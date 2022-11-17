@@ -19,9 +19,28 @@ public class TestTiles {
     }
 
     @Test
-    void test_generate_tile(){
+    void generate_tile(){
         Tile expected = new Tile(21,2);
         assertEquals(expected, Tile.generateTile(21,2));
+    }
+
+    @Test
+    void check_tiles_initialization(){
+        Tiles tiles = Tiles.init();
+        List<Tile> expectedTiles = setupTiles();
+        assertEquals(tiles.getTiles(), expectedTiles);
+    }
+
+    private List<Tile> setupTiles() {
+        List<Tile> expected = new ArrayList<>();
+        int tileNumber;
+        for (int i = 0; i < Tiles.numberOfTiles ; i++) {
+            tileNumber = i + 21;
+            if(tileNumber < 25) expected.add(Tile.generateTile(tileNumber, 1));
+            else if( tileNumber < 29) expected.add(Tile.generateTile(tileNumber, 2));
+            else expected.add(Tile.generateTile(tileNumber, 3));
+        }
+        return expected;
     }
 
 }
