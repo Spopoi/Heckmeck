@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -29,6 +30,18 @@ public class TestTiles {
         Tiles tiles = Tiles.init();
         List<Tile> expectedTiles = setupTiles();
         assertEquals(tiles.getTiles(), expectedTiles);
+    }
+
+    @Test
+    void add_tile(){
+        Tiles tiles = Tiles.init();
+        Tile newTile = Tile.generateTile(50,5);
+        tiles.add(newTile);
+
+        List<Tile> expectedTiles = setupTiles();
+        expectedTiles.add(Tile.generateTile(50,5));
+
+       assertEquals(tiles.getTiles(), expectedTiles);
     }
 
     private List<Tile> setupTiles() {

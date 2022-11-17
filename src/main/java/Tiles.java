@@ -35,4 +35,7 @@ public class Tiles {
         return tiles;
     }
 
+    public void add(Tile newTile) {
+        tiles.add(newTile);
+    }
 }
