@@ -79,4 +79,16 @@ public class TestTiles {
         assertTrue(correctAscendantOrder);
     }
 
+    @Test
+    void check_order_after_adding_one_tile(){
+        Tiles tiles = Tiles.init();
+        tiles.add(Tile.generateTile(20,2));
+        List<Tile> listTiles = tiles.getTiles();
+        boolean correctAscendantOrder = true;
+        for (int i = 0; i < Tiles.numberOfTiles - 1; i++) {
+            if(listTiles.get(i).number() > listTiles.get(i+1).number()) correctAscendantOrder = false;
+        }
+        assertTrue(correctAscendantOrder);
+    }
+
 }

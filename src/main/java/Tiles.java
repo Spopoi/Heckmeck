@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Tiles {
 
@@ -37,6 +35,7 @@ public class Tiles {
 
     public void add(Tile newTile) {
         tiles.add(newTile);
+        tiles.sort(Comparator.comparingInt(Tile::number));
     }
 
     public void remove(Tile newTile) {
