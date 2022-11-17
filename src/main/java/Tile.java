@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Tile {
 
     private final int number;
@@ -12,5 +14,18 @@ public class Tile {
     }
     public int worms(){
         return worms;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile tile = (Tile) o;
+        return number == tile.number && worms == tile.worms;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number, worms);
     }
 }
