@@ -38,4 +38,8 @@ public class Tiles {
     public void add(Tile newTile) {
         tiles.add(newTile);
     }
+
+    public void remove(Tile newTile) {
+        tiles.remove(newTile);
+    }
 }

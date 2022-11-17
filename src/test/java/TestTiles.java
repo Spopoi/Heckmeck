@@ -44,6 +44,18 @@ public class TestTiles {
        assertEquals(tiles.getTiles(), expectedTiles);
     }
 
+    @Test
+    void remove_first_tile(){
+        Tiles tiles = Tiles.init();
+        Tile newTile = Tile.generateTile(21,1);
+        tiles.remove(newTile);
+
+        List<Tile> expectedTiles = setupTiles();
+        expectedTiles.remove(0);
+
+        assertEquals(tiles.getTiles(), expectedTiles);
+    }
+
     private List<Tile> setupTiles() {
         List<Tile> expected = new ArrayList<>();
         int tileNumber;
