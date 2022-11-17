@@ -68,4 +68,15 @@ public class TestTiles {
         return expected;
     }
 
+    @Test
+    void check_order(){
+        Tiles tiles = Tiles.init();
+        List<Tile> listTiles = tiles.getTiles();
+        boolean correctAscendantOrder = true;
+        for (int i = 0; i < Tiles.numberOfTiles - 1; i++) {
+            if(listTiles.get(i).number() > listTiles.get(i+1).number()) correctAscendantOrder = false;
+        }
+        assertTrue(correctAscendantOrder);
+    }
+
 }
