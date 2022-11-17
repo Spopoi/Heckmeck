@@ -16,6 +16,10 @@ public class Tile {
         return worms;
     }
 
+    public static Tile generateTile(int number, int worms){
+        return new Tile(number,worms);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

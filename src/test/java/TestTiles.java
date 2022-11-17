@@ -5,8 +5,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTiles {
 
@@ -17,6 +16,12 @@ public class TestTiles {
                 () -> assertEquals(21, tile.number()),
                 () -> assertEquals(2, tile.worms())
         );
+    }
+
+    @Test
+    void test_generate_tile(){
+        Tile expected = new Tile(21,2);
+        assertEquals(expected, Tile.generateTile(21,2));
     }
 
 }
