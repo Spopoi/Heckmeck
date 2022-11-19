@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Tiles {
 
@@ -9,23 +11,7 @@ public class Tiles {
         this.tiles = tiles;
     }
     public static Tiles init(){
-        List<Tile> tiles = new ArrayList<>();
-        tiles.add(Tile.generateTile(21));
-        tiles.add(Tile.generateTile(22));
-        tiles.add(Tile.generateTile(23));
-        tiles.add(Tile.generateTile(24));
-        tiles.add(Tile.generateTile(25));
-        tiles.add(Tile.generateTile(26));
-        tiles.add(Tile.generateTile(27));
-        tiles.add(Tile.generateTile(28));
-        tiles.add(Tile.generateTile(29));
-        tiles.add(Tile.generateTile(30));
-        tiles.add(Tile.generateTile(31));
-        tiles.add(Tile.generateTile(32));
-        tiles.add(Tile.generateTile(33));
-        tiles.add(Tile.generateTile(34));
-        tiles.add(Tile.generateTile(35));
-        tiles.add(Tile.generateTile(36));
+        List<Tile> tiles = IntStream.range(21,37).mapToObj(Tile::generateTile).collect(Collectors.toList());
         return new Tiles(tiles);
     }
 
