@@ -9,10 +9,10 @@ public class Tile {
         this.worms=worms;
     }
 
-    public int number(){
+    public int getNumber(){
         return number;
     }
-    public int worms(){
+    public int getWorms(){
         return worms;
     }
 

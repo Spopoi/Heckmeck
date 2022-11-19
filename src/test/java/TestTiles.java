@@ -1,7 +1,4 @@
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +11,8 @@ public class TestTiles {
     void init_tile_number_21_with_2_worms(){
         Tile tile = new Tile(21,2);
         assertAll(
-                () -> assertEquals(21, tile.number()),
-                () -> assertEquals(2, tile.worms())
+                () -> assertEquals(21, tile.getNumber()),
+                () -> assertEquals(2, tile.getWorms())
         );
     }
 
@@ -56,6 +53,8 @@ public class TestTiles {
         assertEquals(tiles.getTiles(), expectedTiles);
     }
 
+
+    //aaaaa
     private List<Tile> setupTiles() {
         List<Tile> expected = new ArrayList<>();
         int tileNumber;
@@ -74,7 +73,7 @@ public class TestTiles {
         List<Tile> listTiles = tiles.getTiles();
         boolean correctAscendantOrder = true;
         for (int i = 0; i < Tiles.numberOfTiles - 1; i++) {
-            if(listTiles.get(i).number() > listTiles.get(i+1).number()) correctAscendantOrder = false;
+            if(listTiles.get(i).getNumber() > listTiles.get(i+1).getNumber()) correctAscendantOrder = false;
         }
         assertTrue(correctAscendantOrder);
     }
@@ -86,9 +85,21 @@ public class TestTiles {
         List<Tile> listTiles = tiles.getTiles();
         boolean correctAscendantOrder = true;
         for (int i = 0; i < Tiles.numberOfTiles - 1; i++) {
-            if(listTiles.get(i).number() > listTiles.get(i+1).number()) correctAscendantOrder = false;
+            if(listTiles.get(i).getNumber() > listTiles.get(i+1).getNumber()) correctAscendantOrder = false;
         }
         assertTrue(correctAscendantOrder);
+    }
+
+
+    //getter ultimo elemento e check non ci sia piu'
+    @Test
+    void check_bust(){
+        Tiles tiles = Tiles.init();
+        tiles.bust();
+        List<Tile> tilesList = tiles.getTiles();
+        Tile expectedBustedTile = Tile.generateTile(3,4);
+        assertFalse(tilesList.contains(expectedBustedTile));
+
     }
 
 }

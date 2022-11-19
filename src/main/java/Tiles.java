@@ -35,10 +35,14 @@ public class Tiles {
 
     public void add(Tile newTile) {
         tiles.add(newTile);
-        tiles.sort(Comparator.comparingInt(Tile::number));
+        tiles.sort(Comparator.comparingInt(Tile::getNumber));
     }
 
     public void remove(Tile newTile) {
         tiles.remove(newTile);
+    }
+
+    public void bust() {
+        tiles.remove(tiles.size()-1);
     }
 }
