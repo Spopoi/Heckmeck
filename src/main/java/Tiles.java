@@ -10,22 +10,22 @@ public class Tiles {
     }
     public static Tiles init(){
         List<Tile> tiles = new ArrayList<>();
-        tiles.add(Tile.generateTile(21,1));
-        tiles.add(Tile.generateTile(22,1));
-        tiles.add(Tile.generateTile(23,1));
-        tiles.add(Tile.generateTile(24,1));
-        tiles.add(Tile.generateTile(25,2));
-        tiles.add(Tile.generateTile(26,2));
-        tiles.add(Tile.generateTile(27,2));
-        tiles.add(Tile.generateTile(28,2));
-        tiles.add(Tile.generateTile(29,3));
-        tiles.add(Tile.generateTile(30,3));
-        tiles.add(Tile.generateTile(31,3));
-        tiles.add(Tile.generateTile(32,3));
-        tiles.add(Tile.generateTile(33,3));
-        tiles.add(Tile.generateTile(34,3));
-        tiles.add(Tile.generateTile(35,3));
-        tiles.add(Tile.generateTile(36,3));
+        tiles.add(Tile.generateTile(21));
+        tiles.add(Tile.generateTile(22));
+        tiles.add(Tile.generateTile(23));
+        tiles.add(Tile.generateTile(24));
+        tiles.add(Tile.generateTile(25));
+        tiles.add(Tile.generateTile(26));
+        tiles.add(Tile.generateTile(27));
+        tiles.add(Tile.generateTile(28));
+        tiles.add(Tile.generateTile(29));
+        tiles.add(Tile.generateTile(30));
+        tiles.add(Tile.generateTile(31));
+        tiles.add(Tile.generateTile(32));
+        tiles.add(Tile.generateTile(33));
+        tiles.add(Tile.generateTile(34));
+        tiles.add(Tile.generateTile(35));
+        tiles.add(Tile.generateTile(36));
         return new Tiles(tiles);
     }
 

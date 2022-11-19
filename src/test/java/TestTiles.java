@@ -9,17 +9,17 @@ public class TestTiles {
 
     @Test
     void init_tile_number_21_with_2_worms(){
-        Tile tile = new Tile(21,2);
+        Tile tile = new Tile(21);
         assertAll(
                 () -> assertEquals(21, tile.getNumber()),
-                () -> assertEquals(2, tile.getWorms())
+                () -> assertEquals(1, tile.getWorms())
         );
     }
 
     @Test
     void generate_tile(){
-        Tile expected = new Tile(21,2);
-        assertEquals(expected, Tile.generateTile(21,2));
+        Tile expected = new Tile(21);
+        assertEquals(expected, Tile.generateTile(21));
     }
 
     @Test
@@ -32,11 +32,11 @@ public class TestTiles {
     @Test
     void add_tile(){
         Tiles tiles = Tiles.init();
-        Tile newTile = Tile.generateTile(50,5);
+        Tile newTile = Tile.generateTile(50);
         tiles.add(newTile);
 
         List<Tile> expectedTiles = setupTiles();
-        expectedTiles.add(Tile.generateTile(50,5));
+        expectedTiles.add(Tile.generateTile(50));
 
        assertEquals(tiles.getTiles(), expectedTiles);
     }
@@ -44,7 +44,7 @@ public class TestTiles {
     @Test
     void remove_first_tile(){
         Tiles tiles = Tiles.init();
-        Tile newTile = Tile.generateTile(21,1);
+        Tile newTile = Tile.generateTile(21);
         tiles.remove(newTile);
 
         List<Tile> expectedTiles = setupTiles();
@@ -60,9 +60,9 @@ public class TestTiles {
         int tileNumber;
         for (int i = 0; i < Tiles.numberOfTiles ; i++) {
             tileNumber = i + 21;
-            if(tileNumber < 25) expected.add(Tile.generateTile(tileNumber, 1));
-            else if( tileNumber < 29) expected.add(Tile.generateTile(tileNumber, 2));
-            else expected.add(Tile.generateTile(tileNumber, 3));
+            if(tileNumber < 25) expected.add(Tile.generateTile(tileNumber));
+            else if( tileNumber < 29) expected.add(Tile.generateTile(tileNumber));
+            else expected.add(Tile.generateTile(tileNumber));
         }
         return expected;
     }
@@ -81,7 +81,7 @@ public class TestTiles {
     @Test
     void check_order_after_adding_one_tile(){
         Tiles tiles = Tiles.init();
-        tiles.add(Tile.generateTile(20,2));
+        tiles.add(Tile.generateTile(20));
         List<Tile> listTiles = tiles.getTiles();
         boolean correctAscendantOrder = true;
         for (int i = 0; i < Tiles.numberOfTiles - 1; i++) {
@@ -97,7 +97,7 @@ public class TestTiles {
         Tiles tiles = Tiles.init();
         tiles.bust();
         List<Tile> tilesList = tiles.getTiles();
-        Tile expectedBustedTile = Tile.generateTile(3,4);
+        Tile expectedBustedTile = Tile.generateTile(3);
         assertFalse(tilesList.contains(expectedBustedTile));
 
     }
