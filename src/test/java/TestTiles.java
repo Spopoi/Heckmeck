@@ -39,7 +39,7 @@ public class TestTiles {
 
         TreeSet<Tile> expectedTiles = setupTiles();
         expectedTiles.add(newTile);
-        assertEquals(tiles.getTilesList(), expectedTiles.stream().toList());
+        assertEquals(tiles.getTiles(), expectedTiles);
     }
 
     @Test
@@ -54,8 +54,6 @@ public class TestTiles {
         assertEquals(tiles.getTiles(), expectedTiles);
     }
 
-
-    //aaaaa
     private TreeSet<Tile> setupTiles() {
         TreeSet<Tile> expected = new TreeSet<>();
         for (int tileNumber = 21; tileNumber < 21 + Tiles.numberOfTiles ; tileNumber++) {
@@ -102,9 +100,7 @@ public class TestTiles {
         Tiles tiles = Tiles.init();
         tiles.bust();
         TreeSet<Tile> tilesList = tiles.getTiles();
-        Tile expectedBustedTile = Tile.generateTile(3);
+        Tile expectedBustedTile = Tile.generateTile(36);
         assertFalse(tilesList.contains(expectedBustedTile));
-
     }
-
 }
