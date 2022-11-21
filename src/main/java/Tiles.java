@@ -1,3 +1,5 @@
+import com.sun.source.tree.Tree;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -5,23 +7,27 @@ import java.util.stream.IntStream;
 public class Tiles {
 
     public static final int numberOfTiles = 16;
-    private List<Tile> tiles;
+    //private List<Tile> tiles;
+    private TreeSet<Tile> tiles;
 
-    public Tiles(List<Tile> tiles){
+    public Tiles(TreeSet<Tile> tiles){
         this.tiles = tiles;
     }
     public static Tiles init(){
-        List<Tile> tiles = IntStream.range(21,37).mapToObj(Tile::generateTile).collect(Collectors.toList());
-        return new Tiles(tiles);
+        List<Tile> tiles = IntStream.range(21, 37).mapToObj(Tile::generateTile).toList();
+        return new Tiles(new TreeSet<Tile>(tiles));
     }
 
-    public List<Tile> getTiles(){
+    public TreeSet<Tile> getTiles(){
         return tiles;
+    }
+    public List<Tile> getTilesList(){
+        return tiles.stream().toList();
     }
 
     public void add(Tile newTile) {
         tiles.add(newTile);
-        tiles.sort(Comparator.comparingInt(Tile::getNumber));
+        //tiles.sort(Comparator.comparingInt(Tile::getNumber));
     }
 
     public void remove(Tile newTile) {
@@ -29,6 +35,6 @@ public class Tiles {
     }
 
     public void bust() {
-        tiles.remove(tiles.size()-1);
+        tiles.remove(tiles.last());
     }
 }

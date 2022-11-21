@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Tile {
+public class Tile implements Comparable<Tile> {
     private final int number;
 
     private static final Map<Integer, Integer> numberToWorms =
@@ -51,5 +51,14 @@ public class Tile {
     @Override
     public int hashCode() {
         return Objects.hash(number);
+    }
+    
+    @Override
+    public int compareTo(Tile other) throws NullPointerException{
+        return hasSameNumber(other) ? this.getWorms() - other.getWorms() : this.getNumber() - other.getNumber();
+    }
+
+    private boolean hasSameNumber(Tile other) {
+        return this.getNumber() == other.getNumber();
     }
 }
