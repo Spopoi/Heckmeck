@@ -1,3 +1,8 @@
+package it.units.heckmeck;
+
+import Heckmeck.Tile;
+import Heckmeck.Tiles;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,22 +17,22 @@ public class TestTiles {
     void init_tile_number_21_with_2_worms(){
         Tile tile = new Tile(21);
         assertAll(
-                () -> assertEquals(21, tile.getNumber()),
-                () -> assertEquals(1, tile.getWorms())
+                () -> Assertions.assertEquals(21, tile.getNumber()),
+                () -> Assertions.assertEquals(1, tile.getWorms())
         );
     }
 
     @Test
     void generate_tile(){
         Tile expected = new Tile(21);
-        assertEquals(expected, Tile.generateTile(21));
+        Assertions.assertEquals(expected, Tile.generateTile(21));
     }
 
     @Test
     void check_tiles_initialization(){
         Tiles tiles = Tiles.init();
         TreeSet<Tile> expectedTiles = setupTiles();
-        assertEquals(tiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(tiles.getTiles(), expectedTiles);
     }
 
     @Test
@@ -39,7 +44,7 @@ public class TestTiles {
 
         TreeSet<Tile> expectedTiles = setupTiles();
         expectedTiles.add(newTile);
-        assertEquals(tiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(tiles.getTiles(), expectedTiles);
     }
 
     @Test
@@ -51,7 +56,7 @@ public class TestTiles {
         TreeSet<Tile> expectedTiles = setupTiles();
         expectedTiles.remove(expectedTiles.first());
 
-        assertEquals(tiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(tiles.getTiles(), expectedTiles);
     }
 
     private TreeSet<Tile> setupTiles() {

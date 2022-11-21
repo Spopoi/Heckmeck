@@ -1,13 +1,12 @@
-import com.sun.source.tree.Tree;
+package Heckmeck;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Tiles {
 
     public static final int numberOfTiles = 16;
-    //private List<Tile> tiles;
+    //private List<Heckmeck.Tile> tiles;
     private TreeSet<Tile> tiles;
 
     public Tiles(TreeSet<Tile> tiles){
@@ -27,7 +26,7 @@ public class Tiles {
 
     public void add(Tile newTile) {
         tiles.add(newTile);
-        //tiles.sort(Comparator.comparingInt(Tile::getNumber));
+        //tiles.sort(Comparator.comparingInt(Heckmeck.Tile::getNumber));
     }
 
     public void remove(Tile newTile) {
