@@ -25,4 +25,4 @@ test {
     useJUnitPlatform()
 }
 
-mainClassName = 'GUI.Main'
+//mainClassName = 'GUI.Main'
