@@ -33,5 +33,22 @@ public class Player {
         return hasTile() ? playerTiles.getLast() : null;
     }
 
+    public boolean pickTileFromPlayer(Tile desiredTile, Player robbedPlayer) {
+        if (canStealTileFrom(desiredTile, robbedPlayer)) {
+            return stealTileFromPlayer(robbedPlayer);
+        }
+        return false;
+    }
 
+    private static boolean canStealTileFrom(Tile desiredTile, Player robbedPlayer) {
+        return robbedPlayer.hasTile() && robbedPlayer.getLastPickedTile().equals(desiredTile);
+    }
+
+    private boolean stealTileFromPlayer(Player robbedPlayer) {
+        return playerTiles.add(robbedPlayer.removeLastPickedTile());
+    }
+
+    Tile removeLastPickedTile() {
+        return playerTiles.removeLast();
+    }
 }
