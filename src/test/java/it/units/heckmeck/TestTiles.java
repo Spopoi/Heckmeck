@@ -59,6 +59,8 @@ public class TestTiles {
         Assertions.assertEquals(tiles.getTiles(), expectedTiles);
     }
 
+
+    //to refactor
     private TreeSet<Tile> setupTiles() {
         TreeSet<Tile> expected = new TreeSet<>();
         for (int tileNumber = 21; tileNumber < 21 + Tiles.numberOfTiles ; tileNumber++) {
