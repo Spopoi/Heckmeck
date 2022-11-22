@@ -23,4 +23,15 @@ public class Player {
     public boolean hasTile() {
         return !playerTiles.isEmpty();
     }
+
+     public void pickTileFromBoard(Tile desiredTile, Tiles board) {
+        board.remove(desiredTile);
+        playerTiles.add(desiredTile);
+     }
+
+    public Tile getLastPickedTile() {
+        return hasTile() ? playerTiles.getLast() : null;
+    }
+
+
 }

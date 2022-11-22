@@ -1,7 +1,8 @@
 package it.units.heckmeck;
 
 import Heckmeck.Player;
-import org.junit.jupiter.api.Test;
+import Heckmeck.Tile;
+import Heckmeck.Tiles;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -19,4 +20,17 @@ public class TestPlayer {
                 () -> Assertions.assertFalse(player.hasTile())
         );
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {21, 22, 23, 24})
+    void player_add_tile_from_board(int tileNumber) {
+        Tiles board = Tiles.init();
+        Player player = Player.generatePlayer("Luigi");
+        Tile desiredTile = Tile.generateTile(tileNumber);
+
+        player.pickTileFromBoard(desiredTile, board);
+
+        Assertions.assertEquals(desiredTile, player.getLastPickedTile());
+    }
+    
 }
