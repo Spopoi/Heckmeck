@@ -16,6 +16,9 @@ public class CliHandler {
         dice.chooseDice(Die.face.ONE);
         dice.addSpecificDie(Die.face.THREE);
         dice.chooseDice(Die.face.THREE);
+        dice.addSpecificDie(Die.face.WORM);
+        //dice.chooseDice(Die.face.WORM);
+
         List<Die> diceList = dice.getDiceList();
         String diceString = drawDice(diceList);
         System.out.print(diceString);
@@ -41,7 +44,7 @@ public class CliHandler {
                 put(Die.face.THREE, "┊      ◎  ┊ ");
                 put(Die.face.FOUR,  "┊  ◎   ◎  ┊ ");
                 put(Die.face.FIVE,  "┊  ◎   ◎  ┊ ");
-                put(Die.face.WORM,  "┊  ◎   ◎  ┊ ");
+                put(Die.face.WORM,  "┊   \\=\\   ┊ ");
             }});
     private static final Map<Die.face, String> dieToSecondRow =
             Collections.unmodifiableMap(new HashMap<Die.face, String>() {{
@@ -50,7 +53,7 @@ public class CliHandler {
                 put(Die.face.THREE, "┊    ◎    ┊ ");
                 put(Die.face.FOUR,  "┊         ┊ ");
                 put(Die.face.FIVE,  "┊    ◎    ┊ ");
-                put(Die.face.WORM,  "┊  ◎   ◎  ┊ ");
+                put(Die.face.WORM,  "┊   /=/   ┊ ");
             }});
     private static final Map<Die.face, String> dieToThirdRow =
             Collections.unmodifiableMap(new HashMap<Die.face, String>() {{
@@ -59,7 +62,7 @@ public class CliHandler {
                 put(Die.face.THREE, "┊  ◎      ┊ ");
                 put(Die.face.FOUR,  "┊  ◎   ◎  ┊ ");
                 put(Die.face.FIVE,  "┊  ◎   ◎  ┊ ");
-                put(Die.face.WORM,  "┊  ◎   ◎  ┊ ");
+                put(Die.face.WORM,  "┊   \\=\\   ┊ ");
             }});
     private static String zero = "│      │";
     private static String one = "│  ~   │";
