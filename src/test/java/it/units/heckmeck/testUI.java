@@ -8,7 +8,7 @@ import java.util.*;
 
 import CLI.CliHandler;
 
-import static CLI.CliHandler.drawPlayerTile;
+import static CLI.CliHandler.*;
 import static Heckmeck.Die.face.*;
 
 public class testUI {
@@ -31,7 +31,7 @@ public class testUI {
         Assertions.assertEquals(expected, textToPrint);
     }
 
-    @Test
+  /*  @Test
     void printPlayerTile(){
         Tiles board = Tiles.init();
         List <Tile> tileList = board.getTilesList();
@@ -50,6 +50,8 @@ public class testUI {
         Assertions.assertEquals(expected, tileString);
 
     }
+
+   */
 
     @Test
     void printTiles(){

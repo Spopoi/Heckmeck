@@ -12,7 +12,10 @@ public class CliHandler {
     public static void main(String args[]){
         Dice dice = Dice.generateDice();
         dice.rollDice();
-
+        dice.addSpecificDie(Die.face.ONE);
+        dice.chooseDice(Die.face.ONE);
+        dice.addSpecificDie(Die.face.THREE);
+        dice.chooseDice(Die.face.THREE);
         List<Die> diceList = dice.getDiceList();
         String diceString = drawDice(diceList);
         System.out.print(diceString);
@@ -26,7 +29,7 @@ public class CliHandler {
         tileList = board.getTilesList();
         String boardString = drawTiles(tileList);
 
-        String tileString = drawPlayerTile(player);
+        String tileString = drawPlayerData(player, dice);
         System.out.print(boardString);
         System.out.print(tileString);
     }
@@ -58,9 +61,9 @@ public class CliHandler {
                 put(Die.face.FIVE,  "┊  ◎   ◎  ┊ ");
                 put(Die.face.WORM,  "┊  ◎   ◎  ┊ ");
             }});
-    private static String zero = "│     │";
-    private static String one = "│   ~    │";
-    private static String two = "│   ~~   │";
+    private static String zero = "│      │";
+    private static String one = "│  ~   │";
+    private static String two = "│  ~~  │";
 
     private static final Map<Integer, String> secondTileRowToWorms =
             Collections.unmodifiableMap(new HashMap<Integer, String>() {{
@@ -99,6 +102,7 @@ public class CliHandler {
                 put(35, two);
                 put(36, two);
             }});
+
 
     public static String drawDice(List <Die> diceList){
         String topRow = "";
@@ -154,10 +158,11 @@ public class CliHandler {
     }
 
 
-    public static String drawPlayerTile(Player player) {
+    public String drawPlayerTile(Player player) {
         Tile tile = player.getLastPickedTile();
         String displayString = "        " +player.getName();
-        displayString += "'s tiles  ";
+        displayString += "'s tiles:  ";
+
 
         String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow();
         String firstRow =String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile);
@@ -166,8 +171,29 @@ public class CliHandler {
         String bottomRow =String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow();
 
         return topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
+    }
+    public static String drawPlayerData(Player player, Dice dice) {
+        Tile tile = player.getLastPickedTile();
+        String displayString = "        " + player.getName();
+        displayString += "'s tiles:  ";
+        String chosenDiceString = "     Chosen dice: " + dice.getChosenDiceString();;
+        String chosenDiceScore = "     Current dice score: " + dice.getScore();
+        String wormPresent = "     WORM is chosen: " + dice.isWormChosen();
+
+
+
+        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString ;
+        String firstRow =String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile) + chosenDiceScore;
+        String secondRow =String.format("%1$"+ displayString.length() + "s", "" ) + getSecondTileRow(tile) + wormPresent;
+        String thirdRow =String.format("%1$"+ displayString.length() + "s", "" ) + getTilesThirdRow(tile);
+        String bottomRow =String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow();
+
+        return topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
 
     }
+
+
+
 
     public static String drawTiles(List<Tile> tileList){
         String topRow = "";
@@ -176,26 +202,26 @@ public class CliHandler {
         String thirdRow = "";
         String bottomRow = "";
         for(Tile tile : tileList){
-            topRow += getTopTilesRow();
-            firstRow += getFirstTilesRow(tile);
-            secondRow += getSecondTileRow(tile);
-            thirdRow += getTilesThirdRow(tile);
-            bottomRow += getBottomTilesRow();
+            topRow      += getTopTilesRow();
+            firstRow    += getFirstTilesRow(tile);
+            secondRow   += getSecondTileRow(tile);
+            thirdRow    += getTilesThirdRow(tile);
+            bottomRow   += getBottomTilesRow();
         }
         return topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
 
     }
 
     private static String getBottomTilesRow() {
-        return "└─────┘";
+        return "└──────┘";
     }
 
     private static String getTopTilesRow() {
-        return "┌─────┓";
+        return "┌──────┓";
     }
 
     private static String getFirstTilesRow(Tile tile){
-        return "│   " + String.valueOf(tile.getNumber()) + "   │";
+        return "│  " + String.valueOf(tile.getNumber()) + "  │";
     }
     private static String getSecondTileRow(Tile tile){
         return secondTileRowToWorms.get(tile.getNumber());
@@ -204,4 +230,6 @@ public class CliHandler {
     private static  String getTilesThirdRow(Tile tile){
         return thirdTileRowToWorms.get(tile.getNumber());
     }
+
+
 }
