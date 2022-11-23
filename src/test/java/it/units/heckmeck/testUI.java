@@ -58,11 +58,11 @@ public class testUI {
         List <Tile> tileList = Tiles.init().getTilesList();
 
         String tileString = CliHandler.drawTiles(tileList);
-        String topRow =     "┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓┌─────┓";
-        String firstRow =   "│   21   ││   22   ││   23   ││   24   ││   25   ││   26   ││   27   ││   28   ││   29   ││   30   ││   31   ││   32   ││   33   ││   34   ││   35   ││   36   │";
-        String secondRow =  "│   ~    ││   ~    ││   ~    ││   ~    ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   │";
-        String thirdRow =   "│     ││     ││     ││     ││     ││     ││     ││     ││   ~    ││   ~    ││   ~    ││   ~~   ││   ~~   ││   ~~   ││   ~~   ││   ~~   │";
-        String bottomRow =  "└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘└─────┘";
+        String topRow =     "┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓┌──────┓";
+        String firstRow =   "│  21  ││  22  ││  23  ││  24  ││  25  ││  26  ││  27  ││  28  ││  29  ││  30  ││  31  ││  32  ││  33  ││  34  ││  35  ││  36  │";
+        String secondRow =  "│  ~   ││  ~   ││  ~   ││  ~   ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  │";
+        String thirdRow =   "│      ││      ││      ││      ││      ││      ││      ││      ││  ~   ││  ~   ││  ~   ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  │";
+        String bottomRow =  "└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘";
         String expected = topRow + "\n" + firstRow +"\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
         Assertions.assertEquals(expected, tileString);
 
@@ -94,9 +94,9 @@ public class testUI {
         List <Die> diceList = dice.getDiceList();
         String textToPrint = CliHandler.drawDice(diceList);
         String topRow =     "┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ";
-        String firstRow =   "┊         ┊ ┊      ◎  ┊ ┊      ◎  ┊ ┊  ◎   ◎  ┊ ┊  ◎   ◎  ┊ ┊  ◎   ◎  ┊ ";
-        String secondRow =  "┊    ◎    ┊ ┊         ┊ ┊    ◎    ┊ ┊         ┊ ┊    ◎    ┊ ┊  ◎   ◎  ┊ ";
-        String thirdRow =   "┊         ┊ ┊  ◎      ┊ ┊  ◎      ┊ ┊  ◎   ◎  ┊ ┊  ◎   ◎  ┊ ┊  ◎   ◎  ┊ ";
+        String firstRow =   "┊         ┊ ┊      ◎  ┊ ┊      ◎  ┊ ┊  ◎   ◎  ┊ ┊  ◎   ◎  ┊ ┊   \\=\\   ┊ ";
+        String secondRow =  "┊    ◎    ┊ ┊         ┊ ┊    ◎    ┊ ┊         ┊ ┊    ◎    ┊ ┊   /=/   ┊ ";
+        String thirdRow =   "┊         ┊ ┊  ◎      ┊ ┊  ◎      ┊ ┊  ◎   ◎  ┊ ┊  ◎   ◎  ┊ ┊   \\=\\   ┊ ";
         String bottomRow =  "└---------┘ └---------┘ └---------┘ └---------┘ └---------┘ └---------┘ ";
         String expected = topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
         Assertions.assertEquals(expected, textToPrint);

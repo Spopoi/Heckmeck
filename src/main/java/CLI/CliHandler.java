@@ -20,15 +20,19 @@ public class CliHandler {
         //dice.chooseDice(Die.face.WORM);
 
         List<Die> diceList = dice.getDiceList();
+
         String diceString = drawDice(diceList);
         System.out.print(diceString);
 
         Tiles board = Tiles.init();
         List <Tile> tileList = board.getTilesList();
+        String initialTiles = drawTiles(tileList);
+        System.out.print(initialTiles);
         Tile tile = tileList.get(5);
 
         Player player = Player.generatePlayer("Pippo");
         player.pickTileFromBoard(tile, board);
+        //player.pickTileFromBoard(tileList.get(9), board);
         tileList = board.getTilesList();
         String boardString = drawTiles(tileList);
 
@@ -177,6 +181,7 @@ public class CliHandler {
     }
     public static String drawPlayerData(Player player, Dice dice) {
         Tile tile = player.getLastPickedTile();
+
         String displayString = "        " + player.getName();
         displayString += "'s tiles:  ";
         String chosenDiceString = "     Chosen dice: " + dice.getChosenDiceString();;
@@ -194,9 +199,6 @@ public class CliHandler {
         return topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
 
     }
-
-
-
 
     public static String drawTiles(List<Tile> tileList){
         String topRow = "";
