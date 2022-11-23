@@ -22,7 +22,7 @@ public class CliHandler {
         List<Die> diceList = dice.getDiceList();
 
         String diceString = drawDice(diceList);
-        System.out.print(diceString);
+        //System.out.print(diceString);
 
         Tiles board = Tiles.init();
         List <Tile> tileList = board.getTilesList();
@@ -36,9 +36,9 @@ public class CliHandler {
         tileList = board.getTilesList();
         String boardString = drawTiles(tileList);
 
-        String tileString = drawPlayerData(player, dice);
+        String playerData = drawPlayerData(player, dice);
         System.out.print(boardString);
-        System.out.print(tileString);
+        System.out.print(playerData);
     }
 
     private static final Map<Die.face, String> dieToFirstRow =
@@ -182,13 +182,10 @@ public class CliHandler {
     public static String drawPlayerData(Player player, Dice dice) {
         Tile tile = player.getLastPickedTile();
 
-        String displayString = "        " + player.getName();
-        displayString += "'s tiles:  ";
+        String displayString = "        " + player.getName() + "'s tiles:  ";
         String chosenDiceString = "     Chosen dice: " + dice.getChosenDiceString();;
         String chosenDiceScore = "     Current dice score: " + dice.getScore();
         String wormPresent = "     WORM is chosen: " + dice.isWormChosen();
-
-
 
         String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString ;
         String firstRow =String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile) + chosenDiceScore;
@@ -226,14 +223,33 @@ public class CliHandler {
     }
 
     private static String getFirstTilesRow(Tile tile){
-        return "│  " + String.valueOf(tile.getNumber()) + "  │";
+        if (tile != null){
+            return "│  " + String.valueOf(tile.getNumber()) + "  │";
+        }
+        else{
+            return "│  no  │";
+        }
+
+
     }
     private static String getSecondTileRow(Tile tile){
-        return secondTileRowToWorms.get(tile.getNumber());
+        if (tile != null){
+            return secondTileRowToWorms.get(tile.getNumber());
+        }
+        else{
+            return "│ tile │";
+        }
+
 
     }
     private static  String getTilesThirdRow(Tile tile){
-        return thirdTileRowToWorms.get(tile.getNumber());
+        if (tile != null){
+            return thirdTileRowToWorms.get(tile.getNumber());
+        }
+        else{
+            return "│      │";
+        }
+
     }
 
 
