@@ -11,16 +11,20 @@ import javafx.stage.Stage;
 
 import static javafx.scene.input.KeyCode.U;
 
-public class Tiles {
+public class Tiles extends TilePane{
 
-    public Stage stage;
+    //public Stage stage;
     private TilePane tilePane;
-    private Scene scene;
+    //private Scene scene;
     private Button[] buttons;
     private final String worm = "\uD83D\uDc1B";
 
-    public Tiles(Stage stage){
-        this.stage = stage;
+//    public static TilePane getTiles(){
+//        return tilePane;
+//    }
+
+    public Tiles(){
+        //this.stage = stage;
         buildTilesUI();
     }
 
@@ -46,9 +50,13 @@ public class Tiles {
             }
         }
 
-        scene = new Scene(tilePane, 600, 250);
-        stage.setTitle("Tiles");
-        stage.setScene(scene);
+//        scene = new Scene(tilePane, 600, 250);
+//        stage.setTitle("Tiles");
+//        stage.setScene(scene);
+    }
+
+    public TilePane getTilePane() {
+        return tilePane;
     }
 
     private void configTilePane() {
@@ -59,7 +67,7 @@ public class Tiles {
         tilePane.setPrefColumns(8);
     }
 
-    public void show(){
+    /*public void show(){
         this.stage.show();
-    }
+    }*/
 }
