@@ -14,18 +14,20 @@ public class CliHandler {
         dice.rollDice();
 
         List<Die> diceList = dice.getDiceList();
-        String textToPrint = drawDice(diceList);
-        System.out.print(textToPrint);
+        String diceString = drawDice(diceList);
+        System.out.print(diceString);
 
         Tiles board = Tiles.init();
         List <Tile> tileList = board.getTilesList();
-        String tilesToPrint = drawTiles(tileList);
-        System.out.print(tilesToPrint);
         Tile tile = tileList.get(5);
 
         Player player = Player.generatePlayer("Pippo");
         player.pickTileFromBoard(tile, board);
+        tileList = board.getTilesList();
+        String boardString = drawTiles(tileList);
+
         String tileString = drawPlayerTile(player);
+        System.out.print(boardString);
         System.out.print(tileString);
     }
 
