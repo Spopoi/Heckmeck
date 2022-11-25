@@ -6,32 +6,32 @@ import java.util.*;
 
 public class CliOutputHandler implements OutputHandler {
 
-    private static final Map<Die.face, String> dieToFirstRow =
-            Collections.unmodifiableMap(new HashMap<Die.face, String>() {{
-                put(Die.face.ONE,   "┊         ┊ ");
-                put(Die.face.TWO,   "┊      ◎  ┊ ");
-                put(Die.face.THREE, "┊      ◎  ┊ ");
-                put(Die.face.FOUR,  "┊  ◎   ◎  ┊ ");
-                put(Die.face.FIVE,  "┊  ◎   ◎  ┊ ");
-                put(Die.face.WORM,  "┊   \\=\\   ┊ ");
+    private static final Map<Die.Face, String> dieToFirstRow =
+            Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
+                put(Die.Face.ONE,   "┊         ┊ ");
+                put(Die.Face.TWO,   "┊      ◎  ┊ ");
+                put(Die.Face.THREE, "┊      ◎  ┊ ");
+                put(Die.Face.FOUR,  "┊  ◎   ◎  ┊ ");
+                put(Die.Face.FIVE,  "┊  ◎   ◎  ┊ ");
+                put(Die.Face.WORM,  "┊   \\=\\   ┊ ");
             }});
-    private static final Map<Die.face, String> dieToSecondRow =
-            Collections.unmodifiableMap(new HashMap<Die.face, String>() {{
-                put(Die.face.ONE,   "┊    ◎    ┊ ");
-                put(Die.face.TWO,   "┊         ┊ ");
-                put(Die.face.THREE, "┊    ◎    ┊ ");
-                put(Die.face.FOUR,  "┊         ┊ ");
-                put(Die.face.FIVE,  "┊    ◎    ┊ ");
-                put(Die.face.WORM,  "┊   /=/   ┊ ");
+    private static final Map<Die.Face, String> dieToSecondRow =
+            Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
+                put(Die.Face.ONE,   "┊    ◎    ┊ ");
+                put(Die.Face.TWO,   "┊         ┊ ");
+                put(Die.Face.THREE, "┊    ◎    ┊ ");
+                put(Die.Face.FOUR,  "┊         ┊ ");
+                put(Die.Face.FIVE,  "┊    ◎    ┊ ");
+                put(Die.Face.WORM,  "┊   /=/   ┊ ");
             }});
-    private static final Map<Die.face, String> dieToThirdRow =
-            Collections.unmodifiableMap(new HashMap<Die.face, String>() {{
-                put(Die.face.ONE,   "┊         ┊ ");
-                put(Die.face.TWO,   "┊  ◎      ┊ ");
-                put(Die.face.THREE, "┊  ◎      ┊ ");
-                put(Die.face.FOUR,  "┊  ◎   ◎  ┊ ");
-                put(Die.face.FIVE,  "┊  ◎   ◎  ┊ ");
-                put(Die.face.WORM,  "┊   \\=\\   ┊ ");
+    private static final Map<Die.Face, String> dieToThirdRow =
+            Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
+                put(Die.Face.ONE,   "┊         ┊ ");
+                put(Die.Face.TWO,   "┊  ◎      ┊ ");
+                put(Die.Face.THREE, "┊  ◎      ┊ ");
+                put(Die.Face.FOUR,  "┊  ◎   ◎  ┊ ");
+                put(Die.Face.FIVE,  "┊  ◎   ◎  ┊ ");
+                put(Die.Face.WORM,  "┊   \\=\\   ┊ ");
             }});
     private static String zero = "│      │";
     private static String one = "│  ~   │";

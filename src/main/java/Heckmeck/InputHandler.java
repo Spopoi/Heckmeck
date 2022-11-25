@@ -4,5 +4,6 @@ public interface InputHandler{
 
     public int chooseNumberOfPlayers();
     public String choosePlayerName();
-    //public int chooseDice();
+
+    public int chooseDiceNumber();
 }

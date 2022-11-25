@@ -1,5 +1,7 @@
 package CLI;
 
+import Heckmeck.Dice;
+import Heckmeck.Die;
 import Heckmeck.InputHandler;
 
 import java.util.Scanner;
@@ -19,5 +21,10 @@ public class CliInputHandler implements InputHandler {
     @Override
     public String choosePlayerName() {
         return scan.nextLine();
+    }
+
+    @Override
+    public int chooseDiceNumber() {
+        return Integer.parseInt(scan.nextLine());
     }
 }
