@@ -98,6 +98,11 @@ public class Dice {
         return chosenDiceList;
     }
 
+    public String getChosenDiceString(){
+        return chosenDiceList.stream().map(e -> e.getDieFace().toString()).collect(Collectors.toList()).toString();
+
+    }
+
     public List <Die> getChosenFaces() {
         return chosenDiceList.stream().distinct().collect(Collectors.toList());
     }
