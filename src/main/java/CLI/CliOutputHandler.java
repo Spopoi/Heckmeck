@@ -1,45 +1,10 @@
 package CLI;
 import Heckmeck.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
-public class CliHandler {
-
-    public static void main(String args[]){
-        Dice dice = Dice.generateDice();
-        dice.rollDice();
-        dice.addSpecificDie(Die.face.ONE);
-        dice.chooseDice(Die.face.ONE);
-        dice.addSpecificDie(Die.face.THREE);
-        dice.chooseDice(Die.face.THREE);
-        dice.addSpecificDie(Die.face.WORM);
-        //dice.chooseDice(Die.face.WORM);
-
-        List<Die> diceList = dice.getDiceList();
-
-        String diceString = drawDice(diceList);
-        //System.out.print(diceString);
-
-        Tiles board = Tiles.init();
-        List <Tile> tileList = board.getTilesList();
-        String initialTiles = drawTiles(tileList);
-        System.out.print(initialTiles);
-        Tile tile = tileList.get(5);
-
-        Player player = Player.generatePlayer("Pippo");
-        player.pickTileFromBoard(tile, board);
-        //player.pickTileFromBoard(tileList.get(9), board);
-        tileList = board.getTilesList();
-        String boardString = drawTiles(tileList);
-
-        String playerData = drawPlayerData(player, dice);
-        System.out.print(boardString);
-        System.out.print(playerData);
-    }
+public class CliOutputHandler implements OutputHandler {
 
     private static final Map<Die.face, String> dieToFirstRow =
             Collections.unmodifiableMap(new HashMap<Die.face, String>() {{
@@ -110,76 +75,42 @@ public class CliHandler {
                 put(36, two);
             }});
 
-
-    public static String drawDice(List <Die> diceList){
+    @Override
+    public void showDice(Dice dice) {
         String topRow = "";
         String firstRow = "";
         String secondRow = "";
         String thirdRow = "";
         String bottomRow = "";
-        for(Die die : diceList){
+        for(Die die : dice.getDiceList()){
             topRow      += getDieTopRow();
             firstRow    += getFirstDieRow(die);
             secondRow   += getSecondDieRow(die);
             thirdRow    += getThirdDieRow(die);
             bottomRow   += getDieBottomRow();
         }
-        return topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
+        System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
 
-    public static String drawSingleDie(Die die){
-        String toPrint = getDieTopRow();
-        toPrint += "\n";
-        toPrint+= getFirstDieRow(die);
-        toPrint += "\n";
-        toPrint+= getSecondDieRow(die);
-        toPrint += "\n";
-        toPrint += getThirdDieRow(die);
-        toPrint += "\n";
-        toPrint += getDieBottomRow();
-        toPrint += "\n";
-
-        return toPrint;
-
+    @Override
+    public void showTiles(Tiles tiles) {
+        String topRow = "";
+        String firstRow = "";
+        String secondRow = "";
+        String thirdRow = "";
+        String bottomRow = "";
+        for(Tile tile : tiles.getTiles()){
+            topRow      += getTopTilesRow();
+            firstRow    += getFirstTilesRow(tile);
+            secondRow   += getSecondTileRow(tile);
+            thirdRow    += getTilesThirdRow(tile);
+            bottomRow   += getBottomTilesRow();
+        }
+        System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
 
-    public static String getDieTopRow(){
-        return "┌---------┐ ";
-    }
-    public static String getFirstDieRow(Die die){
-
-        return dieToFirstRow.get(die.getDieFace());
-    }
-    public static String getSecondDieRow(Die die){
-        return dieToSecondRow.get(die.getDieFace());
-    }
-    public static String getThirdDieRow(Die die){
-        return dieToThirdRow.get(die.getDieFace());
-    }
-    public static String getDieBottomRow(){
-        return "└---------┘ ";
-    }
-
-    public static void getDiceList(){
-       // List <Dice> diceList
-    }
-
-
-    public String drawPlayerTile(Player player) {
-        Tile tile = player.getLastPickedTile();
-        String displayString = "        " +player.getName();
-        displayString += "'s tiles:  ";
-
-
-        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow();
-        String firstRow =String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile);
-        String secondRow =String.format("%1$"+ displayString.length() + "s", "" ) + getSecondTileRow(tile);
-        String thirdRow =String.format("%1$"+ displayString.length() + "s", "" ) + getTilesThirdRow(tile);
-        String bottomRow =String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow();
-
-        return topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
-    }
-    public static String drawPlayerData(Player player, Dice dice) {
+    @Override
+    public void showPlayerData(Player player, Dice dice) {
         Tile tile = player.getLastPickedTile();
 
         String displayString = "        " + player.getName() + "'s tiles:  ";
@@ -193,25 +124,64 @@ public class CliHandler {
         String thirdRow =String.format("%1$"+ displayString.length() + "s", "" ) + getTilesThirdRow(tile);
         String bottomRow =String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow();
 
-        return topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
-
+        System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
 
-    public static String drawTiles(List<Tile> tileList){
-        String topRow = "";
-        String firstRow = "";
-        String secondRow = "";
-        String thirdRow = "";
-        String bottomRow = "";
-        for(Tile tile : tileList){
-            topRow      += getTopTilesRow();
-            firstRow    += getFirstTilesRow(tile);
-            secondRow   += getSecondTileRow(tile);
-            thirdRow    += getTilesThirdRow(tile);
-            bottomRow   += getBottomTilesRow();
-        }
-        return topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n";
+    @Override
+    public void showPlayerTile(Player player){
+        Tile tile = player.getLastPickedTile();
+        String displayString = "        " +player.getName();
+        displayString += "'s tiles:  ";
 
+        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow();
+        String firstRow =String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile);
+        String secondRow =String.format("%1$"+ displayString.length() + "s", "" ) + getSecondTileRow(tile);
+        String thirdRow =String.format("%1$"+ displayString.length() + "s", "" ) + getTilesThirdRow(tile);
+        String bottomRow =String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow();
+
+        System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
+    }
+
+    @Override
+    public void showMenu(){
+        System.out.println("Benvenuto in Heckmeck");
+        System.out.println("Scegli il numero di giocatori tra 1 e 6");
+    }
+
+    @Override
+    public void showSetPlayerName(){
+        System.out.println("Inserisci il nome del giocatore");
+    }
+
+    public static void drawSingleDie(Die die){
+        String toPrint = getDieTopRow();
+        toPrint += "\n";
+        toPrint+= getFirstDieRow(die);
+        toPrint += "\n";
+        toPrint+= getSecondDieRow(die);
+        toPrint += "\n";
+        toPrint += getThirdDieRow(die);
+        toPrint += "\n";
+        toPrint += getDieBottomRow();
+        toPrint += "\n";
+
+        System.out.println(toPrint);
+    }
+
+    public static String getDieTopRow(){
+        return "┌---------┐ ";
+    }
+    public static String getFirstDieRow(Die die){
+        return dieToFirstRow.get(die.getDieFace());
+    }
+    public static String getSecondDieRow(Die die){
+        return dieToSecondRow.get(die.getDieFace());
+    }
+    public static String getThirdDieRow(Die die){
+        return dieToThirdRow.get(die.getDieFace());
+    }
+    public static String getDieBottomRow(){
+        return "└---------┘ ";
     }
 
     private static String getBottomTilesRow() {
@@ -229,8 +199,6 @@ public class CliHandler {
         else{
             return "│  no  │";
         }
-
-
     }
     private static String getSecondTileRow(Tile tile){
         if (tile != null){
@@ -239,8 +207,6 @@ public class CliHandler {
         else{
             return "│ tile │";
         }
-
-
     }
     private static  String getTilesThirdRow(Tile tile){
         if (tile != null){
@@ -249,8 +215,5 @@ public class CliHandler {
         else{
             return "│      │";
         }
-
     }
-
-
 }
