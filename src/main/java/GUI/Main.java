@@ -1,5 +1,6 @@
 package GUI;
 
+import Heckmeck.Player;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,6 +21,10 @@ public class Main extends Application {
         BorderPane.setAlignment(ActionLog.getLogLabel(), Pos.CENTER);
         borderPane.setBottom(ActionLog.getLogLabel());
 
+
+
+        PlayerGround player1 = new PlayerGround(Player.generatePlayer("Davide"));
+        borderPane.setRight(player1.getPane());
 
         Scene root = new Scene(borderPane, 600, 250);
         stage.setTitle("Heckmeck");
