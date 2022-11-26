@@ -44,6 +44,7 @@ public class Dice {
 
     public void eraseDice(){
         diceList = new ArrayList<Die>();
+        chosenDiceList = new ArrayList<Die>();
     }
 
     public void resetDice(){
@@ -91,8 +92,10 @@ public class Dice {
     }
 
     public  void chooseRandomDice(){
-        Die.face face = diceList.get(0).getDieFace();
+        Die.face face = getChoosableFaces().get(0).getDieFace();
         chooseDice(face);
+
+
     }
     public List <Die> getChosenDice(){
         return chosenDiceList;
@@ -105,6 +108,9 @@ public class Dice {
 
     public List <Die> getChosenFaces() {
         return chosenDiceList.stream().distinct().collect(Collectors.toList());
+    }
+    private List <Die> getChoosableFaces(){
+        return diceList.stream().filter(e -> !isDieChosen(e.getDieFace())).toList();
     }
 
     public boolean isDieChosen(Die.face face) {
