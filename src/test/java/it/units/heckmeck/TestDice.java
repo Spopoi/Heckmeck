@@ -152,7 +152,7 @@ public class TestDice {
         Assertions.assertTrue(chosenDice.stream().anyMatch(e -> e.getDieFace().equals(TWO)));
     }
 
-    @Test
+/*    @Test
     void chooseRandomDice(){
         Dice dice = Dice.generateDice();
         dice.rollDice();
@@ -160,7 +160,7 @@ public class TestDice {
         dice.chooseRandomDice();
         List <Die> chosenDice = dice.getChosenDice();
         Assertions.assertEquals(face, chosenDice.get(0).getDieFace());
-    }
+    }*/
 
     @Test
     void isDieChosen(){
@@ -231,7 +231,7 @@ public class TestDice {
     }
 
 
-    @Test
+    /*@Test
     void gameRollSequence(){
         Dice dice = Dice.generateDice();
         dice.rollDice();
@@ -248,32 +248,7 @@ public class TestDice {
             Assertions.assertTrue(dice.isDieChosen(face));
             Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
         }
-    }
-
-
-
-
-
-/*
-
-    @Test
-    void choseValueOne(){
-        List <Die.face> diceList = Dice.rollDice();
-        Die.face face = Die.face.ONE;
-        Dice.choseValue(face);
-        //List <Die.face> choseDice = Dice.getChosenDice();
-
-
-
-    }
-
-
-
-    @Test
-    void checkDiceFairness(){
-        return;
-    }
-*/
+    }*/
 
 
 }

@@ -92,8 +92,11 @@ public class Dice {
     }
 
     public  void chooseRandomDice(){
-        Die.face face = getChoosableFaces().get(0).getDieFace();
-        chooseDice(face);
+        if(getChosenFaces().size() != 0){
+            Die.face face = getChoosableFaces().get(0).getDieFace();
+            chooseDice(face);
+        }
+
 
 
     }
