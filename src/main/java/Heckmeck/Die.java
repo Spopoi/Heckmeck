@@ -48,6 +48,12 @@ public class Die {
         setDieFace(getFaceByNumber(n));
     }
 
+    public static Die getSpecificDieByFace(Face face){
+        Die die = generateDie();
+        die.setDieFace(face);
+        return die;
+    }
+
     public Die getSpecificDie(Face f){
         setDieFace(f);
         return this;

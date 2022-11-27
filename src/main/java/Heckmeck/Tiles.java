@@ -13,7 +13,7 @@ public class Tiles {
         this.tiles = tiles;
     }
     public static Tiles init(){
-        List<Tile> tiles = IntStream.range(21, 37).mapToObj(Tile::generateTile).toList();
+        List<Tile> tiles = IntStream.range(Tile.tileMinNumber, Tile.tileMaxNumber+1).mapToObj(Tile::generateTile).toList();
         return new Tiles(new TreeSet<Tile>(tiles));
     }
 
@@ -35,5 +35,12 @@ public class Tiles {
 
     public void bust() {
         tiles.remove(tiles.last());
+    }
+
+    public Tile getMinValueTile(){
+        return getTilesList().get(0);
+    }
+    public int size(){
+        return tiles.size();
     }
 }

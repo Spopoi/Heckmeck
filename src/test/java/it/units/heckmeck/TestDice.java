@@ -168,7 +168,7 @@ public class TestDice {
         dice.eraseDice();
         dice.addSpecificDie(THREE);
         dice.chooseDice(THREE);
-        Assertions.assertTrue(dice.isDieChosen(THREE));
+        Assertions.assertTrue(dice.isFaceChosen(THREE));
     }
 
     @Test
@@ -238,14 +238,14 @@ public class TestDice {
         Assertions.assertEquals(8, dice.getDiceList().size());
         Die.Face face1 = dice.getDiceList().get(0).getDieFace();
         dice.chooseRandomDice();
-        Assertions.assertTrue(dice.isDieChosen(face1));
+        Assertions.assertTrue(dice.isFaceChosen(face1));
         Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
         while(dice.getDiceList().size() != 0){
             dice.rollDice();
             List <Die> availableDice = dice.getDiceList();
             Die.Face face = dice.getDiceList().get(0).getDieFace();
             dice.chooseRandomDice();
-            Assertions.assertTrue(dice.isDieChosen(face));
+            Assertions.assertTrue(dice.isFaceChosen(face));
             Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
         }
     }

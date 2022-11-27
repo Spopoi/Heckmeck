@@ -27,4 +27,10 @@ public class CliInputHandler implements InputHandler {
     public int chooseDiceNumber() {
         return Integer.parseInt(scan.nextLine());
     }
+
+    @Override
+    public boolean wantToPick() {
+        char decision  = scan.nextLine().charAt(0);
+        return decision == 'y';
+    }
 }

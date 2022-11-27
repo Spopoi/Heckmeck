@@ -153,6 +153,16 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println("Inserisci il nome del giocatore");
     }
 
+    @Override
+    public void showDiceChoice() {
+        System.out.println("Pick one unselected face");
+    }
+
+    @Override
+    public void showWantToPick() {
+        System.out.println("Do you want to pick the tile?" + '\n' + "Press 'y' for picking the tile or 'n' for rolling dice");
+    }
+
     public static void drawSingleDie(Die die){
         String toPrint = getDieTopRow();
         toPrint += "\n";

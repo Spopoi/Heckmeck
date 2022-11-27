@@ -8,4 +8,6 @@ public interface OutputHandler {
     public void showPlayerData(Player player, Dice dice);
     public void showMenu();
     public void showSetPlayerName();
+    public void showDiceChoice();
+    public void showWantToPick();
 }

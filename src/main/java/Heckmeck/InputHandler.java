@@ -6,4 +6,6 @@ public interface InputHandler{
     public String choosePlayerName();
 
     public int chooseDiceNumber();
+
+    public boolean wantToPick();
 }
