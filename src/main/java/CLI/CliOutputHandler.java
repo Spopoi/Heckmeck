@@ -168,6 +168,11 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println("BUUUUUSSSTTTTTT!!");
     }
 
+    @Override
+    public void showPlayerScore(Player actualPlayer, Dice dice) {
+        System.out.println("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
+    }
+
     public static void drawSingleDie(Die die){
         String toPrint = getDieTopRow();
         toPrint += "\n";

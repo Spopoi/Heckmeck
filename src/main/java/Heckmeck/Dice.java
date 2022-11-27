@@ -95,7 +95,7 @@ public class Dice {
 
     public void chooseDice(Die.Face face) {
         if (!isFaceChosen(face)){
-            chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).collect(Collectors.toList()));
+            chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
             diceList.removeIf(e -> e.getDieFace() == face);
         }
 

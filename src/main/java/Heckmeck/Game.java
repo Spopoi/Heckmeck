@@ -29,15 +29,22 @@ public class Game {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
         while(groundTiles.size() > 0){
-            System.out.println(players[playerNumber].getName()+ "  " + playerNumber);
             output.showTiles(groundTiles);
             playerTurn();
             playerNumber++;
             if(playerNumber >= players.length) playerNumber = 0;
             actualPlayer = players[playerNumber];
-            //output.showPlayerData(actualPlayer,dice);
         }
-        //who's the winner logic
+        Player winnerPlayer = whoIsTheWinner(players);
+    }
+
+    //TODO: extend to multiple winners
+    private Player whoIsTheWinner(Player[] players) {
+        Player winner = players[0];
+        for(Player player : players){
+            if(winner.getWormNumber() < player.getWormNumber()) winner = player;
+        }
+        return winner;
     }
 
     private void playerTurn(){
@@ -47,7 +54,7 @@ public class Game {
             actualPlayerScore = dice.getScore();
             if(dice.isWormChosen() && actualPlayerScore >= groundTiles.getMinValueTile().getNumber()){
                 output.showWantToPick();
-                output.showPlayerData(actualPlayer,dice);
+                output.showPlayerScore(actualPlayer,dice);
                 if(input.wantToPick()) {
                     pickBoardTile(actualPlayerScore);
                     isOnRun = false;
@@ -67,6 +74,7 @@ public class Game {
         output.showDice(dice);
         output.showPlayerData(actualPlayer, dice);
         if(dice.canPickAnyFace()){
+            //verify that the chosen die is okay
             output.showDiceChoice();
             dice.chooseDice(Die.intToFace(input.chooseDiceNumber()));
             return true;

@@ -11,4 +11,5 @@ public interface OutputHandler {
     public void showDiceChoice();
     public void showWantToPick();
     public void showBustMessage();
+    public void showPlayerScore(Player actualPlayer, Dice dice);
 }

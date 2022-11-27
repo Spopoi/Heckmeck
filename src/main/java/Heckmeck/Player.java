@@ -12,6 +12,10 @@ public class Player {
         this.playerTiles = new LinkedList<>();
     }
 
+    public int getWormNumber(){
+        return playerTiles.stream().mapToInt(Tile::getWorms).sum();
+    }
+
     public static Player generatePlayer(String playerName) {
         return playerName==null ? new Player("") : new Player(playerName);
     }
