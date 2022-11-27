@@ -1,21 +1,36 @@
 package GUI;
 
+import Heckmeck.Player;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 
-public class Main extends Application{
+public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        String javaVersion = System.getProperty("java.version");
-        String javafxVersion = System.getProperty("javafx.version");
-        Label l = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        Scene scene = new Scene(new StackPane(l), 640, 480);
-        stage.setScene(scene);
+        BorderPane borderPane = new BorderPane();
+        Tiles tiles = new Tiles();
+        borderPane.setCenter(tiles.getPane());
+
+        BorderPane.setAlignment(ActionLog.getLogLabel(), Pos.CENTER);
+        borderPane.setBottom(ActionLog.getLogLabel());
+
+
+
+        PlayerGround player1 = new PlayerGround(Player.generatePlayer("Davide"));
+        borderPane.setRight(player1.getPane());
+
+        Scene root = new Scene(borderPane, 600, 250);
+        stage.setTitle("Heckmeck");
+        stage.setScene(root);
         stage.show();
+
     }
 
     public static void main(String[] args) {

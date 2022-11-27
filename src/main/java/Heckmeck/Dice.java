@@ -3,15 +3,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static Heckmeck.Die.face.WORM;
+import static Heckmeck.Die.Face.WORM;
 
 public class Dice {
     private final int  initialNumOfDice = 8;
     private List<Die> diceList = new ArrayList<Die>();
-    private List<Die> chosenDiceList = new ArrayList<Die>(initialNumOfDice);
+    private List<Die> chosenDiceList;
 
 
     private Dice(){
+        resetChosenDice();
         for (int i = 0; i< initialNumOfDice; i++){
             Die die = Die.generateDie();
             diceList.add(die);
@@ -42,6 +43,10 @@ public class Dice {
         return diceList;
     }
 
+    public List<Die.Face> getFaceList(){
+        return diceList.stream().map(Die::getDieFace).toList();
+    }
+
     public void eraseDice(){
         diceList = new ArrayList<Die>();
         chosenDiceList = new ArrayList<Die>();
@@ -49,11 +54,17 @@ public class Dice {
 
     public void resetDice(){
         eraseDice();
+        resetChosenDice();
         for (int i = 0; i< initialNumOfDice; i++){
             Die die = Die.generateDie();
             diceList.add(die);
         }
     }
+
+    private void resetChosenDice(){
+        chosenDiceList = new ArrayList<Die>(initialNumOfDice);
+    }
+
     public int getNumOfDice(){
         return diceList.size();
     }
@@ -68,13 +79,13 @@ public class Dice {
         }
     }
 
-    public void addSpecificDie(Die.face face){
+    public void addSpecificDie(Die.Face face){
         Die die = Die.generateDie();
         die.getSpecificDie(face);
         diceList.add(die);
     }
 
-    public boolean isFacePresent(Die.face face){
+    public boolean isFacePresent(Die.Face face){
         return diceList.stream().anyMatch(e -> e.getDieFace().equals(face));
     }
 
@@ -83,22 +94,17 @@ public class Dice {
     }
 
 
-    public void chooseDice(Die.face face) {
-        if (!isDieChosen(face)){
-            chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).collect(Collectors.toList()));
+    public void chooseDice(Die.Face face) {
+        if (!isFaceChosen(face)){
+            chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
             diceList.removeIf(e -> e.getDieFace() == face);
         }
 
     }
 
     public  void chooseRandomDice(){
-        if(getChosenFaces().size() != 0){
-            Die.face face = getChoosableFaces().get(0).getDieFace();
-            chooseDice(face);
-        }
-
-
-
+        Die.Face face = diceList.get(0).getDieFace();
+        chooseDice(face);
     }
     public List <Die> getChosenDice(){
         return chosenDiceList;
@@ -109,23 +115,35 @@ public class Dice {
 
     }
 
-    public List <Die> getChosenFaces() {
-        return chosenDiceList.stream().distinct().collect(Collectors.toList());
+    public List<Die.Face> getChosenFaces() {
+        List<Die> distinctChosenDice = chosenDiceList.stream().distinct().toList();
+        List<Die.Face> chosenFaces = new ArrayList<>();
+        for(Die die : distinctChosenDice){
+            chosenFaces.add(die.getDieFace());
+        }
+        return chosenFaces;
     }
     private List <Die> getChoosableFaces(){
         return diceList.stream().filter(e -> !isDieChosen(e.getDieFace())).toList();
     }
 
-    public boolean isDieChosen(Die.face face) {
+    //renaming or changing signature
+    public boolean isFaceChosen(Die.Face face) {
         return chosenDiceList.stream().anyMatch(e -> e.getDieFace().equals(face));
     }
 
     public boolean isWormChosen() {
-        return isDieChosen(WORM);
+        return isFaceChosen(WORM);
     }
 
     public int getScore() {
         return chosenDiceList.stream().map(e->e.getValue(e.getDieFace())).reduce(0, Integer::sum);
     }
 
+    public boolean canPickAnyFace(){
+        for(Die.Face face : getFaceList()){
+            if(!isFaceChosen(face)) return true;
+        }
+        return false;
+    }
 }

@@ -12,6 +12,10 @@ public class Player {
         this.playerTiles = new LinkedList<>();
     }
 
+    public int getWormNumber(){
+        return playerTiles.stream().mapToInt(Tile::getWorms).sum();
+    }
+
     public static Player generatePlayer(String playerName) {
         return playerName==null ? new Player("") : new Player(playerName);
     }
@@ -45,10 +49,10 @@ public class Player {
     }
 
     private boolean stealTileFromPlayer(Player robbedPlayer) {
-        return playerTiles.add(robbedPlayer.removeLastPickedTile());
+        return playerTiles.add(robbedPlayer.getLastPickedTile());
     }
 
-    Tile removeLastPickedTile() {
-        return playerTiles.removeLast();
+    public void removeLastPickedTile() {
+        if(playerTiles.size()>0) playerTiles.removeLast();
     }
 }

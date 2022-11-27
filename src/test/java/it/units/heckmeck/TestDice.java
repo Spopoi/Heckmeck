@@ -6,19 +6,19 @@ import java.util.*;
 
 import Heckmeck.Die;
 import Heckmeck.Dice;
-import static Heckmeck.Die.face.*;
+import static Heckmeck.Die.Face.*;
 
 public class TestDice {
 
     @Test
     void getFaceByNumber(){                // Fare tostring()
 
-        Assertions.assertEquals("ONE", Die.face.ONE.toString());
-        Assertions.assertEquals("TWO", Die.face.TWO.toString());
-        Assertions.assertEquals("THREE", Die.face.THREE.toString());
-        Assertions.assertEquals("FOUR", Die.face.FOUR.toString());
-        Assertions.assertEquals("FIVE", Die.face.FIVE.toString());
-        Assertions.assertEquals("WORM", Die.face.WORM.toString());
+        Assertions.assertEquals("ONE", Die.Face.ONE.toString());
+        Assertions.assertEquals("TWO", Die.Face.TWO.toString());
+        Assertions.assertEquals("THREE", Die.Face.THREE.toString());
+        Assertions.assertEquals("FOUR", Die.Face.FOUR.toString());
+        Assertions.assertEquals("FIVE", Die.Face.FIVE.toString());
+        Assertions.assertEquals("WORM", Die.Face.WORM.toString());
     }
 
     @Test
@@ -32,8 +32,8 @@ public class TestDice {
     void rollDie(){
         Die die = Die.generateDie();
         die.rollDie();
-        Die.face result = die.getDieFace();
-        Assertions.assertTrue(Stream.of(Die.face.values()).anyMatch(e -> e.equals(result)));
+        Die.Face result = die.getDieFace();
+        Assertions.assertTrue(Stream.of(Die.Face.values()).anyMatch(e -> e.equals(result)));
     }
 
     @Test
@@ -56,8 +56,8 @@ public class TestDice {
         int size = diceList.size();
         Assertions.assertEquals(8, size);
         for (Die d : diceList){
-            Die.face result = d.getDieFace();
-            Assertions.assertTrue(Stream.of(Die.face.values()).anyMatch(e -> e.equals(result)));
+            Die.Face result = d.getDieFace();
+            Assertions.assertTrue(Stream.of(Die.Face.values()).anyMatch(e -> e.equals(result)));
         }
     }
 
@@ -109,8 +109,8 @@ public class TestDice {
             List <Die> diceList =  dice.getDiceList();
             Assertions.assertEquals(n, diceList.size());
             for (Die d : diceList){
-                Die.face result = d.getDieFace();
-                boolean test = Stream.of(Die.face.values()).anyMatch(e -> e.equals(result));
+                Die.Face result = d.getDieFace();
+                boolean test = Stream.of(Die.Face.values()).anyMatch(e -> e.equals(result));
                 Assertions.assertTrue(test);
             }
             dice.removeDie();
@@ -148,7 +148,7 @@ public class TestDice {
         dice.addSpecificDie(TWO);
         dice.chooseDice(TWO);
         List <Die> chosenDice = dice.getChosenDice();
-        Die.face f = TWO;
+        Die.Face f = TWO;
         Assertions.assertTrue(chosenDice.stream().anyMatch(e -> e.getDieFace().equals(TWO)));
     }
 
@@ -156,7 +156,7 @@ public class TestDice {
     void chooseRandomDice(){
         Dice dice = Dice.generateDice();
         dice.rollDice();
-        Die.face face = dice.getDiceList().get(0).getDieFace();
+        Die.Face face = dice.getDiceList().get(0).getDieFace();
         dice.chooseRandomDice();
         List <Die> chosenDice = dice.getChosenDice();
         Assertions.assertEquals(face, chosenDice.get(0).getDieFace());
@@ -168,7 +168,7 @@ public class TestDice {
         dice.eraseDice();
         dice.addSpecificDie(THREE);
         dice.chooseDice(THREE);
-        Assertions.assertTrue(dice.isDieChosen(THREE));
+        Assertions.assertTrue(dice.isFaceChosen(THREE));
     }
 
     @Test
@@ -236,16 +236,16 @@ public class TestDice {
         Dice dice = Dice.generateDice();
         dice.rollDice();
         Assertions.assertEquals(8, dice.getDiceList().size());
-        Die.face face1 = dice.getDiceList().get(0).getDieFace();
+        Die.Face face1 = dice.getDiceList().get(0).getDieFace();
         dice.chooseRandomDice();
-        Assertions.assertTrue(dice.isDieChosen(face1));
+        Assertions.assertTrue(dice.isFaceChosen(face1));
         Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
         while(dice.getDiceList().size() != 0){
             dice.rollDice();
             List <Die> availableDice = dice.getDiceList();
-            Die.face face = dice.getDiceList().get(0).getDieFace();
+            Die.Face face = dice.getDiceList().get(0).getDieFace();
             dice.chooseRandomDice();
-            Assertions.assertTrue(dice.isDieChosen(face));
+            Assertions.assertTrue(dice.isFaceChosen(face));
             Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
         }
     }*/

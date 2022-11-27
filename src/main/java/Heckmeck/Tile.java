@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Tile implements Comparable<Tile> {
+    public final static int tileMinNumber = 21;
+    public final static int tileMaxNumber = 36;
     private final int number;
 
     private static final Map<Integer, Integer> numberToWorms =
