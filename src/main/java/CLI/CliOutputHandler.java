@@ -163,6 +163,11 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println("Do you want to pick the tile?" + '\n' + "Press 'y' for picking the tile or 'n' for rolling dice");
     }
 
+    @Override
+    public void showBustMessage() {
+        System.out.println("BUUUUUSSSTTTTTT!!");
+    }
+
     public static void drawSingleDie(Die die){
         String toPrint = getDieTopRow();
         toPrint += "\n";

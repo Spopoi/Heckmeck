@@ -45,10 +45,10 @@ public class Player {
     }
 
     private boolean stealTileFromPlayer(Player robbedPlayer) {
-        return playerTiles.add(robbedPlayer.removeLastPickedTile());
+        return playerTiles.add(robbedPlayer.getLastPickedTile());
     }
 
-    Tile removeLastPickedTile() {
-        return playerTiles.removeLast();
+    public void removeLastPickedTile() {
+        if(playerTiles.size()>0) playerTiles.removeLast();
     }
 }

@@ -10,4 +10,5 @@ public interface OutputHandler {
     public void showSetPlayerName();
     public void showDiceChoice();
     public void showWantToPick();
+    public void showBustMessage();
 }

@@ -71,8 +71,14 @@ public class Game {
             dice.chooseDice(Die.intToFace(input.chooseDiceNumber()));
             return true;
         } else{
-            groundTiles.bust();
+            bust();
             return false;
         }
+    }
+
+    private void bust(){
+        output.showBustMessage();
+        groundTiles.bust();
+        actualPlayer.removeLastPickedTile();
     }
 }
