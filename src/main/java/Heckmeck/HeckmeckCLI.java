@@ -3,8 +3,10 @@ package Heckmeck;
 import CLI.CliInputHandler;
 import CLI.CliOutputHandler;
 
+import java.io.IOException;
+
 public class HeckmeckCLI {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         CliInputHandler input = new CliInputHandler();
         CliOutputHandler output = new CliOutputHandler();
         output.showMenu();

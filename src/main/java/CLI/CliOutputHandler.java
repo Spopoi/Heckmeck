@@ -1,6 +1,11 @@
 package CLI;
 import Heckmeck.*;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.*;
 
 
@@ -76,53 +81,53 @@ public class CliOutputHandler implements OutputHandler {
             }});
 
     @Override
-    public void showDice(Dice dice) {
+    public void showDice(Dice dice) throws IOException {
         String topRow = "";
         String firstRow = "";
         String secondRow = "";
         String thirdRow = "";
         String bottomRow = "";
         for(Die die : dice.getDiceList()){
-            topRow      += getDieTopRow();
-            firstRow    += getFirstDieRow(die);
-            secondRow   += getSecondDieRow(die);
-            thirdRow    += getThirdDieRow(die);
-            bottomRow   += getDieBottomRow();
+            topRow      += decodeText(getTopDieRow(), "UTF-8");
+            firstRow    += decodeText(getFirstDieRow(die), "UTF-8");
+            secondRow   += decodeText(getSecondDieRow(die), "UTF-8");
+            thirdRow    += decodeText(getThirdDieRow(die), "UTF-8");
+            bottomRow   += decodeText(getDieBottomRow(), "UTF-8");
         }
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
 
     @Override
-    public void showTiles(Tiles tiles) {
+    public void showTiles(Tiles tiles) throws IOException {
         String topRow = "";
         String firstRow = "";
         String secondRow = "";
         String thirdRow = "";
         String bottomRow = "";
         for(Tile tile : tiles.getTiles()){
-            topRow      += getTopTilesRow();
-            firstRow    += getFirstTilesRow(tile);
-            secondRow   += getSecondTileRow(tile);
-            thirdRow    += getTilesThirdRow(tile);
-            bottomRow   += getBottomTilesRow();
+            topRow      += decodeText(getTopTilesRow(), "UTF-8");
+            firstRow    += decodeText(getFirstTilesRow(tile), "UTF-8");
+            secondRow   += decodeText(getSecondTileRow(tile), "UTF-8");
+            thirdRow    += decodeText(getTilesThirdRow(tile), "UTF-8");
+            bottomRow   += decodeText(getBottomTilesRow(), "UTF-8");
         }
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
 
     @Override
-    public void showPlayerData(Player player, Dice dice) {
+    public void showPlayerData(Player player, Dice dice) throws IOException {
         Tile tile = player.getLastPickedTile();
 
-        String displayString = "        " + player.getName() + "'s tiles:  ";
-        String chosenDiceString = "     Chosen dice: " + dice.getChosenDiceString();;
-        String chosenDiceScore = "     Current dice score: " + dice.getScore();
-        String wormPresent = "     WORM is chosen: " + dice.isWormChosen();
+        String displayString = decodeText( "        " + player.getName() + "'s tiles:  ", "UTF-8");
+        String chosenDiceString = decodeText( "     Chosen dice: " + dice.getChosenDiceString(), "UTF-8");
+        String chosenDiceScore = decodeText( "     Current dice score: " + dice.getScore(), "UTF-8");
+        String wormPresent = decodeText( "     WORM is chosen: " + dice.isWormChosen(), "UTF-8");
 
-        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString ;
-        String firstRow =String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile) + chosenDiceScore;
-        String secondRow =String.format("%1$"+ displayString.length() + "s", "" ) + getSecondTileRow(tile) + wormPresent;
-        String thirdRow =String.format("%1$"+ displayString.length() + "s", "" ) + getTilesThirdRow(tile);
-        String bottomRow =String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow();
+        String topRow = decodeText(String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString , "UTF-8");
+        String firstRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile) + chosenDiceScore, "UTF-8");
+        String secondRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getSecondTileRow(tile) + wormPresent, "UTF-8");
+        String thirdRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getTilesThirdRow(tile), "UTF-8");
+        String bottomRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow(), "UTF-8");
 
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
@@ -165,7 +170,10 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showBustMessage() {
-        System.out.println("BUUUUUSSSTTTTTT!!");
+        System.out.println("#####################");
+        System.out.println("# BUUUUUSSSTTTTTT!! #");
+        System.out.println("#####################");
+
     }
 
     @Override
@@ -173,8 +181,15 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
     }
 
+    @Override
+    public void showTurnBeginConfirm(){
+        System.out.println("################################");
+        System.out.println("# Hit enter to start your turn #");
+        System.out.println("################################");
+    }
+
     public static void drawSingleDie(Die die){
-        String toPrint = getDieTopRow();
+        String toPrint = getTopDieRow();
         toPrint += "\n";
         toPrint+= getFirstDieRow(die);
         toPrint += "\n";
@@ -188,7 +203,7 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println(toPrint);
     }
 
-    public static String getDieTopRow(){
+    public static String getTopDieRow(){
         return "┌---------┐ ";
     }
     public static String getFirstDieRow(Die die){
@@ -235,5 +250,14 @@ public class CliOutputHandler implements OutputHandler {
         else{
             return "│      │";
         }
+    }
+
+    static String decodeText(String input, String encoding) throws IOException {
+        return
+                new BufferedReader(
+                        new InputStreamReader(
+                                new ByteArrayInputStream(input.getBytes()),
+                                Charset.forName(encoding)))
+                        .readLine();
     }
 }

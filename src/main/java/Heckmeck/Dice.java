@@ -123,7 +123,7 @@ public class Dice {
         }
         return chosenFaces;
     }
-    private List <Die> getChoosableFaces(){
+    private List <Die> getChosableFaces(){
         return diceList.stream().filter(e -> !isFaceChosen(e.getDieFace())).toList();
     }
 
@@ -140,10 +140,8 @@ public class Dice {
         return chosenDiceList.stream().map(e->e.getValue(e.getDieFace())).reduce(0, Integer::sum);
     }
 
-    public boolean canPickAnyFace(){
-        for(Die.Face face : getFaceList()){
-            if(!isFaceChosen(face)) return true;
-        }
+    public boolean canPickAFace(){
+        if (getChosableFaces().size() != 0){return true;}
         return false;
     }
 }

@@ -1,8 +1,6 @@
 package Heckmeck;
 
-import com.sun.source.tree.Tree;
-
-import java.util.List;
+import java.io.IOException;
 import java.util.TreeSet;
 
 public class Game {
@@ -25,7 +23,7 @@ public class Game {
         this.input = input;
         gameFinished = false;
     }
-    public void play(){
+    public void play() throws IOException {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
         while(groundTiles.size() > 0){
@@ -47,7 +45,9 @@ public class Game {
         return winner;
     }
 
-    private void playerTurn(){
+    private void playerTurn() throws IOException {
+        output.showTurnBeginConfirm();
+        input.pressAnyKey();
         int actualPlayerScore;
         boolean isOnRun = roll();
         while(isOnRun){
@@ -69,11 +69,11 @@ public class Game {
         actualPlayer.pickTileFromBoard(acquirableTiles.last(), groundTiles);
     }
 
-    private boolean roll(){
+    private boolean roll() throws IOException {
         dice.rollDice();
-        output.showDice(dice);
         output.showPlayerData(actualPlayer, dice);
-        if(dice.canPickAnyFace()){
+        output.showDice(dice);
+        if(dice.canPickAFace()){
             //verify that the chosen die is okay
             output.showDiceChoice();
             dice.chooseDice(Die.intToFace(input.chooseDiceNumber()));
@@ -86,7 +86,7 @@ public class Game {
 
     private void bust(){
         output.showBustMessage();
-        groundTiles.bust();
         actualPlayer.removeLastPickedTile();
+        groundTiles.bust();
     }
 }

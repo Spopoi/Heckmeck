@@ -4,6 +4,7 @@ import Heckmeck.Dice;
 import Heckmeck.Die;
 import Heckmeck.InputHandler;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class CliInputHandler implements InputHandler {
@@ -32,5 +33,10 @@ public class CliInputHandler implements InputHandler {
     public boolean wantToPick() {
         char decision  = scan.nextLine().charAt(0);
         return decision == 'y';
+    }
+
+    @Override
+    public void pressAnyKey() throws IOException {
+        System.in.read();
     }
 }
