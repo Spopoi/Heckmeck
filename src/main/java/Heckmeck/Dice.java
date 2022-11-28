@@ -124,7 +124,7 @@ public class Dice {
         return chosenFaces;
     }
     private List <Die> getChoosableFaces(){
-        return diceList.stream().filter(e -> !isDieChosen(e.getDieFace())).toList();
+        return diceList.stream().filter(e -> !isFaceChosen(e.getDieFace())).toList();
     }
 
     //renaming or changing signature
