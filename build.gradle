@@ -22,6 +22,10 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+application {
+    mainClass = 'Heckmeck.HeckmeckCLI'
+}
+
 javafx {
     version = "17"
     modules = [ 'javafx.controls' ]
