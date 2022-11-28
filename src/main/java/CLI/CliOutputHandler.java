@@ -38,9 +38,9 @@ public class CliOutputHandler implements OutputHandler {
                 put(Die.Face.FIVE,  "┊  ◎   ◎  ┊ ");
                 put(Die.Face.WORM,  "┊   \033[0;31m\\=\\\033[0m   ┊ ");
             }});
-    private static String zero = "│      │";
-    private static String one = "│  ~   │";
-    private static String two = "│  ~~  │";
+    private static String zero = "\033[0;93m│      │\033[0m";
+    private static String one = "\033[0;93m│\033[0m  \033[0;31m~\033[0m   \033[0;93m│\033[0m";
+    private static String two = "\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m";
 
     private static final Map<Integer, String> secondTileRowToWorms =
             Collections.unmodifiableMap(new HashMap<Integer, String>() {{
@@ -222,16 +222,16 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     private static String getBottomTilesRow() {
-        return "└──────┘";
+        return "\033[0;93m└──────┘\033[0m";
     }
 
     private static String getTopTilesRow() {
-        return "┌──────┓";
+        return "\033[0;93m┌──────┓\033[0m";
     }
 
     private static String getFirstTilesRow(Tile tile){
         if (tile != null){
-            return "│  " + String.valueOf(tile.getNumber()) + "  │";
+            return "\033[0;93m│\033[0m  " + String.valueOf(tile.getNumber()) + "  \033[0;93m│\033[0m";
         }
         else{
             return "│  no  │";
