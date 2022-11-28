@@ -76,6 +76,7 @@ public class Game {
         if(dice.canPickAFace()){
             //verify that the chosen die is okay
             output.showDiceChoice();
+
             dice.chooseDice(Die.intToFace(input.chooseDiceNumber()));
             return true;
         } else{

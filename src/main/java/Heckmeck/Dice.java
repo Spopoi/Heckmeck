@@ -94,10 +94,14 @@ public class Dice {
     }
 
 
-    public void chooseDice(Die.Face face) {
+    public boolean chooseDice(Die.Face face) {
         if (!isFaceChosen(face)){
             chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
             diceList.removeIf(e -> e.getDieFace() == face);
+            return true;
+        }
+        else{
+            return false;
         }
 
     }

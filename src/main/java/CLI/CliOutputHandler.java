@@ -18,7 +18,7 @@ public class CliOutputHandler implements OutputHandler {
                 put(Die.Face.THREE, "┊      ◎  ┊ ");
                 put(Die.Face.FOUR,  "┊  ◎   ◎  ┊ ");
                 put(Die.Face.FIVE,  "┊  ◎   ◎  ┊ ");
-                put(Die.Face.WORM,  "┊   \\=\\   ┊ ");
+                put(Die.Face.WORM,  "┊   \033[0;31m\\=\\\033[0m   ┊ ");
             }});
     private static final Map<Die.Face, String> dieToSecondRow =
             Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
@@ -27,7 +27,7 @@ public class CliOutputHandler implements OutputHandler {
                 put(Die.Face.THREE, "┊    ◎    ┊ ");
                 put(Die.Face.FOUR,  "┊         ┊ ");
                 put(Die.Face.FIVE,  "┊    ◎    ┊ ");
-                put(Die.Face.WORM,  "┊   /=/   ┊ ");
+                put(Die.Face.WORM,  "┊   \033[0;31m/=/\033[0m   ┊ ");
             }});
     private static final Map<Die.Face, String> dieToThirdRow =
             Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
@@ -36,7 +36,7 @@ public class CliOutputHandler implements OutputHandler {
                 put(Die.Face.THREE, "┊  ◎      ┊ ");
                 put(Die.Face.FOUR,  "┊  ◎   ◎  ┊ ");
                 put(Die.Face.FIVE,  "┊  ◎   ◎  ┊ ");
-                put(Die.Face.WORM,  "┊   \\=\\   ┊ ");
+                put(Die.Face.WORM,  "┊   \033[0;31m\\=\\\033[0m   ┊ ");
             }});
     private static String zero = "│      │";
     private static String one = "│  ~   │";
@@ -130,6 +130,8 @@ public class CliOutputHandler implements OutputHandler {
         String bottomRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow(), "UTF-8");
 
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
+
+
     }
 
     @Override
