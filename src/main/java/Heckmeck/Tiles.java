@@ -1,5 +1,7 @@
 package Heckmeck;
 
+import exception.IllegalTileSelection;
+
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -30,7 +32,9 @@ public class Tiles {
     }
 
     public void remove(Tile newTile) {
-        tiles.remove(newTile);
+        if (!tiles.remove(newTile)) {
+            throw new IllegalTileSelection("Can not remove tile " + newTile.getNumber() + ", it is not present in the board");
+        };
     }
 
     public void bust() {

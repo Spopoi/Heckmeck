@@ -3,6 +3,7 @@ package it.units.heckmeck;
 import Heckmeck.Tile;
 import Heckmeck.Tiles;
 import exception.IllegalTileNumber;
+import exception.IllegalTileSelection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +66,19 @@ public class TestTiles {
         expectedTiles.remove(expectedTiles.first());
 
         Assertions.assertEquals(tiles.getTiles(), expectedTiles);
+    }
+
+    @Test
+    void check_that_is_not_possible_to_remove_a_tile_alredy_removed(){
+        Tiles tiles = Tiles.init();
+        Tile tileToRemove = Tile.generateTile(21);
+        String expectedMessage = "Can not remove tile 21, it is not present in the board";
+
+        tiles.remove(tileToRemove);
+
+        Exception ex = Assertions.assertThrows(IllegalTileSelection.class, () ->
+                tiles.remove(tileToRemove));
+        Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
 
     //to refactor
