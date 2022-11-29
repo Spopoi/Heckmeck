@@ -151,8 +151,9 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showMenu(){
-        System.out.println("Benvenuto in Heckmeck");
-        System.out.println("Scegli il numero di giocatori tra 1 e 6");
+        System.out.print(getLogo());
+        System.out.println("                    Benvenuto in Heckmeck");
+        System.out.println("            Scegli il numero di giocatori tra 1 e 6:");
     }
 
     @Override
@@ -252,6 +253,17 @@ public class CliOutputHandler implements OutputHandler {
         else{
             return "│      │";
         }
+    }
+
+    static String getLogo(){
+        String topRow =     ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+        String firstRow =   ",--.  ,--.             ,--.                           ,--.    \n";
+        String secondRow =  "|  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-. \n";
+        String thirdRow =   "|  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     / \n";
+        String fourthRow =  "|  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  \\|\\   --.\\ `--.|  \\  \\ \n";
+        String fifthRow =   "`--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'\n";
+        String bottomRow = "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
+        return topRow + firstRow+secondRow+thirdRow+fourthRow+fifthRow+ bottomRow;
     }
 
     static String decodeText(String input, String encoding) throws IOException {
