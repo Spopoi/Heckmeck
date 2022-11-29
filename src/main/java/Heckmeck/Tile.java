@@ -1,5 +1,7 @@
 package Heckmeck;
 
+import exception.IllegalTileNumber;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +31,7 @@ public class Tile implements Comparable<Tile> {
                 put(35, 3);
                 put(36, 3);
             }});
-    public Tile(int number) {
-        this.number=number;
-    }
+    public Tile(int number) { this.number=number; }
 
     public int getNumber(){
         return number;
@@ -41,6 +41,9 @@ public class Tile implements Comparable<Tile> {
     }
 
     public static Tile generateTile(int number){
+        if (number < 21 || number > 36) {
+            throw new IllegalTileNumber(number);
+        }
         return new Tile(number);
     }
 

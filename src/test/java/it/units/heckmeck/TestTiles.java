@@ -2,10 +2,10 @@ package it.units.heckmeck;
 
 import Heckmeck.Tile;
 import Heckmeck.Tiles;
+import exception.IllegalTileNumber;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -26,6 +26,14 @@ public class TestTiles {
     void generate_tile(){
         Tile expected = new Tile(21);
         Assertions.assertEquals(expected, Tile.generateTile(21));
+    }
+
+    @Test
+    void check_that_is_not_possible_to_create_a_tile_that_is_not_present_in_the_game(){
+        String expectedMessage = "Tile numbers must be between 21 and 36 included. 40 has been given";
+
+        Exception ex = Assertions.assertThrows(IllegalTileNumber.class, () -> Tile.generateTile(40));
+        Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
 
     @Test
@@ -58,7 +66,6 @@ public class TestTiles {
 
         Assertions.assertEquals(tiles.getTiles(), expectedTiles);
     }
-
 
     //to refactor
     private TreeSet<Tile> setupTiles() {
@@ -110,4 +117,5 @@ public class TestTiles {
         Tile expectedBustedTile = Tile.generateTile(36);
         assertFalse(tilesList.contains(expectedBustedTile));
     }
+
 }
