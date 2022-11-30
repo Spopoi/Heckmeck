@@ -70,7 +70,7 @@ public class TestBoardTiles {
     }
 
     @Test
-    void check_that_is_not_possible_to_remove_a_tile_alredy_removed(){
+    void check_that_remove_a_tile_alredy_removed_throws_exception(){
         BoardTiles boardTiles = BoardTiles.init();
         Tile tileToRemove = Tile.generateTile(21);
         String expectedMessage = "Can not remove tile 21, it is not present in the board";
@@ -83,7 +83,7 @@ public class TestBoardTiles {
     }
 
     @Test
-    void check_that_is_not_possible_to_add_twice_the_same_tile(){
+    void check_that_adding_twice_the_same_tile_throws_exception(){
         BoardTiles boardTiles = BoardTiles.init();
         Tile tileToAdd = Tile.generateTile(21);
         String expectedMessage = "Tile number 21 is already present in the collection";
