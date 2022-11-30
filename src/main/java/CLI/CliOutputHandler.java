@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -71,35 +71,35 @@ public class CliOutputHandler implements OutputHandler {
             }});
 
     @Override
-    public void showDice(Dice dice) throws IOException {
+    public void showDice(Dice dice) throws IOException {    //TODO Cambiare concatenaz. con stringBuilder
         String topRow = "";
         String firstRow = "";
         String secondRow = "";
         String thirdRow = "";
         String bottomRow = "";
         for(Die die : dice.getDiceList()){
-            topRow      += decodeText(getTopDieRow(), "UTF-8");
-            firstRow    += decodeText(getFirstDieRow(die), "UTF-8");
-            secondRow   += decodeText(getSecondDieRow(die), "UTF-8");
-            thirdRow    += decodeText(getThirdDieRow(die), "UTF-8");
-            bottomRow   += decodeText(getDieBottomRow(), "UTF-8");
+            topRow      += decodeText(getTopDieRow());
+            firstRow    += decodeText(getFirstDieRow(die));
+            secondRow   += decodeText(getSecondDieRow(die));
+            thirdRow    += decodeText(getThirdDieRow(die));
+            bottomRow   += decodeText(getDieBottomRow());
         }
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
 
     @Override
-    public void showTiles(BoardTiles boardTiles) throws IOException {
+    public void showTiles(BoardTiles boardTiles) throws IOException { //TODO Cambiare concatenaz. con stringBuilder
         String topRow = "";
         String firstRow = "";
         String secondRow = "";
         String thirdRow = "";
         String bottomRow = "";
         for(Tile tile : boardTiles.getTiles()){
-            topRow      += decodeText(getTopTilesRow(), "UTF-8");
-            firstRow    += decodeText(getFirstTilesRow(tile), "UTF-8");
-            secondRow   += decodeText(getSecondTileRow(tile), "UTF-8");
-            thirdRow    += decodeText(getTilesThirdRow(tile), "UTF-8");
-            bottomRow   += decodeText(getBottomTilesRow(), "UTF-8");
+            topRow      += decodeText(getTopTilesRow());
+            firstRow    += decodeText(getFirstTilesRow(tile));
+            secondRow   += decodeText(getSecondTileRow(tile));
+            thirdRow    += decodeText(getTilesThirdRow(tile));
+            bottomRow   += decodeText(getBottomTilesRow());
         }
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
@@ -108,16 +108,17 @@ public class CliOutputHandler implements OutputHandler {
     public void showPlayerData(Player player, Dice dice) throws IOException {
         Tile tile = player.getLastPickedTile();
 
-        String displayString = decodeText( "        " + player.getName() + "'s tiles:  ", "UTF-8");
-        String chosenDiceString = decodeText( "     Chosen dice: " + dice.getChosenDiceString(), "UTF-8");
-        String chosenDiceScore = decodeText( "     Current dice score: " + dice.getScore(), "UTF-8");
-        String wormPresent = decodeText( "     WORM is chosen: " + dice.isWormChosen(), "UTF-8");
+        String displayString = decodeText( "        " + player.getName() + "'s tiles:  ");
+        String chosenDiceString = decodeText( "     Chosen dice: " + dice.getChosenDiceString());
+        String chosenDiceScore = decodeText( "     Current dice score: " + dice.getScore());
+        String wormPresent = decodeText( "     WORM is chosen: " + dice.isWormChosen());
 
-        String topRow = decodeText(String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString , "UTF-8");
-        String firstRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile) + chosenDiceScore, "UTF-8");
-        String secondRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getSecondTileRow(tile) + wormPresent, "UTF-8");
-        String thirdRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getTilesThirdRow(tile), "UTF-8");
-        String bottomRow =decodeText(String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow(), "UTF-8");
+        String topRow = decodeText(String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString);
+        String format = String.format("%1$" + displayString.length() + "s", "");
+        String firstRow =decodeText(format + getFirstTilesRow(tile) + chosenDiceScore);
+        String secondRow =decodeText(format + getSecondTileRow(tile) + wormPresent);
+        String thirdRow =decodeText(format + getTilesThirdRow(tile));
+        String bottomRow =decodeText(format + getBottomTilesRow());
 
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
 
@@ -131,10 +132,12 @@ public class CliOutputHandler implements OutputHandler {
         displayString += "'s tiles:  ";
 
         String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow();
-        String firstRow =String.format("%1$"+ displayString.length() + "s", "" ) + getFirstTilesRow(tile);
-        String secondRow =String.format("%1$"+ displayString.length() + "s", "" ) + getSecondTileRow(tile);
-        String thirdRow =String.format("%1$"+ displayString.length() + "s", "" ) + getTilesThirdRow(tile);
-        String bottomRow =String.format("%1$"+ displayString.length() + "s", "" ) + getBottomTilesRow();
+        String format = String.format("%1$" + displayString.length() + "s", "");
+
+        String firstRow = format + getFirstTilesRow(tile);
+        String secondRow = format + getSecondTileRow(tile);
+        String thirdRow = format + getTilesThirdRow(tile);
+        String bottomRow = format + getBottomTilesRow();
 
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
@@ -222,7 +225,7 @@ public class CliOutputHandler implements OutputHandler {
 
     private static String getFirstTilesRow(Tile tile){
         if (tile != null){
-            return "\033[0;93m│\033[0m  " + String.valueOf(tile.getNumber()) + "  \033[0;93m│\033[0m";
+            return "\033[0;93m│\033[0m  " + tile.getNumber() + "  \033[0;93m│\033[0m";
         }
         else{
             return "│  no  │";
@@ -246,26 +249,23 @@ public class CliOutputHandler implements OutputHandler {
     }
 
 static String getLogo(){
-
-        String logo ="""
+        return """
                         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                        ,--.  ,--.             ,--.                           ,--.    
-                        |  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-. 
-                        |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     / 
-                        |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  |\\   --.\\ `--.|  \\  \\ 
+                        ,--.  ,--.             ,--.                           ,--.
+                        |  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-.
+                        |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     /
+                        |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  |\\   --.\\ `--.|  \\  \\
                         `--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'
                         <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                         """;
-
-        return logo;
     }
 
-    static String decodeText(String input, String encoding) throws IOException {
+    static String decodeText(String input) throws IOException {
         return
                 new BufferedReader(
                         new InputStreamReader(
                                 new ByteArrayInputStream(input.getBytes()),
-                                Charset.forName(encoding)))
+                                StandardCharsets.UTF_8))
                         .readLine();
     }
 }
