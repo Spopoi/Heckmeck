@@ -175,11 +175,15 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
     }
 
-    @Override
-    public void showTurnBeginConfirm(){
-        System.out.println("################################");
-        System.out.println("# Hit enter to start your turn #");
-        System.out.println("################################");
+    //@Override
+    public void showTurnBeginConfirm(Player actualPlayer){
+        String message = " hit enter to start your turn #";
+        String separator = "#".repeat(actualPlayer.getName().length()).concat(
+                "#".repeat(message.length()+2));
+
+        System.out.println(separator);
+        System.out.println("# " + actualPlayer.getName() + message );
+        System.out.println(separator);
     }
 
     public static void drawSingleDie(Die die){

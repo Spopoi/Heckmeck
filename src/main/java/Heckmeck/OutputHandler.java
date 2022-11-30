@@ -14,5 +14,5 @@ public interface OutputHandler {
     public void showWantToPick();
     public void showBustMessage();
     public void showPlayerScore(Player actualPlayer, Dice dice);
-    public void showTurnBeginConfirm();
+    public void showTurnBeginConfirm(Player actualPlayer);
 }

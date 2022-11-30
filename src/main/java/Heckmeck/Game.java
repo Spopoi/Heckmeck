@@ -46,7 +46,7 @@ public class Game {
     }
 
     private void playerTurn() throws IOException {
-        output.showTurnBeginConfirm();
+        output.showTurnBeginConfirm(actualPlayer);
         input.pressAnyKey();
         int actualPlayerScore;
         boolean isOnRun = roll();
