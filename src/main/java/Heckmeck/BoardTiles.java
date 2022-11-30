@@ -1,5 +1,6 @@
 package Heckmeck;
 
+import exception.IllegalTileAddition;
 import exception.IllegalTileSelection;
 
 import java.util.*;
@@ -37,9 +38,11 @@ public class BoardTiles implements TilesCollection {
     }
 
     @Override
-    public void add(Tile newTile) {
+    public void add(Tile newTile) throws IllegalTileAddition{
+        if (hasTile(newTile)) {
+            throw new IllegalTileAddition(newTile.getNumber());
+        }
         tiles.add(newTile);
-        //tiles.sort(Comparator.comparingInt(Heckmeck.Tile::getNumber));
     }
 
     @Override

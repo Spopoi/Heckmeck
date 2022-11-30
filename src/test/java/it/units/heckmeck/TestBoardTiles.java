@@ -2,6 +2,7 @@ package it.units.heckmeck;
 
 import Heckmeck.Tile;
 import Heckmeck.BoardTiles;
+import exception.IllegalTileAddition;
 import exception.IllegalTileNumber;
 import exception.IllegalTileSelection;
 import org.junit.jupiter.api.Assertions;
@@ -78,6 +79,17 @@ public class TestBoardTiles {
 
         Exception ex = Assertions.assertThrows(IllegalTileSelection.class, () ->
                 boardTiles.remove(tileToRemove));
+        Assertions.assertEquals(expectedMessage, ex.getMessage());
+    }
+
+    @Test
+    void check_that_is_not_possible_to_add_twice_the_same_tile(){
+        BoardTiles boardTiles = BoardTiles.init();
+        Tile tileToAdd = Tile.generateTile(21);
+        String expectedMessage = "Tile number 21 is already present in the collection";
+
+        Exception ex = Assertions.assertThrows(IllegalTileAddition.class, () ->
+                boardTiles.add(tileToAdd));
         Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
 

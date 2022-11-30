@@ -1,5 +1,7 @@
 package Heckmeck;
 
+import java.util.Objects;
+
 public class Player {
 
     private final String playerName;
@@ -24,6 +26,10 @@ public class Player {
 
     public boolean hasTile() {
         return !playerTiles.isEmpty();
+    }
+
+    public void addTile(Tile tile){
+        playerTiles.add(tile);
     }
 
      public void pickTileFromBoard(Tile desiredTile, BoardTiles board) {
