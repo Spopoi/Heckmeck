@@ -1,5 +1,7 @@
 package Heckmeck;
 
+import exception.IllegalTileTheft;
+
 import java.util.Objects;
 
 public class Player {
@@ -41,11 +43,11 @@ public class Player {
         return playerTiles.peekLast();
     }
 
-    public void pickTileFromPlayer(Tile desiredTile, Player robbedPlayer) {
-        // Should throw an exception if it is not possible to steal tile
-        if (canStealTileFrom(desiredTile, robbedPlayer)) {
-            stealTileFromPlayer(robbedPlayer);
+    public void pickTileFromPlayer(Tile desiredTile, Player robbedPlayer) throws IllegalTileTheft {
+        if (!canStealTileFrom(desiredTile, robbedPlayer)) {
+            throw new IllegalTileTheft(desiredTile, robbedPlayer);
         }
+        stealTileFromPlayer(robbedPlayer);
     }
 
     private static boolean canStealTileFrom(Tile desiredTile, Player robbedPlayer) {

@@ -4,6 +4,7 @@ import Heckmeck.Player;
 import Heckmeck.Tile;
 import Heckmeck.BoardTiles;
 import exception.IllegalTileAddition;
+import exception.IllegalTileTheft;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -58,6 +59,33 @@ public class TestPlayer {
 
         Exception ex = Assertions.assertThrows(IllegalTileAddition.class, () ->
                 player.addTile(newTile));
+        Assertions.assertEquals(expectedMessage, ex.getMessage());
+    }
+
+    @Test
+    void check_that_steal_from_an_empty_player_stack_throw_exception(){
+        Player player = Player.generatePlayer("Ladro");
+        Player robbedPlayer = Player.generatePlayer("Derubato");
+        Tile desiredTile = Tile.generateTile(21);
+        String expectedMessage = "Can not steal tile 21 from Derubato";
+
+
+        Exception ex = Assertions.assertThrows(IllegalTileTheft.class, () ->
+                player.pickTileFromPlayer(desiredTile, robbedPlayer));
+        Assertions.assertEquals(expectedMessage, ex.getMessage());
+    }
+
+    @Test
+    void check_that_steal_wrong_tile_throw_exception(){
+        Player player = Player.generatePlayer("Ladro");
+        Player robbedPlayer = Player.generatePlayer("Derubato");
+        Tile desiredTile = Tile.generateTile(21);
+        String expectedMessage = "Can not steal tile 21 from Derubato";
+
+        robbedPlayer.addTile(Tile.generateTile(22));
+
+        Exception ex = Assertions.assertThrows(IllegalTileTheft.class, () ->
+                player.pickTileFromPlayer(desiredTile, robbedPlayer));
         Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
 
