@@ -256,14 +256,18 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     static String getLogo(){
-        String topRow =     ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
-        String firstRow =   ",--.  ,--.             ,--.                           ,--.    \n";
-        String secondRow =  "|  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-. \n";
-        String thirdRow =   "|  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     / \n";
-        String fourthRow =  "|  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  \\|\\   --.\\ `--.|  \\  \\ \n";
-        String fifthRow =   "`--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'\n";
-        String bottomRow = "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
-        return topRow + firstRow+secondRow+thirdRow+fourthRow+fifthRow+ bottomRow;
+
+        String logo ="""
+                        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                        ,--.  ,--.             ,--.                           ,--.    
+                        |  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-. 
+                        |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     / 
+                        |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  \\|\\   --.\\ `--.|  \\  \\ 
+                        `--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'
+                        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                        """;
+
+        return logo;
     }
 
     static String decodeText(String input, String encoding) throws IOException {
