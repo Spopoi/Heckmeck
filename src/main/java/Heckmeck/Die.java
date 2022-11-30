@@ -5,7 +5,7 @@ public class Die {
 
     private Face dieFace;
     private static final Random PRNG = new Random();
-    private static Map<Face, Integer> faceToIntMap = new HashMap<Face, Integer>();
+    private static Map<Face, Integer> faceToIntMap = new HashMap<Face, Integer>(); // TODO scegliere che mappa usare
     private static final Map<Integer, Face> intToFaceMap =
             Collections.unmodifiableMap(new HashMap<Integer, Face>() {{
                 put(1,Face.ONE);
@@ -73,10 +73,5 @@ public class Die {
         WORM
 
     }
-/*
-    @Override
-    public String toString() {
-        return value.toString();
-    }*/
 
 }
