@@ -7,7 +7,7 @@ public class Game {
 
     private final Player[] players;
     private Dice dice;
-    private Tiles groundTiles;
+    private BoardTiles boardTiles;
     private final OutputHandler output;
     private final InputHandler input;
 
@@ -18,7 +18,7 @@ public class Game {
     public Game(Player[] players, OutputHandler output, InputHandler input){
         this.players = players;
         this.dice = Dice.generateDice();
-        this.groundTiles = Tiles.init();
+        this.boardTiles = BoardTiles.init();
         this.output = output;
         this.input = input;
         gameFinished = false;
@@ -26,8 +26,8 @@ public class Game {
     public void play() throws IOException {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
-        while(groundTiles.size() > 0){
-            output.showTiles(groundTiles);
+        while(boardTiles.size() > 0){
+            output.showTiles(boardTiles);
             playerTurn();
             playerNumber++;
             if(playerNumber >= players.length) playerNumber = 0;
@@ -52,7 +52,7 @@ public class Game {
         boolean isOnRun = roll();
         while(isOnRun){
             actualPlayerScore = dice.getScore();
-            if(dice.isWormChosen() && actualPlayerScore >= groundTiles.getMinValueTile().getNumber()){
+            if(dice.isWormChosen() && actualPlayerScore >= boardTiles.getMinValueTile().getNumber()){
                 output.showWantToPick();
                 output.showPlayerScore(actualPlayer,dice);
                 if(input.wantToPick()) {
@@ -65,8 +65,8 @@ public class Game {
     }
 
     private void pickBoardTile(int actualPlayerScore){
-        TreeSet<Tile> acquirableTiles = new TreeSet<>(groundTiles.getTilesList().stream().filter(tile-> tile.getNumber() <= actualPlayerScore).toList());
-        actualPlayer.pickTileFromBoard(acquirableTiles.last(), groundTiles);
+        TreeSet<Tile> acquirableTiles = new TreeSet<>(boardTiles.getTilesList().stream().filter(tile-> tile.getNumber() <= actualPlayerScore).toList());
+        actualPlayer.pickTileFromBoard(acquirableTiles.last(), boardTiles);
     }
 
     private boolean roll() throws IOException {
@@ -88,6 +88,6 @@ public class Game {
     private void bust(){
         output.showBustMessage();
         actualPlayer.removeLastPickedTile();
-        groundTiles.bust();
+        boardTiles.bust();
     }
 }
