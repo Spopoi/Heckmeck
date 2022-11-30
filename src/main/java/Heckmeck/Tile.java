@@ -40,7 +40,7 @@ public class Tile implements Comparable<Tile> {
         return numberToWorms.get(number);
     }
 
-    public static Tile generateTile(int number){
+    public static Tile generateTile(int number) throws IllegalTileNumber{
         if (number < 21 || number > 36) {
             throw new IllegalTileNumber(number);
         }

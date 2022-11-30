@@ -43,7 +43,7 @@ public class BoardTiles implements TilesCollection {
     }
 
     @Override
-    public void remove(Tile newTile) {
+    public void remove(Tile newTile) throws IllegalTileSelection{
         if (!tiles.remove(newTile)) {
             throw new IllegalTileSelection("Can not remove tile " + newTile.getNumber() + ", it is not present in the board");
         };
