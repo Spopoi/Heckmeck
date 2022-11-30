@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static Heckmeck.Die.Face.WORM;
+import static java.util.stream.Collectors.toList;
 
 public class Dice {
     private final int  initialNumOfDice = 8;
@@ -101,17 +102,13 @@ public class Dice {
     }
 
     public String getChosenDiceString(){
-        return chosenDiceList.stream().map(e -> e.getDieFace().toString()).collect(Collectors.toList()).toString();
+        return chosenDiceList.stream().map(e -> e.getDieFace().toString()).toList().toString();
 
     }
 
     public List<Die.Face> getChosenFaces() {
-        List<Die> distinctChosenDice = chosenDiceList.stream().distinct().toList();
-        List<Die.Face> chosenFaces = new ArrayList<>();
-        for(Die die : distinctChosenDice){
-            chosenFaces.add(die.getDieFace());
-        }
-        return chosenFaces;
+        return diceList.stream().map(Die::getDieFace).filter(e -> isFaceChosen(e)).toList();
+
     }
     private List <Die> getChosableFaces(){
         return diceList.stream().filter(e -> !isFaceChosen(e.getDieFace())).toList();
@@ -131,7 +128,6 @@ public class Dice {
     }
 
     public boolean canPickAFace(){
-        if (getChosableFaces().size() != 0){return true;}
-        return false;
+        return getChosableFaces().size() != 0;
     }
 }
