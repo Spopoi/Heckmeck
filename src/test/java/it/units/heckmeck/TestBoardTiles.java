@@ -1,17 +1,18 @@
 package it.units.heckmeck;
 
 import Heckmeck.Tile;
-import Heckmeck.Tiles;
+import Heckmeck.BoardTiles;
+import exception.IllegalTileNumber;
+import exception.IllegalTileSelection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestTiles {
+public class TestBoardTiles {
 
     @Test
     void init_tile_number_21_with_2_worms(){
@@ -29,41 +30,61 @@ public class TestTiles {
     }
 
     @Test
+    void check_that_is_not_possible_to_create_a_tile_that_is_not_present_in_the_game(){
+        String expectedMessage = "Tile numbers must be between 21 and 36 included. 40 has been given";
+
+        Exception ex = Assertions.assertThrows(IllegalTileNumber.class, () -> Tile.generateTile(40));
+        Assertions.assertEquals(expectedMessage, ex.getMessage());
+    }
+
+    @Test
     void check_tiles_initialization(){
-        Tiles tiles = Tiles.init();
+        BoardTiles boardTiles = BoardTiles.init();
         TreeSet<Tile> expectedTiles = setupTiles();
-        Assertions.assertEquals(tiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
     }
 
     @Test
     void add_tile(){
         Tile newTile = Tile.generateTile(26);
 
-        Tiles tiles = Tiles.init();
-        tiles.add(newTile);
+        BoardTiles boardTiles = BoardTiles.init();
+        boardTiles.add(newTile);
 
         TreeSet<Tile> expectedTiles = setupTiles();
         expectedTiles.add(newTile);
-        Assertions.assertEquals(tiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
     }
 
     @Test
     void remove_first_tile(){
-        Tiles tiles = Tiles.init();
+        BoardTiles boardTiles = BoardTiles.init();
         Tile firstTile = Tile.generateTile(21);
-        tiles.remove(firstTile);
+        boardTiles.remove(firstTile);
 
         TreeSet<Tile> expectedTiles = setupTiles();
         expectedTiles.remove(expectedTiles.first());
 
-        Assertions.assertEquals(tiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
     }
 
+    @Test
+    void check_that_is_not_possible_to_remove_a_tile_alredy_removed(){
+        BoardTiles boardTiles = BoardTiles.init();
+        Tile tileToRemove = Tile.generateTile(21);
+        String expectedMessage = "Can not remove tile 21, it is not present in the board";
+
+        boardTiles.remove(tileToRemove);
+
+        Exception ex = Assertions.assertThrows(IllegalTileSelection.class, () ->
+                boardTiles.remove(tileToRemove));
+        Assertions.assertEquals(expectedMessage, ex.getMessage());
+    }
 
     //to refactor
     private TreeSet<Tile> setupTiles() {
         TreeSet<Tile> expected = new TreeSet<>();
-        for (int tileNumber = 21; tileNumber < 21 + Tiles.numberOfTiles ; tileNumber++) {
+        for (int tileNumber = 21; tileNumber < 21 + BoardTiles.numberOfTiles ; tileNumber++) {
             if(tileNumber < 25) expected.add(Tile.generateTile(tileNumber));
             else if( tileNumber < 29) expected.add(Tile.generateTile(tileNumber));
             else expected.add(Tile.generateTile(tileNumber));
@@ -73,10 +94,10 @@ public class TestTiles {
 
     @Test
     void check_order(){
-        Tiles tiles = Tiles.init();
-        List<Tile> listTiles = tiles.getTiles().stream().toList();
+        BoardTiles boardTiles = BoardTiles.init();
+        List<Tile> listTiles = boardTiles.getTiles().stream().toList();
         boolean correctAscendantOrder = true;
-        for (int i = 0; i < Tiles.numberOfTiles - 1; i++) {
+        for (int i = 0; i < BoardTiles.numberOfTiles - 1; i++) {
             if (listTiles.get(i).getNumber() > listTiles.get(i + 1).getNumber()) {
                 correctAscendantOrder = false;
                 break;
@@ -87,11 +108,11 @@ public class TestTiles {
 
     @Test
     void check_order_after_adding_one_tile(){
-        Tiles tiles = Tiles.init();
-        tiles.add(Tile.generateTile(28));
-        List<Tile> listTiles = tiles.getTiles().stream().toList();
+        BoardTiles boardTiles = BoardTiles.init();
+        boardTiles.add(Tile.generateTile(28));
+        List<Tile> listTiles = boardTiles.getTiles().stream().toList();
         boolean correctAscendantOrder = true;
-        for (int i = 0; i < Tiles.numberOfTiles - 1; i++) {
+        for (int i = 0; i < BoardTiles.numberOfTiles - 1; i++) {
             if (listTiles.get(i).getNumber() > listTiles.get(i + 1).getNumber()) {
                 correctAscendantOrder = false;
                 break;
@@ -104,10 +125,11 @@ public class TestTiles {
     //getter ultimo elemento e check non ci sia piu'
     @Test
     void check_bust(){
-        Tiles tiles = Tiles.init();
-        tiles.bust();
-        TreeSet<Tile> tilesList = tiles.getTiles();
+        BoardTiles boardTiles = BoardTiles.init();
+        boardTiles.bust();
+        TreeSet<Tile> tilesList = boardTiles.getTiles();
         Tile expectedBustedTile = Tile.generateTile(36);
         assertFalse(tilesList.contains(expectedBustedTile));
     }
+
 }

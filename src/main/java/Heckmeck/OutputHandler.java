@@ -5,7 +5,7 @@ import java.io.IOException;
 public interface OutputHandler {
 
     public void showDice(Dice dice) throws IOException;
-    public void showTiles(Tiles tiles) throws IOException;
+    public void showTiles(BoardTiles boardTiles) throws IOException;
     public void showPlayerTile(Player player);
     public void showPlayerData(Player player, Dice dice) throws IOException;
     public void showMenu();

@@ -1,19 +1,17 @@
 package Heckmeck;
 
-import java.util.LinkedList;
-
 public class Player {
 
     private final String playerName;
-    private LinkedList<Tile> playerTiles;
+    private StackOfTiles playerTiles;
 
     private Player(String playerName){
         this.playerName = playerName;
-        this.playerTiles = new LinkedList<>();
+        this.playerTiles = StackOfTiles.generate();
     }
 
     public int getWormNumber(){
-        return playerTiles.stream().mapToInt(Tile::getWorms).sum();
+        return playerTiles.computeScore();
     }
 
     public static Player generatePlayer(String playerName) {
@@ -28,31 +26,31 @@ public class Player {
         return !playerTiles.isEmpty();
     }
 
-     public void pickTileFromBoard(Tile desiredTile, Tiles board) {
+     public void pickTileFromBoard(Tile desiredTile, BoardTiles board) {
         board.remove(desiredTile);
         playerTiles.add(desiredTile);
      }
 
     public Tile getLastPickedTile() {
-        return hasTile() ? playerTiles.getLast() : null;
+        return playerTiles.peekLast();
     }
 
-    public boolean pickTileFromPlayer(Tile desiredTile, Player robbedPlayer) {
+    public void pickTileFromPlayer(Tile desiredTile, Player robbedPlayer) {
+        // Should throw an exception if it is not possible to steal tile
         if (canStealTileFrom(desiredTile, robbedPlayer)) {
-            return stealTileFromPlayer(robbedPlayer);
+            stealTileFromPlayer(robbedPlayer);
         }
-        return false;
     }
 
     private static boolean canStealTileFrom(Tile desiredTile, Player robbedPlayer) {
         return robbedPlayer.hasTile() && robbedPlayer.getLastPickedTile().equals(desiredTile);
     }
 
-    private boolean stealTileFromPlayer(Player robbedPlayer) {
-        return playerTiles.add(robbedPlayer.getLastPickedTile());
+    private void stealTileFromPlayer(Player robbedPlayer) {
+        playerTiles.add(robbedPlayer.getLastPickedTile());
     }
 
     public void removeLastPickedTile() {
-        if(playerTiles.size()>0) playerTiles.removeLast();
+        playerTiles.removeLast();
     }
 }

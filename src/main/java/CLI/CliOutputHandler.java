@@ -98,13 +98,13 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showTiles(Tiles tiles) throws IOException {
+    public void showTiles(BoardTiles boardTiles) throws IOException {
         String topRow = "";
         String firstRow = "";
         String secondRow = "";
         String thirdRow = "";
         String bottomRow = "";
-        for(Tile tile : tiles.getTiles()){
+        for(Tile tile : boardTiles.getTiles()){
             topRow      += decodeText(getTopTilesRow(), "UTF-8");
             firstRow    += decodeText(getFirstTilesRow(tile), "UTF-8");
             secondRow   += decodeText(getSecondTileRow(tile), "UTF-8");
