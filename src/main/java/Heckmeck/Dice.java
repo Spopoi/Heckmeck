@@ -23,27 +23,17 @@ public class Dice {
         return new Dice();
     }
 
-    public List <Die> getList(){
-        return diceList;
-    }
-
     public void rollDice(){
         for (Die d : diceList){
             d.rollDie();
         }
     }
-/*    public void rollDice(int n){
-        numOfDice = diceList.size();
-        for (Die d : diceList){
-            d.rollDie();
-        }
-    }*/
 
     public List <Die> getDiceList(){
         return diceList;
     }
 
-    public List<Die.Face> getFaceList(){
+    public List<Die.Face> getFaceList(){ //TODO capire se serve
         return diceList.stream().map(Die::getDieFace).toList();
     }
 
@@ -94,14 +84,10 @@ public class Dice {
     }
 
 
-    public boolean chooseDice(Die.Face face) {
-        if (!isFaceChosen(face)){
+    public void chooseDice(Die.Face face) {
+        if (!isFaceChosen(face)) {
             chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
             diceList.removeIf(e -> e.getDieFace() == face);
-            return true;
-        }
-        else{
-            return false;
         }
 
     }
