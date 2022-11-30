@@ -11,73 +11,63 @@ import java.util.*;
 
 public class CliOutputHandler implements OutputHandler {
 
-    private static final Map<Die.Face, String> dieToFirstRow =
-            Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
-                put(Die.Face.ONE,   "┊         ┊ ");
-                put(Die.Face.TWO,   "┊      ◎  ┊ ");
-                put(Die.Face.THREE, "┊      ◎  ┊ ");
-                put(Die.Face.FOUR,  "┊  ◎   ◎  ┊ ");
-                put(Die.Face.FIVE,  "┊  ◎   ◎  ┊ ");
-                put(Die.Face.WORM,  "┊   \033[0;31m\\=\\\033[0m   ┊ ");
-            }});
-    private static final Map<Die.Face, String> dieToSecondRow =
-            Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
-                put(Die.Face.ONE,   "┊    ◎    ┊ ");
-                put(Die.Face.TWO,   "┊         ┊ ");
-                put(Die.Face.THREE, "┊    ◎    ┊ ");
-                put(Die.Face.FOUR,  "┊         ┊ ");
-                put(Die.Face.FIVE,  "┊    ◎    ┊ ");
-                put(Die.Face.WORM,  "┊   \033[0;31m/=/\033[0m   ┊ ");
-            }});
-    private static final Map<Die.Face, String> dieToThirdRow =
-            Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
-                put(Die.Face.ONE,   "┊         ┊ ");
-                put(Die.Face.TWO,   "┊  ◎      ┊ ");
-                put(Die.Face.THREE, "┊  ◎      ┊ ");
-                put(Die.Face.FOUR,  "┊  ◎   ◎  ┊ ");
-                put(Die.Face.FIVE,  "┊  ◎   ◎  ┊ ");
-                put(Die.Face.WORM,  "┊   \033[0;31m\\=\\\033[0m   ┊ ");
-            }});
-    private static String zero = "\033[0;93m│      │\033[0m";
-    private static String one = "\033[0;93m│\033[0m  \033[0;31m~\033[0m   \033[0;93m│\033[0m";
-    private static String two = "\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m";
+    private static final String[] faceOne = {   "┊         ┊ ",
+                                                "┊    ◎    ┊ ",
+                                                "┊         ┊ "  };
 
-    private static final Map<Integer, String> secondTileRowToWorms =
-            Collections.unmodifiableMap(new HashMap<Integer, String>() {{
-                put(21, one);
-                put(22, one);
-                put(23, one);
-                put(24, one);
-                put(25, two);
-                put(26, two);
-                put(27, two);
-                put(28, two);
-                put(29, two);
-                put(30, two);
-                put(31, two);
-                put(32, two);
-                put(33, two);
-                put(34, two);
-                put(35, two);
-                put(36, two);
-            }});    private static final Map<Integer, String> thirdTileRowToWorms =
-            Collections.unmodifiableMap(new HashMap<Integer, String>() {{
-                put(21, zero);
-                put(22, zero);
-                put(23, zero);
-                put(24, zero);
-                put(25, zero);
-                put(26, zero);
-                put(27, zero);
-                put(28, zero);
-                put(29, one);
-                put(30, one);
-                put(31, one);
-                put(32, two);
-                put(33, two);
-                put(34, two);
-                put(35, two);
-                put(36, two);
+    private static final String[] faceTwo = {   "┊      ◎  ┊ ",
+                                                "┊         ┊ ",
+                                                "┊  ◎      ┊ "  };
+
+    private static final String[] faceThree ={  "┊      ◎  ┊ ",
+                                                "┊    ◎    ┊ ",
+                                                "┊  ◎      ┊ "  };
+
+    private static final String[] faceFour = {  "┊  ◎   ◎  ┊ ",
+                                                "┊         ┊ ",
+                                                "┊  ◎   ◎  ┊ "  };
+
+    private static final String[] faceFive = {  "┊  ◎   ◎  ┊ ",
+                                                "┊    ◎    ┊ ",
+                                                "┊  ◎   ◎  ┊ "  };
+
+    private static final String[] faceWorm = {      "┊   \033[0;31m\\=\\\033[0m   ┊ ",
+                                                    "┊   \033[0;31m/=/\033[0m   ┊ ",
+                                                    "┊   \033[0;31m\\=\\\033[0m   ┊ "  };
+
+    private static final Map<Die.Face, String[]> dieToString =
+            Collections.unmodifiableMap(new HashMap<Die.Face, String[]>() {{
+                put(Die.Face.ONE,   faceOne);
+                put(Die.Face.TWO,   faceTwo);
+                put(Die.Face.THREE, faceThree);
+                put(Die.Face.FOUR,  faceFour);
+                put(Die.Face.FIVE,  faceFive);
+                put(Die.Face.WORM,  faceWorm);
+            }});
+
+    private static final String[] oneWorm = {"\033[0;93m│\033[0m  \033[0;31m~\033[0m   \033[0;93m│\033[0m", "\033[0;93m│      │\033[0m"};
+    private static final String[] twoWorms = {"\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m", "\033[0;93m│      │\033[0m"};
+    private static final String[] threeWorms = {"\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m", "\033[0;93m│\033[0m  \033[0;31m~\033[0m   \033[0;93m│\033[0m"};
+    private static final String[] fourWorms = {"\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m", "\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m"};
+
+    private static final Map<Integer, String[]> tileToString =
+            Collections.unmodifiableMap(new HashMap<Integer, String[]>() {{
+                put(21, oneWorm);
+                put(22, oneWorm);
+                put(23, oneWorm);
+                put(24, oneWorm);
+                put(25, twoWorms);
+                put(26, twoWorms);
+                put(27, twoWorms);
+                put(28, twoWorms);
+                put(29, threeWorms);
+                put(30, threeWorms);
+                put(31, threeWorms);
+                put(32, threeWorms);
+                put(33, fourWorms);
+                put(34, fourWorms);
+                put(35, fourWorms);
+                put(36, fourWorms);
             }});
 
     @Override
@@ -210,13 +200,13 @@ public class CliOutputHandler implements OutputHandler {
         return "┌---------┐ ";
     }
     public static String getFirstDieRow(Die die){
-        return dieToFirstRow.get(die.getDieFace());
+        return dieToString.get(die.getDieFace())[0];
     }
     public static String getSecondDieRow(Die die){
-        return dieToSecondRow.get(die.getDieFace());
+        return dieToString.get(die.getDieFace())[1];
     }
     public static String getThirdDieRow(Die die){
-        return dieToThirdRow.get(die.getDieFace());
+        return dieToString.get(die.getDieFace())[2];
     }
     public static String getDieBottomRow(){
         return "└---------┘ ";
@@ -240,7 +230,7 @@ public class CliOutputHandler implements OutputHandler {
     }
     private static String getSecondTileRow(Tile tile){
         if (tile != null){
-            return secondTileRowToWorms.get(tile.getNumber());
+            return tileToString.get(tile.getNumber())[0];
         }
         else{
             return "│ tile │";
@@ -248,7 +238,7 @@ public class CliOutputHandler implements OutputHandler {
     }
     private static  String getTilesThirdRow(Tile tile){
         if (tile != null){
-            return thirdTileRowToWorms.get(tile.getNumber());
+            return tileToString.get(tile.getNumber())[1];
         }
         else{
             return "│      │";
