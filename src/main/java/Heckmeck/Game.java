@@ -17,7 +17,7 @@ public class Game {
 
     public Game(Player[] players, OutputHandler output, InputHandler input){
         this.players = players;
-        this.dice = Dice.generateDice();
+        this.dice = Dice.generateDice();// TODO ha senso rinominare in init()?
         this.boardTiles = BoardTiles.init();
         this.output = output;
         this.input = input;

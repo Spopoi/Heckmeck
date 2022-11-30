@@ -121,8 +121,6 @@ public class CliOutputHandler implements OutputHandler {
         String bottomRow =decodeText(format + getBottomTilesRow());
 
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
-
-
     }
 
     @Override
