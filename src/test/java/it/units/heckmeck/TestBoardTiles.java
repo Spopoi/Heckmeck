@@ -47,13 +47,14 @@ public class TestBoardTiles {
 
     @Test
     void add_tile(){
-        Tile newTile = Tile.generateTile(26);
+        Tile tileToTest = Tile.generateTile(26);
 
         BoardTiles boardTiles = BoardTiles.init();
-        boardTiles.add(newTile);
+        boardTiles.remove(tileToTest);
+        boardTiles.add(tileToTest);
 
         TreeSet<Tile> expectedTiles = setupTiles();
-        expectedTiles.add(newTile);
+        expectedTiles.add(tileToTest);
         Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
     }
 
@@ -121,7 +122,10 @@ public class TestBoardTiles {
     @Test
     void check_order_after_adding_one_tile(){
         BoardTiles boardTiles = BoardTiles.init();
-        boardTiles.add(Tile.generateTile(28));
+        Tile tileToTest = Tile.generateTile(28);
+
+        boardTiles.remove(tileToTest);
+        boardTiles.add(tileToTest);
         List<Tile> listTiles = boardTiles.getTiles().stream().toList();
         boolean correctAscendantOrder = true;
         for (int i = 0; i < BoardTiles.numberOfTiles - 1; i++) {
@@ -130,6 +134,7 @@ public class TestBoardTiles {
                 break;
             }
         }
+
         assertTrue(correctAscendantOrder);
     }
 
