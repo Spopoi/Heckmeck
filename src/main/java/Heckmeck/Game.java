@@ -5,7 +5,8 @@ import java.util.TreeSet;
 
 public class Game {
 
-    private final Player[] players;
+    // final (?)
+    private Player[] players;
     private Dice dice;
     private BoardTiles boardTiles;
     private final OutputHandler output;
@@ -14,6 +15,24 @@ public class Game {
     private boolean gameFinished;
 
     private Player actualPlayer;
+
+    public Game(OutputHandler output, InputHandler input) {
+        this.output = output;
+        this.input = input;
+    }
+
+    public void init() {
+        output.showWelcomeMessage();
+        if (input.wantToPlay()) {
+            setupPlayersFromUserInput();
+            this.dice = Dice.generateDice(); // TODO ha senso rinominare in init()?
+            this.boardTiles = BoardTiles.init();
+            gameFinished = false;
+        }
+        else {
+            System.exit(0);
+        }
+    }
 
     public Game(Player[] players, OutputHandler output, InputHandler input){
         this.players = players;
@@ -89,5 +108,16 @@ public class Game {
         output.showBustMessage();
         actualPlayer.removeLastPickedTile();
         boardTiles.bust();
+    }
+
+    private void setupPlayersFromUserInput() {
+        output.askForNumberOfPlayers();
+        int numberOfPlayers = input.chooseNumberOfPlayers();
+        this.players = new Player[numberOfPlayers];
+        for(Player player : players) {
+            output.showSetPlayerName();
+            String playerName = input.choosePlayerName();
+            player = Player.generatePlayer(playerName);
+        }
     }
 }

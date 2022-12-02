@@ -148,6 +148,18 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
+    public void showWelcomeMessage(){
+        System.out.print(getLogo());
+        System.out.println("                      Welcome in Heckmeck");
+        System.out.println("Do you want to start a new game? y/n");
+    }
+
+    @Override
+    public void askForNumberOfPlayers(){
+        System.out.println("Choose number of players between 2 and 7:");
+    }
+
+    @Override
     public void showSetPlayerName(){
         System.out.println("Inserisci il nome del giocatore");
     }

@@ -9,6 +9,8 @@ public interface OutputHandler {
     public void showPlayerTile(Player player);
     public void showPlayerData(Player player, Dice dice) throws IOException;
     public void showMenu();
+    void showWelcomeMessage();
+    void askForNumberOfPlayers();
     public void showSetPlayerName();
     public void showDiceChoice();
     public void showWantToPick();

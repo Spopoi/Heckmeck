@@ -1,7 +1,5 @@
 package CLI;
 
-import Heckmeck.Dice;
-import Heckmeck.Die;
 import Heckmeck.InputHandler;
 
 import java.io.IOException;
@@ -14,9 +12,16 @@ public class CliInputHandler implements InputHandler {
     public CliInputHandler(){
         scan = new Scanner(System.in);
     }
+
+    @Override
+    public boolean wantToPlay() {
+        char decision  = scan.nextLine().charAt(0);
+        return decision == 'y';
+    }
+
     @Override
     public int chooseNumberOfPlayers() {
-        return Integer.parseInt(scan.nextLine());
+        return Integer.parseInt(scan.nextLine())-1;
     }
 
     @Override
