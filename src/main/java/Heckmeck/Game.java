@@ -21,9 +21,9 @@ public class Game {
         this.input = input;
     }
 
-    public void init() {
+    public void init(){
         output.showWelcomeMessage();
-        if (input.wantToPlay()) {
+        if (input.wantToPlay()){
             int numberOfPlayers = getNumberOfPlayer();
             this.players = setupPlayersFromUserInput(numberOfPlayers);
             this.dice = Dice.generateDice(); // TODO ha senso rinominare in init()?
@@ -66,7 +66,6 @@ public class Game {
     public void play() throws IOException {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
-//        while(boardTiles.size() > 0){
         while(!boardTiles.isEmpty()){
             output.showTiles(boardTiles);
             playerTurn();
@@ -87,22 +86,61 @@ public class Game {
     }
 
     private void playerTurn() throws IOException {
-        output.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
-        input.pressAnyKey();
-        int actualPlayerScore;
+        //output.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
+        //input.pressAnyKey();
         boolean isOnRun = roll();
-        while(isOnRun){
-            actualPlayerScore = dice.getScore();
-            if(dice.isWormChosen() && actualPlayerScore >= boardTiles.getMinValueTile().getNumber()){
-                output.showWantToPick();
-                output.showPlayerScore(actualPlayer,dice);
-                if(input.wantToPick()) {
-                    pickBoardTile(actualPlayerScore);
+        while (isOnRun){
+            if (dice.isWormChosen()) {
+                if (steal() || pick()) {
                     isOnRun = false;
-                }else isOnRun = roll();
+                } else isOnRun = roll();
             } else isOnRun = roll();
         }
         dice.resetDice();
+    }
+
+    private boolean pick(){
+        if(!canPick()) return false;
+        output.showWantToPick();
+        output.showPlayerScore(actualPlayer,dice);
+        if(input.wantToPick()) {
+            pickBoardTile(dice.getScore());
+            return true;
+        }else return false;
+    }
+
+    private boolean steal() {
+        if(!canSteal()) return false;
+        output.showWantToSteal();
+        if(input.wantToSteal()){
+            stealTile();
+            return true;
+        }else return false;
+    }
+
+    private void stealTile() {
+        int playerScore = dice.getScore();
+        for(Player robbedPlayer : players){
+            if(!robbedPlayer.equals(actualPlayer) && robbedPlayer.hasTile() && playerScore == robbedPlayer.getLastPickedTile().getNumber()){
+                actualPlayer.pickTileFromPlayer(robbedPlayer.getLastPickedTile(),robbedPlayer);
+            }
+        }
+    }
+
+    private boolean canPick(){
+        return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
+    }
+
+    //TODO: equals method for players
+    private boolean canSteal() {
+        int playerScore = dice.getScore();
+        if(playerScore < Tile.tileMinNumber) return false;
+        for(Player player : players){
+            if(!player.equals(actualPlayer) && player.hasTile() && playerScore == player.getLastPickedTile().getNumber()){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void pickBoardTile(int actualPlayerScore){

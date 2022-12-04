@@ -47,4 +47,10 @@ public class CliInputHandler implements InputHandler {
     public void pressAnyKey() throws IOException {
         System.in.read();
     }
+
+    @Override
+    public boolean wantToSteal() {
+        char decision  = scan.nextLine().charAt(0);
+        return decision == 'y';
+    }
 }

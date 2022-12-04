@@ -14,4 +14,6 @@ public interface InputHandler{
     public boolean wantToPick();
 
     public void pressAnyKey() throws IOException;
+
+    public boolean wantToSteal();
 }

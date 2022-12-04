@@ -56,6 +56,7 @@ public class Player {
 
     private void stealTileFromPlayer(Player robbedPlayer) {
         playerTiles.add(robbedPlayer.getLastPickedTile());
+        robbedPlayer.removeLastPickedTile();
     }
 
     public void removeLastPickedTile() {

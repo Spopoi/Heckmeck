@@ -209,6 +209,11 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println(separator);
     }
 
+    @Override
+    public void showWantToSteal() {
+        System.out.println("Do you want to steal? Press 'y' for stealing or 'n' for continuing your turn:");
+    }
+
     public static void drawSingleDie(Die die){
         String toPrint = getTopDieRow();
         toPrint += "\n";
