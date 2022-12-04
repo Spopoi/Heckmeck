@@ -24,7 +24,8 @@ public class Game {
     public void init() {
         output.showWelcomeMessage();
         if (input.wantToPlay()) {
-            setupPlayersFromUserInput();
+            int numberOfPlayers = getNumberOfPlayer();
+            this.players = setupPlayersFromUserInput(numberOfPlayers);
             this.dice = Dice.generateDice(); // TODO ha senso rinominare in init()?
             this.boardTiles = BoardTiles.init();
             gameFinished = false;
@@ -32,6 +33,26 @@ public class Game {
         else {
             System.exit(0);
         }
+    }
+
+    private int getNumberOfPlayer() {
+        output.askForNumberOfPlayers();
+        while(true) {
+            try {
+                int numberOfPlayers = input.chooseNumberOfPlayers();
+                if (isValidNumberOfPlayers(numberOfPlayers)) {
+                    return numberOfPlayers;
+                } else {
+                    output.showIncorrectNumberOfPlayersMessage();
+                }
+            } catch (NumberFormatException ex) {
+                output.showIncorrectNumberOfPlayersMessage();
+            }
+        }
+    }
+
+    private boolean isValidNumberOfPlayers(int numberOfPlayer) {
+        return (numberOfPlayer >= 2 && numberOfPlayer <= 7);
     }
 
     public Game(Player[] players, OutputHandler output, InputHandler input){
@@ -45,7 +66,8 @@ public class Game {
     public void play() throws IOException {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
-        while(boardTiles.size() > 0){
+//        while(boardTiles.size() > 0){
+        while(!boardTiles.isEmpty()){
             output.showTiles(boardTiles);
             playerTurn();
             playerNumber++;
@@ -65,7 +87,7 @@ public class Game {
     }
 
     private void playerTurn() throws IOException {
-        output.showTurnBeginConfirm(actualPlayer);
+        output.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
         input.pressAnyKey();
         int actualPlayerScore;
         boolean isOnRun = roll();
@@ -95,6 +117,7 @@ public class Game {
         if(dice.canPickAFace()){
             //verify that the chosen die is okay
             output.showDiceChoice();
+//            dice.chooseDice();
 
             dice.chooseDice(Die.intToFace(input.chooseDiceNumber()));
             return true;
@@ -110,14 +133,19 @@ public class Game {
         boardTiles.bust();
     }
 
-    private void setupPlayersFromUserInput() {
-        output.askForNumberOfPlayers();
-        int numberOfPlayers = input.chooseNumberOfPlayers();
-        this.players = new Player[numberOfPlayers];
-        for(Player player : players) {
-            output.showSetPlayerName();
+    private Player[] setupPlayersFromUserInput(int numberOfPlayers) {
+        // Why not ArrayList?
+        Player[] playersList = new Player[numberOfPlayers];
+        for(int i=0; i<numberOfPlayers; i++) {
+            output.showSetPlayerName(i+1);
             String playerName = input.choosePlayerName();
-            player = Player.generatePlayer(playerName);
+            while (playerName.isBlank()) {
+                output.showBlankPlayerNameWarning();
+                output.showSetPlayerName(i+1);
+                playerName = input.choosePlayerName();
+            }
+            playersList[i] = Player.generatePlayer(playerName);
         }
+        return playersList;
     }
 }

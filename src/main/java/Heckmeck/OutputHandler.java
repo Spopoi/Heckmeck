@@ -11,7 +11,11 @@ public interface OutputHandler {
     public void showMenu();
     void showWelcomeMessage();
     void askForNumberOfPlayers();
-    public void showSetPlayerName();
+    void showIncorrectNumberOfPlayersMessage();
+    public void showSetPlayerName(int playerNumber);
+
+    void showBlankPlayerNameWarning();
+
     public void showDiceChoice();
     public void showWantToPick();
     public void showBustMessage();

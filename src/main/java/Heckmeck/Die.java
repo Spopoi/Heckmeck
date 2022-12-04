@@ -1,6 +1,8 @@
 package Heckmeck;
 import  java.util.*;
 
+import static java.util.Map.entry;
+
 public class Die {
 
     private Face dieFace;
@@ -15,6 +17,15 @@ public class Die {
                 put(5,Face.FIVE);
                 put(6,Face.WORM);
             }});
+
+    public static final Map<String, Face> stringToFaceMap = Map.ofEntries(
+            entry("1", Face.ONE),
+            entry("2", Face.TWO),
+            entry("3", Face.THREE),
+            entry("4", Face.FOUR),
+            entry("5", Face.FIVE),
+            entry("w", Face.WORM));
+
 
     private Die(){
         faceToIntMap.put(Face.ONE, 1);

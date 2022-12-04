@@ -101,6 +101,7 @@ public class CliOutputHandler implements OutputHandler {
             thirdRow    += decodeText(getTilesThirdRow(tile));
             bottomRow   += decodeText(getBottomTilesRow());
         }
+        System.out.println("The available tiles on the board now are:");
         System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
     }
 
@@ -160,8 +161,13 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showSetPlayerName(){
-        System.out.println("Inserisci il nome del giocatore");
+    public void showSetPlayerName(int playerNumber){
+        System.out.println("Insert the name for player" + playerNumber);
+    }
+
+    @Override
+    public void showBlankPlayerNameWarning() {
+        System.out.println("Name of a player can not be blank.");
     }
 
     @Override
@@ -185,6 +191,11 @@ public class CliOutputHandler implements OutputHandler {
     @Override
     public void showPlayerScore(Player actualPlayer, Dice dice) {
         System.out.println("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
+    }
+
+    @Override
+    public void showIncorrectNumberOfPlayersMessage() {
+        System.out.println("Input is not correct, choose a number between 2 and 7:");
     }
 
     //@Override

@@ -15,13 +15,16 @@ public class CliInputHandler implements InputHandler {
 
     @Override
     public boolean wantToPlay() {
-        char decision  = scan.nextLine().charAt(0);
-        return decision == 'y';
+        String decision  = scan.nextLine();
+        while(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision)) {
+            decision = scan.nextLine();
+        }
+        return "y".equalsIgnoreCase(decision);
     }
 
     @Override
-    public int chooseNumberOfPlayers() {
-        return Integer.parseInt(scan.nextLine())-1;
+    public int chooseNumberOfPlayers() {  // Should use throws??
+        return Integer.parseInt(scan.nextLine());
     }
 
     @Override
