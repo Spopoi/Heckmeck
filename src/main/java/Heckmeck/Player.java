@@ -62,4 +62,12 @@ public class Player {
     public void removeLastPickedTile() {
         playerTiles.removeLast();
     }
+
+    public int getNumberOfPlayerTile(){
+        return playerTiles.size();
+    }
+
+    public int getTotalTileNumber(){
+        return playerTiles.totalTileNumber();
+    }
 }

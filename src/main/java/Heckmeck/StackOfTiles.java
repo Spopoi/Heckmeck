@@ -61,4 +61,12 @@ public class StackOfTiles implements TilesCollection {
                 .sum();
     }
 
+    public int size(){
+        return stackOfTiles.size();
+    }
+
+    public int totalTileNumber(){
+        return stackOfTiles.stream().mapToInt(Tile::getNumber).sum();
+    }
+
 }

@@ -1,7 +1,10 @@
 package Heckmeck;
 
+import javafx.collections.transformation.SortedList;
+
 import java.io.IOException;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
 
@@ -35,6 +38,7 @@ public class Game {
         }
     }
 
+    //moving into clioutputhandler?
     private int getNumberOfPlayer() {
         output.askForNumberOfPlayers();
         while(true) {
@@ -73,16 +77,35 @@ public class Game {
             if(playerNumber >= players.length) playerNumber = 0;
             actualPlayer = players[playerNumber];
         }
-        Player winnerPlayer = whoIsTheWinner(players);
+        Player winnerPlayer = whoIsTheWinner();
     }
 
     //TODO: extend to multiple winners
-    private Player whoIsTheWinner(Player[] players) {
-        Player winner = players[0];
-        for(Player player : players){
-            if(winner.getWormNumber() < player.getWormNumber()) winner = player;
+    public Player whoIsTheWinner() {
+
+        List<Player> playerList = new ArrayList<>(Arrays.stream(players).toList());
+        playerList.sort(Comparator.comparingInt(Player::getWormNumber));
+        int highestWormScore = playerList.get(playerList.size()-1).getWormNumber();
+        List<Player> winners = new ArrayList<>(playerList.stream().filter(e -> e.getWormNumber() >= highestWormScore).toList());
+        if(winners.size() == 1) return winners.get(0);
+        else {
+            winners.sort(Comparator.comparingInt(Player::getNumberOfPlayerTile));
+            int highestNumberOfTiles = winners.get(winners.size()-1).getNumberOfPlayerTile();
+            winners = new ArrayList<>(winners.stream().filter(p -> p.getNumberOfPlayerTile() >= highestNumberOfTiles).toList());
+            if(winners.size() == 1) return winners.get(0);
+            else{
+                winners.sort(Comparator.comparingInt(Player::getTotalTileNumber));
+                int highestTotalTileNumber = winners.get(winners.size()-1).getTotalTileNumber();
+                winners = winners.stream().filter(p -> p.getNumberOfPlayerTile() >= highestTotalTileNumber).toList();
+                return winners.get(0);
+            }
         }
-        return winner;
+//
+//        Player actualWinner = players[0];
+//        for(Player player : players){
+//            if(actualWinner.getWormNumber() < player.getWormNumber()) actualWinner = player;
+//        }
+//        return actualWinner;
     }
 
     private void playerTurn() throws IOException {
