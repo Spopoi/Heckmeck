@@ -176,6 +176,11 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
+    public void showExceptionMessage(Exception ex) {
+        System.out.println(ex.getMessage());
+    }
+
+    @Override
     public void showWantToPick() {
         System.out.println("Do you want to pick the tile?" + '\n' + "Press 'y' for picking the tile or 'n' for rolling dice");
     }

@@ -1,6 +1,8 @@
 package CLI;
 
+import Heckmeck.Die;
 import Heckmeck.InputHandler;
+import exception.IllegalInput;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -33,8 +35,12 @@ public class CliInputHandler implements InputHandler {
     }
 
     @Override
-    public int chooseDiceNumber() {
-        return Integer.parseInt(scan.nextLine());
+    public Die.Face chooseDiceNumber() throws IllegalInput {
+        String chosenDice = scan.nextLine();
+        if (Die.stringToFaceMap.containsKey(chosenDice)) {
+            return Die.stringToFaceMap.get(chosenDice);
+        }
+        throw new IllegalInput("Input is not correct, choose between {1, 2, 3, 4, 5, w}: ");
     }
 
     @Override

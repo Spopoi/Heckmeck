@@ -17,6 +17,9 @@ public interface OutputHandler {
     void showBlankPlayerNameWarning();
 
     public void showDiceChoice();
+
+    void showExceptionMessage(Exception ex);
+
     public void showWantToPick();
     public void showBustMessage();
     public void showPlayerScore(Player actualPlayer, Dice dice);

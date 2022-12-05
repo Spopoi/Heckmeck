@@ -1,6 +1,7 @@
 package Heckmeck;
 
 import javafx.collections.transformation.SortedList;
+import exception.IllegalInput;
 
 import java.io.IOException;
 import java.util.*;
@@ -171,13 +172,22 @@ public class Game {
         if(dice.canPickAFace()){
             //verify that the chosen die is okay
             output.showDiceChoice();
-//            dice.chooseDice();
-
-            dice.chooseDice(Die.intToFace(input.chooseDiceNumber()));
+            Die.Face chosenDieFace = getDieFace();
+            dice.chooseDice(chosenDieFace);
             return true;
         } else{
             bust();
             return false;
+        }
+    }
+
+    private Die.Face getDieFace() {
+        while (true) {
+            try {
+                Die.Face chosenDieFace = input.chooseDiceNumber();
+            } catch (IllegalInput ex) {
+                output.showExceptionMessage(ex);
+            }
         }
     }
 
