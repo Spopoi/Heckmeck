@@ -95,9 +95,7 @@ public class Game {
             if(winners.size() == 1) return winners.get(0);
             else{
                 winners.sort(Comparator.comparingInt(Player::getTotalTileNumber));
-                int highestTotalTileNumber = winners.get(winners.size()-1).getTotalTileNumber();
-                winners = winners.stream().filter(p -> p.getNumberOfPlayerTile() >= highestTotalTileNumber).toList();
-                return winners.get(0);
+                return winners.get(winners.size()-1);
             }
         }
 //
