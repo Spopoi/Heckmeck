@@ -185,6 +185,7 @@ public class Game {
         while (true) {
             try {
                 Die.Face chosenDieFace = input.chooseDiceNumber();
+                return chosenDieFace;
             } catch (IllegalInput ex) {
                 output.showExceptionMessage(ex);
             }
