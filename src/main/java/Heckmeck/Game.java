@@ -78,6 +78,7 @@ public class Game {
             actualPlayer = players[playerNumber];
         }
         Player winnerPlayer = whoIsTheWinner();
+        output.showWinnerPlayerMessage(winnerPlayer);
     }
 
     //TODO: extend to multiple winners
@@ -98,12 +99,6 @@ public class Game {
                 return winners.get(winners.size()-1);
             }
         }
-//
-//        Player actualWinner = players[0];
-//        for(Player player : players){
-//            if(actualWinner.getWormNumber() < player.getWormNumber()) actualWinner = player;
-//        }
-//        return actualWinner;
     }
 
     private void playerTurn() throws IOException {

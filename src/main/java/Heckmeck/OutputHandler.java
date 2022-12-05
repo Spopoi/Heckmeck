@@ -22,4 +22,5 @@ public interface OutputHandler {
     public void showPlayerScore(Player actualPlayer, Dice dice);
     public void showTurnBeginConfirm(Player actualPlayer);
     public void showWantToSteal();
+    public void showWinnerPlayerMessage(Player winnerPlayer);
 }

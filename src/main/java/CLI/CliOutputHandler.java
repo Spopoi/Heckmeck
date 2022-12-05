@@ -214,6 +214,11 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println("Do you want to steal? Press 'y' for stealing or 'n' for continuing your turn:");
     }
 
+    @Override
+    public void showWinnerPlayerMessage(Player winnerPlayer) {
+        System.out.println("Congratulation to "+winnerPlayer.getName() + "!" + System.lineSeparator()+ "You are the WINNER!!");
+    }
+
     public static void drawSingleDie(Die die){
         String toPrint = getTopDieRow();
         toPrint += "\n";
