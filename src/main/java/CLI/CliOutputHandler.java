@@ -224,6 +224,16 @@ public class CliOutputHandler implements OutputHandler {
         System.out.println("Congratulation to "+winnerPlayer.getName() + "!" + System.lineSeparator()+ "You are the WINNER!!");
     }
 
+    @Override
+    public void showAlreadyPickedDice() {
+        System.out.println("You have already chose this face, pick another one!");
+    }
+
+    @Override
+    public void showFaceNotPresentMessage() {
+        System.out.println("This face is not present.. Pick another one!");
+    }
+
     public static void drawSingleDie(Die die){
         String toPrint = getTopDieRow();
         toPrint += "\n";

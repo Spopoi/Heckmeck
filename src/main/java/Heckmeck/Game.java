@@ -183,7 +183,9 @@ public class Game {
         while (true) {
             try {
                 Die.Face chosenDieFace = input.chooseDiceNumber();
-                return chosenDieFace;
+                if(!dice.isFacePresent(chosenDieFace)) output.showFaceNotPresentMessage();
+                else if(dice.isFaceChosen(chosenDieFace)) output.showAlreadyPickedDice();
+                else return chosenDieFace;
             } catch (IllegalInput ex) {
                 output.showExceptionMessage(ex);
             }
