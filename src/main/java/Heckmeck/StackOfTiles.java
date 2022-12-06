@@ -3,7 +3,9 @@ package Heckmeck;
 import exception.IllegalTileAddition;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class StackOfTiles implements TilesCollection {
 
@@ -65,8 +67,9 @@ public class StackOfTiles implements TilesCollection {
         return stackOfTiles.size();
     }
 
-    public int totalTileNumber(){
-        return stackOfTiles.stream().mapToInt(Tile::getNumber).sum();
+    public int highestTileNumber(){
+        List<Tile> sortedTile = stackOfTiles.stream().sorted().toList();
+        return sortedTile.get(sortedTile.size()-1).getNumber();
     }
 
 }

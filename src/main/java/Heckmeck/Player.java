@@ -67,7 +67,7 @@ public class Player {
         return playerTiles.size();
     }
 
-    public int getTotalTileNumber(){
-        return playerTiles.totalTileNumber();
+    public int getHighestTileNumber(){
+        return playerTiles.highestTileNumber();
     }
 }

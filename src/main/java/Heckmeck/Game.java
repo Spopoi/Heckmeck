@@ -82,21 +82,19 @@ public class Game {
         output.showWinnerPlayerMessage(winnerPlayer);
     }
 
-    //TODO: extend to multiple winners
     public Player whoIsTheWinner() {
-
-        List<Player> playerList = new ArrayList<>(Arrays.stream(players).toList());
-        playerList.sort(Comparator.comparingInt(Player::getWormNumber));
-        int highestWormScore = playerList.get(playerList.size()-1).getWormNumber();
-        List<Player> winners = new ArrayList<>(playerList.stream().filter(e -> e.getWormNumber() >= highestWormScore).toList());
+        
+        List<Player> winners = Arrays.stream(players).sorted(Comparator.comparingInt(Player::getWormNumber)).toList();
+        int highestWormScore = winners.get(winners.size()-1).getWormNumber();
+        winners = winners.stream().filter(e -> e.getWormNumber() >= highestWormScore).collect(Collectors.toList());
         if(winners.size() == 1) return winners.get(0);
         else {
             winners.sort(Comparator.comparingInt(Player::getNumberOfPlayerTile));
-            int highestNumberOfTiles = winners.get(winners.size()-1).getNumberOfPlayerTile();
-            winners = new ArrayList<>(winners.stream().filter(p -> p.getNumberOfPlayerTile() >= highestNumberOfTiles).toList());
+            int lowerNumberOfTiles = winners.get(0).getNumberOfPlayerTile();
+            winners = winners.stream().filter(p -> p.getNumberOfPlayerTile() <= lowerNumberOfTiles).collect(Collectors.toList());
             if(winners.size() == 1) return winners.get(0);
             else{
-                winners.sort(Comparator.comparingInt(Player::getTotalTileNumber));
+                winners.sort(Comparator.comparingInt(Player::getHighestTileNumber));
                 return winners.get(winners.size()-1);
             }
         }
