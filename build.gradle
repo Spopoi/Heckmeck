@@ -35,4 +35,8 @@ test {
     useJUnitPlatform()
 }
 
+run {
+    standardInput = System.in
+}
+
 //mainClassName = 'GUI.Main'
