@@ -48,6 +48,12 @@ public class Die {
         return Face.values()[n];
     }
 
+    // TODO: What if text is not present in the Map (just null or excep?)
+    // TODO: Mark private stringToFaceMap?
+    public static Face getFaceByString(String text) {
+        return stringToFaceMap.get(text);
+    }
+
     public int getValue(Face f){
         return faceToIntMap.get(f);
     }
