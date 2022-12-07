@@ -6,6 +6,9 @@ import java.util.*;
 
 import Heckmeck.Die;
 import Heckmeck.Dice;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import static Heckmeck.Die.Face.*;
 
 public class TestDice {
@@ -19,6 +22,18 @@ public class TestDice {
         Assertions.assertEquals("FOUR", Die.Face.FOUR.toString());
         Assertions.assertEquals("FIVE", Die.Face.FIVE.toString());
         Assertions.assertEquals("WORM", Die.Face.WORM.toString());
+    }
+
+    @Test
+    void convertStringToDieFace() {
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(ONE, Die.getFaceByString("1")),
+                () -> Assertions.assertEquals(TWO, Die.getFaceByString("2")),
+                () -> Assertions.assertEquals(THREE, Die.getFaceByString("3")),
+                () -> Assertions.assertEquals(FOUR, Die.getFaceByString("4")),
+                () -> Assertions.assertEquals(FIVE, Die.getFaceByString("5")),
+                () -> Assertions.assertEquals(WORM, Die.getFaceByString("w"))
+        );
     }
 
     @Test

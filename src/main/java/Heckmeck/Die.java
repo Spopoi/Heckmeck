@@ -7,7 +7,8 @@ public class Die {
 
     private Face dieFace;
     private static final Random PRNG = new Random();
-    private static Map<Face, Integer> faceToIntMap = new HashMap<Face, Integer>(); // TODO scegliere che mappa usare
+    private static Map<Face, Integer> faceToIntMap = new HashMap<Face, Integer>();
+    // TODO scegliere che mappa usare
     private static final Map<Integer, Face> intToFaceMap =
             Collections.unmodifiableMap(new HashMap<Integer, Face>() {{
                 put(1,Face.ONE);
@@ -45,6 +46,12 @@ public class Die {
 
     public Face getFaceByNumber(int n){
         return Face.values()[n];
+    }
+
+    // TODO: What if text is not present in the Map (just null or excep?)
+    // TODO: Mark private stringToFaceMap?
+    public static Face getFaceByString(String text) {
+        return stringToFaceMap.get(text);
     }
 
     public int getValue(Face f){

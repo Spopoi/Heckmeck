@@ -101,6 +101,7 @@ public class Game {
     }
 
     private void playerTurn() throws IOException {
+        //TODO: FIXARE Press any key
         //output.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
         //input.pressAnyKey();
         boolean isOnRun = roll();
