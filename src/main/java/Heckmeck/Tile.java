@@ -61,11 +61,8 @@ public class Tile implements Comparable<Tile> {
     }
     
     @Override
-    public int compareTo(Tile other) throws NullPointerException{
-        return hasSameNumber(other) ? this.getWorms() - other.getWorms() : this.getNumber() - other.getNumber();
+    public int compareTo(Tile other) {
+        return Integer.compare(this.number, other.number);
     }
 
-    private boolean hasSameNumber(Tile other) {
-        return this.getNumber() == other.getNumber();
-    }
 }
