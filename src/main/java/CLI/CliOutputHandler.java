@@ -69,6 +69,7 @@ public class CliOutputHandler implements OutputHandler {
                 put(35, fourWorms);
                 put(36, fourWorms);
             }});
+    private static final String newLine = System.lineSeparator();
 
     private static void print(String message){
         System.out.println(message);
@@ -88,7 +89,7 @@ public class CliOutputHandler implements OutputHandler {
             thirdRow    += decodeText(getThirdDieRow(die));
             bottomRow   += decodeText(getDieBottomRow());
         }
-        print(topRow + System.lineSeparator() + firstRow + System.lineSeparator() + secondRow + System.lineSeparator() + thirdRow + System.lineSeparator() + bottomRow);
+        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow+ newLine);
     }
 
     @Override
@@ -105,8 +106,8 @@ public class CliOutputHandler implements OutputHandler {
             thirdRow    += decodeText(getTilesThirdRow(tile));
             bottomRow   += decodeText(getBottomTilesRow());
         }
-        print("The available tiles on the board now are:" + System.lineSeparator() + topRow + System.lineSeparator() +
-                firstRow + System.lineSeparator() + secondRow + System.lineSeparator() + thirdRow + System.lineSeparator() + bottomRow + System.lineSeparator());
+        print("The available tiles on the board now are:" + newLine + topRow + newLine +
+                firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
     }
 
     @Override
@@ -125,7 +126,7 @@ public class CliOutputHandler implements OutputHandler {
         String thirdRow =decodeText(format + getTilesThirdRow(tile));
         String bottomRow =decodeText(format + getBottomTilesRow());
 
-        print(topRow + System.lineSeparator() + firstRow + System.lineSeparator() + secondRow + System.lineSeparator() + thirdRow + System.lineSeparator() + bottomRow + System.lineSeparator());
+        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
     }
 
     @Override
@@ -142,7 +143,7 @@ public class CliOutputHandler implements OutputHandler {
         String thirdRow = format + getTilesThirdRow(tile);
         String bottomRow = format + getBottomTilesRow();
 
-        print(topRow + System.lineSeparator() + firstRow + System.lineSeparator() + secondRow + System.lineSeparator() + thirdRow + System.lineSeparator() + bottomRow + System.lineSeparator());
+        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
     }
 
     @Override
@@ -186,12 +187,12 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showWantToPick() {
-        print("Do you want to pick the tile?" + System.lineSeparator() + "Press 'y' for picking the tile or 'n' for rolling dice");
+        print("Do you want to pick the tile?" + newLine + "Press 'y' for picking the tile or 'n' for rolling dice");
     }
 
     @Override
     public void showBustMessage() {
-        print("#####################" +System.lineSeparator()+ "# BUUUUUSSSTTTTTT!! #" +System.lineSeparator() + "#####################");
+        print("#####################" +newLine+ "# BUUUUUSSSTTTTTT!! #" +newLine + "#####################" +newLine);
     }
 
     @Override
@@ -222,7 +223,7 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showWinnerPlayerMessage(Player winnerPlayer) {
-        print("Congratulation to "+winnerPlayer.getName() + "!" + System.lineSeparator()+ "You are the WINNER!!");
+        print("Congratulation to "+winnerPlayer.getName() + "!" + newLine+ "You are the WINNER!!");
     }
 
     @Override
