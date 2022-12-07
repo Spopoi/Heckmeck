@@ -85,12 +85,12 @@ public class Dice {
     }
 
 
+    //TODO: checkinput
     public void chooseDice(Die.Face face) {
         if (!isFaceChosen(face)) {
             chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
             diceList.removeIf(e -> e.getDieFace() == face);
         }
-
     }
 
     public  void chooseRandomDice(){

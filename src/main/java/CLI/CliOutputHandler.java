@@ -70,6 +70,10 @@ public class CliOutputHandler implements OutputHandler {
                 put(36, fourWorms);
             }});
 
+    private static void print(String message){
+        System.out.println(message);
+    }
+
     @Override
     public void showDice(Dice dice) throws IOException {    //TODO Cambiare concatenaz. con stringBuilder
         String topRow = "";
@@ -84,7 +88,7 @@ public class CliOutputHandler implements OutputHandler {
             thirdRow    += decodeText(getThirdDieRow(die));
             bottomRow   += decodeText(getDieBottomRow());
         }
-        System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
+        print(topRow + System.lineSeparator() + firstRow + System.lineSeparator() + secondRow + System.lineSeparator() + thirdRow + System.lineSeparator() + bottomRow);
     }
 
     @Override
@@ -101,8 +105,8 @@ public class CliOutputHandler implements OutputHandler {
             thirdRow    += decodeText(getTilesThirdRow(tile));
             bottomRow   += decodeText(getBottomTilesRow());
         }
-        System.out.println("The available tiles on the board now are:");
-        System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
+        print("The available tiles on the board now are:" + System.lineSeparator() + topRow + System.lineSeparator() +
+                firstRow + System.lineSeparator() + secondRow + System.lineSeparator() + thirdRow + System.lineSeparator() + bottomRow + System.lineSeparator());
     }
 
     @Override
@@ -121,7 +125,7 @@ public class CliOutputHandler implements OutputHandler {
         String thirdRow =decodeText(format + getTilesThirdRow(tile));
         String bottomRow =decodeText(format + getBottomTilesRow());
 
-        System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
+        print(topRow + System.lineSeparator() + firstRow + System.lineSeparator() + secondRow + System.lineSeparator() + thirdRow + System.lineSeparator() + bottomRow + System.lineSeparator());
     }
 
     @Override
@@ -138,69 +142,66 @@ public class CliOutputHandler implements OutputHandler {
         String thirdRow = format + getTilesThirdRow(tile);
         String bottomRow = format + getBottomTilesRow();
 
-        System.out.println(topRow + "\n" + firstRow + "\n" + secondRow + "\n" + thirdRow + "\n" + bottomRow + "\n");
+        print(topRow + System.lineSeparator() + firstRow + System.lineSeparator() + secondRow + System.lineSeparator() + thirdRow + System.lineSeparator() + bottomRow + System.lineSeparator());
     }
 
     @Override
     public void showMenu(){
-        System.out.print(getLogo());
-        System.out.println("                    Benvenuto in Heckmeck");
-        System.out.println("            Scegli il numero di giocatori tra 1 e 6:");
+        print(getLogo());
+        print("                    Benvenuto in Heckmeck");
+        print("            Scegli il numero di giocatori tra 1 e 6:");
     }
 
     @Override
     public void showWelcomeMessage(){
-        System.out.print(getLogo());
-        System.out.println("                      Welcome in Heckmeck");
-        System.out.println("Do you want to start a new game? y/n");
+        print(getLogo());
+        print("                      Welcome in Heckmeck");
+        print("Do you want to start a new game? y/n");
     }
 
     @Override
     public void askForNumberOfPlayers(){
-        System.out.println("Choose number of players between 2 and 7:");
+        print("Choose number of players between 2 and 7:");
     }
 
     @Override
     public void showSetPlayerName(int playerNumber){
-        System.out.println("Insert the name for player" + playerNumber);
+        print("Insert the name for player" + playerNumber);
     }
 
     @Override
     public void showBlankPlayerNameWarning() {
-        System.out.println("Name of a player can not be blank.");
+        print("Name of a player can not be blank.");
     }
 
     @Override
     public void showDiceChoice() {
-        System.out.println("Pick one unselected face");
+        print("Pick one unselected face");
     }
 
     @Override
     public void showExceptionMessage(Exception ex) {
-        System.out.println(ex.getMessage());
+        print(ex.getMessage());
     }
 
     @Override
     public void showWantToPick() {
-        System.out.println("Do you want to pick the tile?" + '\n' + "Press 'y' for picking the tile or 'n' for rolling dice");
+        print("Do you want to pick the tile?" + System.lineSeparator() + "Press 'y' for picking the tile or 'n' for rolling dice");
     }
 
     @Override
     public void showBustMessage() {
-        System.out.println("#####################");
-        System.out.println("# BUUUUUSSSTTTTTT!! #");
-        System.out.println("#####################");
-
+        print("#####################" +System.lineSeparator()+ "# BUUUUUSSSTTTTTT!! #" +System.lineSeparator() + "#####################");
     }
 
     @Override
     public void showPlayerScore(Player actualPlayer, Dice dice) {
-        System.out.println("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
+        print("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
     }
 
     @Override
     public void showIncorrectNumberOfPlayersMessage() {
-        System.out.println("Input is not correct, choose a number between 2 and 7:");
+        print("Input is not correct, choose a number between 2 and 7:");
     }
 
     //@Override
@@ -209,44 +210,44 @@ public class CliOutputHandler implements OutputHandler {
         String separator = "#".repeat(actualPlayer.getName().length()).concat(
                 "#".repeat(message.length()+2));
 
-        System.out.println(separator);
-        System.out.println("# " + actualPlayer.getName() + message );
-        System.out.println(separator);
+        print(separator);
+        print("# " + actualPlayer.getName() + message );
+        print(separator);
     }
 
     @Override
     public void showWantToSteal() {
-        System.out.println("Do you want to steal? Press 'y' for stealing or 'n' for continuing your turn:");
+        print("Do you want to steal? Press 'y' for stealing or 'n' for continuing your turn:");
     }
 
     @Override
     public void showWinnerPlayerMessage(Player winnerPlayer) {
-        System.out.println("Congratulation to "+winnerPlayer.getName() + "!" + System.lineSeparator()+ "You are the WINNER!!");
+        print("Congratulation to "+winnerPlayer.getName() + "!" + System.lineSeparator()+ "You are the WINNER!!");
     }
 
     @Override
     public void showAlreadyPickedDice() {
-        System.out.println("You have already chose this face, pick another one!");
+        print("You have already chose this face, pick another one!");
     }
 
     @Override
     public void showFaceNotPresentMessage() {
-        System.out.println("This face is not present.. Pick another one!");
+        print("This face is not present.. Pick another one!");
     }
 
     public static void drawSingleDie(Die die){
-        String toPrint = getTopDieRow();
-        toPrint += "\n";
-        toPrint+= getFirstDieRow(die);
-        toPrint += "\n";
-        toPrint+= getSecondDieRow(die);
-        toPrint += "\n";
-        toPrint += getThirdDieRow(die);
-        toPrint += "\n";
-        toPrint += getDieBottomRow();
-        toPrint += "\n";
+        String dieString = getTopDieRow();
+        dieString += System.lineSeparator();
+        dieString+= getFirstDieRow(die);
+        dieString += System.lineSeparator();
+        dieString+= getSecondDieRow(die);
+        dieString += System.lineSeparator();
+        dieString += getThirdDieRow(die);
+        dieString += System.lineSeparator();
+        dieString += getDieBottomRow();
+        dieString += System.lineSeparator();
 
-        System.out.println(toPrint);
+        print(dieString);
     }
 
     public static String getTopDieRow(){
