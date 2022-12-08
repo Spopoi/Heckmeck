@@ -150,7 +150,6 @@ public class CliOutputHandler implements OutputHandler {
     public void showWelcomeMessage(){
         print(getLogo());
         print("                      Welcome in Heckmeck");
-        print("Do you want to start a new game? y/n");
     }
 
     @Override
@@ -222,6 +221,11 @@ public class CliOutputHandler implements OutputHandler {
     @Override
     public void showAlreadyPickedName() {
         print("Already picked name.. Please choose another one");
+    }
+
+    @Override
+    public void showWantToPlay() {
+        print("Do you want to start a new game? y/n");
     }
 
     public static void drawSingleDie(Die die){

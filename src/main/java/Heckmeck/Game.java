@@ -95,11 +95,11 @@ public class Game {
         dice.resetDice();
     }
 
-    private boolean pick(){
+    //TODO: catch IOException somewhere
+    private boolean pick() throws IOException{
         if(!canPick()) return false;
-        output.showWantToPick();
-        output.showPlayerScore(actualPlayer,dice);
-        if(input.wantToPick()) {
+        io.showPlayerScore(actualPlayer,dice);
+        if(io.wantToPick()) {
             pickBoardTile(dice.getScore());
             return true;
         }else return false;

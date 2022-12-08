@@ -21,4 +21,6 @@ public interface OutputHandler {
     public void showAlreadyPickedDice();
     public void showFaceNotPresentMessage();
     public void showAlreadyPickedName();
+
+    public void showWantToPlay();
 }

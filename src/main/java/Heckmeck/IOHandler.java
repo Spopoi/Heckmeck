@@ -19,6 +19,7 @@ public class IOHandler {
     }
 
     public boolean wantToPlay(){
+        output.showWantToPlay();
         while(true) {
             try {
                 return input.wantToPlay();
@@ -61,5 +62,20 @@ public class IOHandler {
 
     public void showWinnerPlayerMessage(Player winnerPlayer) {
         output.showWinnerPlayerMessage(winnerPlayer);
+    }
+
+    public boolean wantToPick(){
+        output.showWantToPick();
+        while(true) {
+            try {
+                return input.wantToPick();
+            } catch (IllegalInput e) {
+                output.showExceptionMessage(e);
+            }
+        }
+    }
+
+    public void showPlayerScore(Player player, Dice dice) throws IOException{
+        output.showPlayerScore(player,dice);
     }
 }

@@ -2,7 +2,6 @@ package CLI;
 
 import Heckmeck.Die;
 import Heckmeck.InputHandler;
-import Heckmeck.Rules;
 import exception.IllegalInput;
 
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class CliInputHandler implements InputHandler {
     @Override
     public boolean wantToPlay() {
         String decision  = scan.nextLine();
-        if(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision)) throw new IllegalInput("Incorrect decision, please select 'y' for playing or 'n' for quitting");
+        if(isYesOrNoChar(decision)) throw new IllegalInput("Incorrect decision, please select 'y' for playing or 'n' for quitting");
         else return "y".equalsIgnoreCase(decision);
     }
 
@@ -43,8 +42,9 @@ public class CliInputHandler implements InputHandler {
 
     @Override
     public boolean wantToPick() {
-        char decision  = scan.nextLine().charAt(0);
-        return decision == 'y';
+        String decision  = scan.nextLine();
+        if(isYesOrNoChar(decision)) throw new IllegalInput("Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice");
+        else return "y".equalsIgnoreCase(decision);
     }
 
     @Override
@@ -54,7 +54,12 @@ public class CliInputHandler implements InputHandler {
 
     @Override
     public boolean wantToSteal() {
-        char decision  = scan.nextLine().charAt(0);
-        return decision == 'y';
+        String decision  = scan.nextLine();
+        if(isYesOrNoChar(decision)) throw new IllegalInput("Incorrect decision, please select 'y' for stealing or 'n' for continuing your turn");
+        else return "y".equalsIgnoreCase(decision);
+    }
+
+    private boolean isYesOrNoChar(String decision){
+        return(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision));
     }
 }
