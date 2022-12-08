@@ -15,18 +15,20 @@ public class Game {
     private final OutputHandler output;
     private final InputHandler input;
 
+    private IOHandler io;
     private boolean gameFinished;
 
     private Player actualPlayer;
 
     public Game(OutputHandler output, InputHandler input) {
+        io = new IOHandler(input,output);
         this.output = output;
         this.input = input;
     }
 
     public void init(){
-        output.showWelcomeMessage();
-        if (input.wantToPlay()){
+       io.showWelcomeMessage();
+        if (io.wantToPlay()){
             int numberOfPlayers = getNumberOfPlayer();
             this.players = setupPlayersFromUserInput(numberOfPlayers);
             this.dice = Dice.generateDice(); // TODO ha senso rinominare in init()?

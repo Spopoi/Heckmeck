@@ -18,10 +18,8 @@ public class CliInputHandler implements InputHandler {
     @Override
     public boolean wantToPlay() {
         String decision  = scan.nextLine();
-        while(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision)) {
-            decision = scan.nextLine();
-        }
-        return "y".equalsIgnoreCase(decision);
+        if(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision)) throw new IllegalInput("Incorrect decision, please select 'y' for playing or 'n' for quitting");
+        else return "y".equalsIgnoreCase(decision);
     }
 
     @Override
