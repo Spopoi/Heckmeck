@@ -78,4 +78,15 @@ public class IOHandler {
     public void showPlayerScore(Player player, Dice dice) throws IOException{
         output.showPlayerScore(player,dice);
     }
+
+    public boolean wantToSteal(){
+        output.showWantToSteal();
+        while(true) {
+            try {
+                return input.wantToSteal();
+            } catch (IllegalInput e) {
+                output.showExceptionMessage(e);
+            }
+        }
+    }
 }

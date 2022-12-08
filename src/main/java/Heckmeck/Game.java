@@ -105,10 +105,14 @@ public class Game {
         }else return false;
     }
 
+    private boolean canPick(){
+        return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
+    }
+
+
     private boolean steal() {
         if(!canSteal()) return false;
-        output.showWantToSteal();
-        if(input.wantToSteal()){
+        if(io.wantToSteal()){
             stealTile();
             return true;
         }else return false;
@@ -121,10 +125,6 @@ public class Game {
                 actualPlayer.pickTileFromPlayer(robbedPlayer.getLastPickedTile(),robbedPlayer);
             }
         }
-    }
-
-    private boolean canPick(){
-        return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
     }
 
     //TODO: equals method for players
