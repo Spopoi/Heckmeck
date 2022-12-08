@@ -12,9 +12,6 @@ public class Game {
     private Player[] players;
     private Dice dice;
     private BoardTiles boardTiles;
-    private final OutputHandler output;
-    private final InputHandler input;
-
     private IOHandler io;
     private boolean gameFinished;
 
@@ -22,8 +19,6 @@ public class Game {
 
     public Game(OutputHandler output, InputHandler input) {
         io = new IOHandler(input,output);
-        this.output = output;
-        this.input = input;
     }
 
     public void init(){
@@ -44,8 +39,6 @@ public class Game {
         this.players = players;
         this.dice = Dice.generateDice();// TODO ha senso rinominare in init()?
         this.boardTiles = BoardTiles.init();
-        this.output = output;
-        this.input = input;
         gameFinished = false;
     }
     public void play() throws IOException {
@@ -161,8 +154,8 @@ public class Game {
     private Die.Face pickDieFace() {
         while(true){
             Die.Face chosenDieFace = io.chooseDieFace(dice);
-            if(!dice.isFacePresent(chosenDieFace)) output.showFaceNotPresentMessage();
-            else if(dice.isFaceChosen(chosenDieFace)) output.showAlreadyPickedDice();
+            if(!dice.isFacePresent(chosenDieFace)) io.showFaceNotPresentMessage();
+            else if(dice.isFaceChosen(chosenDieFace)) io.showAlreadyPickedDice();
             else return chosenDieFace;
         }
     }

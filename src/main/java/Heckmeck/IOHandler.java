@@ -111,4 +111,12 @@ public class IOHandler {
     public void showBustMessage(){
         output.showBustMessage();
     }
+
+    public void showFaceNotPresentMessage() {
+        output.showFaceNotPresentMessage();
+    }
+
+    public void showAlreadyPickedDice() {
+        output.showAlreadyPickedDice();
+    }
 }
