@@ -70,4 +70,19 @@ public class Player {
     public int getHighestTileNumber(){
         return playerTiles.highestTileNumber();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Player player = (Player) o;
+
+        return playerName.equals(player.playerName);
+    }
+
+    @Override
+    public int hashCode() {
+        return playerName != null ? playerName.hashCode() : 0;
+    }
 }
