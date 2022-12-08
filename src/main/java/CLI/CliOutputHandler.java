@@ -129,29 +129,22 @@ public class CliOutputHandler implements OutputHandler {
         print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
     }
 
-    @Override
-    public void showPlayerTile(Player player){
-        Tile tile = player.getLastPickedTile();
-        String displayString = "        " +player.getName();
-        displayString += "'s tiles:  ";
-
-        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow();
-        String format = String.format("%1$" + displayString.length() + "s", "");
-
-        String firstRow = format + getFirstTilesRow(tile);
-        String secondRow = format + getSecondTileRow(tile);
-        String thirdRow = format + getTilesThirdRow(tile);
-        String bottomRow = format + getBottomTilesRow();
-
-        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
-    }
-
-    @Override
-    public void showMenu(){
-        print(getLogo());
-        print("                    Benvenuto in Heckmeck");
-        print("            Scegli il numero di giocatori tra 1 e 6:");
-    }
+//    @Override
+//    public void showPlayerTile(Player player){
+//        Tile tile = player.getLastPickedTile();
+//        String displayString = "        " +player.getName();
+//        displayString += "'s tiles:  ";
+//
+//        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow();
+//        String format = String.format("%1$" + displayString.length() + "s", "");
+//
+//        String firstRow = format + getFirstTilesRow(tile);
+//        String secondRow = format + getSecondTileRow(tile);
+//        String thirdRow = format + getTilesThirdRow(tile);
+//        String bottomRow = format + getBottomTilesRow();
+//
+//        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
+//    }
 
     @Override
     public void showWelcomeMessage(){
@@ -168,11 +161,6 @@ public class CliOutputHandler implements OutputHandler {
     @Override
     public void showSetPlayerName(int playerNumber){
         print("Insert the name for player" + playerNumber);
-    }
-
-    @Override
-    public void showBlankPlayerNameWarning() {
-        print("Name of a player can not be blank.");
     }
 
     @Override
@@ -198,11 +186,6 @@ public class CliOutputHandler implements OutputHandler {
     @Override
     public void showPlayerScore(Player actualPlayer, Dice dice) {
         print("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
-    }
-
-    @Override
-    public void showIncorrectNumberOfPlayersMessage() {
-        print("Input is not correct, choose a number between 2 and 7:");
     }
 
     //@Override
@@ -234,6 +217,11 @@ public class CliOutputHandler implements OutputHandler {
     @Override
     public void showFaceNotPresentMessage() {
         print("This face is not present.. Pick another one!");
+    }
+
+    @Override
+    public void showAlreadyPickedName() {
+        print("Already picked name.. Please choose another one");
     }
 
     public static void drawSingleDie(Die die){

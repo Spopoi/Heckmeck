@@ -29,8 +29,8 @@ public class Game {
     public void init(){
        io.showWelcomeMessage();
         if (io.wantToPlay()){
-            int numberOfPlayers = getNumberOfPlayer();
-            this.players = setupPlayersFromUserInput(numberOfPlayers);
+            int numberOfPlayers = io.chooseNumberOfPlayers();
+            this.players = setupPlayers(numberOfPlayers);
             this.dice = Dice.generateDice(); // TODO ha senso rinominare in init()?
             this.boardTiles = BoardTiles.init();
             gameFinished = false;
@@ -38,27 +38,6 @@ public class Game {
         else {
             System.exit(0);
         }
-    }
-
-    //moving into clioutputhandler?
-    private int getNumberOfPlayer() {
-        output.askForNumberOfPlayers();
-        while(true) {
-            try {
-                int numberOfPlayers = input.chooseNumberOfPlayers();
-                if (isValidNumberOfPlayers(numberOfPlayers)) {
-                    return numberOfPlayers;
-                } else {
-                    output.showIncorrectNumberOfPlayersMessage();
-                }
-            } catch (NumberFormatException ex) {
-                output.showIncorrectNumberOfPlayersMessage();
-            }
-        }
-    }
-
-    private boolean isValidNumberOfPlayers(int numberOfPlayer) {
-        return (numberOfPlayer >= 2 && numberOfPlayer <= 7);
     }
 
     public Game(Player[] players, OutputHandler output, InputHandler input){
@@ -200,19 +179,20 @@ public class Game {
         boardTiles.bust();
     }
 
-    private Player[] setupPlayersFromUserInput(int numberOfPlayers) {
-        // Why not ArrayList?
+    private Player[] setupPlayers(int numberOfPlayers) {
         Player[] playersList = new Player[numberOfPlayers];
-        for(int i=0; i<numberOfPlayers; i++) {
-            output.showSetPlayerName(i+1);
-            String playerName = input.choosePlayerName();
-            while (playerName.isBlank()) {
-                output.showBlankPlayerNameWarning();
-                output.showSetPlayerName(i+1);
-                playerName = input.choosePlayerName();
+        for(int i=0; i<numberOfPlayers; i++){
+            String playerName = io.choosePlayerName(i + 1);
+            while(isNameAlreadyPicked(playerName,playersList)){
+                io.showAlreadyPickedPlayerName();
+                playerName = io.choosePlayerName(i+1);
             }
             playersList[i] = Player.generatePlayer(playerName);
         }
         return playersList;
+    }
+
+    private boolean isNameAlreadyPicked(String name, Player[] playersList){
+        return Arrays.stream(playersList).filter(Objects::nonNull).anyMatch(player -> player.getName().equals(name));
     }
 }

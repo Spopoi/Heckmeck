@@ -2,6 +2,7 @@ package CLI;
 
 import Heckmeck.Die;
 import Heckmeck.InputHandler;
+import Heckmeck.Rules;
 import exception.IllegalInput;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class CliInputHandler implements InputHandler {
     }
 
     @Override
-    public int chooseNumberOfPlayers() {  // Should use throws??
+    public int chooseNumberOfPlayers(){
         return Integer.parseInt(scan.nextLine());
     }
 

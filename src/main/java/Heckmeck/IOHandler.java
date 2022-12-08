@@ -1,6 +1,7 @@
 package Heckmeck;
 
 import exception.HeckmeckException;
+import exception.IllegalInput;
 
 public class IOHandler {
     private final InputHandler input;
@@ -19,12 +20,36 @@ public class IOHandler {
         while(true) {
             try {
                 return input.wantToPlay();
-            } catch (HeckmeckException e) {
+            } catch (IllegalInput e) {
                 output.showExceptionMessage(e);
             }
         }
     }
-
-
-
+    public int chooseNumberOfPlayers(){
+        output.askForNumberOfPlayers();
+        while(true){
+            try{
+                int numberOfPlayer = input.chooseNumberOfPlayers();
+                if(Rules.validNumberOfPlayer(numberOfPlayer)) return numberOfPlayer;
+                else throw new IllegalInput("Invalid number of player, please select a number between 2 and 7");
+            } catch (IllegalInput e) {
+                output.showExceptionMessage(e);
+            }
+        }
+    }
+    public String choosePlayerName(int playerNumber){
+        output.showSetPlayerName(playerNumber);
+        while(true) {
+            try {
+                String playerName = input.choosePlayerName();
+                if (playerName.isBlank()) throw new IllegalInput("Blank name, choose a valid a one");
+                else return playerName;
+            } catch (IllegalInput e) {
+                output.showExceptionMessage(e);
+            }
+        }
+    }
+    public void showAlreadyPickedPlayerName() {
+        output.showAlreadyPickedName();
+    }
 }

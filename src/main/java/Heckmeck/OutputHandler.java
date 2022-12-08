@@ -6,14 +6,10 @@ public interface OutputHandler {
 
     public void showDice(Dice dice) throws IOException;
     public void showTiles(BoardTiles boardTiles) throws IOException;
-    public void showPlayerTile(Player player);
     public void showPlayerData(Player player, Dice dice) throws IOException;
-    public void showMenu();
     public void showWelcomeMessage();
     public void askForNumberOfPlayers();
-    public void showIncorrectNumberOfPlayersMessage();
     public void showSetPlayerName(int playerNumber);
-    public void showBlankPlayerNameWarning();
     public void showDiceChoice();
     public void showExceptionMessage(Exception ex);
     public void showWantToPick();
@@ -24,4 +20,5 @@ public interface OutputHandler {
     public void showWinnerPlayerMessage(Player winnerPlayer);
     public void showAlreadyPickedDice();
     public void showFaceNotPresentMessage();
+    public void showAlreadyPickedName();
 }
