@@ -1,19 +1,14 @@
 package Heckmeck;
 
-import exception.IllegalInput;
-
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game {
 
-    // final (?)
     private Player[] players;
     private Dice dice;
     private BoardTiles boardTiles;
     private IOHandler io;
-    private boolean gameFinished;
 
     private Player actualPlayer;
 
@@ -28,7 +23,6 @@ public class Game {
             this.players = setupPlayers(numberOfPlayers);
             this.dice = Dice.generateDice(); // TODO ha senso rinominare in init()?
             this.boardTiles = BoardTiles.init();
-            gameFinished = false;
         }
         else {
             System.exit(0);
@@ -39,7 +33,6 @@ public class Game {
         this.players = players;
         this.dice = Dice.generateDice();// TODO ha senso rinominare in init()?
         this.boardTiles = BoardTiles.init();
-        gameFinished = false;
     }
     public void play() throws IOException {
         int playerNumber = 0;
@@ -102,7 +95,6 @@ public class Game {
         }
     }
 
-    //TODO: equals method for players
     private boolean canSteal() {
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;

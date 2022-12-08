@@ -24,7 +24,11 @@ public class CliInputHandler implements InputHandler {
 
     @Override
     public int chooseNumberOfPlayers(){
-        return Integer.parseInt(scan.nextLine());
+        try {
+            return Integer.parseInt(scan.nextLine());
+        } catch (NumberFormatException e){
+            throw new IllegalInput("Invalid input, please choose a number between 1 and 7");
+        }
     }
 
     @Override
