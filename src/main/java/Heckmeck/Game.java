@@ -146,12 +146,10 @@ public class Game {
 
     private boolean roll() throws IOException {
         dice.rollDice();
-        output.showPlayerData(actualPlayer, dice);
-        output.showDice(dice);
+        io.showPlayerData(actualPlayer, dice);
+        io.showDice(dice);
         if(dice.canPickAFace()){
-            //verify that the chosen die is okay
-            output.showDiceChoice();
-            Die.Face chosenDieFace = getDieFace();
+            Die.Face chosenDieFace = pickDieFace();
             dice.chooseDice(chosenDieFace);
             return true;
         } else{
@@ -160,21 +158,17 @@ public class Game {
         }
     }
 
-    private Die.Face getDieFace() {
-        while (true) {
-            try {
-                Die.Face chosenDieFace = input.chooseDiceNumber();
-                if(!dice.isFacePresent(chosenDieFace)) output.showFaceNotPresentMessage();
-                else if(dice.isFaceChosen(chosenDieFace)) output.showAlreadyPickedDice();
-                else return chosenDieFace;
-            } catch (IllegalInput ex) {
-                output.showExceptionMessage(ex);
-            }
+    private Die.Face pickDieFace() {
+        while(true){
+            Die.Face chosenDieFace = io.chooseDieFace(dice);
+            if(!dice.isFacePresent(chosenDieFace)) output.showFaceNotPresentMessage();
+            else if(dice.isFaceChosen(chosenDieFace)) output.showAlreadyPickedDice();
+            else return chosenDieFace;
         }
     }
 
     private void bust(){
-        output.showBustMessage();
+        io.showBustMessage();
         actualPlayer.removeLastPickedTile();
         boardTiles.bust();
     }

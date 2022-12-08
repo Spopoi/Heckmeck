@@ -33,7 +33,7 @@ public class CliInputHandler implements InputHandler {
     }
 
     @Override
-    public Die.Face chooseDiceNumber() throws IllegalInput {
+    public Die.Face chooseDiceFace(){
         String chosenDice = scan.nextLine();
         if (Die.stringToFaceMap.containsKey(chosenDice)) {
             return Die.stringToFaceMap.get(chosenDice);

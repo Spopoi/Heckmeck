@@ -1,6 +1,5 @@
 package Heckmeck;
 
-import exception.HeckmeckException;
 import exception.IllegalInput;
 
 import java.io.IOException;
@@ -88,5 +87,28 @@ public class IOHandler {
                 output.showExceptionMessage(e);
             }
         }
+    }
+
+    public void showPlayerData(Player player, Dice dice) throws IOException{
+        output.showPlayerData(player,dice);
+    }
+
+    public void showDice(Dice dice) throws IOException{
+        output.showDice(dice);
+    }
+
+    public Die.Face chooseDieFace(Dice dice){
+        output.showDiceChoice();
+        while (true) {
+            try {
+                return input.chooseDiceFace();
+            } catch (IllegalInput ex) {
+                output.showExceptionMessage(ex);
+            }
+        }
+    }
+
+    public void showBustMessage(){
+        output.showBustMessage();
     }
 }

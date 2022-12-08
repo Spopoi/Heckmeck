@@ -1,14 +1,16 @@
 package Heckmeck;
 
+import exception.IllegalInput;
+
 import java.io.IOException;
 
 public interface InputHandler{
 
-    boolean wantToPlay();
-    public int chooseNumberOfPlayers();
-    public String choosePlayerName();
-    public Die.Face chooseDiceNumber();
-    public boolean wantToPick();
+    boolean wantToPlay() throws IllegalInput;
+    public int chooseNumberOfPlayers() throws IllegalInput;
+    public String choosePlayerName() throws IllegalInput;
+    public Die.Face chooseDiceFace() throws IllegalInput ;
+    public boolean wantToPick() throws IllegalInput;
     public void pressAnyKey() throws IOException;
-    public boolean wantToSteal();
+    public boolean wantToSteal() throws IllegalInput;
 }

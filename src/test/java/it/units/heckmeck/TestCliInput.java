@@ -3,7 +3,6 @@ package it.units.heckmeck;
 import CLI.CliInputHandler;
 import Heckmeck.Die;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -50,7 +49,7 @@ public class TestCliInput {
         CliInputHandler inputHandler = new CliInputHandler();
 
         Die.Face expectedFace = Die.getFaceByString(faceAsString);
-        Die.Face obtainedFace = inputHandler.chooseDiceNumber();
+        Die.Face obtainedFace = inputHandler.chooseDiceFace();
 
         Assertions.assertEquals(expectedFace, obtainedFace);
     }
