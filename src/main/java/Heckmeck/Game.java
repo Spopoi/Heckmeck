@@ -51,26 +51,8 @@ public class Game {
             if(playerNumber >= players.length) playerNumber = 0;
             actualPlayer = players[playerNumber];
         }
-        Player winnerPlayer = whoIsTheWinner();
+        Player winnerPlayer = Rules.whoIsTheWinner(players);
         io.showWinnerPlayerMessage(winnerPlayer);
-    }
-
-    public Player whoIsTheWinner() {
-        
-        List<Player> winners = Arrays.stream(players).sorted(Comparator.comparingInt(Player::getWormNumber)).toList();
-        int highestWormScore = winners.get(winners.size()-1).getWormNumber();
-        winners = winners.stream().filter(e -> e.getWormNumber() >= highestWormScore).collect(Collectors.toList());
-        if(winners.size() == 1) return winners.get(0);
-        else {
-            winners.sort(Comparator.comparingInt(Player::getNumberOfPlayerTile));
-            int lowerNumberOfTiles = winners.get(0).getNumberOfPlayerTile();
-            winners = winners.stream().filter(p -> p.getNumberOfPlayerTile() <= lowerNumberOfTiles).collect(Collectors.toList());
-            if(winners.size() == 1) return winners.get(0);
-            else{
-                winners.sort(Comparator.comparingInt(Player::getHighestTileNumber));
-                return winners.get(winners.size()-1);
-            }
-        }
     }
 
     private void playerTurn() throws IOException {

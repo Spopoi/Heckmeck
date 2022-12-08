@@ -2,8 +2,8 @@ package it.units.heckmeck;
 
 import CLI.CliInputHandler;
 import CLI.CliOutputHandler;
-import Heckmeck.Game;
 import Heckmeck.Player;
+import Heckmeck.Rules;
 import Heckmeck.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,7 @@ public class TestGameWinner {
         loser1.addTile(Tile.generateTile(23));
         loser2.addTile(Tile.generateTile(22));
         Player[] players = {loser1, expectedWinner,loser2};
-        Game game = new Game(players,new CliOutputHandler(), new CliInputHandler());
-        Player winner = game.whoIsTheWinner();
+        Player winner = Rules.whoIsTheWinner(players);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expectedWinner, winner),
                 () -> Assertions.assertNotEquals(loser1, winner),
@@ -39,8 +38,7 @@ public class TestGameWinner {
         loser1.addTile(Tile.generateTile(25));
         loser2.addTile(Tile.generateTile(22));
         Player[] players = {loser1, expectedWinner,loser2};
-        Game game = new Game(players,new CliOutputHandler(), new CliInputHandler());
-        Player winner = game.whoIsTheWinner();
+        Player winner = Rules.whoIsTheWinner(players);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expectedWinner, winner),
                 () -> Assertions.assertNotEquals(loser1, winner),
@@ -59,8 +57,7 @@ public class TestGameWinner {
         loser1.addTile(Tile.generateTile(25));
         loser2.addTile(Tile.generateTile(22));
         Player[] players = {loser1, expectedWinner,loser2};
-        Game game = new Game(players,new CliOutputHandler(), new CliInputHandler());
-        Player winner = game.whoIsTheWinner();
+        Player winner = Rules.whoIsTheWinner(players);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expectedWinner, winner),
                 () -> Assertions.assertNotEquals(loser1, winner),
