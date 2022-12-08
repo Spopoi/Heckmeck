@@ -52,14 +52,14 @@ public class Game {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
         while(!boardTiles.isEmpty()){
-            output.showTiles(boardTiles);
+            io.showBoardTiles(boardTiles);
             playerTurn();
             playerNumber++;
             if(playerNumber >= players.length) playerNumber = 0;
             actualPlayer = players[playerNumber];
         }
         Player winnerPlayer = whoIsTheWinner();
-        output.showWinnerPlayerMessage(winnerPlayer);
+        io.showWinnerPlayerMessage(winnerPlayer);
     }
 
     public Player whoIsTheWinner() {

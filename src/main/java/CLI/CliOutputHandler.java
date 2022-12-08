@@ -93,7 +93,7 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showTiles(BoardTiles boardTiles) throws IOException { //TODO Cambiare concatenaz. con stringBuilder
+    public void showTiles(BoardTiles boardTiles) throws IOException{ //TODO Cambiare concatenaz. con stringBuilder
         String topRow = "";
         String firstRow = "";
         String secondRow = "";

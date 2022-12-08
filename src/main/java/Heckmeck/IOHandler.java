@@ -3,6 +3,8 @@ package Heckmeck;
 import exception.HeckmeckException;
 import exception.IllegalInput;
 
+import java.io.IOException;
+
 public class IOHandler {
     private final InputHandler input;
     private final OutputHandler output;
@@ -51,5 +53,13 @@ public class IOHandler {
     }
     public void showAlreadyPickedPlayerName() {
         output.showAlreadyPickedName();
+    }
+
+    public void showBoardTiles(BoardTiles boardTiles) throws IOException{
+        output.showTiles(boardTiles);
+    }
+
+    public void showWinnerPlayerMessage(Player winnerPlayer) {
+        output.showWinnerPlayerMessage(winnerPlayer);
     }
 }
