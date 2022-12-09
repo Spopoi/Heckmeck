@@ -77,34 +77,34 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showDice(Dice dice) throws IOException {    //TODO Cambiare concatenaz. con stringBuilder
-        String topRow = "";
-        String firstRow = "";
-        String secondRow = "";
-        String thirdRow = "";
-        String bottomRow = "";
+        StringBuilder topRow = new StringBuilder();
+        StringBuilder firstRow = new StringBuilder();
+        StringBuilder secondRow = new StringBuilder();
+        StringBuilder thirdRow = new StringBuilder();
+        StringBuilder bottomRow = new StringBuilder();
         for(Die die : dice.getDiceList()){
-            topRow      += decodeText(getTopDieRow());
-            firstRow    += decodeText(getFirstDieRow(die));
-            secondRow   += decodeText(getSecondDieRow(die));
-            thirdRow    += decodeText(getThirdDieRow(die));
-            bottomRow   += decodeText(getDieBottomRow());
+            topRow.append(decodeText(getTopDieRow()));
+            firstRow.append(decodeText(getFirstDieRow(die)));
+            secondRow.append(decodeText(getSecondDieRow(die)));
+            thirdRow.append(decodeText(getThirdDieRow(die)));
+            bottomRow.append(decodeText(getDieBottomRow()));
         }
         print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow+ newLine);
     }
 
     @Override
     public void showTiles(BoardTiles boardTiles) throws IOException{ //TODO Cambiare concatenaz. con stringBuilder
-        String topRow = "";
-        String firstRow = "";
-        String secondRow = "";
-        String thirdRow = "";
-        String bottomRow = "";
+        StringBuilder topRow = new StringBuilder();
+        StringBuilder firstRow = new StringBuilder();
+        StringBuilder secondRow = new StringBuilder();
+        StringBuilder thirdRow = new StringBuilder();
+        StringBuilder bottomRow = new StringBuilder();
         for(Tile tile : boardTiles.getTiles()){
-            topRow      += decodeText(getTopTilesRow());
-            firstRow    += decodeText(getFirstTilesRow(tile));
-            secondRow   += decodeText(getSecondTileRow(tile));
-            thirdRow    += decodeText(getTilesThirdRow(tile));
-            bottomRow   += decodeText(getBottomTilesRow());
+            topRow.append(decodeText(getTopTilesRow()));
+            firstRow.append(decodeText(getFirstTilesRow(tile)));
+            secondRow.append(decodeText(getSecondTileRow(tile)));
+            thirdRow.append(decodeText(getTilesThirdRow(tile)));
+            bottomRow.append(decodeText(getBottomTilesRow()));
         }
         print("The available tiles on the board now are:" + newLine + topRow + newLine +
                 firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
@@ -283,7 +283,7 @@ public class CliOutputHandler implements OutputHandler {
             return "│ tile │";
         }
     }
-    private static  String getTilesThirdRow(Tile tile){
+    private static String getTilesThirdRow(Tile tile){
         if (tile != null){
             return tileToString.get(tile.getNumber())[1];
         }
