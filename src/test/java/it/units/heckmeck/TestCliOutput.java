@@ -24,14 +24,18 @@ public class TestCliOutput {
 
     public static final String INITIAL_PLAYER_STATUS = getInitialPlayerStatus();
 
+    ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+
+    private PrintStream outStream = new PrintStream(fakeStandardOutput);
+
+    CliOutputHandler output = new CliOutputHandler();
+
 
     @Test
     void printInitialBoardConfiguration() throws IOException {
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliOutputHandler output = new CliOutputHandler();
         BoardTiles boardTiles = BoardTiles.init();
 
+        setSystemOut(outStream);
         output.showTiles(boardTiles);
 
         Assertions.assertEquals(INITIAL_BOARD, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
@@ -39,15 +43,13 @@ public class TestCliOutput {
 
     @Test
     void printEightOnesAsDiceResult() throws IOException {
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliOutputHandler output = new CliOutputHandler();
         Dice dice = Dice.generateDice();
 
         dice.eraseDice();
         for (int i = 0; i < 8; i++) {
             dice.addSpecificDie(Die.Face.ONE);
         }
+        setSystemOut(outStream);
         output.showDice(dice);
 
         Assertions.assertEquals(EIGHT_DICE_WITH_ONE_FACES, fakeStandardOutput.toString());
@@ -55,9 +57,6 @@ public class TestCliOutput {
 
     @Test
     void printAllFacesAsDiceResult() throws IOException {
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliOutputHandler output = new CliOutputHandler();
         Dice dice = Dice.generateDice();
 
         dice.eraseDice();
@@ -67,6 +66,7 @@ public class TestCliOutput {
         dice.addSpecificDie(Die.Face.FOUR);
         dice.addSpecificDie(Die.Face.FIVE);
         dice.addSpecificDie(Die.Face.WORM);
+        setSystemOut(outStream);
         output.showDice(dice);
 
         Assertions.assertEquals(ALL_DIE_FACES, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
@@ -74,9 +74,7 @@ public class TestCliOutput {
 
     @Test
     void printInitialPlayerStatus() throws IOException {
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliOutputHandler output = new CliOutputHandler();
+        setSystemOut(outStream);
         Dice dice = Dice.generateDice();
         Player player = Player.generatePlayer(PLAYER_NAME);
 
@@ -85,6 +83,10 @@ public class TestCliOutput {
         Assertions.assertEquals(INITIAL_PLAYER_STATUS, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
     }
 
+
+    private static void setSystemOut(PrintStream outStream) {
+        System.setOut(outStream);
+    }
 
     private static String getInitialBoard() {
         return """
