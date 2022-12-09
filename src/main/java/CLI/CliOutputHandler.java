@@ -107,7 +107,7 @@ public class CliOutputHandler implements OutputHandler {
             bottomRow.append(decodeText(getBottomTilesRow()));
         }
         print("The available tiles on the board now are:" + newLine + topRow + newLine +
-                firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
+                firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
 
     @Override
