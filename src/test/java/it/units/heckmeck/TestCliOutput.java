@@ -4,6 +4,7 @@ import CLI.CliOutputHandler;
 import Heckmeck.BoardTiles;
 import Heckmeck.Dice;
 import Heckmeck.Die;
+import Heckmeck.Player;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,10 @@ public class TestCliOutput {
     public static final String EIGHT_DICE_WITH_ONE_FACES = getEightDiceWithOneFaces();
 
     public static final String ALL_DIE_FACES = getSixDiceWithAllFaces();
+
+    public static final String PLAYER_NAME = "Luigi";
+
+    public static final String INITIAL_PLAYER_STATUS = getInitialPlayerStatus();
 
 
     @Test
@@ -67,6 +72,19 @@ public class TestCliOutput {
         Assertions.assertEquals(ALL_DIE_FACES, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
     }
 
+    @Test
+    void printInitialPlayerStatus() throws IOException {
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliOutputHandler output = new CliOutputHandler();
+        Dice dice = Dice.generateDice();
+        Player player = Player.generatePlayer(PLAYER_NAME);
+
+        output.showPlayerData(player, dice);
+
+        Assertions.assertEquals(INITIAL_PLAYER_STATUS, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
+    }
+
 
     private static String getInitialBoard() {
         return """
@@ -99,6 +117,16 @@ public class TestCliOutput {
                 """;
     }
 
-
+    private static String getInitialPlayerStatus() {
+        String intro = "        " + PLAYER_NAME + "'s tiles:  ";
+        String indent = String.format("%1$" + intro.length() + "s", "");
+        return new StringBuilder().
+                append(intro + "┌──────┓     Chosen dice: []\n").
+                append(indent + "│  no  │     Current dice score: 0\n").
+                append(indent + "│ tile │     WORM is chosen: false\n").
+                append(indent + "│      │\n").
+                append(indent + "└──────┘\n").
+                toString();
+    }
 
 }

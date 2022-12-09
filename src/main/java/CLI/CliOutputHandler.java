@@ -126,7 +126,7 @@ public class CliOutputHandler implements OutputHandler {
         String thirdRow =decodeText(format + getTilesThirdRow(tile));
         String bottomRow =decodeText(format + getBottomTilesRow());
 
-        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
+        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
 
 //    @Override
