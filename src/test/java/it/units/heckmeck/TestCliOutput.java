@@ -2,6 +2,8 @@ package it.units.heckmeck;
 
 import CLI.CliOutputHandler;
 import Heckmeck.BoardTiles;
+import Heckmeck.Dice;
+import Heckmeck.Die;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +14,8 @@ import java.io.PrintStream;
 public class TestCliOutput {
 
     private static final String INITIAL_BOARD = getInitialBoard();
+
+    public static final String EIGHT_DICE_WITH_ONE_FACES = getEightDiceWithOneFaces();
 
 
     @Test
@@ -26,6 +30,22 @@ public class TestCliOutput {
         Assertions.assertEquals(INITIAL_BOARD, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
     }
 
+    @Test
+    void printEightOnesAsDiceResult() throws IOException {
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliOutputHandler output = new CliOutputHandler();
+        Dice dice = Dice.generateDice();
+
+        dice.eraseDice();
+        for (int i = 0; i < 8; i++) {
+            dice.addSpecificDie(Die.Face.ONE);
+        }
+        output.showDice(dice);
+
+        Assertions.assertEquals(EIGHT_DICE_WITH_ONE_FACES, fakeStandardOutput.toString());
+    }
+
 
     private static String getInitialBoard() {
         return """
@@ -35,6 +55,16 @@ public class TestCliOutput {
                 │  ~   ││  ~   ││  ~   ││  ~   ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  ││  ~~  │
                 │      ││      ││      ││      ││      ││      ││      ││      ││  ~   ││  ~   ││  ~   ││  ~   ││  ~~  ││  ~~  ││  ~~  ││  ~~  │
                 └──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘└──────┘
+                """;
+    }
+
+    private static String getEightDiceWithOneFaces() {
+        return """
+                ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐\s
+                ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊\s
+                ┊    ◎    ┊ ┊    ◎    ┊ ┊    ◎    ┊ ┊    ◎    ┊ ┊    ◎    ┊ ┊    ◎    ┊ ┊    ◎    ┊ ┊    ◎    ┊\s
+                ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊ ┊         ┊\s
+                └---------┘ └---------┘ └---------┘ └---------┘ └---------┘ └---------┘ └---------┘ └---------┘\s
                 """;
     }
 

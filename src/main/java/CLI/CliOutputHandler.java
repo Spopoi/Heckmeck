@@ -89,7 +89,7 @@ public class CliOutputHandler implements OutputHandler {
             thirdRow.append(decodeText(getThirdDieRow(die)));
             bottomRow.append(decodeText(getDieBottomRow()));
         }
-        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow+ newLine);
+        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
 
     @Override
