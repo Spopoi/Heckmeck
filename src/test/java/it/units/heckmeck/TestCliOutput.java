@@ -26,9 +26,9 @@ public class TestCliOutput {
 
     ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
 
-    private PrintStream outStream = new PrintStream(fakeStandardOutput);
+    private final PrintStream outStream = new PrintStream(fakeStandardOutput);
 
-    CliOutputHandler output = new CliOutputHandler();
+    private final CliOutputHandler output = new CliOutputHandler();
 
 
     @Test
@@ -122,13 +122,11 @@ public class TestCliOutput {
     private static String getInitialPlayerStatus() {
         String intro = "        " + PLAYER_NAME + "'s tiles:  ";
         String indent = String.format("%1$" + intro.length() + "s", "");
-        return new StringBuilder().
-                append(intro + "┌──────┓     Chosen dice: []\n").
-                append(indent + "│  no  │     Current dice score: 0\n").
-                append(indent + "│ tile │     WORM is chosen: false\n").
-                append(indent + "│      │\n").
-                append(indent + "└──────┘\n").
-                toString();
+        return intro + "┌──────┓     Chosen dice: []\n" +
+                indent + "│  no  │     Current dice score: 0\n" +
+                indent + "│ tile │     WORM is chosen: false\n" +
+                indent + "│      │\n" +
+                indent + "└──────┘\n";
     }
 
 }
