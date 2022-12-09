@@ -17,6 +17,8 @@ public class TestCliOutput {
 
     public static final String EIGHT_DICE_WITH_ONE_FACES = getEightDiceWithOneFaces();
 
+    public static final String ALL_DIE_FACES = getSixDiceWithAllFaces();
+
 
     @Test
     void printInitialBoardConfiguration() throws IOException {
@@ -46,6 +48,25 @@ public class TestCliOutput {
         Assertions.assertEquals(EIGHT_DICE_WITH_ONE_FACES, fakeStandardOutput.toString());
     }
 
+    @Test
+    void printAllFacesAsDiceResult() throws IOException {
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliOutputHandler output = new CliOutputHandler();
+        Dice dice = Dice.generateDice();
+
+        dice.eraseDice();
+        dice.addSpecificDie(Die.Face.ONE);
+        dice.addSpecificDie(Die.Face.TWO);
+        dice.addSpecificDie(Die.Face.THREE);
+        dice.addSpecificDie(Die.Face.FOUR);
+        dice.addSpecificDie(Die.Face.FIVE);
+        dice.addSpecificDie(Die.Face.WORM);
+        output.showDice(dice);
+
+        Assertions.assertEquals(ALL_DIE_FACES, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
+    }
+
 
     private static String getInitialBoard() {
         return """
@@ -67,5 +88,17 @@ public class TestCliOutput {
                 └---------┘ └---------┘ └---------┘ └---------┘ └---------┘ └---------┘ └---------┘ └---------┘\s
                 """;
     }
+
+    private static String getSixDiceWithAllFaces() {
+        return """
+                ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐ ┌---------┐\s
+                ┊         ┊ ┊      ◎  ┊ ┊      ◎  ┊ ┊  ◎   ◎  ┊ ┊  ◎   ◎  ┊ ┊   \\=\\   ┊\s
+                ┊    ◎    ┊ ┊         ┊ ┊    ◎    ┊ ┊         ┊ ┊    ◎    ┊ ┊   /=/   ┊\s
+                ┊         ┊ ┊  ◎      ┊ ┊  ◎      ┊ ┊  ◎   ◎  ┊ ┊  ◎   ◎  ┊ ┊   \\=\\   ┊\s
+                └---------┘ └---------┘ └---------┘ └---------┘ └---------┘ └---------┘\s
+                """;
+    }
+
+
 
 }
