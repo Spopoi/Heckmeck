@@ -8,7 +8,7 @@ public class Game {
     private Player[] players;
     private Dice dice;
     private BoardTiles boardTiles;
-    private IOHandler io;
+    private final IOHandler io;
 
     private Player actualPlayer;
 
@@ -27,12 +27,6 @@ public class Game {
         else {
             System.exit(0);
         }
-    }
-
-    public Game(Player[] players, OutputHandler output, InputHandler input){
-        this.players = players;
-        this.dice = Dice.generateDice();// TODO ha senso rinominare in init()?
-        this.boardTiles = BoardTiles.init();
     }
     public void play() throws IOException {
         int playerNumber = 0;
@@ -77,30 +71,15 @@ public class Game {
         return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
     }
 
-
-    private boolean steal() {
-        if(!canSteal()) return false;
-        if(io.wantToSteal()){
-            stealTile();
-            return true;
-        }else return false;
-    }
-
-    private void stealTile() {
-        int playerScore = dice.getScore();
-        for(Player robbedPlayer : players){
-            if(!robbedPlayer.equals(actualPlayer) && robbedPlayer.hasTile() && playerScore == robbedPlayer.getLastPickedTile().getNumber()){
-                actualPlayer.pickTileFromPlayer(robbedPlayer.getLastPickedTile(),robbedPlayer);
-            }
-        }
-    }
-
-    private boolean canSteal() {
+    private boolean steal(){
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;
-        for(Player player : players){
-            if(!player.equals(actualPlayer) && player.hasTile() && playerScore == player.getLastPickedTile().getNumber()){
-                return true;
+        for(Player robbedPlayer : players){
+            if(!robbedPlayer.equals(actualPlayer) && robbedPlayer.hasTile() && playerScore == robbedPlayer.getLastPickedTileNumber()){
+                if(io.wantToSteal(robbedPlayer)){
+                    actualPlayer.stealTileFromPlayer(robbedPlayer);
+                    return true;
+                } else return false;
             }
         }
         return false;

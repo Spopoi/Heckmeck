@@ -78,8 +78,8 @@ public class IOHandler {
         output.showPlayerScore(player,dice);
     }
 
-    public boolean wantToSteal(){
-        output.showWantToSteal();
+    public boolean wantToSteal(Player robbedPlayer){
+        output.showWantToSteal(robbedPlayer);
         while(true) {
             try {
                 return input.wantToSteal();
