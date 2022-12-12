@@ -43,6 +43,7 @@ public class Player {
         return playerTiles.peekLast();
     }
 
+    //TODO: rimuovere pickTileFromPlayer && canStealTileFrom? used only for tests
     public void pickTileFromPlayer(Tile desiredTile, Player robbedPlayer) throws IllegalTileTheft {
         if (!canStealTileFrom(desiredTile, robbedPlayer)) {
             throw new IllegalTileTheft(desiredTile, robbedPlayer);
@@ -54,13 +55,17 @@ public class Player {
         return robbedPlayer.hasTile() && robbedPlayer.getLastPickedTile().equals(desiredTile);
     }
 
-    private void stealTileFromPlayer(Player robbedPlayer) {
+    public void stealTileFromPlayer(Player robbedPlayer) {
         playerTiles.add(robbedPlayer.getLastPickedTile());
         robbedPlayer.removeLastPickedTile();
     }
 
     public void removeLastPickedTile() {
         playerTiles.removeLast();
+    }
+
+    public int getLastPickedTileNumber(){
+        return getLastPickedTile().getNumber();
     }
 
     public int getNumberOfPlayerTile(){

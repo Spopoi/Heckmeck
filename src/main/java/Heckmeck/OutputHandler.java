@@ -16,7 +16,7 @@ public interface OutputHandler {
     public void showBustMessage();
     public void showPlayerScore(Player actualPlayer, Dice dice);
     public void showTurnBeginConfirm(Player actualPlayer);
-    public void showWantToSteal();
+    public void showWantToSteal(Player robbedPlayer);
     public void showWinnerPlayerMessage(Player winnerPlayer);
     public void showAlreadyPickedDice();
     public void showFaceNotPresentMessage();

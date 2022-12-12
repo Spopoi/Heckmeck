@@ -199,8 +199,8 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showWantToSteal() {
-        print("Do you want to steal? Press 'y' for stealing or 'n' for continuing your turn:");
+    public void showWantToSteal(Player robbedPlayer) {
+        print("Do you want to steal tile number "+ robbedPlayer.getLastPickedTileNumber()+ " from "+ robbedPlayer.getName() + "? Press 'y' for stealing or 'n' for continuing your turn:");
     }
 
     @Override
