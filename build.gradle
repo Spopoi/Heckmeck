@@ -17,10 +17,9 @@ dependencies {
 }
 
 compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = "UTF-8"
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
+
 
 application {
     mainClass = 'Heckmeck.HeckmeckCLI'
@@ -37,6 +36,10 @@ test {
 
 run {
     standardInput = System.in
+}
+
+run.configure {
+    allJvmArgs = ['-Dsun.stdout.encoding=cp437']
 }
 
 //mainClassName = 'GUI.Main'

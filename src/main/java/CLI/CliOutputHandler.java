@@ -11,29 +11,29 @@ import java.util.*;
 
 public class CliOutputHandler implements OutputHandler {
 
-    private static final String[] faceOne = {   "┊         ┊ ",
-                                                "┊    ◎    ┊ ",
-                                                "┊         ┊ "  };
+    private static final String[] faceOne = {   "|         | ",
+                                                "|    o    | ",
+                                                "|         | "  };
 
-    private static final String[] faceTwo = {   "┊      ◎  ┊ ",
-                                                "┊         ┊ ",
-                                                "┊  ◎      ┊ "  };
+    private static final String[] faceTwo = {   "|      o  | ",
+                                                "|         | ",
+                                                "|  o      | "  };
 
-    private static final String[] faceThree ={  "┊      ◎  ┊ ",
-                                                "┊    ◎    ┊ ",
-                                                "┊  ◎      ┊ "  };
+    private static final String[] faceThree ={  "|      o  | ",
+                                                "|    o    | ",
+                                                "|  o      | "  };
 
-    private static final String[] faceFour = {  "┊  ◎   ◎  ┊ ",
-                                                "┊         ┊ ",
-                                                "┊  ◎   ◎  ┊ "  };
+    private static final String[] faceFour = {  "|  o   o  | ",
+                                                "|         | ",
+                                                "|  o   o  | "  };
 
-    private static final String[] faceFive = {  "┊  ◎   ◎  ┊ ",
-                                                "┊    ◎    ┊ ",
-                                                "┊  ◎   ◎  ┊ "  };
+    private static final String[] faceFive = {  "|  o   o  | ",
+                                                "|    o    | ",
+                                                "|  o   o  | "  };
 
-    private static final String[] faceWorm = {      "┊   \033[0;31m\\=\\\033[0m   ┊ ",
-                                                    "┊   \033[0;31m/=/\033[0m   ┊ ",
-                                                    "┊   \033[0;31m\\=\\\033[0m   ┊ "  };
+    private static final String[] faceWorm = {      "|   \033[0;31m\\=\\\033[0m   | ",
+                                                    "|   \033[0;31m/=/\033[0m   | ",
+                                                    "|   \033[0;31m\\=\\\033[0m   | "  };
 
     private static final Map<Die.Face, String[]> dieToString =
             Collections.unmodifiableMap(new HashMap<Die.Face, String[]>() {{
@@ -45,10 +45,10 @@ public class CliOutputHandler implements OutputHandler {
                 put(Die.Face.WORM,  faceWorm);
             }});
 
-    private static final String[] oneWorm = {"\033[0;93m│\033[0m  \033[0;31m~\033[0m   \033[0;93m│\033[0m", "\033[0;93m│      │\033[0m"};
-    private static final String[] twoWorms = {"\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m", "\033[0;93m│      │\033[0m"};
-    private static final String[] threeWorms = {"\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m", "\033[0;93m│\033[0m  \033[0;31m~\033[0m   \033[0;93m│\033[0m"};
-    private static final String[] fourWorms = {"\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m", "\033[0;93m│\033[0m  \033[0;31m~~\033[0m  \033[0;93m│\033[0m"};
+    private static final String[] oneWorm = {"\033[0;93m|\033[0m  \033[0;31m~\033[0m   \033[0;93m|\033[0m", "\033[0;93m|      |\033[0m"};
+    private static final String[] twoWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|      |\033[0m"};
+    private static final String[] threeWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|\033[0m  \033[0;31m~\033[0m   \033[0;93m|\033[0m"};
+    private static final String[] fourWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m"};
 
     private static final Map<Integer, String[]> tileToString =
             Collections.unmodifiableMap(new HashMap<Integer, String[]>() {{
@@ -244,7 +244,7 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     public static String getTopDieRow(){
-        return "┌---------┐ ";
+        return ".---------. ";
     }
     public static String getFirstDieRow(Die die){
         return dieToString.get(die.getDieFace())[0];
@@ -256,23 +256,23 @@ public class CliOutputHandler implements OutputHandler {
         return dieToString.get(die.getDieFace())[2];
     }
     public static String getDieBottomRow(){
-        return "└---------┘ ";
+        return "'---------' ";
     }
 
     private static String getBottomTilesRow() {
-        return "\033[0;93m└──────┘\033[0m";
+        return "\033[0;93m'------'\033[0m";
     }
 
     private static String getTopTilesRow() {
-        return "\033[0;93m┌──────┓\033[0m";
+        return "\033[0;93m.------.\033[0m";
     }
 
     private static String getFirstTilesRow(Tile tile){
         if (tile != null){
-            return "\033[0;93m│\033[0m  " + tile.getNumber() + "  \033[0;93m│\033[0m";
+            return "\033[0;93m|\033[0m  " + tile.getNumber() + "  \033[0;93m|\033[0m";
         }
         else{
-            return "│  no  │";
+            return "|  no  |";
         }
     }
     private static String getSecondTileRow(Tile tile){
@@ -280,7 +280,7 @@ public class CliOutputHandler implements OutputHandler {
             return tileToString.get(tile.getNumber())[0];
         }
         else{
-            return "│ tile │";
+            return "| tile |";
         }
     }
     private static String getTilesThirdRow(Tile tile){
@@ -288,7 +288,7 @@ public class CliOutputHandler implements OutputHandler {
             return tileToString.get(tile.getNumber())[1];
         }
         else{
-            return "│      │";
+            return "|      |";
         }
     }
 
