@@ -114,10 +114,10 @@ public class CliOutputHandler implements OutputHandler {
     public void showPlayerData(Player player, Dice dice) throws IOException {
         Tile tile = player.getLastPickedTile();
 
-        String displayString = decodeText( "        " + player.getName() + "'s tiles:  ");
-        String chosenDiceString = decodeText( "     Chosen dice: " + dice.getChosenDiceString());
-        String chosenDiceScore = decodeText( "     Current dice score: " + dice.getScore());
-        String wormPresent = decodeText( "     WORM is chosen: " + dice.isWormChosen());
+        String displayString = decodeText( " " + player.getName() + "'s tiles:  ");
+        String chosenDiceString = decodeText( " Chosen dice: " + dice.getChosenDiceString());
+        String chosenDiceScore = decodeText( " Current dice score: " + dice.getScore());
+        String wormPresent = decodeText( " WORM is chosen: " + dice.isWormChosen());
 
         String topRow = decodeText(String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString);
         String format = String.format("%1$" + displayString.length() + "s", "");
