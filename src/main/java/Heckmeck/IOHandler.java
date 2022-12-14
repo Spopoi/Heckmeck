@@ -2,8 +2,6 @@ package Heckmeck;
 
 import exception.IllegalInput;
 
-import java.io.IOException;
-
 public class IOHandler {
     private final InputHandler input;
     private final OutputHandler output;
@@ -13,7 +11,7 @@ public class IOHandler {
         this.output = output;
     }
 
-    public void showTurnBeginConfirm(Player actualPlayer) throws IOException{
+    public void showTurnBeginConfirm(Player actualPlayer){
         output.showTurnBeginConfirm(actualPlayer);
         input.pressEnter();
     }
@@ -60,7 +58,7 @@ public class IOHandler {
         output.showAlreadyPickedName();
     }
 
-    public void showBoardTiles(BoardTiles boardTiles) throws IOException {
+    public void showBoardTiles(BoardTiles boardTiles){
         output.showTiles(boardTiles);
     }
 
@@ -94,11 +92,11 @@ public class IOHandler {
         }
     }
 
-    public void showPlayerData(Player player, Dice dice) throws IOException{
+    public void showPlayerData(Player player, Dice dice){
         output.showPlayerData(player,dice);
     }
 
-    public void showDice(Dice dice) throws IOException{
+    public void showDice(Dice dice){
         output.showDice(dice);
     }
 

@@ -76,55 +76,55 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showDice(Dice dice) throws IOException {    //TODO Cambiare concatenaz. con stringBuilder
+    public void showDice(Dice dice){    //TODO Cambiare concatenaz. con stringBuilder
         StringBuilder topRow = new StringBuilder();
         StringBuilder firstRow = new StringBuilder();
         StringBuilder secondRow = new StringBuilder();
         StringBuilder thirdRow = new StringBuilder();
         StringBuilder bottomRow = new StringBuilder();
         for(Die die : dice.getDiceList()){
-            topRow.append(decodeText(getTopDieRow()));
-            firstRow.append(decodeText(getFirstDieRow(die)));
-            secondRow.append(decodeText(getSecondDieRow(die)));
-            thirdRow.append(decodeText(getThirdDieRow(die)));
-            bottomRow.append(decodeText(getDieBottomRow()));
+            topRow.append(getTopDieRow());
+            firstRow.append(getFirstDieRow(die));
+            secondRow.append(getSecondDieRow(die));
+            thirdRow.append(getThirdDieRow(die));
+            bottomRow.append(getDieBottomRow());
         }
         print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
 
     @Override
-    public void showTiles(BoardTiles boardTiles) throws IOException{ //TODO Cambiare concatenaz. con stringBuilder
+    public void showTiles(BoardTiles boardTiles){ //TODO Cambiare concatenaz. con stringBuilder
         StringBuilder topRow = new StringBuilder();
         StringBuilder firstRow = new StringBuilder();
         StringBuilder secondRow = new StringBuilder();
         StringBuilder thirdRow = new StringBuilder();
         StringBuilder bottomRow = new StringBuilder();
         for(Tile tile : boardTiles.getTiles()){
-            topRow.append(decodeText(getTopTilesRow()));
-            firstRow.append(decodeText(getFirstTilesRow(tile)));
-            secondRow.append(decodeText(getSecondTileRow(tile)));
-            thirdRow.append(decodeText(getTilesThirdRow(tile)));
-            bottomRow.append(decodeText(getBottomTilesRow()));
+            topRow.append(getTopTilesRow());
+            firstRow.append(getFirstTilesRow(tile));
+            secondRow.append(getSecondTileRow(tile));
+            thirdRow.append(getTilesThirdRow(tile));
+            bottomRow.append(getBottomTilesRow());
         }
         print("The available tiles on the board now are:" + newLine + topRow + newLine +
                 firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
 
     @Override
-    public void showPlayerData(Player player, Dice dice) throws IOException {
+    public void showPlayerData(Player player, Dice dice){
         Tile tile = player.getLastPickedTile();
 
-        String displayString = decodeText( "        " + player.getName() + "'s tiles:  ");
-        String chosenDiceString = decodeText( "     Chosen dice: " + dice.getChosenDiceString());
-        String chosenDiceScore = decodeText( "     Current dice score: " + dice.getScore());
-        String wormPresent = decodeText( "     WORM is chosen: " + dice.isWormChosen());
+        String displayString = "        " + player.getName() + "'s tiles:  ";
+        String chosenDiceString = "     Chosen dice: " + dice.getChosenDiceString();
+        String chosenDiceScore = "     Current dice score: " + dice.getScore();
+        String wormPresent =  "     WORM is chosen: " + dice.isWormChosen();
 
-        String topRow = decodeText(String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString);
+        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString;
         String format = String.format("%1$" + displayString.length() + "s", "");
-        String firstRow =decodeText(format + getFirstTilesRow(tile) + chosenDiceScore);
-        String secondRow =decodeText(format + getSecondTileRow(tile) + wormPresent);
-        String thirdRow =decodeText(format + getTilesThirdRow(tile));
-        String bottomRow =decodeText(format + getBottomTilesRow());
+        String firstRow =format + getFirstTilesRow(tile) + chosenDiceScore;
+        String secondRow =format + getSecondTileRow(tile) + wormPresent;
+        String thirdRow =format + getTilesThirdRow(tile);
+        String bottomRow =format + getBottomTilesRow();
 
         print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
@@ -304,12 +304,4 @@ static String getLogo(){
                         """;
     }
 
-    static String decodeText(String input) throws IOException {
-        return
-                new BufferedReader(
-                        new InputStreamReader(
-                                new ByteArrayInputStream(input.getBytes()),
-                                StandardCharsets.UTF_8))
-                        .readLine();
-    }
 }

@@ -11,6 +11,6 @@ public interface InputHandler{
     public String choosePlayerName() throws IllegalInput;
     public Die.Face chooseDiceFace() throws IllegalInput ;
     public boolean wantToPick() throws IllegalInput;
-    public void pressEnter() throws IOException;
+    public void pressEnter();
     public boolean wantToSteal() throws IllegalInput;
 }
