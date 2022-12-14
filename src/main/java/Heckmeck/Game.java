@@ -41,8 +41,7 @@ public class Game {
     }
 
     private void playerTurn(){
-        //TODO: FIXARE Press any key
-        io.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
+        io.showTurnBeginConfirm(actualPlayer.getName());
         io.showBoardTiles(boardTiles);
         boolean isOnRun = roll();
         while (isOnRun){

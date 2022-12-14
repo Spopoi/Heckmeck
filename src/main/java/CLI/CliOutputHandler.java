@@ -1,11 +1,6 @@
 package CLI;
 import Heckmeck.*;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -187,14 +182,14 @@ public class CliOutputHandler implements OutputHandler {
         print("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
     }
 
-    //@Override
-    public void showTurnBeginConfirm(Player actualPlayer){
+    @Override
+    public void showTurnBeginConfirm(String playerName){
         String message = ": hit enter to start your turn #";
-        String separator = "#".repeat(actualPlayer.getName().length()).concat(
+        String separator = "#".repeat(playerName.length()).concat(
                 "#".repeat(message.length()+2));
 
         print(separator);
-        print("# " + actualPlayer.getName() + message );
+        print("# " + playerName + message );
         print(separator);
     }
 

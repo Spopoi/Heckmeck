@@ -11,8 +11,8 @@ public class IOHandler {
         this.output = output;
     }
 
-    public void showTurnBeginConfirm(Player actualPlayer){
-        output.showTurnBeginConfirm(actualPlayer);
+    public void showTurnBeginConfirm(String playerName){
+        output.showTurnBeginConfirm(playerName);
         input.pressEnter();
     }
 
