@@ -20,8 +20,8 @@ public class TestFileReader {
                 '------'
                 """;
 
-        String tileAsString = FileReader.readFile(Path.of(tile21Resource.toURI()));
+        String tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
 
-        Assertions.assertEquals(expectedTile21AsText, tileAsString);
+        Assertions.assertEquals(expectedTile21AsText, tileAsText);
     }
 }
