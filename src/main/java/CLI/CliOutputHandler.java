@@ -77,13 +77,14 @@ public class CliOutputHandler implements OutputHandler {
         StringBuilder secondRow = new StringBuilder();
         StringBuilder thirdRow = new StringBuilder();
         StringBuilder bottomRow = new StringBuilder();
-        for(Die die : dice.getDiceList()){
+
+        dice.getDiceList().forEach(die->{
             topRow.append(getTopDieRow());
             firstRow.append(getFirstDieRow(die));
             secondRow.append(getSecondDieRow(die));
             thirdRow.append(getThirdDieRow(die));
             bottomRow.append(getDieBottomRow());
-        }
+        });
         print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
 
@@ -94,13 +95,14 @@ public class CliOutputHandler implements OutputHandler {
         StringBuilder secondRow = new StringBuilder();
         StringBuilder thirdRow = new StringBuilder();
         StringBuilder bottomRow = new StringBuilder();
-        for(Tile tile : boardTiles.getTiles()){
+
+        boardTiles.getTilesList().forEach(tile->{
             topRow.append(getTopTilesRow());
             firstRow.append(getFirstTilesRow(tile));
             secondRow.append(getSecondTileRow(tile));
             thirdRow.append(getTilesThirdRow(tile));
             bottomRow.append(getBottomTilesRow());
-        }
+        });
         print("The available tiles on the board now are:" + newLine + topRow + newLine +
                 firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
