@@ -43,7 +43,7 @@ public class TestCliOutput {
 
     @Test
     void printEightOnesAsDiceResult() throws IOException {
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
 
         dice.eraseDice();
         for (int i = 0; i < 8; i++) {
@@ -57,7 +57,7 @@ public class TestCliOutput {
 
     @Test
     void printAllFacesAsDiceResult() throws IOException {
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
 
         dice.eraseDice();
         dice.addSpecificDie(Die.Face.ONE);
@@ -75,7 +75,7 @@ public class TestCliOutput {
     @Test
     void printInitialPlayerStatus() throws IOException {
         setSystemOut(outStream);
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         Player player = Player.generatePlayer(PLAYER_NAME);
 
         output.showPlayerData(player, dice);

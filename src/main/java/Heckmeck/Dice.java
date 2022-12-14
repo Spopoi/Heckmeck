@@ -1,14 +1,13 @@
 package Heckmeck;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static Heckmeck.Die.Face.WORM;
-import static java.util.stream.Collectors.toList;
+
 
 public class Dice {
     private final int  initialNumOfDice = 8;
-    private List<Die> diceList = new ArrayList<Die>();
+    private List<Die> diceList = new ArrayList<>();
     private List<Die> chosenDiceList;
 
 
@@ -20,7 +19,7 @@ public class Dice {
         }
     }
 
-    public static Dice generateDice(){
+    public static Dice init(){
         return new Dice();
     }
 
@@ -53,7 +52,7 @@ public class Dice {
     }
 
     private void resetChosenDice(){
-        chosenDiceList = new ArrayList<Die>(initialNumOfDice);
+        chosenDiceList = new ArrayList<>(initialNumOfDice);
     }
 
     public int getNumOfDice(){

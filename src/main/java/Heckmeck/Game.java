@@ -20,7 +20,7 @@ public class Game {
         if (io.wantToPlay()){
             int numberOfPlayers = io.chooseNumberOfPlayers();
             this.players = setupPlayers(numberOfPlayers);
-            this.dice = Dice.generateDice(); // TODO ha senso rinominare in init()?
+            this.dice = Dice.init();
             this.boardTiles = BoardTiles.init();
         }
         else {
@@ -54,7 +54,6 @@ public class Game {
         dice.resetDice();
     }
 
-    //TODO: catch IOException somewhere
     private boolean pick(){
         if(!canPick()) return false;
         io.showPlayerScore(actualPlayer,dice);

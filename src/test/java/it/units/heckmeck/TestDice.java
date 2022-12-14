@@ -6,8 +6,6 @@ import java.util.*;
 
 import Heckmeck.Die;
 import Heckmeck.Dice;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import static Heckmeck.Die.Face.*;
 
@@ -53,7 +51,7 @@ public class TestDice {
 
     @Test
     void initDice(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         List <Die> diceList =  dice.getDiceList();
         int size = diceList.size();
         Assertions.assertEquals(8, size);
@@ -65,7 +63,7 @@ public class TestDice {
 
     @Test
     void rollInitialDice(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.rollDice();
         List <Die> diceList =  dice.getDiceList();
         int size = diceList.size();
@@ -78,7 +76,7 @@ public class TestDice {
 
     @Test
     void deleteDice(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.eraseDice();
         int numOfDice = dice.getNumOfDice();
         boolean test = numOfDice == 0;
@@ -87,7 +85,7 @@ public class TestDice {
 
     @Test
     void resetDice(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         Assertions.assertEquals(8, dice.getNumOfDice());
         dice.eraseDice();
         Assertions.assertEquals(0, dice.getNumOfDice());
@@ -98,7 +96,7 @@ public class TestDice {
 
     @Test
     void removeDie(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         Assertions.assertEquals(8, dice.getNumOfDice());
         dice.removeDie();
         Assertions.assertEquals(7, dice.getNumOfDice());
@@ -109,7 +107,7 @@ public class TestDice {
     @Test
     void removeDice(){
         int n = 7;
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         Assertions.assertEquals(8, dice.getNumOfDice());
         dice.removeDice(n);
         Assertions.assertEquals(8-n, dice.getNumOfDice());
@@ -118,7 +116,7 @@ public class TestDice {
     @Test
     void rollSequence(){
         int [] seq = {8, 7, 6, 5, 4, 3, 2, 1};
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         for(int n : seq){
             dice.rollDice();
             List <Die> diceList =  dice.getDiceList();
@@ -133,7 +131,7 @@ public class TestDice {
     }
     @Test
     void addSpecificDie(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.eraseDice();
         dice.addSpecificDie(ONE);
         List <Die> diceList =  dice.getDiceList();
@@ -142,7 +140,7 @@ public class TestDice {
 
     @Test
     void isFacePresent(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.rollDice();
         dice.addSpecificDie(TWO);
         Assertions.assertTrue(dice.isFacePresent(TWO));
@@ -150,7 +148,7 @@ public class TestDice {
 
     @Test
     void isWormPresent(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.rollDice();
         dice.addSpecificDie(WORM);
         Assertions.assertTrue(dice.isWormPresent());
@@ -158,7 +156,7 @@ public class TestDice {
 
     @Test
     void chooseDie(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.eraseDice();
         dice.addSpecificDie(TWO);
         dice.chooseDice(TWO);
@@ -169,7 +167,7 @@ public class TestDice {
 
     @Test
     void chooseRandomDice(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.resetDice();
         dice.rollDice();
         Die.Face face = dice.getDiceList().get(0).getDieFace();
@@ -180,7 +178,7 @@ public class TestDice {
 
     @Test
     void isDieChosen(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.eraseDice();
         dice.addSpecificDie(THREE);
         dice.chooseDice(THREE);
@@ -189,7 +187,7 @@ public class TestDice {
 
     @Test
     void isWormChosen(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.rollDice();
         dice.addSpecificDie(WORM);
         dice.chooseDice(WORM);
@@ -198,7 +196,7 @@ public class TestDice {
 
     @Test
     void getChosenDice(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.eraseDice();
         dice.addSpecificDie(ONE);
         dice.addSpecificDie(TWO);
@@ -229,7 +227,7 @@ public class TestDice {
 
     @Test
     void getScore(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.eraseDice();
         dice.addSpecificDie(ONE);
         dice.addSpecificDie(TWO);
@@ -249,7 +247,7 @@ public class TestDice {
 
     @Test
     void gameRollSequence(){
-        Dice dice = Dice.generateDice();
+        Dice dice = Dice.init();
         dice.rollDice();
         Assertions.assertEquals(8, dice.getDiceList().size());
         Die.Face face1 = dice.getDiceList().get(0).getDieFace();
