@@ -29,22 +29,11 @@ public class CliOutputHandler implements OutputHandler {
     private static final String[] faceWorm = {      "|   \033[0;31m\\=\\\033[0m   | ",
                                                     "|   \033[0;31m/=/\033[0m   | ",
                                                     "|   \033[0;31m\\=\\\033[0m   | "  };
-
-    private static final Map<Die.Face, String[]> dieToString =
-            Collections.unmodifiableMap(new HashMap<Die.Face, String[]>() {{
-                put(Die.Face.ONE,   faceOne);
-                put(Die.Face.TWO,   faceTwo);
-                put(Die.Face.THREE, faceThree);
-                put(Die.Face.FOUR,  faceFour);
-                put(Die.Face.FIVE,  faceFive);
-                put(Die.Face.WORM,  faceWorm);
-            }});
-
     private static final String[] oneWorm = {"\033[0;93m|\033[0m  \033[0;31m~\033[0m   \033[0;93m|\033[0m", "\033[0;93m|      |\033[0m"};
     private static final String[] twoWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|      |\033[0m"};
     private static final String[] threeWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|\033[0m  \033[0;31m~\033[0m   \033[0;93m|\033[0m"};
     private static final String[] fourWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m"};
-
+    private static final String newLine = System.lineSeparator();
     private static final Map<Integer, String[]> tileToString =
             Collections.unmodifiableMap(new HashMap<Integer, String[]>() {{
                 put(21, oneWorm);
@@ -64,7 +53,16 @@ public class CliOutputHandler implements OutputHandler {
                 put(35, fourWorms);
                 put(36, fourWorms);
             }});
-    private static final String newLine = System.lineSeparator();
+
+    private static final Map<Die.Face, String[]> dieToString =
+            Collections.unmodifiableMap(new HashMap<Die.Face, String[]>() {{
+                put(Die.Face.ONE,   faceOne);
+                put(Die.Face.TWO,   faceTwo);
+                put(Die.Face.THREE, faceThree);
+                put(Die.Face.FOUR,  faceFour);
+                put(Die.Face.FIVE,  faceFive);
+                put(Die.Face.WORM,  faceWorm);
+            }});
 
     private static void print(String message){
         System.out.println(message);
@@ -126,6 +124,10 @@ public class CliOutputHandler implements OutputHandler {
         print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
 
+    public void printMessage(String message){
+        print(message);
+    }
+
 //    @Override
 //    public void showPlayerTile(Player player){
 //        Tile tile = player.getLastPickedTile();
@@ -150,38 +152,13 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void askForNumberOfPlayers(){
-        print("Choose number of players between 2 and 7:");
-    }
-
-    @Override
-    public void showSetPlayerName(int playerNumber){
-        print("Insert the name for player" + playerNumber);
-    }
-
-    @Override
-    public void showDiceChoice() {
-        print("Pick one unselected face");
-    }
-
-    @Override
-    public void showExceptionMessage(Exception ex) {
-        print(ex.getMessage());
-    }
-
-    @Override
     public void showWantToPick() {
-        print("Do you want to pick the tile?" + newLine + "Press 'y' for picking the tile or 'n' for rolling dice");
+        print("Do you want to pick the tile?" + newLine + "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
     }
 
     @Override
     public void showBustMessage() {
         print("#####################" +newLine+ "# BUUUUUSSSTTTTTT!! #" +newLine + "#####################" +newLine);
-    }
-
-    @Override
-    public void showPlayerScore(Player actualPlayer, Dice dice) {
-        print("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
     }
 
     @Override
@@ -201,44 +178,24 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showWinnerPlayerMessage(Player winnerPlayer) {
-        print("Congratulation to "+winnerPlayer.getName() + "!" + newLine+ "You are the WINNER!!");
-    }
-
-    @Override
-    public void showAlreadyPickedDice() {
-        print("You have already chose this face, pick another one!");
-    }
-
-    @Override
-    public void showFaceNotPresentMessage() {
-        print("This face is not present.. Pick another one!");
-    }
-
-    @Override
-    public void showAlreadyPickedName() {
-        print("Already picked name.. Please choose another one");
-    }
-
-    @Override
     public void showWantToPlay() {
-        print("Do you want to start a new game? y/n");
+        print("Do you want to start a new game? Press 'y' for playing or 'n' for quitting");
     }
 
-    public static void drawSingleDie(Die die){
-        String dieString = getTopDieRow();
-        dieString += System.lineSeparator();
-        dieString+= getFirstDieRow(die);
-        dieString += System.lineSeparator();
-        dieString+= getSecondDieRow(die);
-        dieString += System.lineSeparator();
-        dieString += getThirdDieRow(die);
-        dieString += System.lineSeparator();
-        dieString += getDieBottomRow();
-        dieString += System.lineSeparator();
-
-        print(dieString);
-    }
+//    public static void drawSingleDie(Die die){
+//        String dieString = getTopDieRow();
+//        dieString += System.lineSeparator();
+//        dieString+= getFirstDieRow(die);
+//        dieString += System.lineSeparator();
+//        dieString+= getSecondDieRow(die);
+//        dieString += System.lineSeparator();
+//        dieString += getThirdDieRow(die);
+//        dieString += System.lineSeparator();
+//        dieString += getDieBottomRow();
+//        dieString += System.lineSeparator();
+//
+//        print(dieString);
+//    }
 
     public static String getTopDieRow(){
         return ".---------. ";

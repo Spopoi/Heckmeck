@@ -11,6 +11,10 @@ public class IOHandler {
         this.output = output;
     }
 
+    public void printMessage(String message){
+        output.printMessage(message);
+    }
+
     public void showTurnBeginConfirm(String playerName){
         output.showTurnBeginConfirm(playerName);
         input.pressEnter();
@@ -26,59 +30,48 @@ public class IOHandler {
             try {
                 return input.wantToPlay();
             } catch (IllegalInput e) {
-                output.showExceptionMessage(e);
+                output.printMessage(e.getMessage());
             }
         }
     }
     public int chooseNumberOfPlayers(){
-        output.askForNumberOfPlayers();
+        output.printMessage("Choose number of players between 2 and 7:");
         while(true){
             try{
                 int numberOfPlayer = input.chooseNumberOfPlayers();
                 if(Rules.validNumberOfPlayer(numberOfPlayer)) return numberOfPlayer;
                 else throw new IllegalInput("Invalid number of player, please select a number between 2 and 7");
             } catch (IllegalInput e) {
-                output.showExceptionMessage(e);
+                output.printMessage(e.getMessage());
             }
         }
     }
     public String choosePlayerName(int playerNumber){
-        output.showSetPlayerName(playerNumber);
+        output.printMessage("Insert the name for player" + playerNumber);
         while(true) {
             try {
                 String playerName = input.choosePlayerName();
                 if (playerName.isBlank()) throw new IllegalInput("Blank name, choose a valid a one");
                 else return playerName;
             } catch (IllegalInput e) {
-                output.showExceptionMessage(e);
+                output.printMessage(e.getMessage());
             }
         }
     }
-    public void showAlreadyPickedPlayerName() {
-        output.showAlreadyPickedName();
-    }
-
     public void showBoardTiles(BoardTiles boardTiles){
         output.showTiles(boardTiles);
     }
 
-    public void showWinnerPlayerMessage(Player winnerPlayer) {
-        output.showWinnerPlayerMessage(winnerPlayer);
-    }
-
-    public boolean wantToPick(){
+    public boolean wantToPick(int diceScore){
+        output.printMessage("Actual score: " + diceScore);
         output.showWantToPick();
         while(true) {
             try {
                 return input.wantToPick();
             } catch (IllegalInput e) {
-                output.showExceptionMessage(e);
+                output.printMessage(e.getMessage());
             }
         }
-    }
-
-    public void showPlayerScore(Player player, Dice dice){
-        output.showPlayerScore(player,dice);
     }
 
     public boolean wantToSteal(Player robbedPlayer){
@@ -87,7 +80,7 @@ public class IOHandler {
             try {
                 return input.wantToSteal();
             } catch (IllegalInput e) {
-                output.showExceptionMessage(e);
+                output.printMessage(e.getMessage());
             }
         }
     }
@@ -100,13 +93,13 @@ public class IOHandler {
         output.showDice(dice);
     }
 
-    public Die.Face chooseDieFace(Dice dice){
-        output.showDiceChoice();
+    public Die.Face chooseDieFace(){
+        output.printMessage("Pick one unselected face");
         while (true) {
             try {
                 return input.chooseDiceFace();
-            } catch (IllegalInput ex) {
-                output.showExceptionMessage(ex);
+            } catch (IllegalInput e) {
+                output.printMessage(e.getMessage());
             }
         }
     }
@@ -115,11 +108,4 @@ public class IOHandler {
         output.showBustMessage();
     }
 
-    public void showFaceNotPresentMessage() {
-        output.showFaceNotPresentMessage();
-    }
-
-    public void showAlreadyPickedDice() {
-        output.showAlreadyPickedDice();
-    }
 }
