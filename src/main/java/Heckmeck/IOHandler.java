@@ -13,6 +13,11 @@ public class IOHandler {
         this.output = output;
     }
 
+    public void showTurnBeginConfirm(Player actualPlayer) throws IOException{
+        output.showTurnBeginConfirm(actualPlayer);
+        input.pressEnter();
+    }
+
     public void showWelcomeMessage(){
         output.showWelcomeMessage();
     }
@@ -55,7 +60,7 @@ public class IOHandler {
         output.showAlreadyPickedName();
     }
 
-    public void showBoardTiles(BoardTiles boardTiles) throws IOException{
+    public void showBoardTiles(BoardTiles boardTiles) throws IOException {
         output.showTiles(boardTiles);
     }
 
@@ -74,7 +79,7 @@ public class IOHandler {
         }
     }
 
-    public void showPlayerScore(Player player, Dice dice) throws IOException{
+    public void showPlayerScore(Player player, Dice dice){
         output.showPlayerScore(player,dice);
     }
 

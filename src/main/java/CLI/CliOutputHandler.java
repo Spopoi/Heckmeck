@@ -189,7 +189,7 @@ public class CliOutputHandler implements OutputHandler {
 
     //@Override
     public void showTurnBeginConfirm(Player actualPlayer){
-        String message = " hit enter to start your turn #";
+        String message = ": hit enter to start your turn #";
         String separator = "#".repeat(actualPlayer.getName().length()).concat(
                 "#".repeat(message.length()+2));
 

@@ -32,7 +32,6 @@ public class Game {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
         while(!boardTiles.isEmpty()){
-            io.showBoardTiles(boardTiles);
             playerTurn();
             playerNumber++;
             if(playerNumber >= players.length) playerNumber = 0;
@@ -44,8 +43,8 @@ public class Game {
 
     private void playerTurn() throws IOException {
         //TODO: FIXARE Press any key
-        //output.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
-        //input.pressAnyKey();
+        io.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
+        io.showBoardTiles(boardTiles);
         boolean isOnRun = roll();
         while (isOnRun){
             if (dice.isWormChosen()) {
@@ -58,7 +57,7 @@ public class Game {
     }
 
     //TODO: catch IOException somewhere
-    private boolean pick() throws IOException{
+    private boolean pick(){
         if(!canPick()) return false;
         io.showPlayerScore(actualPlayer,dice);
         if(io.wantToPick()) {

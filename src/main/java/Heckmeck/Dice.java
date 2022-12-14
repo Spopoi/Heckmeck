@@ -107,7 +107,7 @@ public class Dice {
     }
 
     public List<Die.Face> getChosenFaces() {
-        return diceList.stream().map(Die::getDieFace).filter(e -> isFaceChosen(e)).toList();
+        return diceList.stream().map(Die::getDieFace).filter(this::isFaceChosen).toList();
 
     }
     private List <Die> getChosableFaces(){

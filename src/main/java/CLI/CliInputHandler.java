@@ -52,8 +52,8 @@ public class CliInputHandler implements InputHandler {
     }
 
     @Override
-    public void pressAnyKey() throws IOException {
-        System.in.read();
+    public void pressEnter(){
+        getInputString();
     }
 
     @Override
