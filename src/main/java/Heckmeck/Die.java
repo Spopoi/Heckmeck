@@ -9,15 +9,6 @@ public class Die {
     private static final Random PRNG = new Random();
     private static Map<Face, Integer> faceToIntMap = new HashMap<Face, Integer>();
     // TODO scegliere che mappa usare
-    private static final Map<Integer, Face> intToFaceMap =
-            Collections.unmodifiableMap(new HashMap<Integer, Face>() {{
-                put(1,Face.ONE);
-                put(2,Face.TWO);
-                put(3,Face.THREE);
-                put(4,Face.FOUR);
-                put(5,Face.FIVE);
-                put(6,Face.WORM);
-            }});
 
     public static final Map<String, Face> stringToFaceMap = Map.ofEntries(
             entry("1", Face.ONE),
@@ -37,9 +28,6 @@ public class Die {
         faceToIntMap.put(Face.WORM, 5);
     }
 
-    public static Face intToFace(int value){
-        return intToFaceMap.get(value);
-    }
     public static Die generateDie(){
         return new Die();
     }

@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public interface OutputHandler {
 
-    public void showDice(Dice dice) throws IOException;
-    public void showTiles(BoardTiles boardTiles) throws IOException;
-    public void showPlayerData(Player player, Dice dice) throws IOException;
+    public void showDice(Dice dice);
+    public void showTiles(BoardTiles boardTiles);
+    public void showPlayerData(Player player, Dice dice);
     public void showWelcomeMessage();
     public void askForNumberOfPlayers();
     public void showSetPlayerName(int playerNumber);

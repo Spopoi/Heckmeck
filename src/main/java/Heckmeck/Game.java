@@ -1,6 +1,5 @@
 package Heckmeck;
 
-import java.io.IOException;
 import java.util.*;
 
 public class Game {
@@ -28,11 +27,10 @@ public class Game {
             System.exit(0);
         }
     }
-    public void play() throws IOException {
+    public void play(){
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
         while(!boardTiles.isEmpty()){
-            io.showBoardTiles(boardTiles);
             playerTurn();
             playerNumber++;
             if(playerNumber >= players.length) playerNumber = 0;
@@ -42,10 +40,10 @@ public class Game {
         io.showWinnerPlayerMessage(winnerPlayer);
     }
 
-    private void playerTurn() throws IOException {
+    private void playerTurn(){
         //TODO: FIXARE Press any key
-        //output.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
-        //input.pressAnyKey();
+        io.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
+        io.showBoardTiles(boardTiles);
         boolean isOnRun = roll();
         while (isOnRun){
             if (dice.isWormChosen()) {
@@ -58,7 +56,7 @@ public class Game {
     }
 
     //TODO: catch IOException somewhere
-    private boolean pick() throws IOException{
+    private boolean pick(){
         if(!canPick()) return false;
         io.showPlayerScore(actualPlayer,dice);
         if(io.wantToPick()) {
@@ -90,7 +88,7 @@ public class Game {
         actualPlayer.pickTileFromBoard(acquirableTiles.last(), boardTiles);
     }
 
-    private boolean roll() throws IOException {
+    private boolean roll(){
         dice.rollDice();
         io.showPlayerData(actualPlayer, dice);
         io.showDice(dice);
