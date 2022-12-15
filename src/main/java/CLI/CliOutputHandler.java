@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Stream;
 
 
 public class CliOutputHandler implements OutputHandler {
@@ -111,22 +112,45 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showPlayerData(Player player, Dice dice){
+    public void showPlayerData(Player player, Dice dice, Player[] players){
         Tile tile = player.getLastPickedTile();
+        List<Player> otherPlayers = Arrays.asList(players).stream().filter(e -> !e.equals(player)).toList();
 
         String displayString = "        " + player.getName() + "'s tiles:  ";
         String chosenDiceString = "     Chosen dice: " + dice.getChosenDiceString();
         String chosenDiceScore = "     Current dice score: " + dice.getScore();
         String wormPresent =  "     WORM is chosen: " + dice.isWormChosen();
 
-        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow() + chosenDiceString;
-        String format = String.format("%1$" + displayString.length() + "s", "");
-        String firstRow =format + getFirstTilesRow(tile) + chosenDiceScore;
-        String secondRow =format + getSecondTileRow(tile) + wormPresent;
-        String thirdRow =format + getTilesThirdRow(tile);
-        String bottomRow =format + getBottomTilesRow();
+        List <String> rows = new ArrayList<>();
 
-        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
+        rows.add(String.format("%1$"+ displayString.length() + "s", displayString ) + ".------." + chosenDiceString);
+        String format = String.format("%1$" + displayString.length() + "s", "");
+        rows.add(format + getFirstTilesRow(tile) + chosenDiceScore);
+        rows.add(format + getSecondTileRow(tile) + wormPresent);
+        rows.add(format + getTilesThirdRow(tile));
+        rows.add(format + "'------'");
+        rows.add("");
+        int len = 5 + rows.stream().max(Comparator.comparing(e-> e.length())).get().length();
+        int size = Stream.of(players).max(Comparator.comparing(e-> e.getName().length())).get().getName().length();
+        String topRow = String.format("%1$-" + len  + "s", "") + String.format("%1$-" + (size + 2) + "s", "")
+                + String.format("%1$-" + 8 + "s", "Top Tile ");
+
+        print(topRow);
+
+        for(int i = 0; i < otherPlayers.size(); i++){
+            int number = otherPlayers.get(i).getLastPickedTileNumber();
+            String worms = otherPlayers.get(i).getLastPickedTileWormString();
+            String playersName = String.format("%1$" + size  + "s", otherPlayers.get(i).getName());
+            String tileNumber = String.format("%1$" + 2 + "s", number);
+            String wormNumber = String.format("%1$-" + 4 + "s", worms);
+
+            String newString = String.format("%1$-" + len + "s", rows.get(i)).concat(playersName) + " | " + tileNumber + " - "+ wormNumber;
+            rows.set(i, newString);
+
+        }
+        for (String r : rows){
+            System.out.println(r);
+        }
     }
 
 //    @Override

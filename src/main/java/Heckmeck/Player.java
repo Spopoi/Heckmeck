@@ -65,8 +65,20 @@ public class Player {
     }
 
     public int getLastPickedTileNumber(){
-        return getLastPickedTile().getNumber();
+        if (hasTile()){
+            return getLastPickedTile().getNumber();
+        }
+        else return 0;
     }
+
+    public String getLastPickedTileWormString(){
+        if (hasTile()){
+            return  getLastPickedTile().getWormString();
+        }
+        else return "";
+    }
+
+
 
     public int getNumberOfPlayerTile(){
         return playerTiles.size();

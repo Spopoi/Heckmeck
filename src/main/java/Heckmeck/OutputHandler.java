@@ -6,7 +6,7 @@ public interface OutputHandler {
 
     public void showDice(Dice dice);
     public void showTiles(BoardTiles boardTiles);
-    public void showPlayerData(Player player, Dice dice);
+    public void showPlayerData(Player player, Dice dice, Player[] players);
     public void showWelcomeMessage();
     public void askForNumberOfPlayers();
     public void showSetPlayerName(int playerNumber);
