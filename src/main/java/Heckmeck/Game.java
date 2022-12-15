@@ -90,7 +90,7 @@ public class Game {
 
     private boolean roll(){
         dice.rollDice();
-        io.showPlayerData(actualPlayer, dice);
+        io.showPlayerData(actualPlayer, dice, players);
         io.showDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();

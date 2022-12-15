@@ -32,9 +32,9 @@ public class CliOutputHandler implements OutputHandler {
                                                 "|    o    | ",
                                                 "|  o   o  | "  };
 
-    private static final String[] faceWorm = {      "|   \033[0;31m\\=\\\033[0m   | ",
-                                                    "|   \033[0;31m/=/\033[0m   | ",
-                                                    "|   \033[0;31m\\=\\\033[0m   | "  };
+    private static final String[] faceWorm = {      "|   \\=\\   | ",
+                                                    "|   /=/   | ",
+                                                    "|   \\=\\   | "  };
 
     private static final Map<Die.Face, String[]> dieToString =
             Collections.unmodifiableMap(new HashMap<Die.Face, String[]>() {{
@@ -46,10 +46,10 @@ public class CliOutputHandler implements OutputHandler {
                 put(Die.Face.WORM,  faceWorm);
             }});
 
-    private static final String[] oneWorm = {"\033[0;93m|\033[0m  \033[0;31m~\033[0m   \033[0;93m|\033[0m", "\033[0;93m|      |\033[0m"};
-    private static final String[] twoWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|      |\033[0m"};
-    private static final String[] threeWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|\033[0m  \033[0;31m~\033[0m   \033[0;93m|\033[0m"};
-    private static final String[] fourWorms = {"\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m", "\033[0;93m|\033[0m  \033[0;31m~~\033[0m  \033[0;93m|\033[0m"};
+    private static final String[] oneWorm = {"|  ~   |", "|      |"};
+    private static final String[] twoWorms = {"|  ~~  |", "|      |"};
+    private static final String[] threeWorms = {"|  ~~  |", "|  ~   |"};
+    private static final String[] fourWorms = {"|  ~~  |", "|  ~~  |"};
 
     private static final Map<Integer, String[]> tileToString =
             Collections.unmodifiableMap(new HashMap<Integer, String[]>() {{
@@ -143,8 +143,9 @@ public class CliOutputHandler implements OutputHandler {
             String playersName = String.format("%1$" + size  + "s", otherPlayers.get(i).getName());
             String tileNumber = String.format("%1$" + 2 + "s", number);
             String wormNumber = String.format("%1$-" + 4 + "s", worms);
+            String othersTile = (number == 0) ? "No tiles" : tileNumber + " - " + worms;
 
-            String newString = String.format("%1$-" + len + "s", rows.get(i)).concat(playersName) + " | " + tileNumber + " - "+ wormNumber;
+            String newString = String.format("%1$-" + len + "s", rows.get(i)).concat(playersName) + " | " + othersTile;
             rows.set(i, newString);
 
         }
@@ -284,16 +285,16 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     private static String getBottomTilesRow() {
-        return "\033[0;93m'------'\033[0m";
+        return "'------'";
     }
 
     private static String getTopTilesRow() {
-        return "\033[0;93m.------.\033[0m";
+        return ".------.";
     }
 
     private static String getFirstTilesRow(Tile tile){
         if (tile != null){
-            return "\033[0;93m|\033[0m  " + tile.getNumber() + "  \033[0;93m|\033[0m";
+            return "|  " + tile.getNumber() + "  |";
         }
         else{
             return "|  no  |";
@@ -318,14 +319,17 @@ public class CliOutputHandler implements OutputHandler {
 
 static String getLogo(){
         return """
-                        >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                        ,--.  ,--.             ,--.                           ,--.
-                        |  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-.
-                        |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     /
-                        |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  |\\   --.\\ `--.|  \\  \\
-                        `--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'
-                        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                        """;
+                       
+                      _/'')
+                     / />>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>         _______                                                                                   
+                    ( ( ,--.  ,--.             ,--.                           ,--.            /\\ o o o\\                                                                                    
+                    \\ ) |  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-.        /o \\ o o o\\_______                                                                                    
+                        |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     /       <    >------>   o /|                                                                                    
+                        |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  |\\   --.\\ `--.|  \\  \\        \\ o/  o   /_____/o|                                                                                            
+                        `--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'        \\/______/     |oo|                                                                                    
+                       <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<             |   o   |o/
+                                                                                                   |_______|/                                                                                                                             
+                """;
     }
 
 }

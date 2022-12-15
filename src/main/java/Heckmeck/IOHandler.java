@@ -92,8 +92,8 @@ public class IOHandler {
         }
     }
 
-    public void showPlayerData(Player player, Dice dice){
-        output.showPlayerData(player,dice);
+    public void showPlayerData(Player player, Dice dice, Player[] players){
+        output.showPlayerData(player,dice, players);
     }
 
     public void showDice(Dice dice){

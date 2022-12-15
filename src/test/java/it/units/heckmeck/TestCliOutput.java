@@ -130,9 +130,9 @@ public class TestCliOutput {
                 indent + "|      |\n" +
                 indent + "'------'\n"; */
         return """
-                                                                                          Top Tile\s
-                          Luigi's tiles:  .------.     Chosen dice: []           player2 |  0 - 0  \s
-                                          |  no  |     Current dice score: 0     player3 |  0 - 0  \s
+                                                                                          Top Tile
+                          Luigi's tiles:  .------.     Chosen dice: []           player2 | No tiles
+                                          |  no  |     Current dice score: 0     player3 | No tiles
                                           | tile |     WORM is chosen: false
                                           |      |
                                           '------'
