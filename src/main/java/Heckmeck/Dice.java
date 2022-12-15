@@ -66,9 +66,7 @@ public class Dice {
     }
 
     public void addSpecificDie(Die.Face face){
-        Die die = Die.generateDie();
-        die.getSpecificDie(face);
-        diceList.add(die);
+        diceList.add(Die.generateDie(face));
     }
 
     public boolean isFacePresent(Die.Face face){
@@ -116,7 +114,7 @@ public class Dice {
     }
 
     public int getScore() {
-        return chosenDiceList.stream().map(e->e.getValue(e.getDieFace())).reduce(0, Integer::sum);
+        return chosenDiceList.stream().mapToInt(Die::getDieScore).sum();
     }
 
     public boolean canPickAFace(){

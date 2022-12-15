@@ -6,6 +6,9 @@ import java.util.*;
 
 import Heckmeck.Die;
 import Heckmeck.Dice;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static Heckmeck.Die.Face.*;
 
@@ -214,15 +217,12 @@ public class TestDice {
         Assertions.assertTrue(chosenDice.stream().anyMatch(e -> e.getDieFace().equals(TWO)));
         Assertions.assertTrue(chosenDice.stream().anyMatch(e -> e.getDieFace().equals(THREE)));
     }
-    @Test
-    void getDieValue(){
-        Die die = Die.generateDie();
-        Assertions.assertEquals(1, die.getValue(ONE));
-        Assertions.assertEquals(2, die.getValue(TWO));
-        Assertions.assertEquals(3, die.getValue(THREE));
-        Assertions.assertEquals(4, die.getValue(FOUR));
-        Assertions.assertEquals(5, die.getValue(FIVE));
-        Assertions.assertEquals(5, die.getValue(WORM));
+
+    @ParameterizedTest
+    @CsvSource({"ONE,1", "TWO, 2","THREE,3","FOUR,4","FIVE,5","WORM,5"})
+    void getDieScore(Die.Face face, int score){
+        Die die = Die.generateDie(face);
+        Assertions.assertEquals(die.getDieScore(),score);
     }
 
     @Test

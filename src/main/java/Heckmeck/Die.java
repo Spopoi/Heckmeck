@@ -6,7 +6,7 @@ import static java.util.Map.entry;
 public class Die {
 
     private Face dieFace;
-    private final Random PRNG;
+    private static final Random PRNG = new Random();
 
     public enum Face {
         ONE,
@@ -37,16 +37,20 @@ public class Die {
 
 
     private Die(){
-        PRNG = new Random();
     }
-
+    public static Die generateDie(Face face){
+        Die die = generateDie();
+        die.setDieFace(face);
+        return die;
+    }
     public static Die generateDie(){
         return new Die();
     }
 
-    public Face getFaceByNumber(int n){
-        return Face.values()[n];
+    private void setDieFace(Face f){
+        dieFace = f;
     }
+    public Face getDieFace(){ return dieFace; }
 
     // TODO: What if text is not present in the Map (just null or excep?)
     // TODO: Mark private stringToFaceMap?
@@ -54,31 +58,12 @@ public class Die {
         return stringToFaceMap.get(text);
     }
 
-    public int getValue(Face f){
-        return faceToIntMap.get(f);
+    public int getDieScore(){
+        return faceToIntMap.get(dieFace);
     }
 
-    public Face getDieFace(){
-        return dieFace;
-    }
     public void rollDie(){
         int n = PRNG.nextInt(Face.values().length);
-        Face.valueOf("ONE");
-        setDieFace(getFaceByNumber(n));
-    }
-
-    public static Die getSpecificDieByFace(Face face){
-        Die die = generateDie();
-        die.setDieFace(face);
-        return die;
-    }
-
-    public Die getSpecificDie(Face f){
-        setDieFace(f);
-        return this;
-    }
-
-    private void setDieFace(Face f){
-        dieFace = f;
+        setDieFace(Face.values()[n]);
     }
 }
