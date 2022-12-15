@@ -13,7 +13,7 @@ public class TestTile {
     @Test
     void convertTile21IntoAString() throws Exception {
         Tile tileToTest = Tile.generateTile(21);
-        URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_21");
+        URL tile21Resource = TestTile.class.getClassLoader().getResource("TILE_21");
         String expectedString = FileReader.readFile(Path.of(tile21Resource.toURI()));
 
         Assertions.assertEquals(expectedString, tileToTest.toString());
@@ -22,8 +22,9 @@ public class TestTile {
     @Test
     void convertTile22IntoAString() throws Exception {
         Tile tileToTest = Tile.generateTile(22);
-        URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_22");
-        String expectedString = FileReader.readFile(Path.of(tile21Resource.toURI()));
+        URL tile22Resource = TestTile.class.getClassLoader().getResource("TILE_22");
+        String expectedString = FileReader.readFile(Path.of(tile22Resource.toURI()));
+
 
         Assertions.assertEquals(expectedString, tileToTest.toString());
     }
@@ -31,8 +32,8 @@ public class TestTile {
     @Test
     void convertTile23IntoAString() throws Exception {
         Tile tileToTest = Tile.generateTile(23);
-        URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_23");
-        String expectedString = FileReader.readFile(Path.of(tile21Resource.toURI()));
+        URL tile23Resource = TestTile.class.getClassLoader().getResource("TILE_23");
+        String expectedString = FileReader.readFile(Path.of(tile23Resource.toURI()));
 
         Assertions.assertEquals(expectedString, tileToTest.toString());
     }
