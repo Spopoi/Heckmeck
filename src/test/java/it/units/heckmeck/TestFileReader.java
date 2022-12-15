@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.List;
 
 public class TestFileReader {
 
@@ -23,5 +24,30 @@ public class TestFileReader {
         String tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
 
         Assertions.assertEquals(expectedTile21AsText, tileAsText);
+    }
+
+    @Test
+    void name() throws Exception {
+        URL multipleTilesResource = TestFileReader.class.getClassLoader().getResource("MULTIPLE_TILES");
+        List<String> expectedTilesAsText = List.of(
+                """
+                        .------.
+                        |  21  |
+                        |  ~   |
+                        |      |
+                        '------'
+                        """,
+                """
+                        .------.
+                        |  21  |
+                        |  ~   |
+                        |      |
+                        '------'
+                        """
+        );
+
+        List<String> tilesAsText = FileReader.readMultipleTilesFromFile(Path.of(multipleTilesResource.toURI()));
+
+        Assertions.assertEquals(expectedTilesAsText, tilesAsText);
     }
 }
