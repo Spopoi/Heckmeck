@@ -1,14 +1,13 @@
 package Heckmeck;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static Heckmeck.Die.Face.WORM;
-import static java.util.stream.Collectors.toList;
+
 
 public class Dice {
     private final int  initialNumOfDice = 8;
-    private List<Die> diceList = new ArrayList<Die>();
+    private List<Die> diceList = new ArrayList<>();
     private List<Die> chosenDiceList;
 
 
@@ -20,7 +19,7 @@ public class Dice {
         }
     }
 
-    public static Dice generateDice(){
+    public static Dice init(){
         return new Dice();
     }
 
@@ -32,10 +31,6 @@ public class Dice {
 
     public List <Die> getDiceList(){
         return diceList;
-    }
-
-    public List<Die.Face> getFaceList(){ //TODO capire se serve
-        return diceList.stream().map(Die::getDieFace).toList();
     }
 
     public void eraseDice(){
@@ -53,7 +48,7 @@ public class Dice {
     }
 
     private void resetChosenDice(){
-        chosenDiceList = new ArrayList<Die>(initialNumOfDice);
+        chosenDiceList = new ArrayList<>(initialNumOfDice);
     }
 
     public int getNumOfDice(){
@@ -71,9 +66,7 @@ public class Dice {
     }
 
     public void addSpecificDie(Die.Face face){
-        Die die = Die.generateDie();
-        die.getSpecificDie(face);
-        diceList.add(die);
+        diceList.add(Die.generateDie(face));
     }
 
     public boolean isFacePresent(Die.Face face){
@@ -84,13 +77,10 @@ public class Dice {
         return isFacePresent(WORM);
     }
 
-
-    //TODO: checkinput
     public void chooseDice(Die.Face face) {
-        if (!isFaceChosen(face)) {
-            chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
-            diceList.removeIf(e -> e.getDieFace() == face);
-        }
+        chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
+        diceList.removeIf(e -> e.getDieFace() == face);
+
     }
 
     public  void chooseRandomDice(){
@@ -124,7 +114,7 @@ public class Dice {
     }
 
     public int getScore() {
-        return chosenDiceList.stream().map(e->e.getValue(e.getDieFace())).reduce(0, Integer::sum);
+        return chosenDiceList.stream().mapToInt(Die::getDieScore).sum();
     }
 
     public boolean canPickAFace(){

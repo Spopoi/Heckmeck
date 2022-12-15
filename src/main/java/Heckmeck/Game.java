@@ -20,7 +20,7 @@ public class Game {
         if (io.wantToPlay()){
             int numberOfPlayers = io.chooseNumberOfPlayers();
             this.players = setupPlayers(numberOfPlayers);
-            this.dice = Dice.generateDice(); // TODO ha senso rinominare in init()?
+            this.dice = Dice.init();
             this.boardTiles = BoardTiles.init();
         }
         else {
@@ -37,12 +37,11 @@ public class Game {
             actualPlayer = players[playerNumber];
         }
         Player winnerPlayer = Rules.whoIsTheWinner(players);
-        io.showWinnerPlayerMessage(winnerPlayer);
+        io.printMessage("Congratulation to "+winnerPlayer.getName() + ", you are the WINNER!!");
     }
 
     private void playerTurn(){
-        //TODO: FIXARE Press any key
-        io.showTurnBeginConfirm(actualPlayer);  // pass only the String (?)
+        io.showTurnBeginConfirm(actualPlayer.getName());
         io.showBoardTiles(boardTiles);
         boolean isOnRun = roll();
         while (isOnRun){
@@ -55,11 +54,8 @@ public class Game {
         dice.resetDice();
     }
 
-    //TODO: catch IOException somewhere
     private boolean pick(){
-        if(!canPick()) return false;
-        io.showPlayerScore(actualPlayer,dice);
-        if(io.wantToPick()) {
+        if(canPick() && io.wantToPick(dice.getScore())){
             pickBoardTile(dice.getScore());
             return true;
         }else return false;
@@ -104,9 +100,9 @@ public class Game {
 
     private Die.Face pickDieFace() {
         while(true){
-            Die.Face chosenDieFace = io.chooseDieFace(dice);
-            if(!dice.isFacePresent(chosenDieFace)) io.showFaceNotPresentMessage();
-            else if(dice.isFaceChosen(chosenDieFace)) io.showAlreadyPickedDice();
+            Die.Face chosenDieFace = io.chooseDieFace();
+            if(!dice.isFacePresent(chosenDieFace)) io.printMessage("This face is not present.. Pick another one!");
+            else if(dice.isFaceChosen(chosenDieFace)) io.printMessage("You have already chose this face, pick another one!");
             else return chosenDieFace;
         }
     }
@@ -122,7 +118,7 @@ public class Game {
         for(int i=0; i<numberOfPlayers; i++){
             String playerName = io.choosePlayerName(i + 1);
             while(isNameAlreadyPicked(playerName,playersList)){
-                io.showAlreadyPickedPlayerName();
+                io.printMessage("Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(i+1);
             }
             playersList[i] = Player.generatePlayer(playerName);

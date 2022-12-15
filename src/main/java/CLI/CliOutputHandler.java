@@ -1,11 +1,6 @@
 package CLI;
 import Heckmeck.*;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -51,6 +46,7 @@ public class CliOutputHandler implements OutputHandler {
     private static final String[] threeWorms = {"|  ~~  |", "|  ~   |"};
     private static final String[] fourWorms = {"|  ~~  |", "|  ~~  |"};
 
+    private static final String newLine = System.lineSeparator();
     private static final Map<Integer, String[]> tileToString =
             Collections.unmodifiableMap(new HashMap<Integer, String[]>() {{
                 put(21, oneWorm);
@@ -70,43 +66,45 @@ public class CliOutputHandler implements OutputHandler {
                 put(35, fourWorms);
                 put(36, fourWorms);
             }});
-    private static final String newLine = System.lineSeparator();
+
 
     private static void print(String message){
         System.out.println(message);
     }
 
     @Override
-    public void showDice(Dice dice){    //TODO Cambiare concatenaz. con stringBuilder
+    public void showDice(Dice dice){    //TODO Provare a fondere in un unico StringBuilder
         StringBuilder topRow = new StringBuilder();
         StringBuilder firstRow = new StringBuilder();
         StringBuilder secondRow = new StringBuilder();
         StringBuilder thirdRow = new StringBuilder();
         StringBuilder bottomRow = new StringBuilder();
-        for(Die die : dice.getDiceList()){
+
+        dice.getDiceList().forEach(die->{
             topRow.append(getTopDieRow());
             firstRow.append(getFirstDieRow(die));
             secondRow.append(getSecondDieRow(die));
             thirdRow.append(getThirdDieRow(die));
             bottomRow.append(getDieBottomRow());
-        }
+        });
         print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
 
     @Override
-    public void showTiles(BoardTiles boardTiles){ //TODO Cambiare concatenaz. con stringBuilder
+    public void showTiles(BoardTiles boardTiles){
         StringBuilder topRow = new StringBuilder();
         StringBuilder firstRow = new StringBuilder();
         StringBuilder secondRow = new StringBuilder();
         StringBuilder thirdRow = new StringBuilder();
         StringBuilder bottomRow = new StringBuilder();
-        for(Tile tile : boardTiles.getTiles()){
+
+        boardTiles.getTilesList().forEach(tile->{
             topRow.append(getTopTilesRow());
             firstRow.append(getFirstTilesRow(tile));
             secondRow.append(getSecondTileRow(tile));
             thirdRow.append(getTilesThirdRow(tile));
             bottomRow.append(getBottomTilesRow());
-        }
+        });
         print("The available tiles on the board now are:" + newLine + topRow + newLine +
                 firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
     }
@@ -154,6 +152,10 @@ public class CliOutputHandler implements OutputHandler {
         }
     }
 
+    public void printMessage(String message){
+        print(message);
+    }
+
 //    @Override
 //    public void showPlayerTile(Player player){
 //        Tile tile = player.getLastPickedTile();
@@ -178,28 +180,8 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void askForNumberOfPlayers(){
-        print("Choose number of players between 2 and 7:");
-    }
-
-    @Override
-    public void showSetPlayerName(int playerNumber){
-        print("Insert the name for player" + playerNumber);
-    }
-
-    @Override
-    public void showDiceChoice() {
-        print("Pick one unselected face");
-    }
-
-    @Override
-    public void showExceptionMessage(Exception ex) {
-        print(ex.getMessage());
-    }
-
-    @Override
     public void showWantToPick() {
-        print("Do you want to pick the tile?" + newLine + "Press 'y' for picking the tile or 'n' for rolling dice");
+        print("Do you want to pick the tile?" + newLine + "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
     }
 
     @Override
@@ -208,18 +190,13 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showPlayerScore(Player actualPlayer, Dice dice) {
-        print("Actual player '" + actualPlayer.getName() + "' score = " + dice.getScore());
-    }
-
-    //@Override
-    public void showTurnBeginConfirm(Player actualPlayer){
+    public void showTurnBeginConfirm(String playerName){
         String message = ": hit enter to start your turn #";
-        String separator = "#".repeat(actualPlayer.getName().length()).concat(
+        String separator = "#".repeat(playerName.length()).concat(
                 "#".repeat(message.length()+2));
 
         print(separator);
-        print("# " + actualPlayer.getName() + message );
+        print("# " + playerName + message );
         print(separator);
     }
 
@@ -229,44 +206,24 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showWinnerPlayerMessage(Player winnerPlayer) {
-        print("Congratulation to "+winnerPlayer.getName() + "!" + newLine+ "You are the WINNER!!");
-    }
-
-    @Override
-    public void showAlreadyPickedDice() {
-        print("You have already chose this face, pick another one!");
-    }
-
-    @Override
-    public void showFaceNotPresentMessage() {
-        print("This face is not present.. Pick another one!");
-    }
-
-    @Override
-    public void showAlreadyPickedName() {
-        print("Already picked name.. Please choose another one");
-    }
-
-    @Override
     public void showWantToPlay() {
-        print("Do you want to start a new game? y/n");
+        print("Do you want to start a new game? Press 'y' for playing or 'n' for quitting");
     }
 
-    public static void drawSingleDie(Die die){
-        String dieString = getTopDieRow();
-        dieString += System.lineSeparator();
-        dieString+= getFirstDieRow(die);
-        dieString += System.lineSeparator();
-        dieString+= getSecondDieRow(die);
-        dieString += System.lineSeparator();
-        dieString += getThirdDieRow(die);
-        dieString += System.lineSeparator();
-        dieString += getDieBottomRow();
-        dieString += System.lineSeparator();
-
-        print(dieString);
-    }
+//    public static void drawSingleDie(Die die){
+//        String dieString = getTopDieRow();
+//        dieString += System.lineSeparator();
+//        dieString+= getFirstDieRow(die);
+//        dieString += System.lineSeparator();
+//        dieString+= getSecondDieRow(die);
+//        dieString += System.lineSeparator();
+//        dieString += getThirdDieRow(die);
+//        dieString += System.lineSeparator();
+//        dieString += getDieBottomRow();
+//        dieString += System.lineSeparator();
+//
+//        print(dieString);
+//    }
 
     public static String getTopDieRow(){
         return ".---------. ";

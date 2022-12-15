@@ -41,7 +41,7 @@ public class CliInputHandler implements InputHandler {
         String chosenDice = getInputString();
         if (Die.stringToFaceMap.containsKey(chosenDice)) {
             return Die.stringToFaceMap.get(chosenDice);
-        } else throw new IllegalInput("Input is not correct, choose between {1, 2, 3, 4, 5, w}: ");
+        } else throw new IllegalInput("Incorrect input, choose between {1, 2, 3, 4, 5, w}: ");
     }
 
     @Override

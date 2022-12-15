@@ -7,68 +7,6 @@ public class Die {
 
     private Face dieFace;
     private static final Random PRNG = new Random();
-    private static Map<Face, Integer> faceToIntMap = new HashMap<Face, Integer>();
-    // TODO scegliere che mappa usare
-
-    public static final Map<String, Face> stringToFaceMap = Map.ofEntries(
-            entry("1", Face.ONE),
-            entry("2", Face.TWO),
-            entry("3", Face.THREE),
-            entry("4", Face.FOUR),
-            entry("5", Face.FIVE),
-            entry("w", Face.WORM));
-
-
-    private Die(){
-        faceToIntMap.put(Face.ONE, 1);
-        faceToIntMap.put(Face.TWO, 2);
-        faceToIntMap.put(Face.THREE, 3);
-        faceToIntMap.put(Face.FOUR, 4);
-        faceToIntMap.put(Face.FIVE, 5);
-        faceToIntMap.put(Face.WORM, 5);
-    }
-
-    public static Die generateDie(){
-        return new Die();
-    }
-
-    public Face getFaceByNumber(int n){
-        return Face.values()[n];
-    }
-
-    // TODO: What if text is not present in the Map (just null or excep?)
-    // TODO: Mark private stringToFaceMap?
-    public static Face getFaceByString(String text) {
-        return stringToFaceMap.get(text);
-    }
-
-    public int getValue(Face f){
-        return faceToIntMap.get(f);
-    }
-
-    public Face getDieFace(){
-        return dieFace;
-    }
-    public void rollDie(){
-        int n = PRNG.nextInt(Face.values().length);
-        setDieFace(getFaceByNumber(n));
-    }
-
-    public static Die getSpecificDieByFace(Face face){
-        Die die = generateDie();
-        die.setDieFace(face);
-        return die;
-    }
-
-    public Die getSpecificDie(Face f){
-        setDieFace(f);
-        return this;
-    }
-
-    private void setDieFace(Face f){
-        dieFace = f;
-    }
-
 
     public enum Face {
         ONE,
@@ -80,4 +18,52 @@ public class Die {
 
     }
 
+    // TODO scegliere che mappa usare
+    private static final Map<Face,Integer> faceToIntMap = Map.ofEntries(
+            entry(Face.ONE, 1),
+            entry(Face.TWO, 2),
+            entry(Face.THREE,3),
+            entry(Face.FOUR, 4),
+            entry(Face.FIVE, 5),
+            entry(Face.WORM, 5));
+
+    public static final Map<String, Face> stringToFaceMap = Map.ofEntries(
+            entry("1", Face.ONE),
+            entry("2", Face.TWO),
+            entry("3", Face.THREE),
+            entry("4", Face.FOUR),
+            entry("5", Face.FIVE),
+            entry("w", Face.WORM));
+
+
+    private Die(){
+    }
+    public static Die generateDie(Face face){
+        Die die = generateDie();
+        die.setDieFace(face);
+        return die;
+    }
+    public static Die generateDie(){
+        return new Die();
+    }
+
+    private void setDieFace(Face f){
+        dieFace = f;
+    }
+    public Face getDieFace(){ return dieFace; }
+
+    // TODO: What if text is not present in the Map (just null or excep?)
+    // TODO: Mark private stringToFaceMap?
+    public static Face getFaceByString(String text) {
+        return stringToFaceMap.get(text);
+    }
+
+    public int getDieScore(){
+        return faceToIntMap.get(dieFace);
+    }
+
+    public void rollDie(){
+        int n = PRNG.nextInt(Face.values().length);
+        setDieFace(Face.values()[n]);
+    }
 }

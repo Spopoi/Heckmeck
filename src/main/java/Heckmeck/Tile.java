@@ -2,6 +2,8 @@ package Heckmeck;
 
 import exception.IllegalTileNumber;
 
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,4 +71,15 @@ public class Tile implements Comparable<Tile> {
         return Integer.compare(this.number, other.number);
     }
 
+    @Override
+    public String toString() {
+        URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_21");
+        String tileAsText = null;
+        try {
+            tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
+        } catch (Exception ex) {
+            System.err.println(ex);  // Is it a good way to manage exception?
+        }
+        return tileAsText;
+    }
 }
