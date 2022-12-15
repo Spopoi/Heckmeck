@@ -6,9 +6,26 @@ import static java.util.Map.entry;
 public class Die {
 
     private Face dieFace;
-    private static final Random PRNG = new Random();
-    private static Map<Face, Integer> faceToIntMap = new HashMap<Face, Integer>();
+    private final Random PRNG;
+
+    public enum Face {
+        ONE,
+        TWO,
+        THREE,
+        FOUR,
+        FIVE,
+        WORM
+
+    }
+
     // TODO scegliere che mappa usare
+    private static final Map<Face,Integer> faceToIntMap = Map.ofEntries(
+            entry(Face.ONE, 1),
+            entry(Face.TWO, 2),
+            entry(Face.THREE,3),
+            entry(Face.FOUR, 4),
+            entry(Face.FIVE, 5),
+            entry(Face.WORM, 5));
 
     public static final Map<String, Face> stringToFaceMap = Map.ofEntries(
             entry("1", Face.ONE),
@@ -20,12 +37,7 @@ public class Die {
 
 
     private Die(){
-        faceToIntMap.put(Face.ONE, 1);
-        faceToIntMap.put(Face.TWO, 2);
-        faceToIntMap.put(Face.THREE, 3);
-        faceToIntMap.put(Face.FOUR, 4);
-        faceToIntMap.put(Face.FIVE, 5);
-        faceToIntMap.put(Face.WORM, 5);
+        PRNG = new Random();
     }
 
     public static Die generateDie(){
@@ -51,6 +63,7 @@ public class Die {
     }
     public void rollDie(){
         int n = PRNG.nextInt(Face.values().length);
+        Face.valueOf("ONE");
         setDieFace(getFaceByNumber(n));
     }
 
@@ -68,16 +81,4 @@ public class Die {
     private void setDieFace(Face f){
         dieFace = f;
     }
-
-
-    public enum Face {
-        ONE,
-        TWO,
-        THREE,
-        FOUR,
-        FIVE,
-        WORM
-
-    }
-
 }

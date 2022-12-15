@@ -69,7 +69,7 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showDice(Dice dice){    //TODO Cambiare concatenaz. con stringBuilder
+    public void showDice(Dice dice){    //TODO Provare a fondere in un unico StringBuilder
         StringBuilder topRow = new StringBuilder();
         StringBuilder firstRow = new StringBuilder();
         StringBuilder secondRow = new StringBuilder();
@@ -87,7 +87,7 @@ public class CliOutputHandler implements OutputHandler {
     }
 
     @Override
-    public void showTiles(BoardTiles boardTiles){ //TODO Cambiare concatenaz. con stringBuilder
+    public void showTiles(BoardTiles boardTiles){
         StringBuilder topRow = new StringBuilder();
         StringBuilder firstRow = new StringBuilder();
         StringBuilder secondRow = new StringBuilder();
