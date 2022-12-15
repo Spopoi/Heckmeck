@@ -18,4 +18,22 @@ public class TestTile {
 
         Assertions.assertEquals(expectedString, tileToTest.toString());
     }
+
+    @Test
+    void convertTile22IntoAString() throws Exception {
+        Tile tileToTest = Tile.generateTile(22);
+        URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_22");
+        String expectedString = FileReader.readFile(Path.of(tile21Resource.toURI()));
+
+        Assertions.assertEquals(expectedString, tileToTest.toString());
+    }
+
+    @Test
+    void convertTile23IntoAString() throws Exception {
+        Tile tileToTest = Tile.generateTile(23);
+        URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_23");
+        String expectedString = FileReader.readFile(Path.of(tile21Resource.toURI()));
+
+        Assertions.assertEquals(expectedString, tileToTest.toString());
+    }
 }

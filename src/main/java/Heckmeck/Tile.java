@@ -73,13 +73,32 @@ public class Tile implements Comparable<Tile> {
 
     @Override
     public String toString() {
-        URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_21");
         String tileAsText = null;
-        try {
-            tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
-        } catch (Exception ex) {
-            System.err.println(ex);  // Is it a good way to manage exception?
+
+        if (this.number==21) {
+            URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_21");
+            try {
+                tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
+            } catch (Exception ex) {
+                System.err.println(ex);  // Is it a good way to manage exception?
+            }
+        } else if (this.number==22) {
+            URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_22");
+            try {
+                tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
+            } catch (Exception ex) {
+                System.err.println(ex);  // Is it a good way to manage exception?
+            }
+        } else {
+            URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_23");
+            try {
+                tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
+            } catch (Exception ex) {
+                System.err.println(ex);  // Is it a good way to manage exception?
+            }
         }
+
         return tileAsText;
     }
+
 }
