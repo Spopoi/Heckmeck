@@ -133,7 +133,7 @@ public class CliOutputHandler implements OutputHandler {
         int len = 5 + rows.stream().max(Comparator.comparing(e-> e.length())).get().length();
         int size = Stream.of(players).max(Comparator.comparing(e-> e.getName().length())).get().getName().length();
         String topRow = String.format("%1$-" + len  + "s", "") + String.format("%1$-" + (size + 2) + "s", "")
-                + String.format("%1$-" + 8 + "s", "Top Tile ");
+                + String.format("%1$-" + 8 + "s", "Top Tile");
 
         print(topRow);
 
