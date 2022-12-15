@@ -33,10 +33,6 @@ public class Dice {
         return diceList;
     }
 
-    public List<Die.Face> getFaceList(){ //TODO capire se serve
-        return diceList.stream().map(Die::getDieFace).toList();
-    }
-
     public void eraseDice(){
         diceList = new ArrayList<Die>();
         chosenDiceList = new ArrayList<Die>();
@@ -83,13 +79,10 @@ public class Dice {
         return isFacePresent(WORM);
     }
 
-
-    //TODO: checkinput
     public void chooseDice(Die.Face face) {
-        if (!isFaceChosen(face)) {
-            chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
-            diceList.removeIf(e -> e.getDieFace() == face);
-        }
+        chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
+        diceList.removeIf(e -> e.getDieFace() == face);
+
     }
 
     public  void chooseRandomDice(){
