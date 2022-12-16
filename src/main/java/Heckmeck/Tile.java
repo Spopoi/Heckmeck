@@ -43,7 +43,7 @@ public class Tile implements Comparable<Tile> {
     }
 
     public String getWormString(){
-        return "~".repeat(this.getWorms());
+        return "~".repeat(this.getWorms()); // TODO spostare sopra
     }
 
     public static Tile generateTile(int number) throws IllegalTileNumber{

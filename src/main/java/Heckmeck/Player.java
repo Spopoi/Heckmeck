@@ -64,14 +64,14 @@ public class Player {
         playerTiles.removeLast();
     }
 
-    public int getLastPickedTileNumber(){
+    public int getLastPickedTileNumber(){ // TODO Spostare sopra controllo hasTile
         if (hasTile()){
             return getLastPickedTile().getNumber();
         }
         else return 0;
     }
 
-    public String getLastPickedTileWormString(){
+    public String getLastPickedTileWormString(){ // TODO Spostare sopra controllo hasTile
         if (hasTile()){
             return  getLastPickedTile().getWormString();
         }
