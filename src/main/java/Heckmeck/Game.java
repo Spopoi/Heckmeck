@@ -84,6 +84,7 @@ public class Game {
         actualPlayer.pickTileFromBoard(acquirableTiles.last(), boardTiles);
     }
 
+    //TODO: rolli anche se finisci i dadi
     private boolean roll(){
         dice.rollDice();
         io.showPlayerData(actualPlayer, dice, players);
@@ -107,6 +108,7 @@ public class Game {
         }
     }
 
+    //TODO: Rimettere in gioco tessere persa dal giocatore
     private void bust(){
         io.showBustMessage();
         actualPlayer.removeLastPickedTile();

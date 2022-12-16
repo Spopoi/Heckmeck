@@ -67,7 +67,6 @@ public class CliOutputHandler implements OutputHandler {
                 put(36, fourWorms);
             }});
 
-
     private static void print(String message){
         System.out.println(message);
     }
@@ -156,23 +155,6 @@ public class CliOutputHandler implements OutputHandler {
         print(message);
     }
 
-//    @Override
-//    public void showPlayerTile(Player player){
-//        Tile tile = player.getLastPickedTile();
-//        String displayString = "        " +player.getName();
-//        displayString += "'s tiles:  ";
-//
-//        String topRow = String.format("%1$"+ displayString.length() + "s", displayString ) + getTopTilesRow();
-//        String format = String.format("%1$" + displayString.length() + "s", "");
-//
-//        String firstRow = format + getFirstTilesRow(tile);
-//        String secondRow = format + getSecondTileRow(tile);
-//        String thirdRow = format + getTilesThirdRow(tile);
-//        String bottomRow = format + getBottomTilesRow();
-//
-//        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow + newLine);
-//    }
-
     @Override
     public void showWelcomeMessage(){
         print(getLogo());
@@ -209,21 +191,6 @@ public class CliOutputHandler implements OutputHandler {
     public void showWantToPlay() {
         print("Do you want to start a new game? Press 'y' for playing or 'n' for quitting");
     }
-
-//    public static void drawSingleDie(Die die){
-//        String dieString = getTopDieRow();
-//        dieString += System.lineSeparator();
-//        dieString+= getFirstDieRow(die);
-//        dieString += System.lineSeparator();
-//        dieString+= getSecondDieRow(die);
-//        dieString += System.lineSeparator();
-//        dieString += getThirdDieRow(die);
-//        dieString += System.lineSeparator();
-//        dieString += getDieBottomRow();
-//        dieString += System.lineSeparator();
-//
-//        print(dieString);
-//    }
 
     public static String getTopDieRow(){
         return ".---------. ";

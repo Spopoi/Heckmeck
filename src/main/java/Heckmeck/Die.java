@@ -36,7 +36,9 @@ public class Die {
             entry("w", Face.WORM));
 
 
+    //TODO: come inizializzare die
     private Die(){
+        rollDie();
     }
     public static Die generateDie(Face face){
         Die die = generateDie();
