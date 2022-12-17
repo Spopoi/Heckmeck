@@ -7,60 +7,11 @@ import org.junit.jupiter.api.Test;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.entry;
 
 public class TestFileReader {
-
-    @Test
-    void readsSingleTileStringRepresentation() throws Exception {
-        URL tile21Resource = TestFileReader.class.getClassLoader().getResource("TILE_21");
-        String expectedTile21AsText = """
-                .------.
-                |  21  |
-                |  ~   |
-                |      |
-                '------'
-                """;
-
-        String tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
-
-        Assertions.assertEquals(expectedTile21AsText, tileAsText);
-    }
-
-    @Test
-    void readsMultipleTileStringRepresentation() throws Exception {
-        URL multipleTilesResource = TestFileReader.class.getClassLoader().getResource("MULTIPLE_TILES");
-        List<String> expectedTilesAsText = List.of(
-                """
-                        .------.
-                        |  21  |
-                        |  ~   |
-                        |      |
-                        '------'
-                        """,
-                """
-                        .------.
-                        |  22  |
-                        |  ~   |
-                        |      |
-                        '------'
-                        """,
-                """
-                        .------.
-                        |  23  |
-                        |  ~   |
-                        |      |
-                        '------'
-                        """
-        );
-
-        List<String> tilesAsText = FileReader.readMultipleTilesFromFile(Path.of(multipleTilesResource.toURI()));
-
-        Assertions.assertEquals(expectedTilesAsText, tilesAsText);
-    }
 
     @Test
     void readsIntegerToStringMapFromJson() throws URISyntaxException {
@@ -87,6 +38,34 @@ public class TestFileReader {
                         |  ~   |
                         |      |
                         '------'
+                        """),
+                entry(24, """
+                        .------.
+                        |  24  |
+                        |  ~   |
+                        |      |
+                        '------'
+                        """),
+                entry(28, """
+                        .------.
+                        |  23  |
+                        |  ~~  |
+                        |      |
+                        '------'
+                        """),
+                entry(32, """
+                        .------.
+                        |  32  |
+                        |  ~~  |
+                        |  ~   |
+                        '------'
+                        """),
+                entry(36, """
+                        .------.
+                        |  36  |
+                        |  ~~  |
+                        |  ~   |
+                        '------'
                         """)
         );
 
@@ -96,4 +75,5 @@ public class TestFileReader {
         // System.out.println(expectedMap.getClass() + " VS " + obtainedMap.getClass());
         Assertions.assertEquals(expectedMap, obtainedMap);
     }
+
 }
