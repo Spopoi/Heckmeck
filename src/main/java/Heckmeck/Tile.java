@@ -2,6 +2,7 @@ package Heckmeck;
 
 import exception.IllegalTileNumber;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -10,10 +11,11 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Tile implements Comparable<Tile> {
+
+    private final static String RESOURCE_FILE = "TILES";
     public final static int tileMinNumber = 21;
     public final static int tileMaxNumber = 36;
     private final int number;
-
     private static final Map<Integer, Integer> numberToWorms =
             Collections.unmodifiableMap(new HashMap<Integer, Integer>() {{
                 put(21, 1);
@@ -33,6 +35,22 @@ public class Tile implements Comparable<Tile> {
                 put(35, 3);
                 put(36, 3);
             }});
+
+    private static final Map<Integer, String> numberToTilesAsText = FileReader.readTilesFromSingleJson(
+            getResourcePath()
+    );
+
+    private static Path getResourcePath() {
+        URL tilesResource = Tile.class.getClassLoader().getResource(RESOURCE_FILE);
+        Path resourcePath = null;
+        try {
+            resourcePath = Path.of(tilesResource.toURI());
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
+        return resourcePath;
+    }
+
     public Tile(int number) { this.number=number; }
 
     public int getNumber(){
@@ -76,29 +94,16 @@ public class Tile implements Comparable<Tile> {
         String tileAsText = null;
 
         if (this.number==21) {
-            URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_21");
-            try {
-                tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
-            } catch (Exception ex) {
-                System.err.println(ex);  // Is it a good way to manage exception?
-            }
+            return numberToTilesAsText.get(this.number);
         } else if (this.number==22) {
-            URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_22");
-            try {
-                tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
-            } catch (Exception ex) {
-                System.err.println(ex);  // Is it a good way to manage exception?
-            }
-        } else {
-            URL tile21Resource = Tile.class.getClassLoader().getResource("TILE_23");
-            try {
-                tileAsText = FileReader.readFile(Path.of(tile21Resource.toURI()));
-            } catch (Exception ex) {
-                System.err.println(ex);  // Is it a good way to manage exception?
-            }
+            return numberToTilesAsText.get(this.number);
+        } else if (this.number==23) {
+            return numberToTilesAsText.get(this.number);
         }
 
         return tileAsText;
     }
+
+
 
 }
