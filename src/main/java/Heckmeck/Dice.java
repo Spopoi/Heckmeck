@@ -1,3 +1,4 @@
+
 package Heckmeck;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,16 +8,12 @@ import static Heckmeck.Die.Face.WORM;
 
 public class Dice {
     private final int  initialNumOfDice = 8;
-    private List<Die> diceList = new ArrayList<>();
+    private List<Die> diceList;
     private List<Die> chosenDiceList;
 
 
     private Dice(){
-        resetChosenDice();
-        for (int i = 0; i< initialNumOfDice; i++){
-            Die die = Die.generateDie();
-            diceList.add(die);
-        }
+        resetDice();
     }
 
     public static Dice init(){
@@ -34,36 +31,21 @@ public class Dice {
     }
 
     public void eraseDice(){
-        diceList = new ArrayList<Die>();
-        chosenDiceList = new ArrayList<Die>();
+        diceList = new ArrayList<>(initialNumOfDice);
+        chosenDiceList = new ArrayList<>();
     }
 
     public void resetDice(){
         eraseDice();
-        resetChosenDice();
         for (int i = 0; i< initialNumOfDice; i++){
             Die die = Die.generateDie();
             diceList.add(die);
         }
     }
-
-    private void resetChosenDice(){
-        chosenDiceList = new ArrayList<>(initialNumOfDice);
-    }
-
     public int getNumOfDice(){
         return diceList.size();
     }
 
-    public void removeDie(){
-        int index = diceList.size() - 1;
-        diceList.remove(index);
-    }
-    public void removeDice(int n){
-        for(int i = 0; i<n; i++){
-            removeDie();
-        }
-    }
 
     public void addSpecificDie(Die.Face face){
         diceList.add(Die.generateDie(face));
@@ -96,10 +78,6 @@ public class Dice {
 
     }
 
-    public List<Die.Face> getChosenFaces() {
-        return diceList.stream().map(Die::getDieFace).filter(this::isFaceChosen).toList();
-
-    }
     private List <Die> getChosableFaces(){
         return diceList.stream().filter(e -> !isFaceChosen(e.getDieFace())).toList();
     }

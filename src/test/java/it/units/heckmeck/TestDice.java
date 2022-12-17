@@ -98,38 +98,17 @@ public class TestDice {
     }
 
     @Test
-    void removeDie(){
-        Dice dice = Dice.init();
-        Assertions.assertEquals(8, dice.getNumOfDice());
-        dice.removeDie();
-        Assertions.assertEquals(7, dice.getNumOfDice());
-        dice.removeDie();
-        Assertions.assertEquals(6, dice.getNumOfDice());
-    }
-
-    @Test
-    void removeDice(){
-        int n = 7;
-        Dice dice = Dice.init();
-        Assertions.assertEquals(8, dice.getNumOfDice());
-        dice.removeDice(n);
-        Assertions.assertEquals(8-n, dice.getNumOfDice());
-    }
-
-    @Test
     void rollSequence(){
-        int [] seq = {8, 7, 6, 5, 4, 3, 2, 1};
+
         Dice dice = Dice.init();
-        for(int n : seq){
+        while(dice.getNumOfDice()>0){
             dice.rollDice();
-            List <Die> diceList =  dice.getDiceList();
-            Assertions.assertEquals(n, diceList.size());
-            for (Die d : diceList){
-                Die.Face result = d.getDieFace();
-                boolean test = Stream.of(Die.Face.values()).anyMatch(e -> e.equals(result));
+            List<Die> dieList = dice.getDiceList();
+            for(Die die : dieList){
+                boolean test = Arrays.asList(values()).contains(die.getDieFace());
                 Assertions.assertTrue(test);
             }
-            dice.removeDie();
+            dice.chooseRandomDice();
         }
     }
     @Test
@@ -245,7 +224,6 @@ public class TestDice {
     }
 
 
-    //TODO: Solve infinte loop
     @Test
     void gameRollSequence(){
         Dice dice = Dice.init();
