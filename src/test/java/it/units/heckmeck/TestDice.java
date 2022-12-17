@@ -108,7 +108,7 @@ public class TestDice {
                 boolean test = Arrays.asList(values()).contains(die.getDieFace());
                 Assertions.assertTrue(test);
             }
-            dice.chooseRandomDice();
+            dice.chooseDice(getRandomChoosableDice(dice).getDieFace());
         }
     }
     @Test
@@ -143,19 +143,21 @@ public class TestDice {
         dice.addSpecificDie(TWO);
         dice.chooseDice(TWO);
         List <Die> chosenDice = dice.getChosenDice();
-        Die.Face f = TWO;
         Assertions.assertTrue(chosenDice.stream().anyMatch(e -> e.getDieFace().equals(TWO)));
     }
 
     @Test
     void chooseRandomDice(){
         Dice dice = Dice.init();
-        dice.resetDice();
         dice.rollDice();
         Die.Face face = dice.getDiceList().get(0).getDieFace();
-        dice.chooseRandomDice();
+        dice.chooseDice(getRandomChoosableDice(dice).getDieFace());
         List <Die> chosenDice = dice.getChosenDice();
         Assertions.assertEquals(face, chosenDice.get(0).getDieFace());
+    }
+
+    private Die getRandomChoosableDice(Dice dice){
+        return dice.getDiceList().get(0);
     }
 
     @Test
@@ -230,14 +232,14 @@ public class TestDice {
         dice.rollDice();
         Assertions.assertEquals(8, dice.getDiceList().size());
         Die.Face face1 = dice.getDiceList().get(0).getDieFace();
-        dice.chooseRandomDice();
+        dice.chooseDice(getRandomChoosableDice(dice).getDieFace());
         Assertions.assertTrue(dice.isFaceChosen(face1));
         Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
         while(dice.getDiceList().size() != 0){
             dice.rollDice();
             List <Die> availableDice = dice.getDiceList();
             Die.Face face = dice.getDiceList().get(0).getDieFace();
-            dice.chooseRandomDice();
+            dice.chooseDice(getRandomChoosableDice(dice).getDieFace());
             Assertions.assertTrue(dice.isFaceChosen(face));
             Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
         }

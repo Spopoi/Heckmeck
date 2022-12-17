@@ -65,10 +65,6 @@ public class Dice {
 
     }
 
-    public  void chooseRandomDice(){
-        Die.Face face = diceList.get(0).getDieFace();
-        chooseDice(face);
-    }
     public List <Die> getChosenDice(){
         return chosenDiceList;
     }
