@@ -48,7 +48,7 @@ public class TestFileReader {
                         """),
                 entry(28, """
                         .------.
-                        |  23  |
+                        |  28  |
                         |  ~~  |
                         |      |
                         '------'
@@ -64,7 +64,7 @@ public class TestFileReader {
                         .------.
                         |  36  |
                         |  ~~  |
-                        |  ~   |
+                        |  ~~  |
                         '------'
                         """)
         );
