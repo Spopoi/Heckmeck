@@ -133,7 +133,7 @@ public class TestDice {
         Dice dice = Dice.init();
         dice.rollDice();
         dice.addSpecificDie(WORM);
-        Assertions.assertTrue(dice.isWormPresent());
+        Assertions.assertTrue(dice.isFacePresent(WORM));
     }
 
     @Test

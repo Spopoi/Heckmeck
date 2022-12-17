@@ -1,6 +1,7 @@
 package Heckmeck;
 
 import java.util.*;
+import static Heckmeck.Die.Face;
 
 public class Game {
 
@@ -45,7 +46,7 @@ public class Game {
         io.showBoardTiles(boardTiles);
         boolean isOnRun = roll();
         while (isOnRun){
-            if (dice.isWormChosen()) {
+            if (dice.isFaceChosen(Face.WORM)) {
                 if (steal() || pick()) {
                     isOnRun = false;
                 } else isOnRun = roll();

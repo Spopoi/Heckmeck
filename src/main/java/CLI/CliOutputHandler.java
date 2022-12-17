@@ -116,7 +116,7 @@ public class CliOutputHandler implements OutputHandler {
         String displayString = "        " + player.getName() + "'s tiles:  ";
         String chosenDiceString = "     Chosen dice: " + dice.getChosenDiceString();
         String chosenDiceScore = "     Current dice score: " + dice.getScore();
-        String wormPresent =  "     WORM is chosen: " + dice.isWormChosen();
+        String wormPresent =  "     WORM is chosen: " + dice.isFaceChosen(Die.Face.WORM);
 
         List <String> rows = new ArrayList<>();
 
