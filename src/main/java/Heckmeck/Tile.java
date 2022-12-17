@@ -91,17 +91,7 @@ public class Tile implements Comparable<Tile> {
 
     @Override
     public String toString() {
-        String tileAsText = null;
-
-        if (this.number==21) {
-            return numberToTilesAsText.get(this.number);
-        } else if (this.number==22) {
-            return numberToTilesAsText.get(this.number);
-        } else if (this.number==23) {
-            return numberToTilesAsText.get(this.number);
-        }
-
-        return tileAsText;
+        return numberToTilesAsText.get(this.number);
     }
 
 
