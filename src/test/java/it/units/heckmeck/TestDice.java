@@ -245,6 +245,7 @@ public class TestDice {
     }
 
 
+    //TODO: Solve infinte loop
     @Test
     void gameRollSequence(){
         Dice dice = Dice.init();
