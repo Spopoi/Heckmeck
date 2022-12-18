@@ -70,7 +70,7 @@ public class Game {
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;
         for(Player robbedPlayer : players){
-            if(!robbedPlayer.equals(actualPlayer) && robbedPlayer.hasTile() && playerScore == robbedPlayer.getLastPickedTileNumber()){
+            if(!robbedPlayer.equals(actualPlayer) && actualPlayer.canStealFrom(robbedPlayer,playerScore)){
                 if(io.wantToSteal(robbedPlayer)){
                     actualPlayer.stealTileFromPlayer(robbedPlayer);
                     return true;
@@ -112,8 +112,10 @@ public class Game {
     //TODO: Rimettere in gioco tessere persa dal giocatore
     private void bust(){
         io.showBustMessage();
-        boardTiles.add(actualPlayer.getLastPickedTile());
-        actualPlayer.removeLastPickedTile();
+        if(actualPlayer.hasTile()){
+            boardTiles.add(actualPlayer.getLastPickedTile());
+            actualPlayer.removeLastPickedTile();
+        }
         boardTiles.bust();
     }
 

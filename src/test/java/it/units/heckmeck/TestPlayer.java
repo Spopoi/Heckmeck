@@ -42,9 +42,8 @@ public class TestPlayer {
         Player robbed = Player.generatePlayer("Derubato");
         Player robber = Player.generatePlayer("Ladro");
         Tile desiredTile = Tile.generateTile(21);
-
         robbed.pickTileFromBoard(desiredTile, board);
-        robber.pickTileFromPlayer(desiredTile, robbed);
+        robber.stealTileFromPlayer(robbed);
 
         Assertions.assertEquals(desiredTile, robber.getLastPickedTile());
     }
@@ -63,30 +62,21 @@ public class TestPlayer {
     }
 
     @Test
-    void check_that_steal_from_an_empty_player_stack_throw_exception(){
+    void check_cannot_steal_from_an_empty_player_stack(){
         Player player = Player.generatePlayer("Ladro");
         Player robbedPlayer = Player.generatePlayer("Derubato");
-        Tile desiredTile = Tile.generateTile(21);
-        String expectedMessage = "Can not steal tile 21 from Derubato";
-
-
-        Exception ex = Assertions.assertThrows(IllegalTileTheft.class, () ->
-                player.pickTileFromPlayer(desiredTile, robbedPlayer));
-        Assertions.assertEquals(expectedMessage, ex.getMessage());
+        int score = 30;
+        Assertions.assertFalse(player.canStealFrom(robbedPlayer, score));
     }
 
-    @Test
-    void check_that_steal_wrong_tile_throw_exception(){
+
+    @ParameterizedTest
+    @ValueSource(ints = {21, 23, 24, 25, 30})
+    void check_cannot_steal_tile_with_not_equal_score(int score){
         Player player = Player.generatePlayer("Ladro");
         Player robbedPlayer = Player.generatePlayer("Derubato");
-        Tile desiredTile = Tile.generateTile(21);
-        String expectedMessage = "Can not steal tile 21 from Derubato";
-
         robbedPlayer.addTile(Tile.generateTile(22));
-
-        Exception ex = Assertions.assertThrows(IllegalTileTheft.class, () ->
-                player.pickTileFromPlayer(desiredTile, robbedPlayer));
-        Assertions.assertEquals(expectedMessage, ex.getMessage());
+        Assertions.assertFalse(player.canStealFrom(robbedPlayer, score));
     }
 
 }
