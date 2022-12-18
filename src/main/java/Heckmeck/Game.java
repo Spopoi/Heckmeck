@@ -112,6 +112,7 @@ public class Game {
     //TODO: Rimettere in gioco tessere persa dal giocatore
     private void bust(){
         io.showBustMessage();
+        boardTiles.add(actualPlayer.getLastPickedTile());
         actualPlayer.removeLastPickedTile();
         boardTiles.bust();
     }

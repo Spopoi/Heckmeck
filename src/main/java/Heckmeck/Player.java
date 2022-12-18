@@ -2,8 +2,6 @@ package Heckmeck;
 
 import exception.IllegalTileTheft;
 
-import java.util.Objects;
-
 public class Player {
 
     private final String playerName;
@@ -77,9 +75,7 @@ public class Player {
         }
         else return "";
     }
-
-
-
+    
     public int getNumberOfPlayerTile(){
         return playerTiles.size();
     }
