@@ -175,7 +175,7 @@ public class TestDice {
         dice.rollDice();
         dice.addSpecificDie(WORM);
         dice.chooseDice(WORM);
-        Assertions.assertTrue(dice.isWormChosen());
+        Assertions.assertTrue(dice.isFaceChosen(WORM));
     }
 
     @Test

@@ -75,7 +75,7 @@ public class Player {
         }
         else return "";
     }
-    
+
     public int getNumberOfPlayerTile(){
         return playerTiles.size();
     }
