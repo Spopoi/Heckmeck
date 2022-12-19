@@ -12,19 +12,34 @@ public class Rules {
     }
 
     public static Player whoIsTheWinner(Player[] players){
-        List<Player> winners = Arrays.stream(players).sorted(Comparator.comparingInt(Player::getWormNumber)).toList();
-        int highestWormScore = winners.get(winners.size()-1).getWormNumber();
-        winners = winners.stream().filter(e -> e.getWormNumber() >= highestWormScore).collect(Collectors.toList());
+        List<Player> winners = Arrays.stream(players).sorted(Comparator.comparingInt(Rules::computeScore)).toList();
+        int highestWormScore = computeScore(winners.get(winners.size()-1));
+        winners = winners.stream().filter(e -> computeScore(e) >= highestWormScore).collect(Collectors.toList());
         if(winners.size() == 1) return winners.get(0);
         else {
-            winners.sort(Comparator.comparingInt(Player::getNumberOfPlayerTile));
-            int lowerNumberOfTiles = winners.get(0).getNumberOfPlayerTile();
-            winners = winners.stream().filter(p -> p.getNumberOfPlayerTile() <= lowerNumberOfTiles).collect(Collectors.toList());
+            winners.sort(Comparator.comparingInt(Rules::numberOfPlayerTile));
+            int lowerNumberOfTiles = numberOfPlayerTile(winners.get(0));
+            winners = winners.stream().filter(p -> numberOfPlayerTile(p) <= lowerNumberOfTiles).collect(Collectors.toList());
             if(winners.size() == 1) return winners.get(0);
             else{
-                winners.sort(Comparator.comparingInt(Player::getHighestTileNumber));
+                winners.sort(Comparator.comparingInt(Rules::getHighestTileNumber));
                 return winners.get(winners.size()-1);
             }
         }
+    }
+
+    private static int numberOfPlayerTile(Player player){
+        return player.getPlayerTiles().size();
+    }
+
+    private static int computeScore(Player player) {
+        return player.getPlayerTiles().stream()
+                .mapToInt(Tile::getWorms)
+                .sum();
+    }
+
+    private static int getHighestTileNumber(Player player){
+        List<Tile> sortedList = player.getPlayerTiles().stream().sorted().toList();
+        return sortedList.get(sortedList.size()-1).getNumber();
     }
 }

@@ -5,7 +5,7 @@ import exception.IllegalTileAddition;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 public class StackOfTiles implements TilesCollection {
 
@@ -57,19 +57,8 @@ public class StackOfTiles implements TilesCollection {
         return stackOfTiles.pollLast();
     }
 
-    public int computeScore() {
-        return stackOfTiles.stream()
-                .mapToInt(Tile::getWorms)
-                .sum();
-    }
-
-    public int size(){
-        return stackOfTiles.size();
-    }
-
-    public int highestTileNumber(){
-        List<Tile> sortedTile = stackOfTiles.stream().sorted().toList();
-        return sortedTile.get(sortedTile.size()-1).getNumber();
+    public LinkedList<Tile> getTileList(){
+        return stackOfTiles;
     }
 
 }

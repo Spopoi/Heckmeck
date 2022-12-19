@@ -1,6 +1,7 @@
 package Heckmeck;
 
-import exception.IllegalTileTheft;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Player {
 
@@ -11,9 +12,8 @@ public class Player {
         this.playerName = playerName;
         this.playerTiles = StackOfTiles.generate();
     }
-
-    public int getWormNumber(){
-        return playerTiles.computeScore();
+    public LinkedList<Tile> getPlayerTiles(){
+        return playerTiles.getTileList();
     }
 
     public static Player generatePlayer(String playerName) {
@@ -28,6 +28,7 @@ public class Player {
         return !playerTiles.isEmpty();
     }
 
+    //TODO:used only for tests
     public void addTile(Tile tile){
         playerTiles.add(tile);
     }
@@ -46,7 +47,6 @@ public class Player {
         else return robbedPlayer.getLastPickedTile().getNumber() == playerScore;
     }
 
-
     public void stealTileFromPlayer(Player robbedPlayer) {
         playerTiles.add(robbedPlayer.getLastPickedTile());
         robbedPlayer.removeLastPickedTile();
@@ -54,14 +54,6 @@ public class Player {
 
     public void removeLastPickedTile() {
         playerTiles.removeLast();
-    }
-
-    public int getNumberOfPlayerTile(){
-        return playerTiles.size();
-    }
-
-    public int getHighestTileNumber(){
-        return playerTiles.highestTileNumber();
     }
 
     @Override

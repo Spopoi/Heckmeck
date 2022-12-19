@@ -97,7 +97,7 @@ public class CliOutputHandler implements OutputHandler {
         StringBuilder thirdRow = new StringBuilder();
         StringBuilder bottomRow = new StringBuilder();
 
-        boardTiles.getTilesList().forEach(tile->{
+        boardTiles.getTiles().forEach(tile->{
             topRow.append(getTopTilesRow());
             firstRow.append(getFirstTilesRow(tile));
             secondRow.append(getSecondTileRow(tile));

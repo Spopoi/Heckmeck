@@ -7,9 +7,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class BoardTiles implements TilesCollection {
-
     public static final int numberOfTiles = 16;
-    //private List<Heckmeck.Tile> tiles;
     private TreeSet<Tile> tiles;
 
     public BoardTiles(TreeSet<Tile> tiles){
@@ -22,9 +20,6 @@ public class BoardTiles implements TilesCollection {
 
     public TreeSet<Tile> getTiles(){
         return tiles;
-    }
-    public List<Tile> getTilesList(){
-        return tiles.stream().toList();
     }
 
     @Override
@@ -61,10 +56,4 @@ public class BoardTiles implements TilesCollection {
         tiles.remove(tiles.last());
     }
 
-    public Tile getMinValueTile(){
-        return getTilesList().get(0);
-    }
-    public int size(){
-        return tiles.size();
-    }
 }

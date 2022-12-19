@@ -63,7 +63,9 @@ public class Game {
     }
 
     private boolean canPick(){
-        return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
+        Tile minValueTile = boardTiles.getTiles().first();
+        return dice.getScore() >= minValueTile.getNumber();
+        //return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
     }
 
     private boolean steal(){
@@ -81,7 +83,7 @@ public class Game {
     }
 
     private void pickBoardTile(int actualPlayerScore){
-        TreeSet<Tile> acquirableTiles = new TreeSet<>(boardTiles.getTilesList().stream().filter(tile-> tile.getNumber() <= actualPlayerScore).toList());
+        TreeSet<Tile> acquirableTiles = new TreeSet<>(boardTiles.getTiles().stream().filter(tile-> tile.getNumber() <= actualPlayerScore).toList());
         actualPlayer.pickTileFromBoard(acquirableTiles.last(), boardTiles);
     }
 
