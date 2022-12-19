@@ -43,7 +43,7 @@ public class Player {
 
     public boolean canStealFrom(Player robbedPlayer, int playerScore){
         if(!robbedPlayer.hasTile()) return false;
-        else return robbedPlayer.getLastPickedTileNumber() == playerScore;
+        else return robbedPlayer.getLastPickedTile().getNumber() == playerScore;
     }
 
 
@@ -54,20 +54,6 @@ public class Player {
 
     public void removeLastPickedTile() {
         playerTiles.removeLast();
-    }
-
-    public int getLastPickedTileNumber(){ // TODO Spostare sopra controllo hasTile
-        if (hasTile()){
-            return getLastPickedTile().getNumber();
-        }
-        else return 0;
-    }
-
-    public String getLastPickedTileWormString(){ // TODO Spostare sopra controllo hasTile
-        if (hasTile()){
-            return  getLastPickedTile().getWormString();
-        }
-        else return "";
     }
 
     public int getNumberOfPlayerTile(){

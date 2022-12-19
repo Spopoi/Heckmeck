@@ -135,13 +135,16 @@ public class CliOutputHandler implements OutputHandler {
         print(topRow);
 
         for(int i = 0; i < otherPlayers.size(); i++){
-            int number = otherPlayers.get(i).getLastPickedTileNumber();
-            String worms = otherPlayers.get(i).getLastPickedTileWormString();
+            String othersTile;
+            if(otherPlayers.get(i).hasTile()){
+                Tile lastPickedTile = otherPlayers.get(i).getLastPickedTile();
+                int number = lastPickedTile.getNumber();
+                String worms = lastPickedTile.getWormString();
+                String tileNumber = String.format("%1$" + 2 + "s", number);
+                //String wormNumber = String.format("%1$-" + 4 + "s", worms);
+                othersTile = tileNumber + " - " + worms;
+            }else othersTile = "No tiles";
             String playersName = String.format("%1$" + size  + "s", otherPlayers.get(i).getName());
-            String tileNumber = String.format("%1$" + 2 + "s", number);
-            String wormNumber = String.format("%1$-" + 4 + "s", worms);
-            String othersTile = (number == 0) ? "No tiles" : tileNumber + " - " + worms;
-
             String newString = String.format("%1$-" + len + "s", rows.get(i)).concat(playersName) + " | " + othersTile;
             rows.set(i, newString);
 
@@ -184,7 +187,7 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showWantToSteal(Player robbedPlayer) {
-        print("Do you want to steal tile number "+ robbedPlayer.getLastPickedTileNumber()+ " from "+ robbedPlayer.getName() + "? Press 'y' for stealing or 'n' for continuing your turn:");
+        print("Do you want to steal tile number "+ robbedPlayer.getLastPickedTile().getNumber()+ " from "+ robbedPlayer.getName() + "? Press 'y' for stealing or 'n' for continuing your turn:");
     }
 
     @Override
