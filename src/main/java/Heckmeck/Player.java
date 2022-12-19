@@ -28,13 +28,7 @@ public class Player {
         return !playerTiles.isEmpty();
     }
 
-    //TODO:used only for tests
-    public void addTile(Tile tile){
-        playerTiles.add(tile);
-    }
-
-     public void pickTileFromBoard(Tile desiredTile, BoardTiles board) {
-        board.remove(desiredTile);
+     public void pickTile(Tile desiredTile) {
         playerTiles.add(desiredTile);
      }
 

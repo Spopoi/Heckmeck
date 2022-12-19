@@ -82,9 +82,11 @@ public class Game {
         return false;
     }
 
+    //TODO: maybe moving this method into boardTiles?
     private void pickBoardTile(int actualPlayerScore){
         TreeSet<Tile> acquirableTiles = new TreeSet<>(boardTiles.getTiles().stream().filter(tile-> tile.getNumber() <= actualPlayerScore).toList());
-        actualPlayer.pickTileFromBoard(acquirableTiles.last(), boardTiles);
+        actualPlayer.pickTile(acquirableTiles.last());
+        boardTiles.remove(acquirableTiles.last());
     }
 
     //TODO: rolli anche se finisci i dadi
