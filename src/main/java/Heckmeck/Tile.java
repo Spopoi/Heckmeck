@@ -51,20 +51,23 @@ public class Tile implements Comparable<Tile> {
         return resourcePath;
     }
 
-    public Tile(int number) { this.number=number; }
+    public Tile(int number) {
+        this.number = number;
+    }
 
-    public int getNumber(){
+    public int getNumber() {
         return number;
     }
-    public int getWorms(){
+
+    public int getWorms() {
         return numberToWorms.get(number);
     }
 
-    public String getWormString(){
+    public String getWormString() {
         return "~".repeat(this.getWorms()); // TODO spostare sopra
     }
 
-    public static Tile generateTile(int number) throws IllegalTileNumber{
+    public static Tile generateTile(int number) throws IllegalTileNumber {
         if (number < 21 || number > 36) {
             throw new IllegalTileNumber(number);
         }
@@ -83,7 +86,7 @@ public class Tile implements Comparable<Tile> {
     public int hashCode() {
         return Objects.hash(number);
     }
-    
+
     @Override
     public int compareTo(Tile other) {
         return Integer.compare(this.number, other.number);
