@@ -13,6 +13,8 @@ import static java.util.Map.entry;
 
 public class TestFileReader {
 
+    private static final String LOGO = getExpectedLogo();
+
     @Test
     void readsIntegerToStringMapFromJson() throws URISyntaxException {
         URL multipleTilesMapResource = TestFileReader.class.getClassLoader().getResource("MULTIPLE_TILES_MAP");
@@ -74,6 +76,29 @@ public class TestFileReader {
         // Not exactly as expected. Can we live well the same or not??
         // System.out.println(expectedMap.getClass() + " VS " + obtainedMap.getClass());
         Assertions.assertEquals(expectedMap, obtainedMap);
+    }
+
+    @Test
+    void readLogoAsTextFromFile() throws Exception {
+        URL LogoResource = TestFileReader.class.getClassLoader().getResource("TEST_LOGO");
+
+        String actualLogo = FileReader.readLogoFromTextFile(Path.of(LogoResource.toURI()));
+
+        Assertions.assertEquals(LOGO, actualLogo);
+    }
+
+    private static String getExpectedLogo() {
+        return """
+                  _/'')
+                 / />>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>         _______
+                ( ( ,--.  ,--.             ,--.                           ,--.            /\\ o o o\\
+                \\ ) |  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-.        /o \\ o o o\\_______
+                    |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     /       <    >------>   o /|
+                    |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  |\\   --.\\ `--.|  \\  \\        \\ o/  o   /_____/o|
+                    `--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'        \\/______/     |oo|
+                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<             |   o   |o/
+                                                                                               |_______|/
+                """;
     }
 
 }
