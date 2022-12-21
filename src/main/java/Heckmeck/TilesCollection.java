@@ -12,6 +12,6 @@ public interface TilesCollection {
 
     void remove(Tile newTile);
 
-    Tile removeLast();
+    void removeLast();
 
 }

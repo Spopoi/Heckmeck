@@ -3,7 +3,6 @@ package Heckmeck;
 import exception.IllegalTileAddition;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 
@@ -42,19 +41,13 @@ public class StackOfTiles implements TilesCollection {
     }
 
     @Override
-    public void remove(Tile tile){
-        if (Objects.equals(peekLast(), tile)) {
-            stackOfTiles.pollLast();
-        } else {
-            // TO DO: throw some kind of exception
-            // fall here if: - no tiles are present
-            //               - 'tile' does not match the last tile
-        }
+    public void remove(Tile tile) {
+        stackOfTiles.pollLast();
     }
 
     @Override
-    public Tile removeLast() {
-        return stackOfTiles.pollLast();
+    public void removeLast() {
+        stackOfTiles.pollLast();
     }
 
     public LinkedList<Tile> getTileList(){

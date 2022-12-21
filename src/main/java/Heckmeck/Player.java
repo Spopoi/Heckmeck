@@ -17,7 +17,7 @@ public class Player {
     }
 
     public static Player generatePlayer(String playerName) {
-        return playerName==null ? new Player("") : new Player(playerName);
+        return new Player(playerName);
     }
 
     public String getName() {

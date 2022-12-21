@@ -15,7 +15,7 @@ public class BoardTiles implements TilesCollection {
     }
     public static BoardTiles init(){
         List<Tile> tiles = IntStream.range(Tile.tileMinNumber, Tile.tileMaxNumber+1).mapToObj(Tile::generateTile).toList();
-        return new BoardTiles(new TreeSet<Tile>(tiles));
+        return new BoardTiles(new TreeSet<>(tiles));
     }
 
     public TreeSet<Tile> getTiles(){
@@ -33,23 +33,18 @@ public class BoardTiles implements TilesCollection {
     }
 
     @Override
-    public void add(Tile newTile) throws IllegalTileAddition{
-        if (hasTile(newTile)) {
-            throw new IllegalTileAddition(newTile.getNumber());
-        }
+    public void add(Tile newTile){
         tiles.add(newTile);
     }
 
     @Override
-    public void remove(Tile newTile) throws IllegalTileSelection{
-        if (!tiles.remove(newTile)) {
-            throw new IllegalTileSelection("Can not remove tile " + newTile.getNumber() + ", it is not present in the board");
-        };
+    public void remove(Tile tileToRemove){
+        tiles.remove(tileToRemove);
     }
 
     @Override
-    public Tile removeLast() {
-        return tiles.pollLast();
+    public void removeLast() {
+        tiles.pollLast();
     }
 
     public void bust() {
