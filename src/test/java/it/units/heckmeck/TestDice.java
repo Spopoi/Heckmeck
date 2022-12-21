@@ -248,34 +248,13 @@ public class TestDice {
         }
     }
 
-    @Test
-    void convertDieOneIntoAString() throws Exception {
-        Die dieToTest = Die.generateDie(ONE);
-        URL dieOneResource = TestDice.class.getClassLoader().getResource("TEST_DIE_ONE");
+    @ParameterizedTest
+    @CsvSource({"ONE, TEST_DIE_ONE", "TWO, TEST_DIE_TWO", "THREE, TEST_DIE_THREE"})
+    void convertDieIntoAString(Die.Face dieFace, String fileName) throws Exception {
+        Die dieToTest = Die.generateDie(dieFace);
+        URL dieTwoResource = TestDice.class.getClassLoader().getResource(fileName);
 
-        String expectedString = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
-        String actualString = dieToTest.toString();
-
-        Assertions.assertEquals(expectedString, actualString);
-    }
-
-    @Test
-    void convertDieTwoIntoAString() throws Exception {
-        Die dieToTest = Die.generateDie(TWO);
-        URL dieTwoResource = TestDice.class.getClassLoader().getResource("TEST_DIE_TWO");
-
-        String expectedString = FileReader.readDieTwoFile(Path.of(dieTwoResource.toURI()));
-        String actualString = dieToTest.toString();
-
-        Assertions.assertEquals(expectedString, actualString);
-    }
-
-    @Test
-    void convertDieThreeIntoAString() throws Exception {
-        Die dieToTest = Die.generateDie(THREE);
-        URL dieTwoResource = TestDice.class.getClassLoader().getResource("TEST_DIE_THREE");
-
-        String expectedString = FileReader.readDieThreeFile(Path.of(dieTwoResource.toURI()));
+        String expectedString = FileReader.readDieFile(Path.of(dieTwoResource.toURI()));
         String actualString = dieToTest.toString();
 
         Assertions.assertEquals(expectedString, actualString);

@@ -3,6 +3,8 @@ package it.units.heckmeck;
 import Heckmeck.FileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,6 +16,31 @@ import static java.util.Map.entry;
 public class TestFileReader {
 
     private static final String LOGO = getExpectedLogo();
+
+    public static final Map<String, String> fileNameToCorrectDieFace = Map.ofEntries(
+            entry("TEST_DIE_ONE", """
+                .---------.
+                |         |
+                |    o    |
+                |         |
+                '---------'
+                """),
+            entry("TEST_DIE_TWO", """
+                .---------.
+                |      o  |
+                |         |
+                |  o      |
+                '---------'
+                """),
+            entry("TEST_DIE_THREE", """
+                .---------.
+                |      o  |
+                |    o    |
+                |  o      |
+                '---------'
+                """)
+    );
+
 
     @Test
     void readsIntegerToStringMapFromJson() throws URISyntaxException {
@@ -87,54 +114,16 @@ public class TestFileReader {
         Assertions.assertEquals(LOGO, actualLogo);
     }
 
-    @Test
-    void readSingleDieWithOneFaceTextRepresentation() throws Exception {
-        URL dieOneResource = TestFileReader.class.getClassLoader().getResource("TEST_DIE_ONE");
-        String expectedDieOneAsText = """
-                .---------.
-                |         |
-                |    o    |
-                |         |
-                '---------'
-                """;
+    @ParameterizedTest
+    @ValueSource(strings = {"TEST_DIE_ONE", "TEST_DIE_TWO", "TEST_DIE_THREE"})
+    void readSingleDieTextRepresentation(String fileName) throws Exception {
+        URL dieResource = TestFileReader.class.getClassLoader().getResource(fileName);
+        String expectedDieAsText = fileNameToCorrectDieFace.get(fileName);
 
-        String dieOneAsText = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
+        String dieAsText = FileReader.readDieFile(Path.of(dieResource.toURI()));
 
-        Assertions.assertEquals(expectedDieOneAsText, dieOneAsText);
+        Assertions.assertEquals(expectedDieAsText, dieAsText);
     }
-
-    @Test
-    void readSingleDieWithTwoFaceTextRepresentation() throws Exception {
-        URL dieTwoResource = TestFileReader.class.getClassLoader().getResource("TEST_DIE_TWO");
-        String expectedDieTwoAsText = """
-                .---------.
-                |      o  |
-                |         |
-                |  o      |
-                '---------'
-                """;
-
-        String dieTwoAsText = FileReader.readDieTwoFile(Path.of(dieTwoResource.toURI()));
-
-        Assertions.assertEquals(expectedDieTwoAsText, dieTwoAsText);
-    }
-
-    @Test
-    void readSingleDieWithThreeFaceTextRepresentation() throws Exception {
-        URL dieThreeResource = TestFileReader.class.getClassLoader().getResource("TEST_DIE_THREE");
-        String expectedDieThreeAsText = """
-                .---------.
-                |      o  |
-                |    o    |
-                |  o      |
-                '---------'
-                """;
-
-        String dieThreeAsText = FileReader.readDieThreeFile(Path.of(dieThreeResource.toURI()));
-
-        Assertions.assertEquals(expectedDieThreeAsText, dieThreeAsText);
-    }
-
 
 
     private static String getExpectedLogo() {

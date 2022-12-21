@@ -77,21 +77,21 @@ public class Die {
         if (dieFace==Face.ONE) {
             URL dieOneResource = Die.class.getClassLoader().getResource("TEST_DIE_ONE");
             try {
-                dieAsText = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
+                dieAsText = FileReader.readDieFile(Path.of(dieOneResource.toURI()));
             } catch (Exception ex) {
                 System.err.println(ex);
             }
         } else if (dieFace == Face.TWO) {
             URL dieTwoResource = Die.class.getClassLoader().getResource("TEST_DIE_TWO");
             try {
-                dieAsText = FileReader.readDieTwoFile(Path.of(dieTwoResource.toURI()));
+                dieAsText = FileReader.readDieFile(Path.of(dieTwoResource.toURI()));
             } catch (Exception ex) {
                 System.err.println(ex);
             }
         } else {
             URL dieThreeResource = Die.class.getClassLoader().getResource("TEST_DIE_THREE");
             try {
-                dieAsText = FileReader.readDieThreeFile(Path.of(dieThreeResource.toURI()));
+                dieAsText = FileReader.readDieFile(Path.of(dieThreeResource.toURI()));
             } catch (Exception ex) {
                 System.err.println(ex);
             }
