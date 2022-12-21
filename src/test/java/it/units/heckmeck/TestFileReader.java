@@ -87,6 +87,22 @@ public class TestFileReader {
         Assertions.assertEquals(LOGO, actualLogo);
     }
 
+    @Test
+    void readSingleDieWithOneFaceTextRepresentation() throws Exception {
+        URL dieOneResource = TestFileReader.class.getClassLoader().getResource("TEST_DIE");
+        String expectedDieOneAsText = """
+                .---------.
+                |         |
+                |    o    |
+                |         |
+                '---------'
+                """;
+
+        String dieOneAsText = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
+
+        Assertions.assertEquals(expectedDieOneAsText, dieOneAsText);
+    }
+
     private static String getExpectedLogo() {
         return """
                   _/'')
