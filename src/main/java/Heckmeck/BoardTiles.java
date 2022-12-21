@@ -43,11 +43,7 @@ public class BoardTiles implements TilesCollection {
     }
 
     @Override
-    public void removeLast() {
-        tiles.pollLast();
-    }
-
-    public void bust() {
+    public void removeLastTile() {
         tiles.remove(tiles.last());
     }
 

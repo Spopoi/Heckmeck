@@ -23,7 +23,7 @@ public class StackOfTiles implements TilesCollection {
         return stackOfTiles.isEmpty();
     }
 
-    Tile peekLast(){
+    public Tile getLastTile(){
         return stackOfTiles.peekLast();  // exception-safe
     }
 
@@ -46,7 +46,7 @@ public class StackOfTiles implements TilesCollection {
     }
 
     @Override
-    public void removeLast() {
+    public void removeLastTile() {
         stackOfTiles.pollLast();
     }
 

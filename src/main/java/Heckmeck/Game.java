@@ -120,7 +120,7 @@ public class Game {
             boardTiles.add(actualPlayer.getLastPickedTile());
             actualPlayer.removeLastPickedTile();
         }
-        boardTiles.bust();
+        boardTiles.removeLastTile();
     }
 
     private Player[] setupPlayers(int numberOfPlayers) {

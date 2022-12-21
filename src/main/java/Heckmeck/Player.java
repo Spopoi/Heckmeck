@@ -33,7 +33,7 @@ public class Player {
      }
 
     public Tile getLastPickedTile() {
-        return playerTiles.peekLast();
+        return playerTiles.getLastTile();
     }
 
     public boolean canStealFrom(Player robbedPlayer, int playerScore){
@@ -47,7 +47,7 @@ public class Player {
     }
 
     public void removeLastPickedTile() {
-        playerTiles.removeLast();
+        playerTiles.removeLastTile();
     }
 
     @Override
