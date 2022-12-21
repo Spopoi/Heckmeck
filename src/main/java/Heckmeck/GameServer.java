@@ -7,32 +7,32 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server implements Runnable{
+public class GameServer implements Runnable{
     public ServerSocket ss;
     private PrintWriter out;
     private BufferedReader in;
 
     private String message;
 
-    public Server(){
-        System.out.println("This is a game server demo");
-        try{
+    public GameServer(){
+        try {
             ss = new ServerSocket(51734);
 
-        } catch(IOException e){
-            System.out.print("Error on Server constructor");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     public void run() {
         try {
-
+            //ss = new ServerSocket(51734);
             System.out.println("Waiting for client");
             Socket clientSocket = ss.accept();
             System.out.println("Connection ok");
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            message =  in.readLine();
+            this.message =  in.readLine();
             out.println("hello client");
         } catch (IOException e) {
             System.out.println("Error in acceptConnections()");
@@ -43,9 +43,18 @@ public class Server implements Runnable{
         return this.message;
     }
 
+    public void close(){
+        try {
+            ss.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
-        Server server=new Server();
-        server.run();
+        GameServer gameServer =new GameServer();
+        Thread t1 =new Thread(gameServer);
+        t1.start();
     }
 
 
