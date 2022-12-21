@@ -1,11 +1,16 @@
 package CLI;
 import Heckmeck.*;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
 
 public class CliOutputHandler implements OutputHandler {
+
+    public static final String LOGO_FILE = "LOGO";
 
     private static final String[] faceOne = {   "|         | ",
                                                 "|    o    | ",
@@ -149,7 +154,7 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showWelcomeMessage(){
-        print(getLogo());
+        print(FileReader.readLogoFromTextFile(getLogoPath()));
         print("                      Welcome in Heckmeck");
     }
 
@@ -233,19 +238,15 @@ public class CliOutputHandler implements OutputHandler {
         }
     }
 
-static String getLogo(){
-        return """
-                       
-                      _/'')
-                     / />>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>         _______                                                                                   
-                    ( ( ,--.  ,--.             ,--.                           ,--.            /\\ o o o\\                                                                                    
-                    \\ ) |  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-.        /o \\ o o o\\_______                                                                                    
-                        |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     /       <    >------>   o /|                                                                                    
-                        |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  |\\   --.\\ `--.|  \\  \\        \\ o/  o   /_____/o|                                                                                            
-                        `--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'        \\/______/     |oo|                                                                                    
-                       <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<             |   o   |o/
-                                                                                                   |_______|/                                                                                                                             
-                """;
+    private static Path getLogoPath() {
+        URL tilesResource = Tile.class.getClassLoader().getResource(LOGO_FILE);
+        Path resourcePath = null;
+        try {
+            resourcePath = Path.of(tilesResource.toURI());
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
+        return resourcePath;
     }
 
 }
