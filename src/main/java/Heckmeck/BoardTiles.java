@@ -71,4 +71,12 @@ public class BoardTiles implements TilesCollection {
                 .orElse(0);
     }
 
+    public boolean allTilesHaveSameHeight() {
+        int numberOfDifferentHeights = (int) tiles.stream()
+                .map(Tile::toString)
+                .mapToInt(tilesAsText -> (int) tilesAsText.lines().count())
+                .distinct()
+                .count();
+        return numberOfDifferentHeights == 1;
+    }
 }

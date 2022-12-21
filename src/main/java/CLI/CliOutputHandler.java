@@ -91,21 +91,10 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showTiles(BoardTiles boardTiles){
-        StringBuilder topRow = new StringBuilder();
-        StringBuilder firstRow = new StringBuilder();
-        StringBuilder secondRow = new StringBuilder();
-        StringBuilder thirdRow = new StringBuilder();
-        StringBuilder bottomRow = new StringBuilder();
-
-        boardTiles.getTiles().forEach(tile->{
-            topRow.append(getTopTilesRow());
-            firstRow.append(getFirstTilesRow(tile));
-            secondRow.append(getSecondTileRow(tile));
-            thirdRow.append(getTilesThirdRow(tile));
-            bottomRow.append(getBottomTilesRow());
-        });
-        print("The available tiles on the board now are:" + newLine + topRow + newLine +
-                firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
+        if (!boardTiles.allTilesHaveSameHeight()) {
+            print("WARNING: In the Tiles representation you've selected, tiles have different height!!!");
+        }
+        print("The available tiles on the board now are:" + newLine + boardTiles);
     }
 
     @Override
