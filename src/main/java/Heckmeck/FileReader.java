@@ -53,4 +53,33 @@ public class FileReader {
         return res.toString();
     }
 
+    public static String readDieTwoFile(Path filePath) {
+        StringBuilder res = new StringBuilder();
+        try (InputStream in = Files.newInputStream(filePath);
+             BufferedReader reader =
+                     new BufferedReader(new InputStreamReader(in))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                res.append(line).append("\n");  // Notice that will add a newline at the end
+            }
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+        return res.toString();
+    }
+
+    public static String readDieThreeFile(Path filePath) {
+        StringBuilder res = new StringBuilder();
+        try (InputStream in = Files.newInputStream(filePath);
+             BufferedReader reader =
+                     new BufferedReader(new InputStreamReader(in))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                res.append(line).append("\n");  // Notice that will add a newline at the end
+            }
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+        return res.toString();
+    }
 }

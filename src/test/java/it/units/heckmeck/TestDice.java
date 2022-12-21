@@ -251,9 +251,31 @@ public class TestDice {
     @Test
     void convertDieOneIntoAString() throws Exception {
         Die dieToTest = Die.generateDie(ONE);
-        URL dieOneResource = TestDice.class.getClassLoader().getResource("TEST_DIE");
+        URL dieOneResource = TestDice.class.getClassLoader().getResource("TEST_DIE_ONE");
 
         String expectedString = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
+        String actualString = dieToTest.toString();
+
+        Assertions.assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    void convertDieTwoIntoAString() throws Exception {
+        Die dieToTest = Die.generateDie(TWO);
+        URL dieTwoResource = TestDice.class.getClassLoader().getResource("TEST_DIE_TWO");
+
+        String expectedString = FileReader.readDieTwoFile(Path.of(dieTwoResource.toURI()));
+        String actualString = dieToTest.toString();
+
+        Assertions.assertEquals(expectedString, actualString);
+    }
+
+    @Test
+    void convertDieThreeIntoAString() throws Exception {
+        Die dieToTest = Die.generateDie(THREE);
+        URL dieTwoResource = TestDice.class.getClassLoader().getResource("TEST_DIE_THREE");
+
+        String expectedString = FileReader.readDieThreeFile(Path.of(dieTwoResource.toURI()));
         String actualString = dieToTest.toString();
 
         Assertions.assertEquals(expectedString, actualString);

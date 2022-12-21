@@ -89,7 +89,7 @@ public class TestFileReader {
 
     @Test
     void readSingleDieWithOneFaceTextRepresentation() throws Exception {
-        URL dieOneResource = TestFileReader.class.getClassLoader().getResource("TEST_DIE");
+        URL dieOneResource = TestFileReader.class.getClassLoader().getResource("TEST_DIE_ONE");
         String expectedDieOneAsText = """
                 .---------.
                 |         |
@@ -102,6 +102,40 @@ public class TestFileReader {
 
         Assertions.assertEquals(expectedDieOneAsText, dieOneAsText);
     }
+
+    @Test
+    void readSingleDieWithTwoFaceTextRepresentation() throws Exception {
+        URL dieTwoResource = TestFileReader.class.getClassLoader().getResource("TEST_DIE_TWO");
+        String expectedDieTwoAsText = """
+                .---------.
+                |      o  |
+                |         |
+                |  o      |
+                '---------'
+                """;
+
+        String dieTwoAsText = FileReader.readDieTwoFile(Path.of(dieTwoResource.toURI()));
+
+        Assertions.assertEquals(expectedDieTwoAsText, dieTwoAsText);
+    }
+
+    @Test
+    void readSingleDieWithThreeFaceTextRepresentation() throws Exception {
+        URL dieThreeResource = TestFileReader.class.getClassLoader().getResource("TEST_DIE_THREE");
+        String expectedDieThreeAsText = """
+                .---------.
+                |      o  |
+                |    o    |
+                |  o      |
+                '---------'
+                """;
+
+        String dieThreeAsText = FileReader.readDieThreeFile(Path.of(dieThreeResource.toURI()));
+
+        Assertions.assertEquals(expectedDieThreeAsText, dieThreeAsText);
+    }
+
+
 
     private static String getExpectedLogo() {
         return """

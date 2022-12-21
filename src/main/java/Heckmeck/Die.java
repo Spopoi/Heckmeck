@@ -1,5 +1,4 @@
 package Heckmeck;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import  java.util.*;
@@ -74,13 +73,30 @@ public class Die {
 
     @Override
     public String toString() {
-        URL dieOneResource = Die.class.getClassLoader().getResource("TEST_DIE");
         String dieAsText = null;
-        try {
-            dieAsText = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
-        } catch (Exception ex) {
-            System.err.println(ex);
+        if (dieFace==Face.ONE) {
+            URL dieOneResource = Die.class.getClassLoader().getResource("TEST_DIE_ONE");
+            try {
+                dieAsText = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
+            } catch (Exception ex) {
+                System.err.println(ex);
+            }
+        } else if (dieFace == Face.TWO) {
+            URL dieTwoResource = Die.class.getClassLoader().getResource("TEST_DIE_TWO");
+            try {
+                dieAsText = FileReader.readDieTwoFile(Path.of(dieTwoResource.toURI()));
+            } catch (Exception ex) {
+                System.err.println(ex);
+            }
+        } else {
+            URL dieThreeResource = Die.class.getClassLoader().getResource("TEST_DIE_THREE");
+            try {
+                dieAsText = FileReader.readDieThreeFile(Path.of(dieThreeResource.toURI()));
+            } catch (Exception ex) {
+                System.err.println(ex);
+            }
         }
         return dieAsText;
     }
+
 }
