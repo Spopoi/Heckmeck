@@ -1,6 +1,10 @@
 package it.units.heckmeck;
+import Heckmeck.FileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.stream.*;
 import java.util.*;
 
@@ -8,7 +12,6 @@ import Heckmeck.Die;
 import Heckmeck.Dice;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.EnumSource;
 
 import static Heckmeck.Die.Face.*;
 
@@ -245,5 +248,15 @@ public class TestDice {
         }
     }
 
+    @Test
+    void convertDieOneIntoAString() throws Exception {
+        Die dieToTest = Die.generateDie(ONE);
+        URL dieOneResource = TestDice.class.getClassLoader().getResource("TEST_DIE");
+
+        String expectedString = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
+        String actualString = dieToTest.toString();
+
+        Assertions.assertEquals(expectedString, actualString);
+    }
 
 }

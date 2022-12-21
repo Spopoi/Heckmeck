@@ -1,4 +1,7 @@
 package Heckmeck;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import  java.util.*;
 
 import static java.util.Map.entry;
@@ -67,5 +70,17 @@ public class Die {
     public void rollDie(){
         int n = PRNG.nextInt(Face.values().length);
         setDieFace(Face.values()[n]);
+    }
+
+    @Override
+    public String toString() {
+        URL dieOneResource = Die.class.getClassLoader().getResource("TEST_DIE");
+        String dieAsText = null;
+        try {
+            dieAsText = FileReader.readDieOneFile(Path.of(dieOneResource.toURI()));
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+        return dieAsText;
     }
 }
