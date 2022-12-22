@@ -19,11 +19,15 @@ public class GameServer implements Runnable{
     private Socket clientSocket;
     private boolean hostClosedRoom = false;
     private Thread t1;
+    private int numOfPlayers;
+
+    public Game game;
 
 
     public GameServer(){
         try {
             ss = new ServerSocket(51734);
+            this.numOfPlayers = 0;
             //startThread(this);
 
         } catch (IOException e) {
@@ -31,23 +35,38 @@ public class GameServer implements Runnable{
         }
 
     }
+//TODO da cambiare probabilmente.. sarebbe bello se il numero venisse calcolato in base ai player nella stanza
+    public void setNumberOfPlayers(int numOfPlayers){
+        this.numOfPlayers = numOfPlayers;
+    }
 
     public void run() {
         try {
             //ss = new ServerSocket(51734);
             System.out.println("Waiting for client");
-            int numPlayers = 1;
+            int numOfPlayers = 0;
 
             while(!isRoomClosed()){
+
+                System.out.println("Waiting for connections: ");
                 clientSocket = ss.accept();
-                ClientHandler clientHandler = new ClientHandler(clientSocket, numPlayers);
+                ClientHandler clientHandler = new ClientHandler(clientSocket, numOfPlayers);
+                System.out.println("Accepted incoming connection #: "+ numOfPlayers);
                 clients.add(clientHandler);
-                numPlayers++;
-                if (numPlayers == 4) {
+                numOfPlayers++;
+                if (numOfPlayers == 7 || numOfPlayers == this.numOfPlayers ) {
                     closeRoom();
                 }
 
+
+
+                //game = new Game(output, input);
+                //game.init();
+                //game.play();
+
             }
+            TCPInputHandler input = new TCPInputHandler(this);
+            TCPOutputHandler output = new TCPOutputHandler(this);
 
             clients.stream().forEach(e-> new Thread(e).start());
 
@@ -64,6 +83,10 @@ public class GameServer implements Runnable{
 
     public void closeRoom(){
         hostClosedRoom = true;
+    }
+
+    public int getNumOfPlayers(){
+        return numOfPlayers;
     }
 
 

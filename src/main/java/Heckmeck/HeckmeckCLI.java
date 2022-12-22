@@ -12,6 +12,7 @@ public class HeckmeckCLI {
         Game game = new Game(output, input);
         game.init();
         game.play();
+
         /*output.showMenu();
         int numberOfPlayers = input.chooseNumberOfPlayers();
         Player[] players = new Player[numberOfPlayers];

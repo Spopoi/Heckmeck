@@ -15,16 +15,12 @@ public class TCPInputHandler implements InputHandler{
 
     @Override
     public boolean wantToPlay() throws IllegalInput {
-        return false;
+        return true;
     }
 
     @Override
     public int chooseNumberOfPlayers(){
-        try {
-            return getInputNumber();
-        } catch (NumberFormatException e){
-            throw new IllegalInput("Invalid input, please choose a number between 1 and 7");
-        }
+        return gameServer.getNumOfPlayers();
     }
 
     private int getInputNumber() {
@@ -33,6 +29,7 @@ public class TCPInputHandler implements InputHandler{
 
     @Override
     public String choosePlayerName() throws IllegalInput {
+
         return null;
     }
 

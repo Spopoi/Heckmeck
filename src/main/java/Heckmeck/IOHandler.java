@@ -6,7 +6,7 @@ public class IOHandler {
     private final InputHandler input;
     private final OutputHandler output;
 
-    public IOHandler(InputHandler input, OutputHandler output){
+    public IOHandler(InputHandler input, OutputHandler output){ //TODO qua input e output sono scambiati rispetto costruttore Game()
         this.input = input;
         this.output = output;
     }

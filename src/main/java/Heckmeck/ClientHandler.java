@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable{
-    private final int playerId;
+    public final int playerId;
     private String message;
     private Socket clientSocket;
     private PrintWriter out;
@@ -23,12 +23,20 @@ public class ClientHandler implements Runnable{
     public void run(){
         System.out.println("Connection in client handler ok, this is client thread #" + playerId);
         try {
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            this.out = new PrintWriter(clientSocket.getOutputStream(), true);
+            this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             this.message =  in.readLine();
-            if(message.equals("hello server")){
-                writeMessage("hello client "+ playerId);
+            while(true){
+
+                System.out.println("Hi");
+                if(message.equals("hello server")){
+                    writeMessage("hello client "+ playerId);
+                }
+
+                writeMessage("GET PLAYER_NAME");
+
             }
+
 
 
         } catch (IOException e) {
@@ -43,6 +51,7 @@ public class ClientHandler implements Runnable{
 
     public void writeMessage(String message){
         out.println(message);
+        out.flush();
     }
 
 }

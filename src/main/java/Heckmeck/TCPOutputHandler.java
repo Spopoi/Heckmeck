@@ -15,10 +15,11 @@ public class TCPOutputHandler implements OutputHandler{
     @Override
     public void printMessage(String message) {
         gameServer.clients.stream().forEach(client -> client.writeMessage(message));
-    }
+}
 
     @Override
     public void showDice(Dice dice) {
+        String diceObj = dice.toString();
 
     }
 
