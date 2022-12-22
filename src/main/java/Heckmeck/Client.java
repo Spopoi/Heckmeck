@@ -17,6 +17,8 @@ public class Client implements Runnable{
     private String hostIP;
     private int hostPortNumber;
 
+    private int playerID;
+
 
     public Client(){
         //Thread clientThread = new Thread(this);
@@ -40,13 +42,15 @@ public class Client implements Runnable{
 
 public String sendMessage(String msg) {
         out.println(msg);
+        out.flush();
         String resp = "";
         try {
+
             resp = in.readLine();
-            out.flush();
+
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error client reading message");
         }
         return resp;
     }
@@ -87,6 +91,14 @@ public String sendMessage(String msg) {
 
     @Override
     public void run() {
+        /*
+        String resp = sendMessage("hello server");
+        playerID = 1 ;// Integer.parseInt(resp.substring(resp.length()-1));
+        while(true){
+            if(readRxBuffer().equals("GET PLAYER_NAME")){
+                sendMessage("Player" + playerID);
+            }
+        }*/
         //startConnection(hostIP, hostPortNumber);
     }
 }

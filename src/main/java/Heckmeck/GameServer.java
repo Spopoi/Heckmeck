@@ -16,6 +16,8 @@ public class GameServer implements Runnable{
     //private BufferedReader in;
 
     public List<ClientHandler> clients = new ArrayList<ClientHandler>();
+
+    public ClientHandler currentClientPlayer;
     private Socket clientSocket;
     private boolean hostClosedRoom = false;
     private Thread t1;
@@ -45,7 +47,7 @@ public class GameServer implements Runnable{
             //ss = new ServerSocket(51734);
             System.out.println("Waiting for client");
             int numOfPlayers = 0;
-
+            int currentPlayerID = 0;
             while(!isRoomClosed()){
 
                 System.out.println("Waiting for connections: ");
@@ -65,10 +67,9 @@ public class GameServer implements Runnable{
                 //game.play();
 
             }
-            TCPInputHandler input = new TCPInputHandler(this);
-            TCPOutputHandler output = new TCPOutputHandler(this);
 
             clients.stream().forEach(e-> new Thread(e).start());
+            currentClientPlayer = getClientById(currentPlayerID);
 
 
 
@@ -87,6 +88,10 @@ public class GameServer implements Runnable{
 
     public int getNumOfPlayers(){
         return numOfPlayers;
+    }
+
+    private ClientHandler getClientById(int id){
+        return clients.get(id);
     }
 
 
