@@ -53,4 +53,16 @@ public class FileReader {
         return res.toString();
     }
 
+    public static Map<Die.Face, String> readDieFacesFromSingleJson(Path filePath) {
+        Gson gson = new Gson();
+        JsonReader reader = null;
+        try {
+            reader = new JsonReader(new java.io.FileReader(filePath.toString()));
+        } catch (FileNotFoundException ex) {
+            System.err.println(ex);
+        }
+        TypeToken<Map<Die.Face, String>> returnType = new TypeToken<>() {};
+        return gson.fromJson(reader, returnType);
+    }
+
 }

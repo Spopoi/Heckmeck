@@ -1,5 +1,6 @@
 package it.units.heckmeck;
 
+import Heckmeck.Die;
 import Heckmeck.FileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -123,6 +124,48 @@ public class TestFileReader {
         String dieAsText = FileReader.readDieFile(Path.of(dieResource.toURI()));
 
         Assertions.assertEquals(expectedDieAsText, dieAsText);
+    }
+
+    @Test
+    void readDieFaceToStringMapFromJson() throws Exception {
+        URL diceMapResource = TestFileReader.class.getClassLoader().getResource("DICE_MAP");
+        Map<Die.Face, String> obtainedMap;
+        Map<Die.Face, String> expectedMap = Map.ofEntries(
+                entry(Die.Face.ONE, """
+                .---------.
+                |         |
+                |    o    |
+                |         |
+                '---------'
+                """),
+                entry(Die.Face.TWO, """
+                .---------.
+                |      o  |
+                |         |
+                |  o      |
+                '---------'
+                """),
+                entry(Die.Face.THREE, """
+                .---------.
+                |      o  |
+                |    o    |
+                |  o      |
+                '---------'
+                """),
+                entry(Die.Face.WORM, """
+                .---------.
+                |   \\=\\   |
+                |   /=/   |
+                |   \\=\\   |
+                '---------'
+                """)
+        );
+
+        obtainedMap = FileReader.readDieFacesFromSingleJson(Path.of(diceMapResource.toURI()));
+
+        // Not exactly as expected. Can we live well the same or not??
+        // System.out.println(expectedMap.getClass() + " VS " + obtainedMap.getClass());
+        Assertions.assertEquals(expectedMap, obtainedMap);
     }
 
 
