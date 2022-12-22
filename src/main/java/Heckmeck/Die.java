@@ -1,4 +1,5 @@
 package Heckmeck;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import  java.util.*;
@@ -9,6 +10,8 @@ public class Die {
 
     private Face dieFace;
     private static final Random PRNG = new Random();
+
+    public static final String RESOURCE_FILE = "DIE_FACES";
 
     public enum Face {
         ONE,
@@ -36,6 +39,21 @@ public class Die {
             entry("4", Face.FOUR),
             entry("5", Face.FIVE),
             entry("w", Face.WORM));
+
+    private static final Map<Face, String> faceToDieAsText = FileReader.readDieFacesFromSingleJson(
+            getResourcePath()
+    );
+
+    private static Path getResourcePath() {
+        URL dieFacesResource = Die.class.getClassLoader().getResource(RESOURCE_FILE);
+        Path resourcePath = null;
+        try {
+            resourcePath = Path.of(dieFacesResource.toURI());
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
+        return resourcePath;
+    }
 
 
     //TODO: come inizializzare die
@@ -73,30 +91,7 @@ public class Die {
 
     @Override
     public String toString() {
-        String dieAsText = null;
-        if (dieFace==Face.ONE) {
-            URL dieOneResource = Die.class.getClassLoader().getResource("TEST_DIE_ONE");
-            try {
-                dieAsText = FileReader.readDieFile(Path.of(dieOneResource.toURI()));
-            } catch (Exception ex) {
-                System.err.println(ex);
-            }
-        } else if (dieFace == Face.TWO) {
-            URL dieTwoResource = Die.class.getClassLoader().getResource("TEST_DIE_TWO");
-            try {
-                dieAsText = FileReader.readDieFile(Path.of(dieTwoResource.toURI()));
-            } catch (Exception ex) {
-                System.err.println(ex);
-            }
-        } else {
-            URL dieThreeResource = Die.class.getClassLoader().getResource("TEST_DIE_THREE");
-            try {
-                dieAsText = FileReader.readDieFile(Path.of(dieThreeResource.toURI()));
-            } catch (Exception ex) {
-                System.err.println(ex);
-            }
-        }
-        return dieAsText;
+        return faceToDieAsText.get(dieFace);
     }
 
 }
