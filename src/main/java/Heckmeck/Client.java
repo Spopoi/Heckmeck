@@ -31,9 +31,10 @@ public class Client implements Runnable{
             hostIP = ip;
             hostPortNumber = port;
             clientSocket = new Socket(hostIP, hostPortNumber);
+
             this.out = new PrintWriter(clientSocket.getOutputStream(), true);
             this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            System.out.println("Connection established");
+            //System.out.println("Connection established" + clientSocket.isConnected());
         } catch (IOException e) {
             System.out.println("Error in starting client connection()");
         }

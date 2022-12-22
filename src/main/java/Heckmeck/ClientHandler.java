@@ -26,18 +26,31 @@ public class ClientHandler implements Runnable{
             this.out = new PrintWriter(clientSocket.getOutputStream(), true);
             this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-
+            while(true){
+                this.message =  in.readLine();
+                if(this.message.equals("hello server")){
+                    writeMessage("hello client " + playerId);
+                }
+                else{
+                    writeMessage("OK");
+                }
+            }
+            /*
             while(true){
 
                 this.message =  in.readLine();
                 //message = readReceivedMessage();
 
-                if(this.message.equals("hello server")){
-                    writeMessage("hello client " + playerId);
+
+
+                if(this.message.equals("Player12")){
+                    writeMessage("OKK");
+                }
+                if(){
+                    writeMessage("OKK");
                 }
 
-
-            }
+            }  */
 
 
 
@@ -51,10 +64,20 @@ public class ClientHandler implements Runnable{
         return this.message;
     }
 
+    public String ReadIncomingMessage(){
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void writeMessage(String message){
         out.println(message);
         out.flush();
 
     }
+
+
 
 }

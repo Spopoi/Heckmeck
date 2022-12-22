@@ -32,9 +32,9 @@ public class TCPInputHandler implements InputHandler{
 
         //gameServer.clients.stream().forEach(client -> client.writeMessage("GET PLAYER_NAME"));
         gameServer.currentClientPlayer.writeMessage("GET PLAYER_NAME");
+
         String playerName = gameServer.currentClientPlayer.readReceivedMessage();
-        String name = playerName + "2";
-        String abc = playerName + name;
+
         return playerName;
     }
 

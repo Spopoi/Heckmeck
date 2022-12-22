@@ -4,6 +4,7 @@ import Heckmeck.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,6 +12,13 @@ public class TestClientServer {
 
 private GameServer gameServer = new GameServer();
 
+    void waitOneSec(){
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
     void init_server_socket(){
@@ -25,45 +33,75 @@ private GameServer gameServer = new GameServer();
         assertTrue(gameServer.ss.getLocalPort() == 51734);
         gameServer.close();
     }
+    @Test
+    void get_connected_client(){
+
+        Thread serverThread = new Thread(gameServer);
+        serverThread.start();
+
+        Client cli = new Client();
+        Thread cliThread = new Thread(cli);
+        cliThread.start();
+
+        gameServer.setNumberOfPlayers(1);
+
+
+        cli.startConnection("127.0.0.1", 51734);
+        waitOneSec();
+
+        assertEquals("ClientHandler", gameServer.clients.get(0).getClass().getSimpleName());
+    }
 
 
     @Test
     void send_message(){
 
-        Client cli = new Client();
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
 
+        Client cli = new Client();
+        Thread cliThread = new Thread(cli);
+        cliThread.start();
+
+        gameServer.setNumberOfPlayers(1);
+
 
         cli.startConnection("127.0.0.1", 51734);
-        System.out.println("Client connected");
-        gameServer.closeRoom();
-        String response = cli.sendMessage("hello server");
-        System.out.println(response);
-        TCPInputHandler tcpInput = new TCPInputHandler(gameServer);
+        waitOneSec();
 
-        assertEquals(response, "hello client 0");
+        System.out.println(gameServer.clients);
+        //String response = cli.sendMessage("hello server");
+        //String request = gameServer.currentClientPlayer.ReadIncomingMessage();
+        gameServer.currentClientPlayer.writeMessage("hello client 0");
+        String message = cli.readRxBuffer();
+        System.out.println(message);
+
+
+        assertEquals(message, "hello client 0");
     }
 
 
     @Test
     void recieve_message(){
-        Client cli = new Client();
+
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
 
-        TCPInputHandler tcpInput = new TCPInputHandler(gameServer);
+        gameServer.setNumberOfPlayers(1);
+
+        Client cli = new Client();
+        Thread cliThread = new Thread(cli);
+        cliThread.start();
 
         cli.startConnection("127.0.0.1", 51734);
-        gameServer.closeRoom();
+        waitOneSec();
 
-        System.out.println("Client connected");
         String response = cli.sendMessage("hello server");
-        response = cli.sendMessage("hello server");
+
         int playerId = 0;
         System.out.println(playerId);
-        String request = tcpInput.readMessage(playerId);
+        String request = gameServer.clients.get(0).readReceivedMessage();
         System.out.println(response);
 
         System.out.println(request);
@@ -116,7 +154,7 @@ private GameServer gameServer = new GameServer();
     }
 
     @Test
-    void choose_player_name(){
+    void select_player_name(){
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
 
@@ -127,29 +165,28 @@ private GameServer gameServer = new GameServer();
         gameServer.setNumberOfPlayers(1);
         cli1.startConnection("127.0.0.1", 51734);
 
+        TCPInputHandler tcpInput = new TCPInputHandler(gameServer);
+        TCPOutputHandler tcpOut = new TCPOutputHandler(gameServer);
+
 
         String response1 = cli1.sendMessage("hello server");
         System.out.println(response1);
-        gameServer.currentClientPlayer.writeMessage("GET PLAYER_NAME");
+        tcpOut.printMessage("GET PLAYER_NAME");
+        //gameServer.currentClientPlayer.writeMessage("GET PLAYER_NAME");
 
-        String command = cli1.readRxBuffer();
-        System.out.println("command is " + command);
-        String name = "";
-        TCPInputHandler tcpInput = new TCPInputHandler(gameServer);
+        String receivedCommand = cli1.readRxBuffer();
+        System.out.println("command is " + receivedCommand);
 
         int playerId = 0;
-        if(command.equals("GET PLAYER_NAME")){
-            System.out.println("after if");
-
+        String request = "";
+        if(receivedCommand.equals("GET PLAYER_NAME")){
             String resp = cli1.sendMessage("Player1");
 
             System.out.println("resp is " + resp);
-            String request = tcpInput.readMessage(playerId);
-            System.out.println("Name was: "+ name);
-
+            request = tcpInput.readMessage(playerId);
         }
 
-        assertEquals("Player1", name);
+        assertEquals("Player1", request);
 
 
     }
@@ -176,6 +213,7 @@ private GameServer gameServer = new GameServer();
         cli1.startConnection("127.0.0.1", 51734);
         cli2.startConnection("127.0.0.1", 51734);
         cli3.startConnection("127.0.0.1", 51734);
+        waitOneSec();
 
         System.out.println("All Clients connected");
 
@@ -185,8 +223,15 @@ private GameServer gameServer = new GameServer();
         TCPOutputHandler tcpOutput = new TCPOutputHandler(gameServer);
         IOHandler io = new IOHandler(tcpInput, tcpOutput);
         String name="niet";
-        List<String> players = gameServer.clients.stream().map(client -> io.choosePlayerName(client.playerId)).toList();
-        System.out.println(players);
+        System.out.println(io.choosePlayerName(gameServer.clients.get(0).playerId));
+
+
+
+
+
+
+        //List<String> players = gameServer.clients.stream().map(client -> io.choosePlayerName(client.playerId)).toList();
+        //System.out.println(players);
         //gameServer.clients.stream().forEach(client -> client.writeMessage("GET PLAYER_NAME"));
 
 
@@ -194,7 +239,7 @@ private GameServer gameServer = new GameServer();
         /*if(cli1.readRxBuffer().equals("GET PLAYER_NAME")){      // verifica se nel buffer di ricezione client c'è il comando
             String playerName = "Player1";
             cli1.sendMessage(playerName);
-            name = gameServer.clients.get(0).readReceivedMessage();
+            name
         }*/
         System.out.println("Name was: "+ name);
 

@@ -46,19 +46,25 @@ public class GameServer implements Runnable{
         try {
             //ss = new ServerSocket(51734);
             System.out.println("Waiting for client");
-            int numOfPlayers = 0;
+            int playerID = 0;
             int currentPlayerID = 0;
+
+            //openRoom();
             while(!isRoomClosed()){
 
                 System.out.println("Waiting for connections: ");
                 clientSocket = ss.accept();
-                ClientHandler clientHandler = new ClientHandler(clientSocket, numOfPlayers);
-                System.out.println("Accepted incoming connection #: "+ numOfPlayers);
-                clients.add(clientHandler);
-                numOfPlayers++;
-                if (numOfPlayers == 7 || numOfPlayers == this.numOfPlayers ) {
+
+                ClientHandler clientHandler = new ClientHandler(clientSocket, playerID);
+
+                System.out.println("Accepted incoming connection #: "+ playerID);
+                this.clients.add(clientHandler);
+
+                playerID++;
+                if (playerID == 7 || playerID == numOfPlayers ) {
                     closeRoom();
                 }
+
 
 
 
@@ -68,14 +74,19 @@ public class GameServer implements Runnable{
 
             }
 
+
             clients.stream().forEach(e-> new Thread(e).start());
-            currentClientPlayer = getClientById(currentPlayerID);
+            this.currentClientPlayer = clients.get(0);
+            //System.out.println(this.currentClientPlayer);
+
+            //currentClientPlayer = getClientById(currentPlayerID);
 
 
 
         } catch (IOException e) {
         System.out.println("Error in acceptConnections()");
-        }
+    }
+
     }
 
     public boolean isRoomClosed(){
@@ -133,4 +144,7 @@ public class GameServer implements Runnable{
     }
 
 
+    public void openRoom() {
+        hostClosedRoom = false;
+    }
 }
