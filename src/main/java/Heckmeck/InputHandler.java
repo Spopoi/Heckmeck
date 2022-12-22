@@ -5,7 +5,6 @@ import exception.IllegalInput;
 import java.io.IOException;
 
 public interface InputHandler{
-
     boolean wantToPlay() throws IllegalInput;
     public int chooseNumberOfPlayers() throws IllegalInput;
     public String choosePlayerName() throws IllegalInput;

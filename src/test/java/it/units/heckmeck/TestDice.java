@@ -15,7 +15,7 @@ import static Heckmeck.Die.Face.*;
 public class TestDice {
 
     @Test
-    void getFaceByNumber(){                // Fare tostring()
+    void getFaceByNumber(){
 
         Assertions.assertEquals("ONE", Die.Face.ONE.toString());
         Assertions.assertEquals("TWO", Die.Face.TWO.toString());

@@ -11,6 +11,7 @@ public class IOHandler {
         this.output = output;
     }
 
+
     public void printMessage(String message){
         output.printMessage(message);
     }
