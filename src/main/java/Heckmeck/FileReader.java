@@ -38,21 +38,6 @@ public class FileReader {
         return res.toString();
     }
 
-    public static String readDieFile(Path filePath) {
-        StringBuilder res = new StringBuilder();
-        try (InputStream in = Files.newInputStream(filePath);
-             BufferedReader reader =
-                     new BufferedReader(new InputStreamReader(in))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                res.append(line).append("\n");  // Notice that will add a newline at the end
-            }
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
-        return res.toString();
-    }
-
     public static Map<Die.Face, String> readDieFacesFromSingleJson(Path filePath) {
         Gson gson = new Gson();
         JsonReader reader = null;

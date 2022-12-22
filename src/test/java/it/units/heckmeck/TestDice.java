@@ -12,6 +12,7 @@ import Heckmeck.Die;
 import Heckmeck.Dice;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static Heckmeck.Die.Face.*;
 
@@ -249,15 +250,17 @@ public class TestDice {
     }
 
     @ParameterizedTest
-    @CsvSource({"ONE, TEST_DIE_ONE", "TWO, TEST_DIE_TWO", "THREE, TEST_DIE_THREE"})
-    void convertDieIntoAString(Die.Face dieFace, String fileName) throws Exception {
+    @EnumSource
+    void convertDieIntoItsTextRepresentation(Die.Face dieFace) throws Exception {
+        URL diceFacesAsTextResource = TestDice.class.getClassLoader().getResource("DICE_MAP");
+        Map<Die.Face, String> dieFaceToItsTextRepresentation = FileReader
+                .readDieFacesFromSingleJson(Path.of(diceFacesAsTextResource.toURI()));
         Die dieToTest = Die.generateDie(dieFace);
-        URL dieTwoResource = TestDice.class.getClassLoader().getResource(fileName);
 
-        String expectedString = FileReader.readDieFile(Path.of(dieTwoResource.toURI()));
-        String actualString = dieToTest.toString();
+        String expectedTextRepresentation = dieFaceToItsTextRepresentation
+                .get(dieFace);
+        String actualTextRepresentation = dieToTest.toString();
 
-        Assertions.assertEquals(expectedString, actualString);
+        Assertions.assertEquals(expectedTextRepresentation, actualTextRepresentation);
     }
-
 }

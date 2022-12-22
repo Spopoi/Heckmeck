@@ -4,8 +4,6 @@ import Heckmeck.Die;
 import Heckmeck.FileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -17,30 +15,6 @@ import static java.util.Map.entry;
 public class TestFileReader {
 
     private static final String LOGO = getExpectedLogo();
-
-    public static final Map<String, String> fileNameToCorrectDieFace = Map.ofEntries(
-            entry("TEST_DIE_ONE", """
-                .---------.
-                |         |
-                |    o    |
-                |         |
-                '---------'
-                """),
-            entry("TEST_DIE_TWO", """
-                .---------.
-                |      o  |
-                |         |
-                |  o      |
-                '---------'
-                """),
-            entry("TEST_DIE_THREE", """
-                .---------.
-                |      o  |
-                |    o    |
-                |  o      |
-                '---------'
-                """)
-    );
 
 
     @Test
@@ -115,17 +89,6 @@ public class TestFileReader {
         Assertions.assertEquals(LOGO, actualLogo);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"TEST_DIE_ONE", "TEST_DIE_TWO", "TEST_DIE_THREE"})
-    void readSingleDieTextRepresentation(String fileName) throws Exception {
-        URL dieResource = TestFileReader.class.getClassLoader().getResource(fileName);
-        String expectedDieAsText = fileNameToCorrectDieFace.get(fileName);
-
-        String dieAsText = FileReader.readDieFile(Path.of(dieResource.toURI()));
-
-        Assertions.assertEquals(expectedDieAsText, dieAsText);
-    }
-
     @Test
     void readDieFaceToStringMapFromJson() throws Exception {
         URL diceMapResource = TestFileReader.class.getClassLoader().getResource("DICE_MAP");
@@ -150,6 +113,20 @@ public class TestFileReader {
                 |      o  |
                 |    o    |
                 |  o      |
+                '---------'
+                """),
+                entry(Die.Face.FOUR, """
+                .---------.
+                |  o   o  |
+                |         |
+                |  o   o  |
+                '---------'
+                """),
+                entry(Die.Face.FIVE, """
+                .---------.
+                |  o   o  |
+                |    o    |
+                |  o   o  |
                 '---------'
                 """),
                 entry(Die.Face.WORM, """
