@@ -126,7 +126,7 @@ public class Game {
     private Player[] setupPlayers(int numberOfPlayers) {
         Player[] playersList = new Player[numberOfPlayers];
         for(int i=0; i<numberOfPlayers; i++){
-            String playerName = io.choosePlayerName(i + 1);
+            String playerName = io.choosePlayerName(i );
             while(isNameAlreadyPicked(playerName,playersList)){
                 io.printMessage("Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(i+1);
@@ -138,5 +138,9 @@ public class Game {
 
     private boolean isNameAlreadyPicked(String name, Player[] playersList){
         return Arrays.stream(playersList).filter(Objects::nonNull).anyMatch(player -> player.getName().equals(name));
+    }
+
+    public Player[] getPlayers(){
+        return players;
     }
 }

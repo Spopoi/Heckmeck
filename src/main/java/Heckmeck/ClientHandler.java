@@ -30,6 +30,7 @@ public class ClientHandler implements Runnable{
                 this.message =  in.readLine();
                 if(this.message.equals("hello server")){
                     writeMessage("hello client " + playerId);
+                    System.out.println("Server writing message: " + "hello client " + playerId);
                 }
                 else{
                     writeMessage("OK");
@@ -60,6 +61,8 @@ public class ClientHandler implements Runnable{
     }
 
 
+
+
     public String readReceivedMessage(){
         return this.message;
     }
@@ -73,6 +76,7 @@ public class ClientHandler implements Runnable{
     }
 
     public void writeMessage(String message){
+
         out.println(message);
         out.flush();
 

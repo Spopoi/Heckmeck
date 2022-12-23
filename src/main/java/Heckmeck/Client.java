@@ -17,6 +17,10 @@ public class Client implements Runnable{
     private String hostIP;
     private int hostPortNumber;
 
+    private String message;
+
+    private boolean connected = false;
+
     private int playerID;
 
 
@@ -34,6 +38,8 @@ public class Client implements Runnable{
 
             this.out = new PrintWriter(clientSocket.getOutputStream(), true);
             this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            connected = true;
+
             //System.out.println("Connection established" + clientSocket.isConnected());
         } catch (IOException e) {
             System.out.println("Error in starting client connection()");
@@ -60,10 +66,15 @@ public String sendMessage(String msg) {
         String resp = null;
         try {
             resp = in.readLine();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return resp;
+    }
+
+    public String readReceivedMessage(){
+        return this.message;
     }
 
     public void stopConnection() {
@@ -84,22 +95,36 @@ public String sendMessage(String msg) {
         output.showWelcomeMessage();
         IOHandler io = new IOHandler(input, output);
         if(readRxBuffer().equals("GET PLAYER_NAME")){
-            String playerName = input.choosePlayerName();
+            String playerName = input.choosePlayerName(0);
             cli.sendMessage(playerName);
         }
 
     }
 
+    public void waitRequest() {
+
+        if (message.equals("GET PLAYER_NAME")) {
+                sendMessage("Player" + playerID);
+
+        }
+    }
+
     @Override
     public void run() {
-        /*
-        String resp = sendMessage("hello server");
-        playerID = 1 ;// Integer.parseInt(resp.substring(resp.length()-1));
-        while(true){
-            if(readRxBuffer().equals("GET PLAYER_NAME")){
-                sendMessage("Player" + playerID);
+        /*while(true){
+            System.out.println("Client side connection: " + connected);
+            if(connected){
+                message = readRxBuffer();
+                System.out.println("Client side message: "+ message);
+
+                if (message.equals("Insert the name for player0")) {
+                    sendMessage("Player" + playerID);
+                }
+
             }
         }*/
+
+
         //startConnection(hostIP, hostPortNumber);
     }
 }

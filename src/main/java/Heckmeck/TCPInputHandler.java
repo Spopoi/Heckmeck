@@ -1,7 +1,6 @@
 package Heckmeck;
 
 import exception.IllegalInput;
-import Heckmeck.GameServer;
 
 public class TCPInputHandler implements InputHandler{
     //private GameServer gameServer = new GameServer();
@@ -28,12 +27,11 @@ public class TCPInputHandler implements InputHandler{
     }
 
     @Override
-    public String choosePlayerName() throws IllegalInput {
+    public String choosePlayerName(int playerNumber) throws IllegalInput {
 
         //gameServer.clients.stream().forEach(client -> client.writeMessage("GET PLAYER_NAME"));
-        gameServer.currentClientPlayer.writeMessage("GET PLAYER_NAME");
 
-        String playerName = gameServer.currentClientPlayer.readReceivedMessage();
+        String playerName = readMessage(playerNumber);
 
         return playerName;
     }

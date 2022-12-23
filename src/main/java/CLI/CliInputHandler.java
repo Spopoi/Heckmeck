@@ -4,7 +4,6 @@ import Heckmeck.Die;
 import Heckmeck.InputHandler;
 import exception.IllegalInput;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class CliInputHandler implements InputHandler {
@@ -32,7 +31,7 @@ public class CliInputHandler implements InputHandler {
     }
 
     @Override
-    public String choosePlayerName() {
+    public String choosePlayerName(int playerNumber) {
         return getInputString();
     }
 
