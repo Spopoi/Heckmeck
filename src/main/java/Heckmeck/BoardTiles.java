@@ -1,7 +1,5 @@
 package Heckmeck;
 
-import exception.IllegalTileAddition;
-import exception.IllegalTileSelection;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -56,11 +54,12 @@ public class BoardTiles implements TilesCollection {
         for (int i = 0; i < maxNumberOfLines; i++) {
             for (var tile : tiles) {
                 result.append(tile.toString().split("\n")[i]);
+                result.append(" ");
             }
             result.append("\n");
         }
 
-        return result.toString().stripTrailing();  // depends if we want or not the ending \n
+        return result.toString();  // depends if we want or not the ending \n
     }
 
     private int getShortestTileHeight() {

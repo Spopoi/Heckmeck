@@ -78,20 +78,7 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showDice(Dice dice){    //TODO Provare a fondere in un unico StringBuilder
-        StringBuilder topRow = new StringBuilder();
-        StringBuilder firstRow = new StringBuilder();
-        StringBuilder secondRow = new StringBuilder();
-        StringBuilder thirdRow = new StringBuilder();
-        StringBuilder bottomRow = new StringBuilder();
-
-        dice.getDiceList().forEach(die->{
-            topRow.append(getTopDieRow());
-            firstRow.append(getFirstDieRow(die));
-            secondRow.append(getSecondDieRow(die));
-            thirdRow.append(getThirdDieRow(die));
-            bottomRow.append(getDieBottomRow());
-        });
-        print(topRow + newLine + firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
+        print(Dice.diceToString(dice.getDiceList()));
     }
 
     @Override
