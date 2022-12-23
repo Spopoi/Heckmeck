@@ -77,4 +77,28 @@ public class Dice {
         List<Die> choosableDie = diceList.stream().filter(e -> !isFaceChosen(e.getDieFace())).toList();
         return choosableDie.size() != 0;
     }
+
+    public static String diceToString(List<Die> listOfDice) {
+        int maxNumberOfLines = getShortestDieHeight(listOfDice);
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < maxNumberOfLines; i++) {
+            for (var die : listOfDice) {
+                result.append(die.toString().split("\n")[i]);
+                result.append(" ");
+            }
+            result.append("\n");
+        }
+
+        return result.toString();  // depends if we want or not the ending \n
+    }
+
+    private static int getShortestDieHeight(List<Die> diceList) {
+        return diceList.stream()
+                .map(Die::toString)
+                .mapToInt(dieAsText -> (int) dieAsText.lines().count())
+                .min()
+                .orElse(0);
+    }
 }
