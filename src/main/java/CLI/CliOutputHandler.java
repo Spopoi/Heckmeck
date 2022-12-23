@@ -11,41 +11,6 @@ import java.util.stream.Stream;
 public class CliOutputHandler implements OutputHandler {
 
     public static final String LOGO_FILE = "LOGO";
-
-    private static final String[] faceOne = {   "|         | ",
-                                                "|    o    | ",
-                                                "|         | "  };
-
-    private static final String[] faceTwo = {   "|      o  | ",
-                                                "|         | ",
-                                                "|  o      | "  };
-
-    private static final String[] faceThree ={  "|      o  | ",
-                                                "|    o    | ",
-                                                "|  o      | "  };
-
-    private static final String[] faceFour = {  "|  o   o  | ",
-                                                "|         | ",
-                                                "|  o   o  | "  };
-
-    private static final String[] faceFive = {  "|  o   o  | ",
-                                                "|    o    | ",
-                                                "|  o   o  | "  };
-
-    private static final String[] faceWorm = {      "|   \\=\\   | ",
-                                                    "|   /=/   | ",
-                                                    "|   \\=\\   | "  };
-
-    private static final Map<Die.Face, String[]> dieToString =
-            Collections.unmodifiableMap(new HashMap<Die.Face, String[]>() {{
-                put(Die.Face.ONE,   faceOne);
-                put(Die.Face.TWO,   faceTwo);
-                put(Die.Face.THREE, faceThree);
-                put(Die.Face.FOUR,  faceFour);
-                put(Die.Face.FIVE,  faceFive);
-                put(Die.Face.WORM,  faceWorm);
-            }});
-
     private static final String[] oneWorm = {"|  ~   |", "|      |"};
     private static final String[] twoWorms = {"|  ~~  |", "|      |"};
     private static final String[] threeWorms = {"|  ~~  |", "|  ~   |"};
@@ -174,22 +139,6 @@ public class CliOutputHandler implements OutputHandler {
     @Override
     public void showWantToPlay() {
         print("Do you want to start a new game? Press 'y' for playing or 'n' for quitting");
-    }
-
-    public static String getTopDieRow(){
-        return ".---------. ";
-    }
-    public static String getFirstDieRow(Die die){
-        return dieToString.get(die.getDieFace())[0];
-    }
-    public static String getSecondDieRow(Die die){
-        return dieToString.get(die.getDieFace())[1];
-    }
-    public static String getThirdDieRow(Die die){
-        return dieToString.get(die.getDieFace())[2];
-    }
-    public static String getDieBottomRow(){
-        return "'---------' ";
     }
 
     private static String getBottomTilesRow() {

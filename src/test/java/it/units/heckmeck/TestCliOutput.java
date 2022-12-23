@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 
 public class TestCliOutput {
@@ -32,7 +31,7 @@ public class TestCliOutput {
 
 
     @Test
-    void printInitialBoardConfiguration() throws IOException {
+    void printInitialBoardConfiguration() {
         BoardTiles boardTiles = BoardTiles.init();
 
         setSystemOut(outStream);
@@ -42,7 +41,7 @@ public class TestCliOutput {
     }
 
     @Test
-    void printEightOnesAsDiceResult() throws IOException {
+    void printEightOnesAsDiceResult() {
         Dice dice = Dice.init();
 
         dice.eraseDice();
@@ -56,7 +55,7 @@ public class TestCliOutput {
     }
 
     @Test
-    void printAllFacesAsDiceResult() throws IOException {
+    void printAllFacesAsDiceResult() {
         Dice dice = Dice.init();
 
         dice.eraseDice();
@@ -73,7 +72,7 @@ public class TestCliOutput {
     }
 
     @Test
-    void printInitialPlayerStatus() throws IOException {
+    void printInitialPlayerStatus() {
         setSystemOut(outStream);
         Dice dice = Dice.init();
         Player player1 = Player.generatePlayer(PLAYER_NAME);
