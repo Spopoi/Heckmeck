@@ -48,10 +48,10 @@ public class IOHandler {
         }
     }
     public String choosePlayerName(int playerNumber){
-        output.printMessage("Insert the name for player" + playerNumber+1);
+        output.printMessage("Insert the name for player" + (playerNumber+1));
         while(true) {
             try {
-                String playerName = input.choosePlayerName(playerNumber);
+                String playerName = input.choosePlayerName(playerNumber); // TODO agggiunta del parametro.. non serve se gestiamo currentClientPlayer
                 if (playerName.isBlank()) throw new IllegalInput("Blank name, choose a valid a one");
                 else return playerName;
             } catch (IllegalInput e) {

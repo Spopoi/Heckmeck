@@ -5,9 +5,9 @@ import static Heckmeck.Die.Face;
 
 public class Game {
 
-    private Player[] players;
-    private Dice dice;
-    private BoardTiles boardTiles;
+    public Player[] players;
+    public Dice dice;
+    public BoardTiles boardTiles;
     private final IOHandler io;
 
     private Player actualPlayer;
@@ -126,7 +126,7 @@ public class Game {
     private Player[] setupPlayers(int numberOfPlayers) {
         Player[] playersList = new Player[numberOfPlayers];
         for(int i=0; i<numberOfPlayers; i++){
-            String playerName = io.choosePlayerName(i );
+            String playerName = io.choosePlayerName(i);
             while(isNameAlreadyPicked(playerName,playersList)){
                 io.printMessage("Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(i+1);

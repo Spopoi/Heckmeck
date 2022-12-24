@@ -1,6 +1,9 @@
 package it.units.heckmeck;
 
+import CLI.CliOutputHandler;
+import GUI.Tiles;
 import Heckmeck.*;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -12,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestClientServer {
 
 private GameServer gameServer = new GameServer();
+Gson gson = new Gson();
+
 
     void waitOneSec(){
         try {
@@ -229,10 +234,50 @@ private GameServer gameServer = new GameServer();
 
     }
 
-
-
     @Test
     void init_game_check_players(){
+        Thread serverThread = new Thread(gameServer);
+        serverThread.start();
+        Client cli1 = new Client();
+        Thread cli1Thread = new Thread(cli1);
+        cli1Thread.start();
+        Client cli2 = new Client();
+        Thread cli2Thread = new Thread(cli2);
+        cli2Thread.start();
+        Client cli3 = new Client();
+        Thread cli3Thread = new Thread(cli3);
+        cli3Thread.start();
+
+        gameServer.setNumberOfPlayers(3);
+
+        cli1.startConnection("127.0.0.1", 51734);
+        cli2.startConnection("127.0.0.1", 51734);
+        cli3.startConnection("127.0.0.1", 51734);
+        waitOneSec();
+
+        TCPInputHandler tcpInput = new TCPInputHandler(gameServer);
+        TCPOutputHandler tcpOutput = new TCPOutputHandler(gameServer);
+
+        System.out.println("All Clients connected");
+
+        Game game = new Game(tcpOutput, tcpInput);
+        //Questi messaggi andrebbero triggerati da un comando server
+        cli1.sendMessage("Antonio");
+        cli2.sendMessage("Mario");
+        cli3.sendMessage("Giorgio");
+
+        game.init();
+
+        Arrays.stream(game.getPlayers()).forEach(e -> System.out.println(e.getName()));
+        Player[] players = game.getPlayers();
+        assertEquals(players[0].getName(), "Antonio");
+        assertEquals(players[1].getName(), "Mario");
+        assertEquals(players[2].getName(), "Giorgio");
+        gameServer.close();
+    }
+
+    @Test
+    void recieve_game_obj(){
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -263,25 +308,42 @@ private GameServer gameServer = new GameServer();
         cli3.sendMessage("Giorgio");
 
         game.init();
+        IOHandler io = new IOHandler(tcpInput, tcpOutput);
 
-        Arrays.stream(game.getPlayers()).forEach(e -> System.out.println(e.getName()));
+        //Lettura manuale lato client dei messaggi incoming TODO implementare client
+        System.out.println(cli1.readRxBuffer()); //Choose number of players between 2 and 7:
+        System.out.println(cli1.readRxBuffer()); //Insert the name for player1
+        System.out.println(cli1.readRxBuffer()); //Insert the name for player2
+        System.out.println(cli1.readRxBuffer()); //Insert the name for player3
+
         Player[] players = game.getPlayers();
-        assertEquals(players[0].getName(), "Antonio");
-        assertEquals(players[1].getName(), "Mario");
-        assertEquals(players[2].getName(), "Giorgio");
-        gameServer.close();
+
+        io.showBoardTiles(game.boardTiles);
+        waitOneSec();
+        String tilesString = cli1.readRxBuffer();
+        System.out.println("Tiles are: " + tilesString );
+
+        io.showDice(game.dice);
+        waitOneSec();
+        String diceString = cli1.readRxBuffer();
+        System.out.println("Dice are: " + diceString);
+
+        io.showPlayerData(players[0], game.dice, players);
+        waitOneSec();
+        String playersString = cli1.readRxBuffer();
+        System.out.println("Players are: " + playersString);
+
+        BoardTiles tiles = gson.fromJson(tilesString , BoardTiles.class);
+        Dice dice = gson.fromJson(diceString , Dice.class);
+        Player[] playersFromTCP = gson.fromJson(playersString , Player[].class);
+
+        CliOutputHandler cliOut = new CliOutputHandler();
+        cliOut.showTiles(tiles);
+        cliOut.showPlayerData(players[0], dice, playersFromTCP);
+        cliOut.showDice(dice);
+        //assertTrue(tiles.toString().equals(game.boardTiles.toString())); //TODO capire come fare a dire che sono uguali
+        //assertTrue(dice.toString().equals(game.dice));
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

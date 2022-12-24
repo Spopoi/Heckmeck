@@ -1,6 +1,10 @@
 package Heckmeck;
 
+import com.google.gson.Gson;
+
 public class TCPOutputHandler implements OutputHandler{
+
+    Gson gson = new Gson();
 
     enum action{
 
@@ -19,17 +23,22 @@ public class TCPOutputHandler implements OutputHandler{
 
     @Override
     public void showDice(Dice dice) {
-        String diceObj = dice.toString();
+        String jsonString = gson.toJson(dice);
+        printMessage(jsonString);
 
     }
 
     @Override
     public void showTiles(BoardTiles boardTiles) {
+        String jsonString = gson.toJson(boardTiles);
+        printMessage(jsonString);
 
     }
 
     @Override
     public void showPlayerData(Player player, Dice dice, Player[] players) {
+        String playerString = gson.toJson(players);
+        printMessage(playerString);
 
     }
 

@@ -117,9 +117,6 @@ public String sendMessage(String msg) {
                 message = readRxBuffer();
                 System.out.println("Client side message: "+ message);
 
-                if (message.equals("Insert the name for player0")) {
-                    sendMessage("Player" + playerID);
-                }
 
             }
         }*/

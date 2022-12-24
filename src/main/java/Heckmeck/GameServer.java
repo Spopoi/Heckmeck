@@ -143,7 +143,6 @@ public class GameServer implements Runnable{
 
     }
 
-
     public void openRoom() {
         hostClosedRoom = false;
     }
