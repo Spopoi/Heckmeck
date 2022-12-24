@@ -318,17 +318,17 @@ Gson gson = new Gson();
 
         Player[] players = game.getPlayers();
 
-        io.showBoardTiles(game.boardTiles);
+        io.showBoardTiles(game.getBoardTiles());
         waitOneSec();
         String tilesString = cli1.readRxBuffer();
         System.out.println("Tiles are: " + tilesString );
 
-        io.showDice(game.dice);
+        io.showDice(game.getDice());
         waitOneSec();
         String diceString = cli1.readRxBuffer();
         System.out.println("Dice are: " + diceString);
 
-        io.showPlayerData(players[0], game.dice, players);
+        io.showPlayerData(players[0], game.getDice(), players);
         waitOneSec();
         String playersString = cli1.readRxBuffer();
         System.out.println("Players are: " + playersString);

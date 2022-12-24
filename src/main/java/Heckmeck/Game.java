@@ -5,9 +5,9 @@ import static Heckmeck.Die.Face;
 
 public class Game {
 
-    public Player[] players;
-    public Dice dice;
-    public BoardTiles boardTiles;
+    private Player[] players;
+    private Dice dice;
+    private BoardTiles boardTiles;
     private final IOHandler io;
 
     private Player actualPlayer;
@@ -143,4 +143,18 @@ public class Game {
     public Player[] getPlayers(){
         return players;
     }
+
+
+    public BoardTiles getBoardTiles(){
+        return boardTiles;
+    }
+    public Dice getDice(){
+        return dice;
+    }
+    public Player getActualPlayer(){
+        return actualPlayer;
+    }
 }
+
+
+
