@@ -10,7 +10,7 @@ public class BoardTiles implements TilesCollection {
     public static final int numberOfTiles = 16;
     private TreeSet<Tile> tiles;
 
-    public BoardTiles(TreeSet<Tile> tiles){
+    public BoardTiles(TreeSet<Tile> tiles) {
         this.tiles = tiles;
     }
     public static BoardTiles init(){
@@ -18,7 +18,7 @@ public class BoardTiles implements TilesCollection {
         return new BoardTiles(new TreeSet<>(tiles));
     }
 
-    public TreeSet<Tile> getTiles(){
+    public TreeSet<Tile> getTiles() {
         return tiles;
     }
 
@@ -47,4 +47,36 @@ public class BoardTiles implements TilesCollection {
         tiles.remove(tiles.last());
     }
 
+    @Override
+    public String toString() {
+        int maxNumberOfLines = getShortestTileHeight();
+
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < maxNumberOfLines; i++) {
+            for (var tile : tiles) {
+                result.append(tile.toString().split("\n")[i]);
+            }
+            result.append("\n");
+        }
+
+        return result.toString().stripTrailing();  // depends if we want or not the ending \n
+    }
+
+    private int getShortestTileHeight() {
+        return tiles.stream()
+                .map(Tile::toString)
+                .mapToInt(tilesAsText -> (int) tilesAsText.lines().count())
+                .min()
+                .orElse(0);
+    }
+
+    public boolean allTilesHaveSameHeight() {
+        int numberOfDifferentHeights = (int) tiles.stream()
+                .map(Tile::toString)
+                .mapToInt(tilesAsText -> (int) tilesAsText.lines().count())
+                .distinct()
+                .count();
+        return numberOfDifferentHeights == 1;
+    }
 }

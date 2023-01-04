@@ -1,11 +1,16 @@
 package CLI;
 import Heckmeck.*;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
 
 public class CliOutputHandler implements OutputHandler {
+
+    public static final String LOGO_FILE = "LOGO";
 
     private static final String[] faceOne = {   "|         | ",
                                                 "|    o    | ",
@@ -91,21 +96,10 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showTiles(BoardTiles boardTiles){
-        StringBuilder topRow = new StringBuilder();
-        StringBuilder firstRow = new StringBuilder();
-        StringBuilder secondRow = new StringBuilder();
-        StringBuilder thirdRow = new StringBuilder();
-        StringBuilder bottomRow = new StringBuilder();
-
-        boardTiles.getTiles().forEach(tile->{
-            topRow.append(getTopTilesRow());
-            firstRow.append(getFirstTilesRow(tile));
-            secondRow.append(getSecondTileRow(tile));
-            thirdRow.append(getTilesThirdRow(tile));
-            bottomRow.append(getBottomTilesRow());
-        });
-        print("The available tiles on the board now are:" + newLine + topRow + newLine +
-                firstRow + newLine + secondRow + newLine + thirdRow + newLine + bottomRow);
+        if (!boardTiles.allTilesHaveSameHeight()) {
+            print("WARNING: In the Tiles representation you've selected, tiles have different height!!!");
+        }
+        print("The available tiles on the board now are:" + newLine + boardTiles);
     }
 
     @Override
@@ -160,7 +154,7 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showWelcomeMessage(){
-        print(getLogo());
+        print(FileReader.readLogoFromTextFile(getLogoPath()));
         print("                      Welcome in Heckmeck");
     }
 
@@ -244,19 +238,15 @@ public class CliOutputHandler implements OutputHandler {
         }
     }
 
-static String getLogo(){
-        return """
-                       
-                      _/'')
-                     / />>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>         _______                                                                                   
-                    ( ( ,--.  ,--.             ,--.                           ,--.            /\\ o o o\\                                                                                    
-                    \\ ) |  '--'  | ,---.  ,---.|  |,-. ,--,--,--. ,---.  ,---.|  |,-.        /o \\ o o o\\_______                                                                                    
-                        |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     /       <    >------>   o /|                                                                                    
-                        |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  |\\   --.\\ `--.|  \\  \\        \\ o/  o   /_____/o|                                                                                            
-                        `--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'        \\/______/     |oo|                                                                                    
-                       <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<             |   o   |o/
-                                                                                                   |_______|/                                                                                                                             
-                """;
+    private static Path getLogoPath() {
+        URL tilesResource = Tile.class.getClassLoader().getResource(LOGO_FILE);
+        Path resourcePath = null;
+        try {
+            resourcePath = Path.of(tilesResource.toURI());
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
+        return resourcePath;
     }
 
 }

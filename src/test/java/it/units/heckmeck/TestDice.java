@@ -1,6 +1,10 @@
 package it.units.heckmeck;
+import Heckmeck.FileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.stream.*;
 import java.util.*;
 
@@ -245,5 +249,18 @@ public class TestDice {
         }
     }
 
+    @ParameterizedTest
+    @EnumSource
+    void convertDieIntoItsTextRepresentation(Die.Face dieFace) throws Exception {
+        URL diceFacesAsTextResource = TestDice.class.getClassLoader().getResource("DICE_MAP");
+        Map<Die.Face, String> dieFaceToItsTextRepresentation = FileReader
+                .readDieFacesFromSingleJson(Path.of(diceFacesAsTextResource.toURI()));
+        Die dieToTest = Die.generateDie(dieFace);
 
+        String expectedTextRepresentation = dieFaceToItsTextRepresentation
+                .get(dieFace);
+        String actualTextRepresentation = dieToTest.toString();
+
+        Assertions.assertEquals(expectedTextRepresentation, actualTextRepresentation);
+    }
 }

@@ -1,4 +1,7 @@
 package Heckmeck;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import  java.util.*;
 
 import static java.util.Map.entry;
@@ -7,6 +10,8 @@ public class Die {
 
     private Face dieFace;
     private static final Random PRNG = new Random();
+
+    public static final String RESOURCE_FILE = "DIE_FACES";
 
     public enum Face {
         ONE,
@@ -34,6 +39,21 @@ public class Die {
             entry("4", Face.FOUR),
             entry("5", Face.FIVE),
             entry("w", Face.WORM));
+
+    private static final Map<Face, String> faceToDieAsText = FileReader.readDieFacesFromSingleJson(
+            getResourcePath()
+    );
+
+    private static Path getResourcePath() {
+        URL dieFacesResource = Die.class.getClassLoader().getResource(RESOURCE_FILE);
+        Path resourcePath = null;
+        try {
+            resourcePath = Path.of(dieFacesResource.toURI());
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
+        return resourcePath;
+    }
 
 
     //TODO: come inizializzare die
@@ -68,4 +88,10 @@ public class Die {
         int n = PRNG.nextInt(Face.values().length);
         setDieFace(Face.values()[n]);
     }
+
+    @Override
+    public String toString() {
+        return faceToDieAsText.get(dieFace);
+    }
+
 }
