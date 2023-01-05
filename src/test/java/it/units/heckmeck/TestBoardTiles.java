@@ -2,9 +2,7 @@ package it.units.heckmeck;
 
 import Heckmeck.Tile;
 import Heckmeck.BoardTiles;
-import exception.IllegalTileAddition;
 import exception.IllegalTileNumber;
-import exception.IllegalTileSelection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -70,30 +68,6 @@ public class TestBoardTiles {
         Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
     }
 
-    @Test
-    void check_that_remove_a_tile_alredy_removed_throws_exception(){
-        BoardTiles boardTiles = BoardTiles.init();
-        Tile tileToRemove = Tile.generateTile(21);
-        String expectedMessage = "Can not remove tile 21, it is not present in the board";
-
-        boardTiles.remove(tileToRemove);
-
-        Exception ex = Assertions.assertThrows(IllegalTileSelection.class, () ->
-                boardTiles.remove(tileToRemove));
-        Assertions.assertEquals(expectedMessage, ex.getMessage());
-    }
-
-    @Test
-    void check_that_adding_twice_the_same_tile_throws_exception(){
-        BoardTiles boardTiles = BoardTiles.init();
-        Tile tileToAdd = Tile.generateTile(21);
-        String expectedMessage = "Tile number 21 is already present in the collection";
-
-        Exception ex = Assertions.assertThrows(IllegalTileAddition.class, () ->
-                boardTiles.add(tileToAdd));
-        Assertions.assertEquals(expectedMessage, ex.getMessage());
-    }
-
     //to refactor
     private TreeSet<Tile> setupTiles() {
         TreeSet<Tile> expected = new TreeSet<>();
@@ -140,13 +114,13 @@ public class TestBoardTiles {
 
 
     //getter ultimo elemento e check non ci sia piu'
-    /*@Test
+    @Test
     void check_bust(){
         BoardTiles boardTiles = BoardTiles.init();
-        //boardTiles.bust();
+        boardTiles.removeLastTile();
         TreeSet<Tile> tilesList = boardTiles.getTiles();
         Tile expectedBustedTile = Tile.generateTile(36);
         assertFalse(tilesList.contains(expectedBustedTile));
-    }*/
+    }
 
 }

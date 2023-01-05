@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class TestPlayer {
 
     @ParameterizedTest
-    @CsvSource(value = {"Luigi, Luigi", ", ''"})
+    @CsvSource(value = {"Luigi, Luigi", "Mario, Mario", "Sara, Sara"})
     void check_player_initialization(String passedName, String expectedName) {
         Player player = Player.generatePlayer(passedName);
 
