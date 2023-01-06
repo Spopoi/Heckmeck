@@ -93,7 +93,7 @@ public String sendMessage(String msg) {
         CliInputHandler input = new CliInputHandler();
         CliOutputHandler output = new CliOutputHandler();
         output.showWelcomeMessage();
-        IOHandler io = new IOHandler(input, output);
+        //IOHandler io = new IOHandler(input, output);
         if(readRxBuffer().equals("GET PLAYER_NAME")){
             String playerName = input.choosePlayerName(0);
             cli.sendMessage(playerName);

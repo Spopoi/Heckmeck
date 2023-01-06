@@ -12,21 +12,18 @@ public class Game {
 
     private Player actualPlayer;
 
-    public Game(OutputHandler output, InputHandler input) {
-        io = new IOHandler(input,output);
+    public Game(IOHandler io) {
+       this.io = io;
     }
 
     public void init(){
-       io.showWelcomeMessage();
-        if (io.wantToPlay()){
-            int numberOfPlayers = io.chooseNumberOfPlayers();
-            this.players = setupPlayers(numberOfPlayers);
-            this.dice = Dice.init();
-            this.boardTiles = BoardTiles.init();
-        }
-        else {
-            System.exit(0);
-        }
+        io.showWelcomeMessage();
+
+        int numberOfPlayers = io.chooseNumberOfPlayers();
+        this.players = setupPlayers(numberOfPlayers);
+        this.dice = Dice.init();
+        this.boardTiles = BoardTiles.init();
+
     }
     public void play(){
         int playerNumber = 0;

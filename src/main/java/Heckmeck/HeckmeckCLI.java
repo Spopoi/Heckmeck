@@ -9,10 +9,10 @@ public class HeckmeckCLI {
     public static void main(String[] args) throws IOException {
         CliInputHandler input = new CliInputHandler();
         CliOutputHandler output = new CliOutputHandler();
-        Game game = new Game(output, input);
+        /*Game game = new Game(output, input);
         game.init();
         game.play();
-
+*/
         /*output.showMenu();
         int numberOfPlayers = input.chooseNumberOfPlayers();
         Player[] players = new Player[numberOfPlayers];
