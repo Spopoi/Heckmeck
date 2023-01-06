@@ -10,6 +10,7 @@ public class TCPOutputHandler implements OutputHandler{
 
     }
     GameServer gameServer;
+    Message message = new Message();
 
 
     public TCPOutputHandler(GameServer gameServer){
@@ -23,22 +24,27 @@ public class TCPOutputHandler implements OutputHandler{
 
     @Override
     public void showDice(Dice dice) {
-        String jsonString = gson.toJson(dice);
-        printMessage(jsonString);
+        message.setOperation(Message.Action.UPDATE);
+        message.setDice(dice);
+        printMessage(message.toString());
 
     }
 
     @Override
     public void showTiles(BoardTiles boardTiles) {
-        String jsonString = gson.toJson(boardTiles);
-        printMessage(jsonString);
+        message.setOperation(Message.Action.UPDATE);
+        message.setBoardTiles(boardTiles);
+        printMessage(message.toString());
 
     }
 
     @Override
     public void showPlayerData(Player player, Dice dice, Player[] players) {
-        String playerString = gson.toJson(players);
-        printMessage(playerString);
+        message.setOperation(Message.Action.UPDATE);
+        message.setPlayers(players);
+        message.setDice(dice);
+        message.setActualPlayer(player);
+        printMessage(message.toString());
 
     }
 
