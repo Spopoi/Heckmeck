@@ -25,7 +25,7 @@ public class HeckmeckGUI {
         out.showWelcomeMessage();
         out.wantToPlay();
         System.out.println(in.wantToPlay());
-        System.out.println(in.choosePlayerName());
+        System.out.println(in.choosePlayerName(0));
         //System.out.println(in.chooseNumberOfPlayers());
         //SwingUtilities.invokeLater(HeckmeckGUI::Main);
     }
