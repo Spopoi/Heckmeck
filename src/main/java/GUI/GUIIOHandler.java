@@ -5,6 +5,8 @@ import exception.IllegalInput;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +23,7 @@ public class GUIIOHandler implements IOHandler {
     private JPanel othersPlayerPane;
     private JPanel tilesPanel;
     private JPanel messagePanel;
+    private volatile Die.Face chosenFace;
 
     private static final Map<Die.Face, String> faceToIconPath =
             Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
@@ -82,7 +85,6 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public int chooseNumberOfPlayers() {
-
         while(true){
             try{
                 int numberOfPlayer = Integer.parseInt(showInputDialog(null, "Choose number of players between 2 and 7:"));
@@ -214,27 +216,39 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public void showDice(Dice dice) {
+    public Die.Face chooseDie(Dice dice) {
         frame.getContentPane().remove(dicePanel);
+        chosenFace = null;
 
         dicePanel = new JPanel();
         dicePanel.setLayout(new GridLayout(2,4,20, 20));
         dicePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 50, 50));
 
 
+
         for(Die die : dice.getDiceList()){
             JButton dieButton = new JButton(getDieIcon(die.getDieFace()));
+            dieButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    chosenFace = die.getDieFace();
+                }
+            });
             dieButton.setPreferredSize(new Dimension(60,60));
             dicePanel.add(dieButton, CENTER_ALIGNMENT);
         }
 
         frame.getContentPane().add(dicePanel,BorderLayout.CENTER);
         frame.setVisible(true);
-    }
 
-    @Override
-    public Die.Face chooseDieFace() {
-        while (true) {
+        while (chosenFace == null) {
+            Thread.onSpinWait();
+        }
+        return chosenFace;
+
+
+
+        /*while (true) {
             try {
                 String chosenDice = showInputDialog(null, "Which die face do you want to pick?");
                 if (Die.stringToFaceMap.containsKey(chosenDice)) return Die.stringToFaceMap.get(chosenDice);
@@ -242,7 +256,7 @@ public class GUIIOHandler implements IOHandler {
             } catch (IllegalInput e) {
                 printMessage(e.getMessage());
             }
-        }
+        }*/
     }
 
     @Override

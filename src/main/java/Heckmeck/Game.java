@@ -90,7 +90,7 @@ public class Game {
     private boolean roll(){
         dice.rollDice();
         io.showPlayerData(actualPlayer, dice, players);
-        io.showDice(dice);
+        //io.showDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();
             dice.chooseDice(chosenDieFace);
@@ -103,7 +103,7 @@ public class Game {
 
     private Die.Face pickDieFace() {
         while(true){
-            Die.Face chosenDieFace = io.chooseDieFace();
+            Die.Face chosenDieFace = io.chooseDie(dice);
             if(!dice.isFacePresent(chosenDieFace)) io.printMessage("This face is not present.. Pick another one!");
             else if(dice.isFaceChosen(chosenDieFace)) io.printMessage("You have already chose this face, pick another one!");
             else return chosenDieFace;

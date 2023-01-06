@@ -1,7 +1,5 @@
 package Heckmeck;
 
-import exception.IllegalInput;
-
 public interface IOHandler {
 
     void printMessage(String message);
@@ -35,16 +33,16 @@ public interface IOHandler {
     void showBoardTiles(BoardTiles boardTiles);
 
     boolean wantToPick(int diceScore);
-//        output.printMessage("Actual score: " + diceScore);
-//        output.showWantToPick();
-//        while(true) {
-//            try {
-//                return input.wantToPick();
-//            } catch (IllegalInput e) {
-//                output.printMessage(e.getMessage());
-//            }
-//        }
-//    }
+/*        output.printMessage("Actual score: " + diceScore);
+        output.showWantToPick();
+        while(true) {
+            try {
+                return input.wantToPick();
+            } catch (IllegalInput e) {
+                output.printMessage(e.getMessage());
+            }
+        }
+    }*/
     boolean wantToSteal(Player robbedPlayer);
    /*     output.showWantToSteal(robbedPlayer);
         while(true) {
@@ -58,9 +56,9 @@ public interface IOHandler {
 
     void showPlayerData(Player player, Dice dice, Player[] players);
 
-    void showDice(Dice dice);
+    //void showDice(Dice dice);
 
-    Die.Face chooseDieFace();
+    Die.Face chooseDie(Dice dice);
 //        output.printMessage("Pick one unselected face");
 //        while (true) {
 //            try {
