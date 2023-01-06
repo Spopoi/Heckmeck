@@ -1,3 +1,4 @@
+/*
 package Heckmeck;
 
 import exception.IllegalInput;
@@ -60,3 +61,4 @@ public class TCPInputHandler implements InputHandler{
         return gameServer.clients.get(playerId).readReceivedMessage();
     }
 }
+*/
