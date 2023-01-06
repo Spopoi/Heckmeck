@@ -1,8 +1,6 @@
 package GUI;
 
-import Heckmeck.Game;
-import Heckmeck.IOHandler;
-import Heckmeck.Rules;
+import Heckmeck.*;
 import exception.IllegalInput;
 
 import javax.swing.*;
@@ -15,17 +13,34 @@ public class HeckmeckGUI {
 //        game.init();
 //        game.play();
         JFrame frame = new JFrame("HECKMECK");
-        frame.setSize(600,400);
+        frame.setSize(1100,600);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.getContentPane().setLayout(new BorderLayout());
+        frame.getContentPane().setLayout(new BorderLayout(50,30));
 
         GUIOutputHandler out = new GUIOutputHandler(frame);
         GUIInputHandler in = new GUIInputHandler(frame);
 
-        out.showWelcomeMessage();
-        out.wantToPlay();
-        System.out.println(in.wantToPlay());
-        System.out.println(in.choosePlayerName(0));
+        Game game = new Game(out,in);
+        game.init();
+        game.play();
+
+//        out.showWelcomeMessage();
+//        out.wantToPlay();
+//        System.out.println(in.wantToPlay());
+//        System.out.println(in.choosePlayerName());
+//        out.showTurnBeginConfirm("luca");
+//        BoardTiles tiles = BoardTiles.init();
+//        out.showTiles(tiles);
+//
+//        Dice dice = Dice.init();
+//        dice.rollDice();
+//        out.showDice(dice);
+//        Player player = Player.generatePlayer("Davide");
+//        Player[] players = {Player.generatePlayer("Luca"), player};
+//
+//        out.showPlayerData(player, dice , players);
+//
+//        out.printMessage(in.chooseDiceFace().toString());
         //System.out.println(in.chooseNumberOfPlayers());
         //SwingUtilities.invokeLater(HeckmeckGUI::Main);
     }
