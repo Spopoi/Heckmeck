@@ -1,22 +1,21 @@
-/*
 package GUI;
 
 import Heckmeck.*;
+import exception.IllegalInput;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.jar.JarEntry;
 
-import static java.awt.GridBagConstraints.*;
 import static javax.swing.JOptionPane.*;
-import static javax.swing.JOptionPane.showMessageDialog;
+import static java.awt.GridBagConstraints.*;
+//import static javax.swing.SwingConstants.CENTER;
 
-public class GUIOutputHandler implements OutputHandler{
+public class GUIIOHandler implements IOHandler {
 
-    private JFrame frame;
+    private final JFrame frame;
     private JPanel playerPane;
     private JPanel dicePanel;
     private JPanel othersPlayerPane;
@@ -25,13 +24,13 @@ public class GUIOutputHandler implements OutputHandler{
 
     private static final Map<Die.Face, String> faceToIconPath =
             Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
-            put(Die.Face.ONE, "src/main/java/GUI/Icons/Dice/one.png");
-            put(Die.Face.TWO, "src/main/java/GUI/Icons/Dice/two.png");
-            put(Die.Face.THREE, "src/main/java/GUI/Icons/Dice/three.png");
-            put(Die.Face.FOUR, "src/main/java/GUI/Icons/Dice/four.png");
-            put(Die.Face.FIVE, "src/main/java/GUI/Icons/Dice/five.png");
-            put(Die.Face.WORM, "src/main/java/GUI/Icons/Dice/worm.png");
-        }});
+                put(Die.Face.ONE, "src/main/java/GUI/Icons/Dice/one.png");
+                put(Die.Face.TWO, "src/main/java/GUI/Icons/Dice/two.png");
+                put(Die.Face.THREE, "src/main/java/GUI/Icons/Dice/three.png");
+                put(Die.Face.FOUR, "src/main/java/GUI/Icons/Dice/four.png");
+                put(Die.Face.FIVE, "src/main/java/GUI/Icons/Dice/five.png");
+                put(Die.Face.WORM, "src/main/java/GUI/Icons/Dice/worm.png");
+            }});
 
     private static final Map<Integer, String> tileNumberToIconPath =
             Collections.unmodifiableMap(new HashMap<Integer, String>() {{
@@ -53,46 +52,64 @@ public class GUIOutputHandler implements OutputHandler{
                 put(36, "src/main/java/GUI/Icons/Tiles/Tile_36.png");
 
             }});
-    public GUIOutputHandler(JFrame frame){
+
+    public GUIIOHandler(JFrame frame){
         this.frame =frame;
         this.playerPane = new JPanel();
         this.dicePanel = new JPanel();
         this.othersPlayerPane = new JPanel();
         this.tilesPanel = new JPanel();
         this.messagePanel = new JPanel();
-        //frame.getContentPane().add(playerPane,BorderLayout.WEST);
         frame.setVisible(true);
     }
-    @Override
-    public void showWelcomeMessage(){
-        showMessageDialog(null, "WELCOME to Heckmeck!");
-        //messagePanel.setLayout(new GridLayout(1,0,50, 0));
-//        messagePanel.setPreferredSize(new Dimension(0,100));
-//        JLabel outputLabel = new JLabel("Welcome to Heckmeck!");
-//        messagePanel.add(outputLabel);
-//        frame.add(messagePanel, BorderLayout.SOUTH);
-//        frame.setVisible(true);
-    }
 
     @Override
-    public void showWantToPick() {
-
-    }
-
-    @Override
-    public void printMessage(String message){
+    public void printMessage(String message) {
         showMessageDialog(null, message);
     }
 
     @Override
-    public void showTurnBeginConfirm(String playerName){
+    public void showTurnBeginConfirm(String playerName) {
         frame.getContentPane().removeAll();
         frame.repaint();
-        showMessageDialog(null, playerName + " turn, press ok for starting: ");
+        printMessage(playerName + " turn, press ok for starting: ");
     }
 
     @Override
-    public void showTiles(BoardTiles boardTiles){
+    public void showWelcomeMessage() {
+        printMessage("WELCOME to Heckmeck!");
+    }
+
+    @Override
+    public int chooseNumberOfPlayers() {
+
+        while(true){
+            try{
+                int numberOfPlayer = Integer.parseInt(showInputDialog(null, "Choose number of players between 2 and 7:"));
+                if(Rules.validNumberOfPlayer(numberOfPlayer)) return numberOfPlayer;
+                else throw new IllegalInput("Invalid number of player, please select a number between 2 and 7");
+            } catch (IllegalInput | NumberFormatException e) {
+                printMessage(e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public String choosePlayerName(int playerNumber) {
+
+        while(true) {
+            try {
+                String playerName = showInputDialog(null, "Insert player name");
+                if (playerName.isBlank()) throw new IllegalInput("Blank name, choose a valid a one");
+                else return playerName;
+            } catch (IllegalInput e) {
+                printMessage(e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void showBoardTiles(BoardTiles boardTiles) {
 
         tilesPanel = new JPanel();
         tilesPanel.setLayout(new GridLayout(1,0,10, 10));
@@ -104,42 +121,25 @@ public class GUIOutputHandler implements OutputHandler{
             tileIcon.setPreferredSize(new Dimension(80,90));
             tilesPanel.add(tileIcon);
 
-//            String tileText = tile.getNumber() + System.lineSeparator() + tile.getWormString();
-//            JButton tileButton = new JButton("<html>" + tileText.replaceAll(System.lineSeparator(), "<br>") + "</html>");
-//            tileButton.setPreferredSize(new Dimension(80,90));
-//            //tileButton.setMaximumSize(new Dimension(20,50));
-//            tilesPanel.add(tileButton);
         }
         frame.getContentPane().add(tilesPanel,BorderLayout.NORTH);
         frame.setVisible(true);
-        //frame.getContentPane().add(boardTilesLayout(boardTiles), BorderLayout.CENTER);
-    }
-
-
-    //Todo: using gridBagLayout instead of GridLayout for formatting better
-    @Override
-    public void showDice(Dice dice){
-
-        frame.getContentPane().remove(dicePanel);
-        //frame.getContentPane().repaint();
-
-        dicePanel = new JPanel();
-        dicePanel.setLayout(new GridLayout(2,4,20, 20));
-        dicePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 50, 50));
-
-
-        for(Die die : dice.getDiceList()){
-            JButton dieButton = new JButton(getDieIcon(die.getDieFace()));
-            dieButton.setPreferredSize(new Dimension(60,60));
-            dicePanel.add(dieButton, CENTER_ALIGNMENT);
-        }
-
-        frame.getContentPane().add(dicePanel,BorderLayout.CENTER);
-        frame.setVisible(true);
     }
 
     @Override
-    public void showPlayerData(Player player, Dice dice, Player[] players){
+    public boolean wantToPick(int diceScore) {
+        int result = showConfirmDialog(null, "Do you want to pick? Your actual score is " +diceScore);
+        return result == JOptionPane.OK_OPTION;
+    }
+
+    @Override
+    public boolean wantToSteal(Player robbedPlayer) {
+        int result = showConfirmDialog(null, "Do you want to steal tile #" + robbedPlayer.getLastPickedTile().getNumber() + " from "+ robbedPlayer.getName()+"?");
+        return result == JOptionPane.OK_OPTION;
+    }
+
+    @Override
+    public void showPlayerData(Player player, Dice dice, Player[] players) {
 
         frame.getContentPane().remove(playerPane);
 
@@ -148,23 +148,17 @@ public class GUIOutputHandler implements OutputHandler{
         playerPane = new JPanel();
         playerPane.setLayout(new BoxLayout(playerPane, BoxLayout.Y_AXIS));
         playerPane.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 5));
-        //playerPane.add(Box.createHorizontalGlue());
 
         JLabel playerName = new JLabel(player.getName());
         playerName.setPreferredSize(new Dimension(300,50));
         playerName.setFont(new Font("Serif", Font.BOLD, 30));
         playerName.setBackground(Color.LIGHT_GRAY);
         playerPane.add(playerName);
-        //playerPane.add(Box.createVerticalGlue());
-        //playerPane.add(Box.createRigidArea(new Dimension(10, 20)));
-
 
         JLabel score = new JLabel("Your score: " + dice.getScore());
         score.setPreferredSize(new Dimension(200,50));
         score.setFont(new Font("Serif", Font.PLAIN, 20));
         playerPane.add(score);
-        //playerPane.add(Box.createVerticalGlue());
-        // playerPane.add(Box.createRigidArea(new Dimension(10, 20)));
 
         JPanel dicePanel = new JPanel();
         dicePanel.setLayout(new GridBagLayout());
@@ -219,6 +213,44 @@ public class GUIOutputHandler implements OutputHandler{
         frame.setVisible(true);
     }
 
+    @Override
+    public void showDice(Dice dice) {
+        frame.getContentPane().remove(dicePanel);
+
+        dicePanel = new JPanel();
+        dicePanel.setLayout(new GridLayout(2,4,20, 20));
+        dicePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 50, 50));
+
+
+        for(Die die : dice.getDiceList()){
+            JButton dieButton = new JButton(getDieIcon(die.getDieFace()));
+            dieButton.setPreferredSize(new Dimension(60,60));
+            dicePanel.add(dieButton, CENTER_ALIGNMENT);
+        }
+
+        frame.getContentPane().add(dicePanel,BorderLayout.CENTER);
+        frame.setVisible(true);
+    }
+
+    @Override
+    public Die.Face chooseDieFace() {
+        while (true) {
+            try {
+                String chosenDice = showInputDialog(null, "Which die face do you want to pick?");
+                if (Die.stringToFaceMap.containsKey(chosenDice)) return Die.stringToFaceMap.get(chosenDice);
+                else throw new IllegalInput("Incorrect input, choose between {1, 2, 3, 4, 5, w}: ");
+            } catch (IllegalInput e) {
+                printMessage(e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void showBustMessage() {
+        printMessage("BUUUUUSTTTT!!!!");
+    }
+
+
     //TODO: give the size of Tile Icon as parameter
     private ImageIcon getTileIcon(int tileNumber){
         ImageIcon icon = new ImageIcon(tileNumberToIconPath.get(tileNumber));
@@ -233,20 +265,4 @@ public class GUIOutputHandler implements OutputHandler{
         Image newimg = img.getScaledInstance(50 , 50,  java.awt.Image.SCALE_SMOOTH ) ;
         return new ImageIcon( newimg );
     }
-
-    @Override
-    public void showBustMessage() {
-        showMessageDialog(null, "BUUUUSSSSTTTTTT!!!!");
-    }
-    @Override
-    public void showWantToSteal(Player robbedPlayer) {
-
-    }
-
-    @Override
-    public void showWantToPlay() {
-
-    }
-
 }
-*/

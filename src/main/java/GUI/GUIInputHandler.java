@@ -1,3 +1,4 @@
+/*
 package GUI;
 
 import Heckmeck.Die;
@@ -38,7 +39,7 @@ public class GUIInputHandler implements InputHandler{
     }
 
     @Override
-    public String choosePlayerName(int numOfPlayer){
+    public String choosePlayerName(){
         return showInputDialog(null, "Insert player name");
     }
 
@@ -68,3 +69,4 @@ public class GUIInputHandler implements InputHandler{
         return result == JOptionPane.OK_OPTION;
     }
 }
+*/

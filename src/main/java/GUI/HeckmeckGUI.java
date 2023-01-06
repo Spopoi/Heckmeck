@@ -1,7 +1,6 @@
 package GUI;
 
 import Heckmeck.*;
-import exception.IllegalInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,10 +16,12 @@ public class HeckmeckGUI {
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.getContentPane().setLayout(new BorderLayout(50,30));
 
-        GUIOutputHandler out = new GUIOutputHandler(frame);
-        GUIInputHandler in = new GUIInputHandler(frame);
 
-        Game game = new Game(out,in);
+        GUIIOHandler io = new GUIIOHandler(frame);
+        //GUIOutputHandler out = new GUIOutputHandler(frame);
+        //GUIInputHandler in = new GUIInputHandler(frame);
+
+        Game game = new Game(io);
         game.init();
         game.play();
 
