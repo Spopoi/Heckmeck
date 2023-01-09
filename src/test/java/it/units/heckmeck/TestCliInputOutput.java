@@ -1,17 +1,24 @@
 package it.units.heckmeck;
 
+import CLI.CliIOHandler;
+import CLI.CliInputHandler;
 import CLI.CliOutputHandler;
 import Heckmeck.BoardTiles;
 import Heckmeck.Dice;
 import Heckmeck.Die;
 import Heckmeck.Player;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 
-public class TestCliOutput {
+public class TestCliInputOutput {
 
     private static final String INITIAL_BOARD = getInitialBoard();
 
@@ -29,6 +36,53 @@ public class TestCliOutput {
 
     private final CliOutputHandler output = new CliOutputHandler();
 
+
+    // TODO: Should we ask if user wants to play?
+    @Test
+    @Disabled
+    void user_want_to_play() {
+        String userInput = "y\n";
+
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        CliInputHandler inputHandler = new CliInputHandler();
+
+        Assertions.assertTrue(inputHandler.wantToPlay());
+    }
+
+    @Test
+    @Disabled
+    void user_do_not_want_to_play() {
+        String userInput = "n\n";
+
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        CliInputHandler inputHandler = new CliInputHandler();
+
+        Assertions.assertFalse(inputHandler.wantToPlay());
+    }
+
+    // TODO: chooseDie does not need dice
+    @ParameterizedTest
+    @CsvSource(ignoreLeadingAndTrailingWhitespace = false, textBlock = """
+            '1\n',1
+            '2\n',2
+            '3\n',3
+            '4\n',4
+            '5\n',5
+            'w\n',w
+            """)
+    @Disabled
+    void readDieFaceFromValidUserInput(String userInput, String faceAsString) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        CliIOHandler inputHandler = new CliIOHandler();
+
+        Die.Face expectedFace = Die.getFaceByString(faceAsString);
+        Die.Face obtainedFace = inputHandler.chooseDie(null);
+
+        Assertions.assertEquals(expectedFace, obtainedFace);
+    }
 
     @Test
     void printInitialBoardConfiguration() {
