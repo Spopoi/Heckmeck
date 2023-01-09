@@ -2,9 +2,10 @@ package Heckmeck;
 
 import com.google.gson.Gson;
 
-public class Message {
+import java.io.Serializable;
 
-    Gson gson = new Gson();
+public class Message implements Serializable {
+
 
     public  Dice dice;
     public  BoardTiles boardTiles;
@@ -12,23 +13,32 @@ public class Message {
     public  Player[] players;
     public  Action operation;
     public  String text;
+    public int playerID;
 
     public Message(){
 
     }
 
+
+
     public  enum Action {
+        INFO,
         GET_INPUT,
-        UPDATE,
+        UPDATE_TILES,
+        UPDATE_PLAYER,
+        RESPONSE,
         ERROR
     }
 
 
-    @Override
-    public String toString() {
+    public String toString(Object obj) {
 
-        return gson.toJson(this);
+        return ""; //gson.toJson(obj);
 
+    }
+
+    public void setPlayerID(int pId) {
+        playerID = pId;
     }
 
     public void setOperation(Action operation) {
@@ -40,18 +50,18 @@ public class Message {
     }
 
     public void setDice(Dice dice) {
-        this.dice = dice;
+        this.dice = (dice);
     }
 
     public void setBoardTiles(BoardTiles boardTiles) {
-        this.boardTiles = boardTiles;
+        this.boardTiles = (boardTiles);
     }
 
     public void setActualPlayer(Player actualPlayer) {
-        this.actualPlayer = actualPlayer;
+        this.actualPlayer = (actualPlayer);
     }
 
     public void setPlayers(Player[] players) {
-        this.players = players;
+        this.players = (players);
     }
 }

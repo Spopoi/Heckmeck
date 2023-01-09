@@ -2,6 +2,8 @@ package Heckmeck;
 
 import com.google.gson.Gson;
 
+import java.util.concurrent.TimeUnit;
+
 public class TCPIOHandler implements IOHandler{
 
     Gson gson = new Gson();
@@ -15,8 +17,8 @@ public class TCPIOHandler implements IOHandler{
     }
 
     @Override
-    public void printMessage(String message) {
-        gameServer.clients.stream().forEach(client -> client.writeMessage(message));
+    public void printMessage(String text) {
+        gameServer.clients.stream().forEach(client -> client.writeLine(text));
     }
 
     @Override
@@ -29,6 +31,14 @@ public class TCPIOHandler implements IOHandler{
 
     }
 
+    void waitOneSec(){
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public int chooseNumberOfPlayers() {
         return gameServer.getNumOfPlayers();
@@ -36,15 +46,21 @@ public class TCPIOHandler implements IOHandler{
 
     @Override
     public String choosePlayerName(int playerNumber) {
-        gameServer.clients.stream().forEach(client -> client.writeMessage("GET PLAYER_NAME"));
-        return readMessage(playerNumber);
+        message.setOperation(Message.Action.GET_INPUT);
+        message.setText("Choose player name");
+        printMessage(gson.toJson(message));
+        waitOneSec();
+        Message msg = readMessage(playerNumber);
+        return msg.text;
     }
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-        message.setOperation(Message.Action.UPDATE);
+
+        message.setOperation(Message.Action.UPDATE_TILES);
         message.setBoardTiles(boardTiles);
-        printMessage(gson.toJson(boardTiles));
+        printMessage(gson.toJson(message));
+
     }
 
     @Override
@@ -59,7 +75,11 @@ public class TCPIOHandler implements IOHandler{
 
     @Override
     public void showPlayerData(Player player, Dice dice, Player[] players) {
-
+        message.setActualPlayer(player);
+        message.setDice(dice);
+        message.setPlayers(players);
+        message.setOperation(Message.Action.UPDATE_PLAYER);
+        printMessage(gson.toJson(message));
     }
 
     @Override
@@ -72,12 +92,17 @@ public class TCPIOHandler implements IOHandler{
 
     }
 
-    public String readMessage(int playerId){
-        return gameServer.clients.get(playerId).readReceivedMessage();
+    public String readRxBuffer(int playerId){
+        return (gameServer.clients.get(playerId).readReceivedMessage());
+    }
+
+    public Message readMessage(int playerId){
+        return gson.fromJson(gameServer.clients.get(playerId).readReceivedMessage(), Message.class);
     }
 
     public void showDice(Dice dice){
-        message.setOperation(Message.Action.UPDATE);
+        message.boardTiles = null;
+        message.setOperation(Message.Action.UPDATE_PLAYER);
         message.setDice(dice);
         printMessage(gson.toJson(message));
     }

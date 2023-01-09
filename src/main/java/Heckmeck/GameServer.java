@@ -1,13 +1,9 @@
 package Heckmeck;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GameServer implements Runnable{
@@ -15,9 +11,9 @@ public class GameServer implements Runnable{
     //private PrintWriter out;
     //private BufferedReader in;
 
-    public List<ClientHandler> clients = new ArrayList<ClientHandler>();
+    public List<SocketHandler> clients = new ArrayList<SocketHandler>();
 
-    public ClientHandler currentClientPlayer;
+    public SocketHandler currentClientPlayer;
     private Socket clientSocket;
     private boolean hostClosedRoom = false;
     private Thread t1;
@@ -55,7 +51,7 @@ public class GameServer implements Runnable{
                 System.out.println("Waiting for connections: ");
                 clientSocket = ss.accept();
 
-                ClientHandler clientHandler = new ClientHandler(clientSocket, playerID);
+                SocketHandler clientHandler = new SocketHandler(clientSocket, playerID);
 
                 System.out.println("Accepted incoming connection #: "+ playerID);
                 this.clients.add(clientHandler);
@@ -101,7 +97,7 @@ public class GameServer implements Runnable{
         return numOfPlayers;
     }
 
-    private ClientHandler getClientById(int id){
+    private SocketHandler getClientById(int id){
         return clients.get(id);
     }
 

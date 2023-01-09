@@ -1,0 +1,1 @@
+opens com.example.server.Models to com.google.gson;

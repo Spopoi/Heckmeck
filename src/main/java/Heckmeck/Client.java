@@ -2,6 +2,7 @@ package Heckmeck;
 
 import CLI.CliInputHandler;
 import CLI.CliOutputHandler;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,20 +10,23 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+
 public class Client implements Runnable{
 
+    Gson gson = new Gson();
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
     private String hostIP;
     private int hostPortNumber;
 
-    private String message;
+    public Message message;
+
+    public String text;
 
     private boolean connected = false;
 
     private int playerID;
-
 
     public Client(){
         //Thread clientThread = new Thread(this);
@@ -36,9 +40,11 @@ public class Client implements Runnable{
             hostPortNumber = port;
             clientSocket = new Socket(hostIP, hostPortNumber);
 
-            this.out = new PrintWriter(clientSocket.getOutputStream(), true);
-            this.in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
             connected = true;
+            sendMessage("hello server");
 
             //System.out.println("Connection established" + clientSocket.isConnected());
         } catch (IOException e) {
@@ -51,14 +57,12 @@ public String sendMessage(String msg) {
         out.println(msg);
         out.flush();
         String resp = "";
-        try {
-
-            resp = in.readLine();
-
+        /*try {
+            resp = "";// in.readLine();
 
         } catch (IOException e) {
             System.out.println("Error client reading message");
-        }
+        }*/
         return resp;
     }
 
@@ -73,8 +77,14 @@ public String sendMessage(String msg) {
         return resp;
     }
 
-    public String readReceivedMessage(){
-        return this.message;
+    public Message readIncomingMessage(){
+        String serialized = readRxBuffer();
+
+        return gson.fromJson(serialized , Message.class);
+    }
+
+    public Message getMessage(){
+        return message;
     }
 
     public void stopConnection() {
@@ -101,27 +111,75 @@ public String sendMessage(String msg) {
 
     }
 
-    public void waitRequest() {
+    public void resetMessage() {
+        message.text = null;
+        message.operation = null;
 
-        if (message.equals("GET PLAYER_NAME")) {
-                sendMessage("Player" + playerID);
-
-        }
     }
 
     @Override
     public void run() {
-        /*while(true){
-            System.out.println("Client side connection: " + connected);
-            if(connected){
-                message = readRxBuffer();
-                System.out.println("Client side message: "+ message);
+        System.out.println("Client started");
+        CliOutputHandler cliOut = new CliOutputHandler();
 
+        Message message;
+        while (true){
+            if(connected){
+                message = readIncomingMessage();
+
+                switch (message.operation) {
+
+                    case GET_INPUT:
+                        this.message = message;
+                        System.out.println("GET_INPUT, message was: " + message.text);
+
+                        message.setOperation(Message.Action.RESPONSE);
+                        message.setText("Player"+ playerID);
+                        message.setPlayerID(playerID);
+
+                        sendMessage(gson.toJson(message));
+
+                        break;
+
+                    case UPDATE_TILES:
+                        this.message = message;
+                        System.out.println("UPDATE, message was: " + message.text);
+                        if (message.boardTiles!=null){
+                            cliOut.showTiles(message.boardTiles);
+                            message.boardTiles = null;
+                        }
+                        break;
+
+                    case UPDATE_PLAYER:
+                        this.message = message;
+                        if(message.actualPlayer!=null && message.dice!=null){
+                            cliOut.showPlayerData(message.actualPlayer, message.dice, message.players);
+                            cliOut.showDice(message.dice);
+                        }
+                        break;
+
+                    case ERROR:
+                        this.message = message;
+                        System.out.println("ERROR, message was: " + message.operation);
+                        break;
+
+                    case INFO:
+                        this.message = message;
+
+                        playerID = message.playerID;
+                        text = message.text;
+                        System.out.println("INFO, message was: " + playerID);
+                        break;
+
+
+                    default:
+                        break;
+                         //TODO mettere un default
+                }
 
             }
-        }*/
 
+        }
 
-        //startConnection(hostIP, hostPortNumber);
     }
 }

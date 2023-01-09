@@ -23,6 +23,7 @@ public class Game {
         this.players = setupPlayers(numberOfPlayers);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
+        this.actualPlayer = this.players[0];
 
     }
     public void play(){

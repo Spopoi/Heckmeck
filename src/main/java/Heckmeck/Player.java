@@ -7,6 +7,7 @@ public class Player {
 
     private final String playerName;
     private StackOfTiles playerTiles;
+    private int playerID;
 
     private Player(String playerName){
         this.playerName = playerName;
@@ -48,6 +49,10 @@ public class Player {
 
     public void removeLastPickedTile() {
         playerTiles.removeLastTile();
+    }
+
+    public int getPlayerID(){
+        return playerID;
     }
 
     @Override

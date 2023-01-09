@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +53,7 @@ Gson gson = new Gson();
         cli.startConnection("127.0.0.1", 51734);
         waitOneSec();
 
-        assertEquals("ClientHandler", gameServer.clients.get(0).getClass().getSimpleName());
+        assertEquals("SocketHandler", gameServer.clients.get(0).getClass().getSimpleName());
         gameServer.close();
     }
 
@@ -76,13 +75,17 @@ Gson gson = new Gson();
         waitOneSec();
 
         System.out.println(gameServer.clients);
-        //String response = cli.sendMessage("hello server");
-        //String request = gameServer.currentClientPlayer.ReadIncomingMessage();
-        gameServer.currentClientPlayer.writeMessage("hello client 0");
-        String message = cli.readRxBuffer();
-        System.out.println(message);
+        Message message = new Message();
+        message.setText("hello client 0");
+        message.setOperation(Message.Action.INFO);
 
-        assertEquals("hello client 0" , message );
+        gameServer.currentClientPlayer.writeLine(gson.toJson(message));
+        waitOneSec();
+
+        String text = cli.getMessage().text;
+        System.out.println(text);
+
+        assertEquals("hello client 0" , text );
         gameServer.close();
     }
 
@@ -103,16 +106,21 @@ Gson gson = new Gson();
         cli.startConnection("127.0.0.1", 51734);
         waitOneSec();
 
-        String response = cli.sendMessage("hello server");
+        Message message = new Message();
+        message.setText("Hello Server");
+        message.setOperation(Message.Action.INFO);
 
-        int playerId = 0;
-        System.out.println(playerId);
-        String request = gameServer.clients.get(0).readReceivedMessage();
-        System.out.println(response);
+        Message responseMessage = new Message();
+        responseMessage.setText("OK");
+        responseMessage.setOperation(Message.Action.INFO);
+        gameServer.clients.get(0).writeLine(gson.toJson(responseMessage));
 
-        System.out.println(request);
-        gameServer.close();
-        assertEquals(request, "hello server");
+        cli.sendMessage(gson.toJson(message));
+
+        String stringedMsg = gameServer.clients.get(0).readReceivedMessage();
+
+        System.out.println(stringedMsg);
+        assertEquals(stringedMsg, "hello server");
         gameServer.close();
     }
 
@@ -138,24 +146,31 @@ Gson gson = new Gson();
 
         System.out.println("All Clients connected");
 
+        TCPIOHandler io = new TCPIOHandler(gameServer);
+
 
         String response1 = cli1.sendMessage("hello server");
+
+
         System.out.println(response1);
         String response2 = cli2.sendMessage("hello server");
         System.out.println(response2);
         String response3 = cli3.sendMessage("hello server");
         System.out.println(response3);
 
-        TCPIOHandler io = new TCPIOHandler(gameServer);
+
+        waitOneSec();
+
+
 
         int[] playerIds = {0, 1, 2};
         for(int id : playerIds){
-            String request = io.readMessage(id);
-            assertEquals(request, "hello server");
+            String request = io.readRxBuffer(id);
+            assertEquals("hello server", request );
         }
-        assertEquals("hello client 0", response1);
-        assertEquals("hello client 1", response2);
-        assertEquals("hello client 2", response3);
+        assertEquals("Hello player0", cli1.getMessage().text);
+        assertEquals("Hello player1", cli2.getMessage().text);
+        assertEquals("Hello player2", cli3.getMessage().text);
 
         gameServer.close();
 
@@ -165,33 +180,21 @@ Gson gson = new Gson();
     void select_player_name(){
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-
         Client cli1 = new Client();
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
-
         gameServer.setNumberOfPlayers(1);
         cli1.startConnection("127.0.0.1", 51734);
-
         TCPIOHandler io = new TCPIOHandler(gameServer);
-
         String response1 = cli1.sendMessage("hello server");
-        System.out.println(response1);
-        io.printMessage("GET PLAYER_NAME");
-        //gameServer.currentClientPlayer.writeMessage("GET PLAYER_NAME");
+        waitOneSec();
+        Message msg = new Message();
+        msg.setOperation(Message.Action.GET_INPUT);
+        io.printMessage(gson.toJson(msg));
+        waitOneSec();
+        String playerName = io.readMessage(0).text;
 
-        String receivedCommand = cli1.readRxBuffer();
-        System.out.println("command is " + receivedCommand);
-
-        int playerId = 0;
-        String request = "";
-        if(receivedCommand.equals("GET PLAYER_NAME")){
-            String resp = cli1.sendMessage("Player1");
-            System.out.println("resp is " + resp);
-            request = io.readMessage(playerId);
-        }
-
-        assertEquals("Player1", request);
+        assertEquals("Player0", playerName);
         gameServer.close();
 
 
@@ -204,30 +207,20 @@ Gson gson = new Gson();
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
         gameServer.setNumberOfPlayers(1);
-
         cli1.startConnection("127.0.0.1", 51734);
         waitOneSec();
-
         System.out.println("All Clients connected");
-
-        String response1 = cli1.sendMessage("hello server");
         TCPIOHandler io = new TCPIOHandler(gameServer);
-
-        String request = io.readMessage(0);
-
-        System.out.println("Request is: "+ request);
-
         io.choosePlayerName(gameServer.currentClientPlayer.playerId);
-
         waitOneSec();
 
-        String resp = cli1.readRxBuffer();
+        Message msg = io.readMessage(0);
+        waitOneSec();
+        System.out.println(msg.text);
 
         System.out.println("playerID: " + gameServer.clients.get(0).playerId);
-        if(resp.equals("GET PLAYER_NAME")){
-            cli1.sendMessage("Antonio");
-        }
-        assertEquals("Antonio", io.readMessage(0));
+        assertEquals(Message.Action.RESPONSE, msg.operation);
+        assertEquals("Player0", msg.text);
         gameServer.close();
 
     }
@@ -252,35 +245,28 @@ Gson gson = new Gson();
         cli2.startConnection("127.0.0.1", 51734);
         cli3.startConnection("127.0.0.1", 51734);
         waitOneSec();
-
         TCPIOHandler io = new TCPIOHandler(gameServer);
-
-        //TCPInputHandler tcpInput = new TCPInputHandler(gameServer);
-        //TCPOutputHandler tcpOutput = new TCPOutputHandler(gameServer);
-
         System.out.println("All Clients connected");
 
         Game game = new Game(io);
         waitOneSec();
-        //Questi messaggi andrebbero triggerati da un comando server
-        //String resp = cli1.readRxBuffer();
-
-        cli1.sendMessage("Antonio");
-        cli2.sendMessage("Mario");
-        cli3.sendMessage("Giorgio");
 
         game.init();
 
+        waitOneSec();
+
         Arrays.stream(game.getPlayers()).forEach(e -> System.out.println(e.getName()));
         Player[] players = game.getPlayers();
-        assertEquals(players[0].getName(), "Antonio");
-        assertEquals(players[1].getName(), "Mario");
-        assertEquals(players[2].getName(), "Giorgio");
+        assertEquals(players[0].getName(), "Player0");
+        assertEquals(players[1].getName(), "Player1");
+        assertEquals(players[2].getName(), "Player2");
         gameServer.close();
     }
 
-    //@Test
-    void receive_game_obj(){
+
+
+    @Test
+    void receive_game_obj() {
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -302,58 +288,18 @@ Gson gson = new Gson();
 
         TCPIOHandler io = new TCPIOHandler(gameServer);
 
-        //TCPInputHandler tcpInput = new TCPInputHandler(gameServer);
-        //TCPOutputHandler tcpOutput = new TCPOutputHandler(gameServer);
-
         System.out.println("All Clients connected");
 
         Game game = new Game(io);
         waitOneSec();
-        //Questi messaggi andrebbero triggerati da un comando server
-        //String resp = cli1.readRxBuffer();
-
-        cli1.sendMessage("Antonio");
-        cli2.sendMessage("Mario");
-        cli3.sendMessage("Giorgio");
 
         game.init();
 
         Arrays.stream(game.getPlayers()).forEach(e -> System.out.println(e.getName()));
-        Player[] players = game.getPlayers();
-
-
-        //Lettura manuale lato client dei messaggi incoming TODO implementare client
-        System.out.println(cli1.readRxBuffer()); //Choose number of players between 2 and 7:
-        System.out.println(cli1.readRxBuffer()); //Insert the name for player1
-        System.out.println(cli1.readRxBuffer()); //Insert the name for player2
-        //System.out.println(cli1.readRxBuffer()); //Insert the name for player3
 
         io.showBoardTiles(game.getBoardTiles());
-        waitOneSec();
-        String tilesString = cli1.readRxBuffer();
-        System.out.println("Tiles are: " + tilesString );
-
-        io.showDice(game.getDice());
-        waitOneSec();
-        String diceString = cli1.readRxBuffer();
-        System.out.println("Dice are: " + diceString);
-
-        io.showPlayerData(players[0], game.getDice(), players);
-        waitOneSec();
-        String playersString = cli1.readRxBuffer();
-        System.out.println("Players are: " + playersString);
-
-        BoardTiles tiles = gson.fromJson(tilesString , BoardTiles.class);
-        Dice dice = gson.fromJson(diceString , Dice.class);
-        Player[] playersFromTCP = gson.fromJson(playersString , Player[].class);
-
-        CliOutputHandler cliOut = new CliOutputHandler();
-        cliOut.showTiles(tiles);
-        cliOut.showPlayerData(players[0], dice, playersFromTCP);
-        cliOut.showDice(dice);
-        //assertTrue(tiles.toString().equals(game.boardTiles.toString())); //TODO capire come fare a dire che sono uguali
-        //assertTrue(dice.toString().equals(game.dice));
+        io.showPlayerData(game.getActualPlayer(), game.getDice(), game.getPlayers());
+        gameServer.close();
 
     }
-
 }
