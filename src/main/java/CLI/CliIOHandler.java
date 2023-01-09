@@ -70,13 +70,16 @@ public class CliIOHandler implements IOHandler {
     @Override
     public int chooseNumberOfPlayers() {
         printMessage("Choose number of players between 2 and 7:");
-        while(true){
-            try{
+        while (true) {
+            try {
                 int numberOfPlayer = getInputNumber();
-                if(Rules.validNumberOfPlayer(numberOfPlayer)) return numberOfPlayer;
-                else throw new IllegalInput("Invalid number of player, please select a number between 2 and 7");
-            } catch (IllegalInput | NumberFormatException e) {
-                printMessage(e.getMessage());
+                if (Rules.validNumberOfPlayer(numberOfPlayer)) {
+                    return numberOfPlayer;
+                } else {
+                    printMessage("Input is not correct, choose a number between 2 and 7:");
+                }
+            } catch (NumberFormatException ex) {
+                printMessage("Input is not correct, choose a number between 2 and 7:");
             }
         }
     }
