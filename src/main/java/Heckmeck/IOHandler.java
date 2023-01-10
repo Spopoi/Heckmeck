@@ -69,4 +69,6 @@ public interface IOHandler {
 //        }
 //    }
     void showBustMessage();
+
+    void printError(String text);
 }
