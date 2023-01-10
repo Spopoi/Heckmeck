@@ -1,5 +1,6 @@
 package Heckmeck;
 
+import CLI.CliIOHandler;
 import CLI.CliInputHandler;
 import CLI.CliOutputHandler;
 
@@ -7,12 +8,11 @@ import java.io.IOException;
 
 public class HeckmeckCLI {
     public static void main(String[] args) throws IOException {
-        CliInputHandler input = new CliInputHandler();
-        CliOutputHandler output = new CliOutputHandler();
-        /*Game game = new Game(output, input);
+        CliIOHandler io = new CliIOHandler();
+        Game game = new Game(io);
         game.init();
         game.play();
-*/
+
         /*output.showMenu();
         int numberOfPlayers = input.chooseNumberOfPlayers();
         Player[] players = new Player[numberOfPlayers];

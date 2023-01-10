@@ -13,7 +13,6 @@ import java.util.Map;
 
 import static javax.swing.JOptionPane.*;
 import static java.awt.GridBagConstraints.*;
-//import static javax.swing.SwingConstants.CENTER;
 
 public class GUIIOHandler implements IOHandler {
 
@@ -228,12 +227,7 @@ public class GUIIOHandler implements IOHandler {
 
         for(Die die : dice.getDiceList()){
             JButton dieButton = new JButton(getDieIcon(die.getDieFace()));
-            dieButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    chosenFace = die.getDieFace();
-                }
-            });
+            dieButton.addActionListener(e -> chosenFace = die.getDieFace());
             dieButton.setPreferredSize(new Dimension(60,60));
             dicePanel.add(dieButton, CENTER_ALIGNMENT);
         }
@@ -245,18 +239,6 @@ public class GUIIOHandler implements IOHandler {
             Thread.onSpinWait();
         }
         return chosenFace;
-
-
-
-        /*while (true) {
-            try {
-                String chosenDice = showInputDialog(null, "Which die face do you want to pick?");
-                if (Die.stringToFaceMap.containsKey(chosenDice)) return Die.stringToFaceMap.get(chosenDice);
-                else throw new IllegalInput("Incorrect input, choose between {1, 2, 3, 4, 5, w}: ");
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
-            }
-        }*/
     }
 
     @Override
