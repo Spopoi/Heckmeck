@@ -105,7 +105,7 @@ public class TCPIOHandler implements IOHandler{
         message.setOperation(Message.Action.GET_INPUT);
         message.setPlayerID(getCurrentPlayerId());
 
-        message.setText("Do you want to pick?");
+        message.setText("Do you want to pick tile n. " + gameServer.game.getDice().getScore() + "?");
         gameServer.clients.stream().forEach(client -> client.writeMessage(message));
         //waitOneSec();
         Message msg = readMessage(gameServer.game.getActualPlayer().getPlayerID());
