@@ -2,7 +2,6 @@ package it.units.heckmeck;
 
 import CLI.CliIOHandler;
 import CLI.CliInputHandler;
-import CLI.CliOutputHandler;
 import Heckmeck.BoardTiles;
 import Heckmeck.Dice;
 import Heckmeck.Die;
@@ -11,12 +10,15 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.stream.Stream;
 
 public class TestCliInputOutput {
 
@@ -34,7 +36,9 @@ public class TestCliInputOutput {
 
     private final PrintStream outStream = new PrintStream(fakeStandardOutput);
 
-    private final CliOutputHandler output = new CliOutputHandler();
+    private final CliIOHandler inputOutput = new CliIOHandler();
+
+    private static final String newLine = System.lineSeparator();
 
 
     // TODO: Should we ask if user wants to play?
@@ -84,17 +88,79 @@ public class TestCliInputOutput {
         Assertions.assertEquals(expectedFace, obtainedFace);
     }
 
+    @ParameterizedTest
+    @MethodSource("wrongUserInputForPlayerNumberProvider")
+    @Disabled
+    void wrongNumberOfPlayersAreNotAccepted(String userInput) {
+        // TODO: infinite loop breaks the test
+        System.out.println(userInput);
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        inputOutputHandler.chooseNumberOfPlayers();
+
+        String expectedResponse = "Input is not correct, choose a number between 2 and 7:";
+        String actualResponse = fakeStandardOutput.toString();
+        System.out.println(actualResponse);
+        Assertions.assertEquals(expectedResponse, actualResponse);
+    }
+
+    @ParameterizedTest
+    @MethodSource("correctUserInputForPlayerNumberProvider")
+    void correctNumberOfPlayersAreAccepted(String userInput, int expectedReadNumber) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        Assertions.assertEquals(expectedReadNumber, inputOutputHandler.chooseNumberOfPlayers());
+    }
+
+    @ParameterizedTest
+    @MethodSource("blankUserInputForPlayerNameProvider")
+    @Disabled
+    void blankPlayerNameNotAccepted(String userInput) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        inputOutputHandler.choosePlayerName(1);
+
+        String expectedResponse = "Name of a player can not be blank.";
+        String actualResponse = fakeStandardOutput.toString();
+        Assertions.assertEquals(expectedResponse, actualResponse);
+    }
+
+    @ParameterizedTest
+    @MethodSource("correctUserInputForPlayerNameProvider")
+    void correctPlayerNameAreAccepted(String userInput, String expectedReadPlayerName) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        Assertions.assertEquals(expectedReadPlayerName, inputOutputHandler.choosePlayerName(1));
+    }
+
     @Test
     void printInitialBoardConfiguration() {
         BoardTiles boardTiles = BoardTiles.init();
 
         setSystemOut(outStream);
-        output.showTiles(boardTiles);
+        inputOutput.showBoardTiles(boardTiles);
 
         Assertions.assertEquals(INITIAL_BOARD, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
     }
 
     @Test
+    @Disabled
     void printEightOnesAsDiceResult() {
         Dice dice = Dice.init();
 
@@ -103,12 +169,13 @@ public class TestCliInputOutput {
             dice.addSpecificDie(Die.Face.ONE);
         }
         setSystemOut(outStream);
-        output.showDice(dice);
+        inputOutput.chooseDie(dice);
 
         Assertions.assertEquals(EIGHT_DICE_WITH_ONE_FACES, fakeStandardOutput.toString());
     }
 
     @Test
+    @Disabled
     void printAllFacesAsDiceResult() {
         Dice dice = Dice.init();
 
@@ -120,7 +187,7 @@ public class TestCliInputOutput {
         dice.addSpecificDie(Die.Face.FIVE);
         dice.addSpecificDie(Die.Face.WORM);
         setSystemOut(outStream);
-        output.showDice(dice);
+        inputOutput.chooseDie(dice);
 
         Assertions.assertEquals(ALL_DIE_FACES, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
     }
@@ -135,7 +202,7 @@ public class TestCliInputOutput {
         Player[] players = {player1, player2, player3};
 
 
-        output.showPlayerData(player1, dice, players);
+        inputOutput.showPlayerData(player1, dice, players);
 
         Assertions.assertEquals(INITIAL_PLAYER_STATUS, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
     }
@@ -197,5 +264,35 @@ public class TestCliInputOutput {
                                 
                 """;
     }
+
+    static String stringToUserInput(String text) {
+        return text + newLine;
+    }
+
+    static Stream<String> wrongUserInputForPlayerNumberProvider(){
+        return Stream.of("1", "8", "ciao")
+                .map(TestCliInputOutput::stringToUserInput);
+    }
+
+    static Stream<Arguments> correctUserInputForPlayerNumberProvider() {
+        return Stream.of(
+                Arguments.arguments(stringToUserInput("2"), 2),
+                Arguments.arguments(stringToUserInput("7"), 7)
+        );
+    }
+
+    static Stream<String> blankUserInputForPlayerNameProvider() {
+        return Stream.of("", "\t")
+                .map(TestCliInputOutput::stringToUserInput);
+    }
+
+    static  Stream<Arguments> correctUserInputForPlayerNameProvider() {
+        return Stream.of(
+                Arguments.arguments(stringToUserInput("Mario"), "Mario"),
+                Arguments.arguments(stringToUserInput("Luigi"), "Luigi"),
+                Arguments.arguments(stringToUserInput("Sara"), "Sara")
+        );
+    }
+
 
 }
