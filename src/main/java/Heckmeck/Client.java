@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 
 public class Client implements Runnable{
@@ -26,12 +29,29 @@ public class Client implements Runnable{
 
     private boolean connected = false;
 
-    private int playerID;
+    private int playerID = -1;
+    void waitOneSec(){
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public Client(){
         //Thread clientThread = new Thread(this);
         //clientThread.start();
 
+    }
+    public static void main(String args[]){
+        Client cli = new Client();
+        cli.startConnection("127.0.0.1", 51734);
+        CliInputHandler input = new CliInputHandler();
+        CliOutputHandler output = new CliOutputHandler();
+        output.showWelcomeMessage();
+        //IOHandler io = new IOHandler(input, output);
+
+        //run();
     }
 
     public void startConnection(String ip, int port) {
@@ -44,7 +64,7 @@ public class Client implements Runnable{
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             connected = true;
-            sendMessage("hello server");
+            //sendMessage("hello server");
 
             //System.out.println("Connection established" + clientSocket.isConnected());
         } catch (IOException e) {
@@ -58,10 +78,10 @@ public String sendMessage(String msg) {
         out.flush();
         String resp = "";
         /*try {
-            resp = "";// in.readLine();
+            in.readLine();
 
         } catch (IOException e) {
-            System.out.println("Error client reading message");
+            System.out.println("Error client reading line");
         }*/
         return resp;
     }
@@ -72,7 +92,8 @@ public String sendMessage(String msg) {
             resp = in.readLine();
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error client reading line");
+
         }
         return resp;
     }
@@ -97,18 +118,13 @@ public String sendMessage(String msg) {
         }
     }
 
-    public void main(String[] args) throws IOException {
-        Client cli = new Client();
-        cli.startConnection("127.0.0.1", 51734);
-        CliInputHandler input = new CliInputHandler();
-        CliOutputHandler output = new CliOutputHandler();
-        output.showWelcomeMessage();
-        //IOHandler io = new IOHandler(input, output);
-        if(readRxBuffer().equals("GET PLAYER_NAME")){
-            String playerName = input.choosePlayerName(0);
-            cli.sendMessage(playerName);
-        }
 
+
+    public void sendAck(){
+        Message ack = new Message();
+        ack.setOperation(Message.Action.ACK);
+        ack.setPlayerID(playerID);
+        sendMessage(gson.toJson(ack));
     }
 
     public void resetMessage() {
@@ -117,58 +133,95 @@ public String sendMessage(String msg) {
 
     }
 
+    public boolean isYourTurn(Message msg){
+        return msg.playerID == playerID;
+    }
+
     @Override
     public void run() {
         System.out.println("Client started");
         CliOutputHandler cliOut = new CliOutputHandler();
+        CliInputHandler cliIn = new CliInputHandler();
+        Random rand = new Random();
+
 
         Message message;
+        int i = 0;
         while (true){
             if(connected){
                 message = readIncomingMessage();
+                Message msg;
+                String[] choices = {"1", "2", "3", "4", "5", "w", "y"};
+
 
                 switch (message.operation) {
+                    case INIT:
+                        System.out.println("ID: " + playerID + " INIT, message was: " + message.playerID);
+                        playerID = message.playerID;
+                        sendAck();
+                        break;
+
+                    case GET_PLAYER_NAME:
+                        msg = new Message();
+                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + message.text);
+
+                        msg.setOperation(Message.Action.RESPONSE);
+                        msg.setPlayerID(playerID);
+                        //msg.setText("Player"+ rand.nextInt(1000));
+                        msg.setText("Player"+ playerID);
+                        if(isYourTurn(message)) sendMessage(gson.toJson(msg));
+                        else sendAck();
+                        break;
+
 
                     case GET_INPUT:
-                        this.message = message;
-                        System.out.println("GET_INPUT, message was: " + message.text);
+                        msg = new Message();
+                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " GET_INPUT, message was: " + message.text);
 
-                        message.setOperation(Message.Action.RESPONSE);
-                        message.setText("Player"+ playerID);
-                        message.setPlayerID(playerID);
+                        msg.setOperation(Message.Action.RESPONSE);
+                        msg.setText(choices[i%choices.length]);
+                        msg.setPlayerID(playerID);
+                        i++;
 
-                        sendMessage(gson.toJson(message));
+
+                        if(isYourTurn(message)) sendMessage(gson.toJson(msg));
+                        else sendAck();
 
                         break;
 
                     case UPDATE_TILES:
                         this.message = message;
-                        System.out.println("UPDATE, message was: " + message.text);
-                        if (message.boardTiles!=null){
+                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + message);
+                        if (isYourTurn(message)){
+                            System.out.println("Printing tiles of player n. " + playerID);
                             cliOut.showTiles(message.boardTiles);
-                            message.boardTiles = null;
+
                         }
+                        sendAck();
                         break;
 
                     case UPDATE_PLAYER:
                         this.message = message;
-                        if(message.actualPlayer!=null && message.dice!=null){
+                        if(isYourTurn(message)){
                             cliOut.showPlayerData(message.actualPlayer, message.dice, message.players);
                             cliOut.showDice(message.dice);
                         }
+                        sendAck();
                         break;
 
                     case ERROR:
                         this.message = message;
-                        System.out.println("ERROR, message was: " + message.operation);
+                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " ERROR, message was: " + message.operation);
+                        System.out.println(message.text);
+                        sendAck();
                         break;
 
                     case INFO:
                         this.message = message;
 
-                        playerID = message.playerID;
                         text = message.text;
-                        System.out.println("INFO, message was: " + playerID);
+                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
+                        sendAck();
                         break;
 
 

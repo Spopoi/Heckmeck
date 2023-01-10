@@ -66,7 +66,7 @@ public class CliInputHandler implements InputHandler {
         return(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision));
     }
 
-    private String getInputString(){
+    public String getInputString(){
         return scan.nextLine();
     }
 

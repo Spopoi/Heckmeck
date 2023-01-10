@@ -15,18 +15,21 @@ public class Message implements Serializable {
     public  String text;
     public int playerID;
 
+
     public Message(){
 
     }
 
 
-
     public  enum Action {
+        INIT,
         INFO,
         GET_INPUT,
         UPDATE_TILES,
         UPDATE_PLAYER,
         RESPONSE,
+        ACK,
+        GET_PLAYER_NAME,
         ERROR
     }
 

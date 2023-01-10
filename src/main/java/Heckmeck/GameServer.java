@@ -13,7 +13,6 @@ public class GameServer implements Runnable{
 
     public List<SocketHandler> clients = new ArrayList<SocketHandler>();
 
-    public SocketHandler currentClientPlayer;
     private Socket clientSocket;
     private boolean hostClosedRoom = false;
     private Thread t1;
@@ -61,18 +60,11 @@ public class GameServer implements Runnable{
                     closeRoom();
                 }
 
-
-
-
-                //game = new Game(output, input);
-                //game.init();
-                //game.play();
-
             }
 
 
             clients.stream().forEach(e-> new Thread(e).start());
-            this.currentClientPlayer = clients.get(0);
+            //this.clients.stream().forEach(e-> e.initClient());
             //System.out.println(this.currentClientPlayer);
 
             //currentClientPlayer = getClientById(currentPlayerID);
@@ -95,6 +87,10 @@ public class GameServer implements Runnable{
 
     public int getNumOfPlayers(){
         return numOfPlayers;
+    }
+
+    public void initClients(){          // TODO mettere return type boolean
+        clients.stream().forEach(e -> e.initClient());
     }
 
     private SocketHandler getClientById(int id){
