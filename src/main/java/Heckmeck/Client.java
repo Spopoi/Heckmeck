@@ -29,7 +29,10 @@ public class Client implements Runnable{
 
     private boolean connected = false;
 
-    private int playerID = -1;
+    CliOutputHandler cliOut = new CliOutputHandler();
+    CliInputHandler cliIn = new CliInputHandler();
+
+    private int playerID;
     void waitOneSec(){
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -39,20 +42,12 @@ public class Client implements Runnable{
     }
 
     public Client(){
+
         //Thread clientThread = new Thread(this);
         //clientThread.start();
 
     }
-    public static void main(String args[]){
-        Client cli = new Client();
-        cli.startConnection("127.0.0.1", 51734);
-        CliInputHandler input = new CliInputHandler();
-        CliOutputHandler output = new CliOutputHandler();
-        output.showWelcomeMessage();
-        //IOHandler io = new IOHandler(input, output);
 
-        //run();
-    }
 
     public void startConnection(String ip, int port) {
         try {
@@ -140,99 +135,112 @@ public String sendMessage(String msg) {
     @Override
     public void run() {
         System.out.println("Client started");
-        CliOutputHandler cliOut = new CliOutputHandler();
-        CliInputHandler cliIn = new CliInputHandler();
+
         Random rand = new Random();
+        commandInterpreter(true);
+    }
 
+    public static void main(String args[]){
+        Client cli = new Client();
+        cli.startConnection("127.0.0.1", 51734);
+        CliInputHandler input = new CliInputHandler();
+        CliOutputHandler output = new CliOutputHandler();
+        output.showWelcomeMessage();
 
-        Message message;
+        //IOHandler io = new IOHandler(input, output);
+        cli.commandInterpreter(false);
+    }
+
+    private void commandInterpreter(boolean botMode){
+        Message rxMessage;
         int i = 0;
         while (true){
             if(connected){
-                message = readIncomingMessage();
-                Message msg;
+                rxMessage = readIncomingMessage();
+                Message txMessage;
                 String[] choices = {"1", "2", "3", "4", "5", "w", "y"};
 
 
-                switch (message.operation) {
+                switch (rxMessage.operation) {
                     case INIT:
-                        System.out.println("ID: " + playerID + " INIT, message was: " + message.playerID);
-                        playerID = message.playerID;
+                        System.out.println("ID: " + playerID + " INIT, message was: " + rxMessage.playerID);
+                        playerID = rxMessage.playerID;
                         sendAck();
                         break;
 
                     case GET_PLAYER_NAME:
-                        msg = new Message();
-                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + message.text);
+                        txMessage = new Message();
+                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
 
-                        msg.setOperation(Message.Action.RESPONSE);
-                        msg.setPlayerID(playerID);
+                        txMessage.setOperation(Message.Action.RESPONSE);
+                        txMessage.setPlayerID(playerID);
                         //msg.setText("Player"+ rand.nextInt(1000));
-                        msg.setText("Player"+ playerID);
-                        if(isYourTurn(message)) sendMessage(gson.toJson(msg));
+                        if(botMode) txMessage.setText("Player"+ playerID);
+                        else if(isYourTurn(rxMessage)) txMessage.setText(cliIn.getInputString());
+
+                        if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
                         else sendAck();
                         break;
 
 
                     case GET_INPUT:
-                        msg = new Message();
-                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " GET_INPUT, message was: " + message.text);
+                        txMessage = new Message();
+                        //if(isYourTurn(rxMessage))
+                        System.out.println(rxMessage.text);
 
-                        msg.setOperation(Message.Action.RESPONSE);
-                        msg.setText(choices[i%choices.length]);
-                        msg.setPlayerID(playerID);
+                        txMessage.setOperation(Message.Action.RESPONSE);
+                        if(botMode) txMessage.setText(choices[i%choices.length]);
+                        else if(isYourTurn(rxMessage)) txMessage.setText(cliIn.getInputString());
+
+                        txMessage.setPlayerID(playerID);
                         i++;
 
 
-                        if(isYourTurn(message)) sendMessage(gson.toJson(msg));
+                        if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
                         else sendAck();
 
                         break;
 
                     case UPDATE_TILES:
-                        this.message = message;
-                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + message);
-                        if (isYourTurn(message)){
-                            System.out.println("Printing tiles of player n. " + playerID);
-                            cliOut.showTiles(message.boardTiles);
-
+                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + rxMessage);
+                        if (isYourTurn(rxMessage)){
                         }
+                        cliOut.showTiles(rxMessage.boardTiles);
+
                         sendAck();
                         break;
 
                     case UPDATE_PLAYER:
-                        this.message = message;
-                        if(isYourTurn(message)){
-                            cliOut.showPlayerData(message.actualPlayer, message.dice, message.players);
-                            cliOut.showDice(message.dice);
+                        this.message = rxMessage;
+                        if(isYourTurn(rxMessage)){
+
                         }
+                        cliOut.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
+                        cliOut.showDice(rxMessage.dice);
                         sendAck();
                         break;
 
                     case ERROR:
-                        this.message = message;
-                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " ERROR, message was: " + message.operation);
-                        System.out.println(message.text);
+                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " ERROR, message was: " + rxMessage.operation);
+                        System.out.println(rxMessage.text);
                         sendAck();
                         break;
 
                     case INFO:
-                        this.message = message;
-
-                        text = message.text;
-                        if(isYourTurn(message)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
+                        text = rxMessage.text;
+                        cliOut.printMessage(text);
+                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
                         sendAck();
                         break;
 
 
                     default:
                         break;
-                         //TODO mettere un default
+                    //TODO mettere un default
                 }
 
             }
 
         }
-
     }
 }
