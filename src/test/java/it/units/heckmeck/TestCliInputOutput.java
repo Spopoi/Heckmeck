@@ -109,18 +109,6 @@ public class TestCliInputOutput {
     }
 
     @ParameterizedTest
-    @MethodSource("correctUserInputForPlayerNumberProvider")
-    void correctNumberOfPlayersAreAccepted(String userInput, int expectedReadNumber) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
-
-        Assertions.assertEquals(expectedReadNumber, inputOutputHandler.chooseNumberOfPlayers());
-    }
-
-    @ParameterizedTest
     @MethodSource("blankUserInputForPlayerNameProvider")
     @Disabled
     void blankPlayerNameNotAccepted(String userInput) {
@@ -135,6 +123,18 @@ public class TestCliInputOutput {
         String expectedResponse = "Name of a player can not be blank.";
         String actualResponse = fakeStandardOutput.toString();
         Assertions.assertEquals(expectedResponse, actualResponse);
+    }
+
+    @ParameterizedTest
+    @MethodSource("correctUserInputForPlayerNumberProvider")
+    void correctNumberOfPlayersAreAccepted(String userInput, int expectedReadNumber) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        Assertions.assertEquals(expectedReadNumber, inputOutputHandler.chooseNumberOfPlayers());
     }
 
     @ParameterizedTest
@@ -205,6 +205,23 @@ public class TestCliInputOutput {
         inputOutput.showPlayerData(player1, dice, players);
 
         Assertions.assertEquals(INITIAL_PLAYER_STATUS, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
+    }
+
+    @ParameterizedTest
+    @MethodSource("wrongUserInputWhenPickingTilesProvider")
+    @Disabled
+    void printWarningForWrongAnswersWhenPickingTiles(String userInput) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        inputOutputHandler.wantToPick(1);
+
+        String expectedResponse = "Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice";
+        String actualResponse = fakeStandardOutput.toString();
+        Assertions.assertEquals(expectedResponse, actualResponse);
     }
 
 
@@ -286,12 +303,17 @@ public class TestCliInputOutput {
                 .map(TestCliInputOutput::stringToUserInput);
     }
 
-    static  Stream<Arguments> correctUserInputForPlayerNameProvider() {
+    static Stream<Arguments> correctUserInputForPlayerNameProvider() {
         return Stream.of(
                 Arguments.arguments(stringToUserInput("Mario"), "Mario"),
                 Arguments.arguments(stringToUserInput("Luigi"), "Luigi"),
                 Arguments.arguments(stringToUserInput("Sara"), "Sara")
         );
+    }
+
+    static Stream<String> wrongUserInputWhenPickingTilesProvider() {
+        return Stream.of("ciao", "", "mondo")
+                .map(TestCliInputOutput::stringToUserInput);
     }
 
 

@@ -50,18 +50,6 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public void showTurnBeginConfirm(String playerName) {
-        String message = ": hit enter to start your turn #";
-        String separator = "#".repeat(playerName.length()).concat(
-                "#".repeat(message.length()+2));
-
-        printMessage(separator);
-        printMessage("# " + playerName + message );
-        printMessage(separator);
-        getInputString();
-    }
-
-    @Override
     public void showWelcomeMessage() {
         printMessage(FileReader.readLogoFromTextFile(getLogoPath()));
         printMessage("                      Welcome in Heckmeck");
@@ -84,7 +72,6 @@ public class CliIOHandler implements IOHandler {
         }
     }
 
-
     @Override
     public String choosePlayerName(int playerNumber) {
         // TODO: manage tabs in names, breaks everything
@@ -100,6 +87,17 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
+    public void showTurnBeginConfirm(String playerName) {
+        // TODO: remove code duplication in the ###### msg
+        String mainMessage = "# " + playerName + ": hit enter to start your turn #";
+        String separator = "#".repeat(mainMessage.length());
+        printMessage(separator + newLine +
+                mainMessage + newLine +
+                separator);
+        getInputString();
+    }
+
+    @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         if (!boardTiles.allTilesHaveSameHeight()) {
             printMessage("WARNING: In the Tiles representation you've selected, tiles have different height!!!");
@@ -109,32 +107,18 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public boolean wantToPick(int diceScore) {
-
-        printMessage("Actual score: " + diceScore);
-        printMessage("Do you want to pick the tile?" + newLine + "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
-        while(true) {
-            try {
-                String decision  = getInputString();
-                if(isYesOrNoChar(decision)) throw new IllegalInput("Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice");
-                else return "y".equalsIgnoreCase(decision);
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
-            }
-        }
+        printMessage("Your actual score is: " + diceScore);
+        printMessage("Do you want to pick the tile?" + newLine +
+                "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice");
     }
 
     @Override
     public boolean wantToSteal(Player robbedPlayer) {
-        printMessage("Do you want to steal tile number "+ robbedPlayer.getLastPickedTile().getNumber()+ " from "+ robbedPlayer.getName() + "? Press 'y' for stealing or 'n' for continuing your turn:");
-        while(true) {
-            try {
-                String decision  = getInputString();
-                if(isYesOrNoChar(decision)) throw new IllegalInput("Incorrect decision, please select 'y' to steal or 'n' to continue your turn");
-                else return "y".equalsIgnoreCase(decision);
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
-            }
-        }
+        printMessage("Do you want to steal tile number " + robbedPlayer.getLastPickedTile().getNumber() +
+                " from "+ robbedPlayer.getName() +
+                "? Press 'y' for stealing or 'n' for continuing your turn:");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' to steal or 'n' to continue your turn");
     }
 
     @Override
@@ -186,6 +170,7 @@ public class CliIOHandler implements IOHandler {
     //TODO: ha ancora senso mantenere le eccezioni?
     @Override
     public Die.Face chooseDie(Dice dice) {
+        // TODO: bug input
         printMessage(Dice.diceToString(dice.getDiceList()));
         printMessage("Pick one unselected face");
         while (true) {
@@ -246,11 +231,6 @@ public class CliIOHandler implements IOHandler {
         return resourcePath;
     }
 
-
-    private boolean isYesOrNoChar(String decision){
-        return(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision));
-    }
-
     private String getInputString(){
         return scan.nextLine();
     }
@@ -259,6 +239,17 @@ public class CliIOHandler implements IOHandler {
         return Integer.parseInt(getInputString());
     }
 
-
+    private boolean getYesOrNoAnswer(String invalidInputMessage) {
+        while(true){
+            String decision = getInputString();
+            if (Objects.equals(decision, "y")) {
+                return true;
+            } else if (Objects.equals(decision, "n")) {
+                return false;
+            } else {
+                printMessage(invalidInputMessage);
+            }
+        }
+    }
 
 }
