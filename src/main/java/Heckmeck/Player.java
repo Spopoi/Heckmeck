@@ -55,6 +55,10 @@ public class Player {
         return playerID;
     }
 
+    public void setPlayerID(int playerID) {
+        this.playerID = playerID;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

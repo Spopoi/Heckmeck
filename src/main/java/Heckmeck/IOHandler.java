@@ -70,5 +70,5 @@ public interface IOHandler {
 //    }
     void showBustMessage();
 
-    void printError(String text);
+    String printError(String text);
 }

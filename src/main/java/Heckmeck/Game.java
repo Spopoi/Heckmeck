@@ -44,6 +44,7 @@ public class Game {
         io.showBoardTiles(boardTiles);
         boolean isOnRun = roll();
         while (isOnRun){
+            io.showBoardTiles(boardTiles);
             if (dice.isFaceChosen(Face.WORM)) {
                 if (steal() || pick()) {
                     isOnRun = false;
@@ -126,10 +127,11 @@ public class Game {
         for(int i=0; i<numberOfPlayers; i++){
             String playerName = io.choosePlayerName(i);
             while(isNameAlreadyPicked(playerName,playersList)){
-                io.printMessage("Already picked name.. Please choose another one");
+                io.printMessage(playerName + " Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(i+1);
             }
             playersList[i] = Player.generatePlayer(playerName);
+            playersList[i].setPlayerID(i); // TODO Modificato da dew54.. da fare "meglio"
         }
         return playersList;
     }

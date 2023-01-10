@@ -264,6 +264,11 @@ public class GUIIOHandler implements IOHandler {
         printMessage("BUUUUUSTTTT!!!!");
     }
 
+    @Override
+    public String printError(String text) {
+        return null;
+    }
+
 
     //TODO: give the size of Tile Icon as parameter
     private ImageIcon getTileIcon(int tileNumber){
