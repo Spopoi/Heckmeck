@@ -13,7 +13,6 @@ public class GameServer implements Runnable{
 
     public List<SocketHandler> clients = new ArrayList<SocketHandler>();
 
-    private Socket clientSocket;
     private boolean hostClosedRoom = false;
     private Thread t1;
     private int numOfPlayers;
@@ -38,25 +37,36 @@ public class GameServer implements Runnable{
     }
 
     public void run() {
+
+
         try {
             //ss = new ServerSocket(51734);
             System.out.println("Waiting for client");
             int playerID = 0;
-            int currentPlayerID = 0;
-
             //openRoom();
             while(!isRoomClosed()){
+                Socket clientSocket;
 
                 System.out.println("Waiting for connections: ");
                 clientSocket = ss.accept();
-
-                SocketHandler clientHandler = new SocketHandler(clientSocket, playerID);
-
                 System.out.println("Accepted incoming connection #: "+ playerID);
-                this.clients.add(clientHandler);
 
-                playerID++;
-                if (playerID == 7 || playerID == numOfPlayers ) {
+
+                if (clientSocket.isConnected()) {
+                    SocketHandler socketHandler = new SocketHandler(clientSocket, playerID);
+                    this.clients.add(socketHandler);
+
+                    playerID++;
+
+                }
+
+
+
+
+
+
+
+                if (playerID == 8 || playerID == numOfPlayers) {
                     closeRoom();
                 }
 
@@ -64,7 +74,7 @@ public class GameServer implements Runnable{
 
 
             clients.stream().forEach(e-> new Thread(e).start());
-            //this.clients.stream().forEach(e-> e.initClient());
+            clients.stream().forEach(e-> e.initClient());
             //System.out.println(this.currentClientPlayer);
 
             //currentClientPlayer = getClientById(currentPlayerID);

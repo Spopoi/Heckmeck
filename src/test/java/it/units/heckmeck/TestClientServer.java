@@ -414,11 +414,12 @@ Gson gson = new Gson();
 
         cli1.startConnection("127.0.0.1", 51734);
         cli2.startConnection("127.0.0.1", 51734);
-        cli3.startConnection("127.0.0.1", 51734);
+        //cli3.startConnection("127.0.0.1", 51734);
         waitOneSec();
-        boolean isInit1 = gameServer.clients.get(0).initClient();
-        boolean isInit2 = gameServer.clients.get(1).initClient();
-        boolean isInit3 = gameServer.clients.get(2).initClient();
+        while(!gameServer.isRoomClosed())
+        //boolean isInit1 = gameServer.clients.get(0).initClient();
+        //boolean isInit2 = gameServer.clients.get(1).initClient();
+        //boolean isInit3 = gameServer.clients.get(2).initClient();
 
         waitOneSec();
         TCPIOHandler io = new TCPIOHandler(gameServer);
