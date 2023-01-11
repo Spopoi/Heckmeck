@@ -1,7 +1,9 @@
 package TCP;
 
+import CLI.CliIOHandler;
 import CLI.CliInputHandler;
 import CLI.CliOutputHandler;
+import Heckmeck.IOHandler;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -28,8 +30,7 @@ public class Client implements Runnable{
 
     private boolean connected = false;
 
-    CliOutputHandler cliOut = new CliOutputHandler();
-    CliInputHandler cliIn = new CliInputHandler();
+
 
     private int playerID;
     void waitOneSec(){
@@ -128,21 +129,22 @@ public String sendMessage(String msg) {
 
     @Override
     public void run() {
-        commandInterpreter(true);
+        CliIOHandler cliIo = new CliIOHandler();
+
+        commandInterpreter(true, cliIo);
     }
 
     public static void main(String args[]){
         Client cli = new Client();
         cli.startConnection("127.0.0.1", 51734);
-        CliInputHandler input = new CliInputHandler();
-        CliOutputHandler output = new CliOutputHandler();
-        output.showWelcomeMessage();
 
-        //IOHandler io = new IOHandler(input, output);
-        cli.commandInterpreter(false);
+        CliIOHandler cliIo = new CliIOHandler();
+        cliIo.showWelcomeMessage();
+
+        cli.commandInterpreter(false, cliIo);
     }
 
-    private void commandInterpreter(boolean botMode){
+    private void commandInterpreter(boolean botMode, IOHandler io){
         Message rxMessage;
         int i = 0;
         while (true){
@@ -150,7 +152,6 @@ public String sendMessage(String msg) {
                 rxMessage = readIncomingMessage();
                 Message txMessage;
                 String[] choices = {"1", "2", "3", "4", "5", "w", "y"};
-
 
                 switch (rxMessage.operation) {
                     case INIT:
@@ -161,25 +162,24 @@ public String sendMessage(String msg) {
                     case GET_PLAYER_NAME:
                         txMessage = new Message();
                         //if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
-                        cliOut.printMessage(rxMessage.text);
+                        io.printMessage(rxMessage.text);
                         txMessage.setOperation(Message.Action.RESPONSE);
                         txMessage.setPlayerID(playerID);
                         if(botMode) txMessage.setText("Player"+ playerID);
-                        else if(isYourTurn(rxMessage)) txMessage.setText(cliIn.getInputString());
+                        else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
 
                         if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
                         else sendAck();
                         break;
 
-
                     case GET_INPUT:
                         txMessage = new Message();
                         //if(isYourTurn(rxMessage))
-                        cliOut.printMessage(rxMessage.text);
+                        io.printMessage(rxMessage.text);
 
                         txMessage.setOperation(Message.Action.RESPONSE);
                         if(botMode) txMessage.setText(choices[i%choices.length]) ;
-                        else if(isYourTurn(rxMessage)) txMessage.setText(cliIn.getInputString());
+                        else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
                         i++;
                         txMessage.setPlayerID(playerID);
 
@@ -191,15 +191,15 @@ public String sendMessage(String msg) {
                     case UPDATE_TILES:
                         if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + rxMessage);
 
-                        cliOut.showTiles(rxMessage.boardTiles);
+                        io.showBoardTiles(rxMessage.boardTiles);
 
                         sendAck();
                         break;
 
                     case UPDATE_PLAYER:
 
-                        cliOut.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
-                        cliOut.showDice(rxMessage.dice);
+                        io.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
+                        //io.showDice(rxMessage.dice);
                         sendAck();
                         break;
 
@@ -211,7 +211,7 @@ public String sendMessage(String msg) {
 
                     case INFO:
                         text = rxMessage.text;
-                        cliOut.printMessage(text);
+                        io.printMessage(text);
                         if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
                         sendAck();
                         break;
