@@ -1,12 +1,13 @@
 package CLI;
 
 import Heckmeck.*;
-import exception.IllegalInput;
 
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class CliIOHandler implements IOHandler {
@@ -99,10 +100,8 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-        if (!boardTiles.allTilesHaveSameHeight()) {
-            printMessage("WARNING: In the Tiles representation you've selected, tiles have different height!!!");
-        }
-        printMessage("The available tiles on the board now are:" + newLine + boardTiles);
+        printMessage("The available tiles on the board now are:");
+        convertToTextAndPrettyPrintCollection(boardTiles.getTiles());
     }
 
     @Override
@@ -170,17 +169,22 @@ public class CliIOHandler implements IOHandler {
     //TODO: ha ancora senso mantenere le eccezioni?
     @Override
     public Die.Face chooseDie(Dice dice) {
-        // TODO: bug input
-        printMessage(Dice.diceToString(dice.getDiceList()));
-        printMessage("Pick one unselected face");
+        // TODO: bug input infinite loop
+        String mainMessage = "# Hit enter to roll dice #";
+        String separator = "#".repeat(mainMessage.length());
+        printMessage(separator + newLine +
+                mainMessage + newLine +
+                separator);
+        getInputString();
+        convertToTextAndPrettyPrintCollection(dice.getDiceList());
+        printMessage("Pick one unselected face:");
         while (true) {
-            try {
-                String chosenDice = getInputString();
-                if (Die.stringToFaceMap.containsKey(chosenDice)) {
-                    return Die.stringToFaceMap.get(chosenDice);
-                } else throw new IllegalInput("Incorrect input, choose between {1, 2, 3, 4, 5, w}: ");
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
+            String chosenDice = getInputString();
+            // TODO: refactor Hide-delegate?
+            if (Die.stringToFaceMap.containsKey(chosenDice)) {
+                return Die.stringToFaceMap.get(chosenDice);
+            } else {
+                printMessage("Incorrect input, choose between {1, 2, 3, 4, 5, w}: ");
             }
         }
     }
@@ -250,6 +254,38 @@ public class CliIOHandler implements IOHandler {
                 printMessage(invalidInputMessage);
             }
         }
+    }
+
+    private static String concatenateTextBlocks(String textBlock1, String textBlock2) {
+        int numberOfLines1 = (int) textBlock1.lines().count();
+        int numberOfLines2 = (int) textBlock2.lines().count();
+        int maxNumberOfLines = Math.max(numberOfLines1, numberOfLines2);
+
+        // Tabs are counted as 1??
+        int paddingSize = textBlock1.lines()
+                .mapToInt(String::length)
+                .max()
+                .orElse(0);
+        String pad = new String(new char[paddingSize]).replace('\0', ' ');
+
+        List<String> lines1 = textBlock1.lines().toList();
+        List<String> lines2 = textBlock2.lines().toList();
+
+        return IntStream.range(0, maxNumberOfLines)
+                .mapToObj(i -> {
+                    String leftLine = i < numberOfLines1 ? lines1.get(i) : pad;
+                    String rightLine = i < numberOfLines2 ? lines2.get(i) : "";
+                    return leftLine + " " + rightLine;
+                })
+                .collect(Collectors.joining(newLine));
+    }
+
+    private void convertToTextAndPrettyPrintCollection(Collection<?> collection) {
+        String collectionAsText = "";
+        for (var item : collection) {
+            collectionAsText = concatenateTextBlocks(collectionAsText, item.toString());
+        }
+        printMessage(collectionAsText);
     }
 
 }

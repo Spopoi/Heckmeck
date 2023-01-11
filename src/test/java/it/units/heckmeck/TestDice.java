@@ -264,43 +264,4 @@ public class TestDice {
         Assertions.assertEquals(expectedTextRepresentation, actualTextRepresentation);
     }
 
-    @Test
-    void convertAvailableDiceIntoString() {
-        Dice diceToTest = Dice.init();
-        String expectedDiceAsText = """
-                .---------. .---------.\s
-                |         | |      o  |\s
-                |    o    | |         |\s
-                |         | |  o      |\s
-                '---------' '---------'\s
-                """;
-
-        diceToTest.eraseDice();
-        diceToTest.addSpecificDie(ONE);
-        diceToTest.addSpecificDie(TWO);
-        String actualDiceAsText = Dice.diceToString(diceToTest.getDiceList());
-
-        Assertions.assertEquals(expectedDiceAsText, actualDiceAsText);
-    }
-
-    @Test
-    void convertChosenDiceIntoString() {
-        Dice diceToTest = Dice.init();
-        String expectedDiceAsText = """
-                .---------. .---------.\s
-                |         | |      o  |\s
-                |    o    | |         |\s
-                |         | |  o      |\s
-                '---------' '---------'\s
-                """;
-
-        diceToTest.eraseDice();
-        diceToTest.addSpecificDie(ONE);
-        diceToTest.addSpecificDie(TWO);
-        diceToTest.chooseDice(ONE);
-        diceToTest.chooseDice(TWO);
-        String actualDiceAsText = Dice.diceToString(diceToTest.getChosenDice());
-
-        Assertions.assertEquals(expectedDiceAsText, actualDiceAsText);
-    }
 }
