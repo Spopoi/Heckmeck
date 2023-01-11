@@ -1,6 +1,10 @@
 package it.units.heckmeck;
 
 import Heckmeck.*;
+import TCP.Client;
+import TCP.Server.GameServer;
+import TCP.Message;
+import TCP.Server.TCPIOHandler;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
