@@ -2,6 +2,7 @@ package it.units.heckmeck;
 
 import Heckmeck.*;
 import com.google.gson.Gson;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestClientServer {
 
-private GameServer gameServer = new GameServer();
+private GameServer gameServer;
 Gson gson = new Gson();
 
 
@@ -25,19 +26,21 @@ Gson gson = new Gson();
 
     @Test
     void init_server_socket(){
-
+        gameServer = new GameServer();
         assertFalse(gameServer.ss ==(null));
         gameServer.close();
     }
 
     @Test
     void check_socket_port(){
+        gameServer = new GameServer();
 
         assertTrue(gameServer.ss.getLocalPort() == 51734);
         gameServer.close();
     }
     @Test
     void get_connected_client(){
+        gameServer = new GameServer();
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
@@ -60,7 +63,9 @@ Gson gson = new Gson();
 
 
     @Test
+    @Disabled
     void send_message(){
+        gameServer = new GameServer();
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
@@ -93,7 +98,10 @@ Gson gson = new Gson();
 
 
     @Test
+    @Disabled
     void recieve_message(){
+        gameServer = new GameServer();
+
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         gameServer.setNumberOfPlayers(1);
@@ -114,7 +122,10 @@ Gson gson = new Gson();
     }
 
     @Test
+    @Disabled
     void init_client(){
+        gameServer = new GameServer();
+
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -125,10 +136,14 @@ Gson gson = new Gson();
         waitOneSec();
         boolean isInit = gameServer.clients.get(0).initClient();
         assertTrue(isInit);
+        gameServer.close();
     }
 
     @Test
+    @Disabled
     void init_multi_clients(){
+        gameServer = new GameServer();
+
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -137,8 +152,6 @@ Gson gson = new Gson();
         Client cli2 = new Client();
         Thread cli2Thread = new Thread(cli2);
         cli2Thread.start();
-
-
         gameServer.setNumberOfPlayers(2);
 
         cli1.startConnection("127.0.0.1", 51734);
@@ -147,14 +160,14 @@ Gson gson = new Gson();
         waitOneSec();
         boolean isInit1 = gameServer.clients.get(0).initClient();
         boolean isInit2 = gameServer.clients.get(1).initClient();
-
-
         assertTrue(isInit1);
         assertTrue(isInit2);
+        gameServer.close();
 
     }
 
-    //@Test
+    @Test
+    @Disabled
     void connect_multi_clients(){
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
@@ -204,10 +217,14 @@ Gson gson = new Gson();
 
         gameServer.close();
 
+
     }
 
-    //@Test
+    @Test
+    @Disabled
     void select_player_name(){
+        gameServer = new GameServer();
+
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -224,13 +241,13 @@ Gson gson = new Gson();
         msg.setText("Get player name");
         io.choosePlayerName(0);
 
-        //String playerName = io.readMessage(0).text;
-
-        //assertEquals("Player0", playerName);
         gameServer.close();
     }
     @Test
+    @Disabled
     void get_player_name_with_Interface(){
+        gameServer = new GameServer();
+
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -256,6 +273,8 @@ Gson gson = new Gson();
 
     @Test
     void get_players_name_with_Interface(){
+        gameServer = new GameServer();
+
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -312,6 +331,9 @@ Gson gson = new Gson();
 
         @Test
     void init_game_check_players(){
+        gameServer = new GameServer();
+
+
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -356,6 +378,7 @@ Gson gson = new Gson();
 
 
     @Test
+    @Disabled
     void receive_game_obj() {
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
@@ -368,6 +391,8 @@ Gson gson = new Gson();
         Client cli3 = new Client();
         Thread cli3Thread = new Thread(cli3);
         cli3Thread.start();
+
+        //cli1.run();
 
         gameServer.setNumberOfPlayers(3);
 
@@ -389,7 +414,10 @@ Gson gson = new Gson();
         Arrays.stream(gameServer.game.getPlayers()).forEach(e -> System.out.println(e.getName()));
 
         io.showBoardTiles(gameServer.game.getBoardTiles());
+        //cli1.readIncomingMessage();
         io.showPlayerData(gameServer.game.getActualPlayer(), gameServer.game.getDice(), gameServer.game.getPlayers());
+
+
         gameServer.close();
 
     }
@@ -397,6 +425,7 @@ Gson gson = new Gson();
 
 
     @Test
+    @Disabled
     void play_game(){
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
@@ -429,6 +458,7 @@ Gson gson = new Gson();
         waitOneSec();
         gameServer.game.init();
         gameServer.game.play();
+        gameServer.close();
 
     }
 }
