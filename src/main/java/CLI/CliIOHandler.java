@@ -251,7 +251,7 @@ public class CliIOHandler implements IOHandler {
         return(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision));
     }
 
-    private String getInputString(){
+    public String getInputString(){
         return scan.nextLine();
     }
 

@@ -247,6 +247,11 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
+    public String getInputString() {
+        return null;
+    }
+
+    @Override
     public String printError(String text) {
         return null;
     }
