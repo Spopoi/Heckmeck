@@ -205,6 +205,11 @@ public class CliIOHandler implements IOHandler {
         printMessage("#####################" +newLine+ "# BUUUUUSSSTTTTTT!! #" +newLine + "#####################" +newLine);
     }
 
+    @Override
+    public String printError(String text) {
+        return null;
+    }
+
     private static String getFirstTilesRow(Tile tile){
         if (tile != null){
             return "|  " + tile.getNumber() + "  |";
@@ -253,5 +258,7 @@ public class CliIOHandler implements IOHandler {
     private int getInputNumber(){
         return Integer.parseInt(getInputString());
     }
+
+
 
 }
