@@ -163,18 +163,16 @@ public String sendMessage(String msg) {
 
                 switch (rxMessage.operation) {
                     case INIT:
-                        System.out.println("ID: " + playerID + " INIT, message was: " + rxMessage.playerID);
                         playerID = rxMessage.playerID;
                         sendAck();
                         break;
 
                     case GET_PLAYER_NAME:
                         txMessage = new Message();
-                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
-
+                        //if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
+                        cliOut.printMessage(rxMessage.text);
                         txMessage.setOperation(Message.Action.RESPONSE);
                         txMessage.setPlayerID(playerID);
-                        //msg.setText("Player"+ rand.nextInt(1000));
                         if(botMode) txMessage.setText("Player"+ playerID);
                         else if(isYourTurn(rxMessage)) txMessage.setText(cliIn.getInputString());
 
@@ -186,15 +184,13 @@ public String sendMessage(String msg) {
                     case GET_INPUT:
                         txMessage = new Message();
                         //if(isYourTurn(rxMessage))
-                        System.out.println(rxMessage.text);
+                        cliOut.printMessage(rxMessage.text);
 
                         txMessage.setOperation(Message.Action.RESPONSE);
-                        if(botMode) txMessage.setText(choices[i%choices.length]);
+                        if(botMode) txMessage.setText(choices[i%choices.length]) ;
                         else if(isYourTurn(rxMessage)) txMessage.setText(cliIn.getInputString());
-
-                        txMessage.setPlayerID(playerID);
                         i++;
-
+                        txMessage.setPlayerID(playerID);
 
                         if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
                         else sendAck();
