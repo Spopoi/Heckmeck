@@ -87,10 +87,8 @@ public class TestCliInputOutput {
     }
 
     @ParameterizedTest
-    @MethodSource("wrongUserInputForPlayerNumberProvider")
-    @Disabled
+    @MethodSource("wrongUserInputForNumberOfPlayersProvider")
     void wrongNumberOfPlayersAreNotAccepted(String userInput) {
-        // TODO: infinite loop breaks the test
         System.out.println(userInput);
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
@@ -98,33 +96,20 @@ public class TestCliInputOutput {
         System.setOut(new PrintStream(fakeStandardOutput));
         CliIOHandler inputOutputHandler = new CliIOHandler();
 
-        inputOutputHandler.chooseNumberOfPlayers();
-
-        String expectedResponse = "Input is not correct, choose a number between 2 and 7:";
-        String actualResponse = fakeStandardOutput.toString();
-        System.out.println(actualResponse);
-        Assertions.assertEquals(expectedResponse, actualResponse);
+        try {
+            inputOutputHandler.chooseNumberOfPlayers();
+        } catch (java.util.NoSuchElementException ex){
+            String expectedResponse = """
+                    Choose number of players between 2 and 7:
+                    Input is not correct, choose a number between 2 and 7:
+                    """;
+            String actualResponse = fakeStandardOutput.toString();
+            Assertions.assertEquals(expectedResponse, actualResponse);
+        }
     }
 
     @ParameterizedTest
-    @MethodSource("blankUserInputForPlayerNameProvider")
-    @Disabled
-    void blankPlayerNameNotAccepted(String userInput) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
-
-        inputOutputHandler.choosePlayerName(1);
-
-        String expectedResponse = "Name of a player can not be blank.";
-        String actualResponse = fakeStandardOutput.toString();
-        Assertions.assertEquals(expectedResponse, actualResponse);
-    }
-
-    @ParameterizedTest
-    @MethodSource("correctUserInputForPlayerNumberProvider")
+    @MethodSource("correctUserInputForNumberOfPlayersProvider")
     void correctNumberOfPlayersAreAccepted(String userInput, int expectedReadNumber) {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
@@ -133,6 +118,29 @@ public class TestCliInputOutput {
         CliIOHandler inputOutputHandler = new CliIOHandler();
 
         Assertions.assertEquals(expectedReadNumber, inputOutputHandler.chooseNumberOfPlayers());
+    }
+
+    @ParameterizedTest
+    @MethodSource("blankUserInputForPlayerNameProvider")
+    void blankPlayerNameNotAccepted(String userInput) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        try {
+            inputOutputHandler.choosePlayerName(1);
+        } catch (java.util.NoSuchElementException ex){
+            String expectedResponse = """
+                    Insert the name for player1:
+                    Name of a player can not be blank.
+                    Insert the name for player1:
+                    """;
+            String actualResponse = fakeStandardOutput.toString();
+            Assertions.assertEquals(expectedResponse, actualResponse);
+        }
+
     }
 
     @ParameterizedTest
@@ -159,7 +167,6 @@ public class TestCliInputOutput {
 
     @ParameterizedTest
     @MethodSource("userInputForSelectingDiceProvider")
-    @Disabled
     void correctlyPrintDiceFromUserInteraction(String userInput) {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
@@ -172,9 +179,35 @@ public class TestCliInputOutput {
         for (var dieFace : Die.Face.values()) {
             dice.addSpecificDie(dieFace);
         }
-        inputOutputHandler.chooseDie(dice);
 
-        Assertions.assertEquals(CHOOSING_DIE_OUTPUT, fakeStandardOutput.toString());
+        try {
+            inputOutputHandler.chooseDie(dice);
+        } catch (java.util.NoSuchElementException ex) {
+            Assertions.assertEquals(CHOOSING_DIE_OUTPUT, fakeStandardOutput.toString());
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("wrongUserInputWhenPickingTilesProvider")
+    void printWarningForWrongAnswersWhenPickingTiles(String userInput) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        try {
+            inputOutputHandler.wantToPick(1);
+        } catch (java.util.NoSuchElementException ex) {
+            String expectedResponse = """
+                    Your actual score is: 1
+                    Do you want to pick the tile?
+                    Press 'y' for picking the tile or 'n' for rolling the remaining dice
+                    Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice
+                    """;
+            String actualResponse = fakeStandardOutput.toString();
+            Assertions.assertEquals(expectedResponse, actualResponse);
+        }
     }
 
     @Test
@@ -190,23 +223,6 @@ public class TestCliInputOutput {
         inputOutput.showPlayerData(player1, dice, players);
 
         Assertions.assertEquals(INITIAL_PLAYER_STATUS, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
-    }
-
-    @ParameterizedTest
-    @MethodSource("wrongUserInputWhenPickingTilesProvider")
-    @Disabled
-    void printWarningForWrongAnswersWhenPickingTiles(String userInput) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
-
-        inputOutputHandler.wantToPick(1);
-
-        String expectedResponse = "Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice";
-        String actualResponse = fakeStandardOutput.toString();
-        Assertions.assertEquals(expectedResponse, actualResponse);
     }
 
 
@@ -262,12 +278,12 @@ public class TestCliInputOutput {
         return text + newLine;
     }
 
-    static Stream<String> wrongUserInputForPlayerNumberProvider(){
+    static Stream<String> wrongUserInputForNumberOfPlayersProvider(){
         return Stream.of("1", "8", "ciao")
                 .map(TestCliInputOutput::stringToUserInput);
     }
 
-    static Stream<Arguments> correctUserInputForPlayerNumberProvider() {
+    static Stream<Arguments> correctUserInputForNumberOfPlayersProvider() {
         return Stream.of(
                 Arguments.arguments(stringToUserInput("2"), 2),
                 Arguments.arguments(stringToUserInput("7"), 7)
@@ -275,7 +291,8 @@ public class TestCliInputOutput {
     }
 
     static Stream<String> blankUserInputForPlayerNameProvider() {
-        return Stream.of("", "\t")
+        // TODO: should we make it work also with newLine?
+        return Stream.of("", "\t", "  ")
                 .map(TestCliInputOutput::stringToUserInput);
     }
 
