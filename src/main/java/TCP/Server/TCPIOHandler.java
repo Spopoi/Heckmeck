@@ -161,6 +161,11 @@ public class TCPIOHandler implements IOHandler {
 
     }
 
+    @Override
+    public String getInputString() {
+        return null;
+    }
+
     public String readRxBuffer(int playerId){
         return (gameServer.clients.get(playerId).readLine());
     }
