@@ -1,5 +1,8 @@
-package Heckmeck;
+package TCP;
 
+import Heckmeck.BoardTiles;
+import Heckmeck.Dice;
+import Heckmeck.Player;
 import com.google.gson.Gson;
 
 import java.io.Serializable;
@@ -7,9 +10,9 @@ import java.io.Serializable;
 public class Message implements Serializable {
 
 
-    public  Dice dice;
-    public  BoardTiles boardTiles;
-    public  Player actualPlayer;
+    public Dice dice;
+    public BoardTiles boardTiles;
+    public Player actualPlayer;
     public  Player[] players;
     public  Action operation;
     public  String text;

@@ -1,5 +1,6 @@
-package Heckmeck;
+package TCP.Server;
 
+import TCP.Message;
 import com.google.gson.Gson;
 
 import java.io.*;

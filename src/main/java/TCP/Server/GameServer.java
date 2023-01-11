@@ -1,4 +1,6 @@
-package Heckmeck;
+package TCP.Server;
+
+import Heckmeck.Game;
 
 import java.io.IOException;
 import java.net.ServerSocket;

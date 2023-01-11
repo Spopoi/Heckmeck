@@ -1,11 +1,12 @@
-package Heckmeck;
+package TCP.Server;
 
+import Heckmeck.*;
+import TCP.Message;
 import com.google.gson.Gson;
-import exception.IllegalInput;
 
 import java.util.concurrent.TimeUnit;
 
-public class TCPIOHandler implements IOHandler{
+public class TCPIOHandler implements IOHandler {
 
     Gson gson = new Gson();
 

@@ -1,4 +1,4 @@
-package Heckmeck;
+package TCP;
 
 import CLI.CliInputHandler;
 import CLI.CliOutputHandler;
@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 
@@ -122,11 +121,6 @@ public String sendMessage(String msg) {
         sendMessage(gson.toJson(ack));
     }
 
-    public void resetMessage() {
-        message.text = null;
-        message.operation = null;
-
-    }
 
     public boolean isYourTurn(Message msg){
         return msg.playerID == playerID;
@@ -134,9 +128,6 @@ public String sendMessage(String msg) {
 
     @Override
     public void run() {
-        System.out.println("Client started");
-
-        Random rand = new Random();
         commandInterpreter(true);
     }
 
@@ -199,18 +190,14 @@ public String sendMessage(String msg) {
 
                     case UPDATE_TILES:
                         if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + rxMessage);
-                        if (isYourTurn(rxMessage)){
-                        }
+
                         cliOut.showTiles(rxMessage.boardTiles);
 
                         sendAck();
                         break;
 
                     case UPDATE_PLAYER:
-                        this.message = rxMessage;
-                        if(isYourTurn(rxMessage)){
 
-                        }
                         cliOut.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
                         cliOut.showDice(rxMessage.dice);
                         sendAck();
