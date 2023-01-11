@@ -40,7 +40,7 @@ public class Game {
     }
 
     private void playerTurn(){
-        io.showTurnBeginConfirm(actualPlayer.getName());
+        //io.showTurnBeginConfirm(actualPlayer.getName());
         io.showBoardTiles(boardTiles);
         boolean isOnRun = roll();
         while (isOnRun){
@@ -125,7 +125,7 @@ public class Game {
     private Player[] setupPlayers(int numberOfPlayers) {
         Player[] playersList = new Player[numberOfPlayers];
         for(int i=0; i<numberOfPlayers; i++){
-            String playerName = io.choosePlayerName(i+1);
+            String playerName = io.choosePlayerName(i);
             while(isNameAlreadyPicked(playerName,playersList)){
                 io.printMessage(playerName + " Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(i+1);
