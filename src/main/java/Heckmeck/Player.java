@@ -1,7 +1,6 @@
 package Heckmeck;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class Player {
 
@@ -35,6 +34,15 @@ public class Player {
 
     public Tile getLastPickedTile() {
         return playerTiles.getLastTile();
+    }
+
+    public String getTopTileInfo() {
+        if (hasTile()) {
+            Tile topTile = getLastPickedTile();
+            return topTile.getNumber() + " - " + topTile.getWormString();
+        } else {
+            return "No tiles";
+        }
     }
 
     public boolean canStealFrom(Player robbedPlayer, int playerScore){

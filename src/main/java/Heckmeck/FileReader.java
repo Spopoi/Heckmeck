@@ -23,7 +23,7 @@ public class FileReader {
         return gson.fromJson(reader, returnType);
     }
 
-    public static String readLogoFromTextFile(Path filePath) {
+    public static String readTextFile(Path filePath) {
         StringBuilder res = new StringBuilder();
         try (InputStream in = Files.newInputStream(filePath);
              BufferedReader reader =

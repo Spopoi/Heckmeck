@@ -106,7 +106,7 @@ public class CliOutputHandler implements OutputHandler {
 
     @Override
     public void showWelcomeMessage(){
-        print(FileReader.readLogoFromTextFile(getLogoPath()));
+        print(FileReader.readTextFile(getLogoPath()));
         print("                      Welcome in Heckmeck");
     }
 
