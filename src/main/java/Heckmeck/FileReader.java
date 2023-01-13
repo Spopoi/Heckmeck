@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class FileReader {
 
+    public static final String newLine = System.lineSeparator();
+
     public static Map<Integer, String> readTilesFromSingleJson(Path filePath) {
         Gson gson = new Gson();
         JsonReader reader = null;
@@ -30,7 +32,7 @@ public class FileReader {
                      new BufferedReader(new InputStreamReader(in))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                res.append(line).append("\n");  // Notice that will add a newline at the end
+                res.append(line).append(newLine);  // Notice that will add a newline at the end
             }
         } catch (IOException ex) {
             System.err.println(ex);
