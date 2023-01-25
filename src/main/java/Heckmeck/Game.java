@@ -17,7 +17,7 @@ public class Game {
     }
 
     public void init(){
-        io.showWelcomeMessage();
+        // io.showWelcomeMessage();
 
         int numberOfPlayers = io.chooseNumberOfPlayers();
         this.players = setupPlayers(numberOfPlayers);
@@ -40,9 +40,20 @@ public class Game {
     }
 
     private void playerTurn(){
-        //io.showTurnBeginConfirm(actualPlayer.getName());
-        io.showBoardTiles(boardTiles);
-        boolean isOnRun = roll();
+        io.showTurnBeginConfirm(actualPlayer.getName());
+//        io.showBoardTiles(boardTiles);
+
+        boolean isOnRun;
+        do{
+            io.showBoardTiles(boardTiles);
+            if (dice.isFaceChosen(Face.WORM)) {
+                if (steal() || pick()) {
+                    isOnRun = false;
+                } else isOnRun = roll();
+            } else isOnRun = roll();
+        } while (isOnRun);
+
+        /*boolean isOnRun = roll();
         while (isOnRun){
             io.showBoardTiles(boardTiles);
             if (dice.isFaceChosen(Face.WORM)) {
@@ -50,7 +61,7 @@ public class Game {
                     isOnRun = false;
                 } else isOnRun = roll();
             } else isOnRun = roll();
-        }
+        }*/
         dice.resetDice();
     }
 
@@ -90,8 +101,9 @@ public class Game {
 
     //TODO: rolli anche se finisci i dadi
     private boolean roll(){
-        dice.rollDice();
         io.showPlayerData(actualPlayer, dice, players);
+        io.askRollDiceConfirmation(actualPlayer.getName());
+        dice.rollDice();
         //io.showDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();
@@ -105,6 +117,7 @@ public class Game {
 
     private Die.Face pickDieFace() {
         while(true){
+            io.showRolledDice(dice);
             Die.Face chosenDieFace = io.chooseDie(dice);
             if(!dice.isFacePresent(chosenDieFace)) io.printMessage("This face is not present.. Pick another one!");
             else if(dice.isFaceChosen(chosenDieFace)) io.printMessage("You have already chose this face, pick another one!");
@@ -114,6 +127,7 @@ public class Game {
 
     //TODO: Rimettere in gioco tessere persa dal giocatore
     private void bust(){
+        io.showRolledDice(dice);
         io.showBustMessage();
         if(actualPlayer.hasTile()){
             boardTiles.add(actualPlayer.getLastPickedTile());

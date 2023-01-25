@@ -33,6 +33,12 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
+    public boolean wantToPlayRemote() {
+        printMessage("Do you want to play remotely? Press 'y' or 'n' to select:");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
+    }
+
+    @Override
     public int chooseNumberOfPlayers() {
         printMessage("Choose number of players between 2 and 7:");
         while (true) {
@@ -136,15 +142,24 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public Die.Face chooseDie(Dice dice) {
-        // TODO: bug input infinite loop
-        String mainMessage = "# Hit enter to roll dice #";
+    public void askRollDiceConfirmation(String playerName) {
+        String mainMessage = "# " + playerName + ": hit enter to roll dice #";
         String separator = "#".repeat(mainMessage.length());
         printMessage(separator + newLine +
                 mainMessage + newLine +
                 separator);
         getInputString();
+    }
+
+    @Override
+    public void showRolledDice(Dice dice) {
         printMessage(collectionToText(dice.getDiceList()));
+    }
+
+    @Override
+    public Die.Face chooseDie(Dice dice) {
+        // TODO: bug input infinite loop
+        // printMessage(collectionToText(dice.getDiceList()));
         printMessage("Pick one unselected face:");
         while (true) {
             String chosenDice = getInputString();

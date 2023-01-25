@@ -82,6 +82,12 @@ public class GUIIOHandler implements IOHandler {
         printMessage("WELCOME to Heckmeck!");
     }
 
+    // TODO: REMOVE BEFORE COMMIT!!
+    @Override
+    public boolean wantToPlayRemote() {
+        return false;
+    }
+
     @Override
     public int chooseNumberOfPlayers() {
         while(true){
@@ -125,6 +131,16 @@ public class GUIIOHandler implements IOHandler {
         }
         frame.getContentPane().add(tilesPanel,BorderLayout.NORTH);
         frame.setVisible(true);
+    }
+
+    @Override
+    public void askRollDiceConfirmation(String playerName) {
+        return;
+    }
+
+    @Override
+    public void showRolledDice(Dice dice) {
+        return;
     }
 
     @Override

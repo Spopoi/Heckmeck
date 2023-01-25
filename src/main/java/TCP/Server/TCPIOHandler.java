@@ -53,6 +53,12 @@ public class TCPIOHandler implements IOHandler {
 
     }
 
+    // TODO: REMOVE BEFORE COMMIT!!
+    @Override
+    public boolean wantToPlayRemote() {
+        return false;
+    }
+
     void waitOneSec(){
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -97,6 +103,16 @@ public class TCPIOHandler implements IOHandler {
         waitOneSec();*/
 
 
+    }
+
+    @Override
+    public void askRollDiceConfirmation(String playerName) {
+        return;
+    }
+
+    @Override
+    public void showRolledDice(Dice dice) {
+        return;
     }
 
     @Override
