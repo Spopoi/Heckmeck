@@ -5,8 +5,6 @@ import exception.IllegalInput;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -143,9 +141,10 @@ public class GUIIOHandler implements IOHandler {
         return;
     }
 
+    // TODO: move method to the new signature
     @Override
-    public boolean wantToPick(int diceScore) {
-        int result = showConfirmDialog(null, "Do you want to pick? Your actual score is " +diceScore);
+    public boolean wantToPick(int actualDiceScore, int availableTileNumber) {
+        int result = showConfirmDialog(null, "Do you want to pick? Your actual score is " +actualDiceScore);
         return result == JOptionPane.OK_OPTION;
     }
 

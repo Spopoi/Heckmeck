@@ -30,6 +30,10 @@ public class BoardTiles implements TilesCollection {
         return tiles.contains(tile);
     }
 
+    public Tile smallerTileNearestTo(Tile searchedTile) {
+        return tiles.floor(searchedTile);
+    }
+
     @Override
     public void add(Tile newTile){
         tiles.add(newTile);

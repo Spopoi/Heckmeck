@@ -126,9 +126,9 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public boolean wantToPick(int diceScore) {
-        printMessage("Your actual score is: " + diceScore);
-        printMessage("Do you want to pick the tile?" + newLine +
+    public boolean wantToPick(int actualDiceScore, int availableTileNumber) {
+        printMessage("Your actual score is: " + actualDiceScore);
+        printMessage("Do you want to pick tile number " + availableTileNumber + " from board?" + newLine +
                 "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
         return getYesOrNoAnswer("Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice");
     }
@@ -159,7 +159,6 @@ public class CliIOHandler implements IOHandler {
     @Override
     public Die.Face chooseDie(Dice dice) {
         // TODO: bug input infinite loop
-        // printMessage(collectionToText(dice.getDiceList()));
         printMessage("Pick one unselected face:");
         while (true) {
             String chosenDice = getInputString();
@@ -167,7 +166,7 @@ public class CliIOHandler implements IOHandler {
             if (Die.stringToFaceMap.containsKey(chosenDice)) {
                 return Die.stringToFaceMap.get(chosenDice);
             } else {
-                printMessage("Incorrect input, choose between {1, 2, 3, 4, 5, w}: ");
+                printMessage("Incorrect input, choose between {1, 2, 3, 4, 5, w}:");
             }
         }
     }

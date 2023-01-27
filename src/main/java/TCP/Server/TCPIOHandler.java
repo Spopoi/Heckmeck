@@ -115,8 +115,9 @@ public class TCPIOHandler implements IOHandler {
         return;
     }
 
+    // TODO: move method to the new signature
     @Override
-    public boolean wantToPick(int diceScore) {
+    public boolean wantToPick(int actualDiceScore, int availableTileNumber) {
         Message message = new Message();
         message.setActualPlayer(gameServer.game.getActualPlayer());
         message.setOperation(Message.Action.GET_INPUT);

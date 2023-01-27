@@ -38,7 +38,7 @@ public interface IOHandler {
 
     void showRolledDice(Dice dice);
 
-    boolean wantToPick(int diceScore);
+    boolean wantToPick(int actualDiceScore, int availableTileNumber);
 
     /*        output.printMessage("Actual score: " + diceScore);
             output.showWantToPick();

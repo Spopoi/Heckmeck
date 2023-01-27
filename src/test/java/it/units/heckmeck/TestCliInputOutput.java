@@ -24,7 +24,7 @@ public class TestCliInputOutput {
 
     private static final String INITIAL_BOARD = getInitialBoard();
 
-    public static final String CHOOSING_DIE_OUTPUT = getExpectedOutputWhenChoosingDie();
+    public static final String EXPECTED_ALL_DICE = getExpectedAllDiceFromOutput();
 
     public static final String PLAYER_NAME = "Luigi";
 
@@ -165,11 +165,8 @@ public class TestCliInputOutput {
         Assertions.assertEquals(INITIAL_BOARD, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
     }
 
-    @ParameterizedTest
-    @MethodSource("userInputForSelectingDiceProvider")
-    void correctlyPrintDiceFromUserInteraction(String userInput) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
+    @Test
+    void correctlyPrintRolledDice() {
         ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
         System.setOut(new PrintStream(fakeStandardOutput));
         CliIOHandler inputOutputHandler = new CliIOHandler();
@@ -179,11 +176,30 @@ public class TestCliInputOutput {
         for (var dieFace : Die.Face.values()) {
             dice.addSpecificDie(dieFace);
         }
+        inputOutputHandler.showRolledDice(dice);
+
+        Assertions.assertEquals(EXPECTED_ALL_DICE, fakeStandardOutput.toString());
+    }
+
+    @ParameterizedTest
+    @MethodSource("userInputForSelectingDiceProvider")
+    void rejectWrongInputsWhenUserChooseDie(String userInput) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+        Dice dice = Dice.init();
 
         try {
             inputOutputHandler.chooseDie(dice);
         } catch (java.util.NoSuchElementException ex) {
-            Assertions.assertEquals(CHOOSING_DIE_OUTPUT, fakeStandardOutput.toString());
+            String expectedResponse = """
+                    Pick one unselected face:
+                    Incorrect input, choose between {1, 2, 3, 4, 5, w}:
+                    """;
+            String actualResponse = fakeStandardOutput.toString();
+            Assertions.assertEquals(expectedResponse, actualResponse);
         }
     }
 
@@ -197,11 +213,11 @@ public class TestCliInputOutput {
         CliIOHandler inputOutputHandler = new CliIOHandler();
 
         try {
-            inputOutputHandler.wantToPick(1);
+            inputOutputHandler.wantToPick(1, 1);
         } catch (java.util.NoSuchElementException ex) {
             String expectedResponse = """
                     Your actual score is: 1
-                    Do you want to pick the tile?
+                    Do you want to pick tile number 1 from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice
                     """;
@@ -242,17 +258,13 @@ public class TestCliInputOutput {
                 """;
     }
 
-    private static String getExpectedOutputWhenChoosingDie() {
+    private static String getExpectedAllDiceFromOutput() {
         return """
-                ##########################
-                # Hit enter to roll dice #
-                ##########################
                   .---------. .---------. .---------. .---------. .---------. .---------.
                   |         | |      o  | |      o  | |  o   o  | |  o   o  | |   \\=\\   |
                   |    o    | |         | |    o    | |         | |    o    | |   /=/   |
                   |         | |  o      | |  o      | |  o   o  | |  o   o  | |   \\=\\   |
                   '---------' '---------' '---------' '---------' '---------' '---------'
-                Pick one unselected face:
                 """;
     }
 

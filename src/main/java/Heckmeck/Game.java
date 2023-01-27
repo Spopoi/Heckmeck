@@ -53,29 +53,28 @@ public class Game {
             } else isOnRun = roll();
         } while (isOnRun);
 
-        /*boolean isOnRun = roll();
-        while (isOnRun){
-            io.showBoardTiles(boardTiles);
-            if (dice.isFaceChosen(Face.WORM)) {
-                if (steal() || pick()) {
-                    isOnRun = false;
-                } else isOnRun = roll();
-            } else isOnRun = roll();
-        }*/
         dice.resetDice();
     }
 
     private boolean pick(){
-        if(canPick() && io.wantToPick(dice.getScore())){
-            pickBoardTile(dice.getScore());
-            return true;
-        }else return false;
+        return (canPick() && wantToPick());
     }
 
     private boolean canPick(){
         Tile minValueTile = boardTiles.getTiles().first();
         return dice.getScore() >= minValueTile.getNumber();
         //return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
+    }
+
+    private boolean wantToPick() {
+        // Assume canPick()
+        Tile searchedTile = Tile.generateTile(dice.getScore());
+        Tile availableTile = boardTiles.smallerTileNearestTo(searchedTile);  // if canPick() should never return null "theoretically"
+        if (io.wantToPick(searchedTile.getNumber(), availableTile.getNumber())) {
+            boardTiles.remove(availableTile);
+            return true;
+        }
+        return false;
     }
 
     private boolean steal(){
@@ -90,13 +89,6 @@ public class Game {
             }
         }
         return false;
-    }
-
-    //TODO: maybe moving this method into boardTiles?
-    private void pickBoardTile(int actualPlayerScore){
-        TreeSet<Tile> acquirableTiles = new TreeSet<>(boardTiles.getTiles().stream().filter(tile-> tile.getNumber() <= actualPlayerScore).toList());
-        actualPlayer.pickTile(acquirableTiles.last());
-        boardTiles.remove(acquirableTiles.last());
     }
 
     //TODO: rolli anche se finisci i dadi
