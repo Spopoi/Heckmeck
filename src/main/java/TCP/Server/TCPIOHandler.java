@@ -53,6 +53,12 @@ public class TCPIOHandler implements IOHandler {
 
     }
 
+    // TODO: REMOVE BEFORE COMMIT!!
+    @Override
+    public boolean wantToPlayRemote() {
+        return false;
+    }
+
     void waitOneSec(){
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -100,7 +106,18 @@ public class TCPIOHandler implements IOHandler {
     }
 
     @Override
-    public boolean wantToPick(int diceScore) {
+    public void askRollDiceConfirmation(String playerName) {
+        return;
+    }
+
+    @Override
+    public void showRolledDice(Dice dice) {
+        return;
+    }
+
+    // TODO: move method to the new signature
+    @Override
+    public boolean wantToPick(int actualDiceScore, int availableTileNumber) {
         Message message = new Message();
         message.setActualPlayer(gameServer.game.getActualPlayer());
         message.setOperation(Message.Action.GET_INPUT);

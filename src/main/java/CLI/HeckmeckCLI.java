@@ -1,18 +1,30 @@
-package CLI;
+package Heckmeck;
 
 import CLI.CliIOHandler;
-import CLI.CliInputHandler;
-import CLI.CliOutputHandler;
-import Heckmeck.Game;
+import TCP.Server.GameServer;
 
 import java.io.IOException;
 
 public class HeckmeckCLI {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         CliIOHandler io = new CliIOHandler();
-        Game game = new Game(io);
-        game.init();
-        game.play();
+        // (?)
+        // io.getDesiredGame() to:
+        //   - ask if want to play
+        //   - ask if want remote or not
+        io.showWelcomeMessage();
+        if (io.wantToPlayRemote()) {
+            GameServer gameServer = new GameServer();
+            // gameServer autonomously asks and manage if you want to be host or client
+            // gameServer.init();
+            // gameServer.play();
+        } else {
+            Game game = new Game(io);
+            game.init();
+            game.play();
+        }
+
+
 
         /*output.showMenu();
         int numberOfPlayers = input.chooseNumberOfPlayers();

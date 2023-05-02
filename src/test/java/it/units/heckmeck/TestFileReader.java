@@ -84,7 +84,7 @@ public class TestFileReader {
     void readLogoAsTextFromFile() throws Exception {
         URL LogoResource = TestFileReader.class.getClassLoader().getResource("TEST_LOGO");
 
-        String actualLogo = FileReader.readLogoFromTextFile(Path.of(LogoResource.toURI()));
+        String actualLogo = FileReader.readTextFile(Path.of(LogoResource.toURI()));
 
         Assertions.assertEquals(LOGO, actualLogo);
     }

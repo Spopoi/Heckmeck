@@ -75,4 +75,36 @@ public class TestPlayer {
         Assertions.assertFalse(player.canStealFrom(robbedPlayer, score));
     }
 
+    @Test
+    void check_correctness_of_last_picked_tile_info_while_has_no_tiles() {
+        Player player = Player.generatePlayer("Luigi");
+        String expectedInfo = "No tiles";
+
+        String actualInfo = player.getTopTileInfo();
+
+        Assertions.assertEquals(expectedInfo, actualInfo);
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = '|', textBlock = """
+            #--------------------------
+            # tileNumber | expectedInfo
+            #--------------------------
+                21       |  21 - ~
+            #--------------------------
+                25       |  25 - ~~
+            #--------------------------
+                29       |  29 - ~~~
+            #--------------------------
+                33       |  33 - ~~~~
+            """)
+    void check_correctness_of_last_picked_tile_info_while_has_tiles(int tileNumber, String expectedInfo) {
+        Player player = Player.generatePlayer("Luigi");
+
+        player.pickTile(Tile.generateTile(tileNumber));
+        String actualInfo = player.getTopTileInfo();
+
+        Assertions.assertEquals(expectedInfo, actualInfo);
+    }
+
 }

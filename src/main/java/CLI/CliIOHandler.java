@@ -1,44 +1,21 @@
 package CLI;
 
 import Heckmeck.*;
-import exception.IllegalInput;
 
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CliIOHandler implements IOHandler {
 
     public static final String LOGO_FILE = "LOGO";
-    private static final String[] oneWorm = {"|  ~   |", "|      |"};
-    private static final String[] twoWorms = {"|  ~~  |", "|      |"};
-    private static final String[] threeWorms = {"|  ~~  |", "|  ~   |"};
-    private static final String[] fourWorms = {"|  ~~  |", "|  ~~  |"};
+    public static final String ACTUAL_PLAYER_INFO_TEMPLATE_FILE = "PLAYER_INFO_TEMPLATE";
 
     private static final String newLine = System.lineSeparator();
     private final Scanner scan;
-    private static final Map<Integer, String[]> tileToString =
-            Collections.unmodifiableMap(new HashMap<Integer, String[]>() {{
-                put(21, oneWorm);
-                put(22, oneWorm);
-                put(23, oneWorm);
-                put(24, oneWorm);
-                put(25, twoWorms);
-                put(26, twoWorms);
-                put(27, twoWorms);
-                put(28, twoWorms);
-                put(29, threeWorms);
-                put(30, threeWorms);
-                put(31, threeWorms);
-                put(32, threeWorms);
-                put(33, fourWorms);
-                put(34, fourWorms);
-                put(35, fourWorms);
-                put(36, fourWorms);
-            }});
-
 
     public CliIOHandler(){
         scan = new Scanner(System.in);
@@ -50,21 +27,15 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public void showTurnBeginConfirm(String playerName) {
-        String message = ": hit enter to start your turn #";
-        String separator = "#".repeat(playerName.length()).concat(
-                "#".repeat(message.length()+2));
-
-        printMessage(separator);
-        printMessage("# " + playerName + message );
-        printMessage(separator);
-        getInputString();
+    public void showWelcomeMessage() {
+        printMessage(FileReader.readTextFile(getLogoPath()));
+        printMessage("                      Welcome in Heckmeck");
     }
 
     @Override
-    public void showWelcomeMessage() {
-        printMessage(FileReader.readLogoFromTextFile(getLogoPath()));
-        printMessage("                      Welcome in Heckmeck");
+    public boolean wantToPlayRemote() {
+        printMessage("Do you want to play remotely? Press 'y' or 'n' to select:");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
     }
 
     @Override
@@ -84,118 +55,118 @@ public class CliIOHandler implements IOHandler {
         }
     }
 
-
     @Override
     public String choosePlayerName(int playerNumber) {
-        printMessage("Insert the name for player" + playerNumber);
-        while(true) {
-            try {
-                String playerName = getInputString();
-                if (playerName.isBlank()) throw new IllegalInput("Blank name, choose a valid a one");
-                else return playerName;
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
+        // TODO: manage tabs in names, breaks everything
+        while (true) {
+            printMessage("Insert the name for player" + playerNumber + ":");
+            String playerName = getInputString();
+            if (playerName.isBlank()) {
+                printMessage("Name of a player can not be blank.");
+            } else {
+                return playerName;
             }
         }
+    }
+
+    @Override
+    public void showTurnBeginConfirm(String playerName) {
+        // TODO: remove code duplication in the ###### msg
+        String mainMessage = "# " + playerName + ": hit enter to start your turn #";
+        String separator = "#".repeat(mainMessage.length());
+        printMessage(separator + newLine +
+                mainMessage + newLine +
+                separator);
+        getInputString();
     }
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-        if (!boardTiles.allTilesHaveSameHeight()) {
-            printMessage("WARNING: In the Tiles representation you've selected, tiles have different height!!!");
-        }
-        printMessage("The available tiles on the board now are:" + newLine + boardTiles);
+        printMessage("The available tiles on the board now are:");
+        printMessage(collectionToText(boardTiles.getTiles()) + newLine);
     }
 
     @Override
-    public boolean wantToPick(int diceScore) {
+    public void showPlayerData(Player actualPlayer, Dice dice, Player[] players) {
+        String actualPlayerInfoTemplate = FileReader.readTextFile(getActualPlayerInfoTemplate());
 
-        printMessage("Actual score: " + diceScore);
-        printMessage("Do you want to pick the tile?" + newLine + "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
-        while(true) {
-            try {
-                String decision  = getInputString();
-                if(isYesOrNoChar(decision)) throw new IllegalInput("Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice");
-                else return "y".equalsIgnoreCase(decision);
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
-            }
+        List<Player> otherPlayers = Arrays.stream(players)
+                .filter(p -> !Objects.equals(p, actualPlayer))
+                .toList();
+        String summaryTable = buildSummaryTableAsText(otherPlayers);
+
+        String actualPlayerInfo = actualPlayerInfoTemplate.replace("$ACTUAL_PLAYER", actualPlayer.getName())
+                .replace("$CURRENT_TILES", collectionToText(actualPlayer.getPlayerTiles()))
+                .replace("$CHOSEN_DICE", dice.getChosenDiceString())
+                .replace("$CURRENT_DICE_SCORE", String.valueOf(dice.getScore()))
+                .replace("$IS_WARM_SELECTED", String.valueOf(dice.isFaceChosen(Die.Face.WORM)));
+
+        printMessage(concatenateTextBlocks(actualPlayerInfo, summaryTable, 12) + newLine);
+    }
+
+    private String buildSummaryTableAsText(List<Player> otherPlayers) {
+        int playerNameWidth = otherPlayers.stream()
+                .mapToInt(p -> p.getName().length())
+                .max()
+                .orElseThrow(NoSuchElementException::new);
+
+        StringBuilder table = new StringBuilder();
+        String header = String.format("%-" + playerNameWidth + "s | %10s",
+                "Player", "Top tile");
+        String separator = "-".repeat(header.length());
+        table.append(header).append(newLine).
+                append(separator).append(newLine);
+
+        for (var player : otherPlayers) {
+            table.append(String.format("%-" + playerNameWidth + "s | %10s", player.getName(), player.getTopTileInfo()))
+                    .append(newLine);
         }
+
+        return table.toString();
+    }
+
+    @Override
+    public boolean wantToPick(int actualDiceScore, int availableTileNumber) {
+        printMessage("Your actual score is: " + actualDiceScore);
+        printMessage("Do you want to pick tile number " + availableTileNumber + " from board?" + newLine +
+                "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice");
     }
 
     @Override
     public boolean wantToSteal(Player robbedPlayer) {
-        printMessage("Do you want to steal tile number "+ robbedPlayer.getLastPickedTile().getNumber()+ " from "+ robbedPlayer.getName() + "? Press 'y' for stealing or 'n' for continuing your turn:");
-        while(true) {
-            try {
-                String decision  = getInputString();
-                if(isYesOrNoChar(decision)) throw new IllegalInput("Incorrect decision, please select 'y' to steal or 'n' to continue your turn");
-                else return "y".equalsIgnoreCase(decision);
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
-            }
-        }
+        printMessage("Do you want to steal tile number " + robbedPlayer.getLastPickedTile().getNumber() +
+                " from "+ robbedPlayer.getName() +
+                "? Press 'y' for stealing or 'n' for continuing your turn:");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' to steal or 'n' to continue your turn");
     }
 
     @Override
-    public void showPlayerData(Player player, Dice dice, Player[] players) {
-        Tile tile = player.getLastPickedTile();
-        List<Player> otherPlayers = Arrays.asList(players).stream().filter(e -> !e.equals(player)).toList();
-
-        String displayString = "        " + player.getName() + "'s tiles:  ";
-        String chosenDiceString = "     Chosen dice: " + dice.getChosenDiceString();
-        String chosenDiceScore = "     Current dice score: " + dice.getScore();
-        String wormPresent =  "     WORM is chosen: " + dice.isFaceChosen(Die.Face.WORM);
-
-        List <String> rows = new ArrayList<>();
-
-        rows.add(String.format("%1$"+ displayString.length() + "s", displayString ) + ".------." + chosenDiceString);
-        String format = String.format("%1$" + displayString.length() + "s", "");
-        rows.add(format + getFirstTilesRow(tile) + chosenDiceScore);
-        rows.add(format + getSecondTileRow(tile) + wormPresent);
-        rows.add(format + getTilesThirdRow(tile));
-        rows.add(format + "'------'");
-        rows.add("");
-        int len = 5 + rows.stream().max(Comparator.comparing(e-> e.length())).get().length();
-        int size = Stream.of(players).max(Comparator.comparing(e-> e.getName().length())).get().getName().length();
-        String topRow = String.format("%1$-" + len  + "s", "") + String.format("%1$-" + (size + 2) + "s", "")
-                + String.format("%1$-" + 8 + "s", "Top Tile");
-
-        printMessage(topRow);
-
-        for(int i = 0; i < otherPlayers.size(); i++){
-            String othersTile;
-            if(otherPlayers.get(i).hasTile()){
-                Tile lastPickedTile = otherPlayers.get(i).getLastPickedTile();
-                int number = lastPickedTile.getNumber();
-                String worms = lastPickedTile.getWormString();
-                String tileNumber = String.format("%1$" + 2 + "s", number);
-                //String wormNumber = String.format("%1$-" + 4 + "s", worms);
-                othersTile = tileNumber + " - " + worms;
-            }else othersTile = "No tiles";
-            String playersName = String.format("%1$" + size  + "s", otherPlayers.get(i).getName());
-            String newString = String.format("%1$-" + len + "s", rows.get(i)).concat(playersName) + " | " + othersTile;
-            rows.set(i, newString);
-
-        }
-        for (String r : rows){
-           printMessage(r);
-        }
+    public void askRollDiceConfirmation(String playerName) {
+        String mainMessage = "# " + playerName + ": hit enter to roll dice #";
+        String separator = "#".repeat(mainMessage.length());
+        printMessage(separator + newLine +
+                mainMessage + newLine +
+                separator);
+        getInputString();
     }
 
-    //TODO: ha ancora senso mantenere le eccezioni?
+    @Override
+    public void showRolledDice(Dice dice) {
+        printMessage(collectionToText(dice.getDiceList()));
+    }
+
     @Override
     public Die.Face chooseDie(Dice dice) {
-        printMessage(Dice.diceToString(dice.getDiceList()));
-        printMessage("Pick one unselected face");
+        // TODO: bug input infinite loop
+        printMessage("Pick one unselected face:");
         while (true) {
-            try {
-                String chosenDice = getInputString();
-                if (Die.stringToFaceMap.containsKey(chosenDice)) {
-                    return Die.stringToFaceMap.get(chosenDice);
-                } else throw new IllegalInput("Incorrect input, choose between {1, 2, 3, 4, 5, w}: ");
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
+            String chosenDice = getInputString();
+            // TODO: refactor Hide-delegate?
+            if (Die.stringToFaceMap.containsKey(chosenDice)) {
+                return Die.stringToFaceMap.get(chosenDice);
+            } else {
+                printMessage("Incorrect input, choose between {1, 2, 3, 4, 5, w}:");
             }
         }
     }
@@ -210,33 +181,8 @@ public class CliIOHandler implements IOHandler {
         return null;
     }
 
-    private static String getFirstTilesRow(Tile tile){
-        if (tile != null){
-            return "|  " + tile.getNumber() + "  |";
-        }
-        else{
-            return "|  no  |";
-        }
-    }
-    private static String getSecondTileRow(Tile tile){
-        if (tile != null){
-            return tileToString.get(tile.getNumber())[0];
-        }
-        else{
-            return "| tile |";
-        }
-    }
-    private static String getTilesThirdRow(Tile tile){
-        if (tile != null){
-            return tileToString.get(tile.getNumber())[1];
-        }
-        else{
-            return "|      |";
-        }
-    }
-
     private static Path getLogoPath() {
-        URL tilesResource = Tile.class.getClassLoader().getResource(LOGO_FILE);
+        URL tilesResource = CliIOHandler.class.getClassLoader().getResource(LOGO_FILE);
         Path resourcePath = null;
         try {
             resourcePath = Path.of(tilesResource.toURI());
@@ -246,9 +192,15 @@ public class CliIOHandler implements IOHandler {
         return resourcePath;
     }
 
-
-    private boolean isYesOrNoChar(String decision){
-        return(!"y".equalsIgnoreCase(decision) && !"n".equalsIgnoreCase(decision));
+    private Path getActualPlayerInfoTemplate() {
+        URL tilesResource = CliIOHandler.class.getClassLoader().getResource(ACTUAL_PLAYER_INFO_TEMPLATE_FILE);
+        Path resourcePath = null;
+        try {
+            resourcePath = Path.of(tilesResource.toURI());
+        } catch (URISyntaxException ex) {
+            System.out.println(ex);
+        }
+        return resourcePath;
     }
 
     public String getInputString(){
@@ -259,6 +211,57 @@ public class CliIOHandler implements IOHandler {
         return Integer.parseInt(getInputString());
     }
 
+    private boolean getYesOrNoAnswer(String invalidInputMessage) {
+        while(true){
+            String decision = getInputString();
+            if (Objects.equals(decision, "y")) {
+                return true;
+            } else if (Objects.equals(decision, "n")) {
+                return false;
+            } else {
+                printMessage(invalidInputMessage);
+            }
+        }
+    }
 
+    private static String concatenateTextBlocks(String textBlock1, String textBlock2, Integer spaceBetweenBlocks) {
+        final int finalSpaceBetweenBlocks = spaceBetweenBlocks != null ? spaceBetweenBlocks : 1;
+        int textBlock1Height = (int) textBlock1.lines().count();
+        int textBlock1Width = textBlock1.lines()
+                .mapToInt(String::length)
+                .max().orElse(0);
+        textBlock1 = padRightTextBlockWithSpaces(textBlock1, textBlock1Width);
+
+        int textBlock2Height = (int) textBlock2.lines().count();
+        int resultingHeight = Math.max(textBlock1Height, textBlock2Height);
+
+        String pad = " ".repeat(textBlock1Width + finalSpaceBetweenBlocks);
+        
+        List<String> lines1 = textBlock1.lines().toList();
+        List<String> lines2 = textBlock2.lines().toList();
+
+        return IntStream.range(0, resultingHeight)
+                .mapToObj(i -> {
+                    String leftLine = i < textBlock1Height ? lines1.get(i) : pad;
+                    String rightLine = i < textBlock2Height ? lines2.get(i) : "";
+                    return leftLine + " ".repeat(finalSpaceBetweenBlocks) + rightLine;
+                })
+                .collect(Collectors.joining(newLine));
+    }
+
+    private static String padRightTextBlockWithSpaces(String textBlock, int width) {
+        return textBlock.lines()
+                .map(line -> String.format("%1$-" + width + "s", line))
+                .collect(Collectors.joining(newLine));
+    }
+
+    private String collectionToText(Collection<?> collection) {
+        String collectionAsText = "";
+        for (var item : collection) {
+            // at first iteration collectionAsText will have height=0 --> 2 spaces
+            collectionAsText = concatenateTextBlocks(collectionAsText, item.toString(), null);
+        }
+        return collectionAsText;
+    }
 
 }

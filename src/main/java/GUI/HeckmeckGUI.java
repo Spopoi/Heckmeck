@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class HeckmeckGUI {
 
-    public static void main(String[] args) {
-        //SwingUtilities.invokeLater(HeckmeckGUI::gui);
-        gui();
+    public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        SwingUtilities.invokeLater(HeckmeckGUI::gui);
     }
 
     private static void gui(){
@@ -19,7 +19,15 @@ public class HeckmeckGUI {
         frame.getContentPane().setLayout(new BorderLayout(50,30));
         GUIIOHandler io = new GUIIOHandler(frame);
         Game game = new Game(io);
-        game.init();
-        game.play();
+
+        final var worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                game.init();
+                game.play();
+                return null;
+            }
+        };
+        worker.execute();
     }
 }

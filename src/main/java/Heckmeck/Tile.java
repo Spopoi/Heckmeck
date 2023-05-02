@@ -30,10 +30,10 @@ public class Tile implements Comparable<Tile> {
                 put(30, 3);
                 put(31, 3);
                 put(32, 3);
-                put(33, 3);
-                put(34, 3);
-                put(35, 3);
-                put(36, 3);
+                put(33, 4);
+                put(34, 4);
+                put(35, 4);
+                put(36, 4);
             }});
 
     private static final Map<Integer, String> numberToTilesAsText = FileReader.readTilesFromSingleJson(

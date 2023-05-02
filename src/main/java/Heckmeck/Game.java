@@ -17,7 +17,7 @@ public class Game {
     }
 
     public void init(){
-        io.showWelcomeMessage();
+        // io.showWelcomeMessage();
 
         int numberOfPlayers = io.chooseNumberOfPlayers();
         this.players = setupPlayers(numberOfPlayers);
@@ -40,31 +40,41 @@ public class Game {
     }
 
     private void playerTurn(){
-        //io.showTurnBeginConfirm(actualPlayer.getName());
-        io.showBoardTiles(boardTiles);
-        boolean isOnRun = roll();
-        while (isOnRun){
+        io.showTurnBeginConfirm(actualPlayer.getName());
+//        io.showBoardTiles(boardTiles);
+
+        boolean isOnRun;
+        do{
             io.showBoardTiles(boardTiles);
             if (dice.isFaceChosen(Face.WORM)) {
                 if (steal() || pick()) {
                     isOnRun = false;
                 } else isOnRun = roll();
             } else isOnRun = roll();
-        }
+        } while (isOnRun);
+
         dice.resetDice();
     }
 
     private boolean pick(){
-        if(canPick() && io.wantToPick(dice.getScore())){
-            pickBoardTile(dice.getScore());
-            return true;
-        }else return false;
+        return (canPick() && wantToPick());
     }
 
     private boolean canPick(){
         Tile minValueTile = boardTiles.getTiles().first();
         return dice.getScore() >= minValueTile.getNumber();
         //return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
+    }
+
+    private boolean wantToPick() {
+        // Assume canPick()
+        Tile searchedTile = Tile.generateTile(dice.getScore());
+        Tile availableTile = boardTiles.smallerTileNearestTo(searchedTile);  // if canPick() should never return null "theoretically"
+        if (io.wantToPick(searchedTile.getNumber(), availableTile.getNumber())) {
+            boardTiles.remove(availableTile);
+            return true;
+        }
+        return false;
     }
 
     private boolean steal(){
@@ -81,17 +91,11 @@ public class Game {
         return false;
     }
 
-    //TODO: maybe moving this method into boardTiles?
-    private void pickBoardTile(int actualPlayerScore){
-        TreeSet<Tile> acquirableTiles = new TreeSet<>(boardTiles.getTiles().stream().filter(tile-> tile.getNumber() <= actualPlayerScore).toList());
-        actualPlayer.pickTile(acquirableTiles.last());
-        boardTiles.remove(acquirableTiles.last());
-    }
-
     //TODO: rolli anche se finisci i dadi
     private boolean roll(){
-        dice.rollDice();
         io.showPlayerData(actualPlayer, dice, players);
+        io.askRollDiceConfirmation(actualPlayer.getName());
+        dice.rollDice();
         //io.showDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();
@@ -105,6 +109,7 @@ public class Game {
 
     private Die.Face pickDieFace() {
         while(true){
+            io.showRolledDice(dice);
             Die.Face chosenDieFace = io.chooseDie(dice);
             if(!dice.isFacePresent(chosenDieFace)) io.printMessage("This face is not present.. Pick another one!");
             else if(dice.isFaceChosen(chosenDieFace)) io.printMessage("You have already chose this face, pick another one!");
@@ -114,6 +119,7 @@ public class Game {
 
     //TODO: Rimettere in gioco tessere persa dal giocatore
     private void bust(){
+        io.showRolledDice(dice);
         io.showBustMessage();
         if(actualPlayer.hasTile()){
             boardTiles.add(actualPlayer.getLastPickedTile());
