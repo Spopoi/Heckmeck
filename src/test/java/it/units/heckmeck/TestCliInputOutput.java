@@ -104,7 +104,7 @@ public class TestCliInputOutput {
                     Input is not correct, choose a number between 2 and 7:
                     """;
             String actualResponse = fakeStandardOutput.toString();
-            Assertions.assertEquals(expectedResponse, actualResponse);
+            Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
     }
 
@@ -138,7 +138,7 @@ public class TestCliInputOutput {
                     Insert the name for player1:
                     """;
             String actualResponse = fakeStandardOutput.toString();
-            Assertions.assertEquals(expectedResponse, actualResponse);
+            Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
 
     }
@@ -162,7 +162,7 @@ public class TestCliInputOutput {
         setSystemOut(outStream);
         inputOutput.showBoardTiles(boardTiles);
 
-        Assertions.assertEquals(INITIAL_BOARD, fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", ""));
+        Assertions.assertEquals(INITIAL_BOARD, standardizeLineSeparator(fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", "")));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class TestCliInputOutput {
         }
         inputOutputHandler.showRolledDice(dice);
 
-        Assertions.assertEquals(EXPECTED_ALL_DICE, fakeStandardOutput.toString());
+        Assertions.assertEquals(EXPECTED_ALL_DICE, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
 
     @ParameterizedTest
@@ -199,7 +199,7 @@ public class TestCliInputOutput {
                     Incorrect input, choose between {1, 2, 3, 4, 5, w}:
                     """;
             String actualResponse = fakeStandardOutput.toString();
-            Assertions.assertEquals(expectedResponse, actualResponse);
+            Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
     }
 
@@ -222,7 +222,7 @@ public class TestCliInputOutput {
                     Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice
                     """;
             String actualResponse = fakeStandardOutput.toString();
-            Assertions.assertEquals(expectedResponse, actualResponse);
+            Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
     }
 
@@ -238,9 +238,13 @@ public class TestCliInputOutput {
 
         inputOutput.showPlayerData(player1, dice, players);
 
-        Assertions.assertEquals(INITIAL_PLAYER_STATUS, fakeStandardOutput.toString());
+        Assertions.assertEquals(INITIAL_PLAYER_STATUS, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
 
+
+    private static String standardizeLineSeparator(String actualResponse) {
+        return actualResponse.replaceAll("\\r\\n?", "\n");
+    }
 
     private static void setSystemOut(PrintStream outStream) {
         System.setOut(outStream);
