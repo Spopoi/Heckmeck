@@ -14,6 +14,7 @@ import static java.awt.GridBagConstraints.*;
 
 public class GUIIOHandler implements IOHandler {
 
+    //TODO: removing method's parameters and adding a Game local variable which contains players dice etc..
     private final JFrame frame;
     private JPanel playerPane;
     private JPanel dicePanel;
@@ -175,6 +176,13 @@ public class GUIIOHandler implements IOHandler {
         score.setPreferredSize(new Dimension(200,50));
         score.setFont(new Font("Serif", Font.PLAIN, 20));
         playerPane.add(score);
+
+        if(player.hasTile()) {
+            JLabel lastPlayerTile = new JLabel(getTileIcon(player.getLastPickedTile().getNumber()));
+            lastPlayerTile.setPreferredSize(new Dimension(80,90));
+            playerPane.add(lastPlayerTile);
+        }
+
 
         JPanel dicePanel = new JPanel();
         dicePanel.setLayout(new GridBagLayout());

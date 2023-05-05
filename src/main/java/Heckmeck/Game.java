@@ -72,6 +72,7 @@ public class Game {
         Tile availableTile = boardTiles.smallerTileNearestTo(searchedTile);  // if canPick() should never return null "theoretically"
         if (io.wantToPick(searchedTile.getNumber(), availableTile.getNumber())) {
             boardTiles.remove(availableTile);
+            actualPlayer.pickTile(availableTile);
             return true;
         }
         return false;
