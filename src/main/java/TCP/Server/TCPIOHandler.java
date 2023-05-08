@@ -23,14 +23,14 @@ public class TCPIOHandler implements IOHandler {
         msg.setText(text);
         msg.setOperation(Message.Action.INFO);
         msg.setPlayerID(getCurrentPlayerId());
-        gameServer.clients.stream().forEach(client -> client.writeMessage(msg));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(msg));
     }
     @Override
     public String printError(String text){
         Message msg = new Message();
         msg.setText(text);
         msg.setOperation(Message.Action.ERROR);
-        gameServer.clients.stream().forEach(client -> client.writeMessage(msg));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(msg));
         Message respMsg = getCurrentPlayerSocket().readReceivedMessage();
         return respMsg.text;
     }
@@ -42,7 +42,7 @@ public class TCPIOHandler implements IOHandler {
         message.setOperation(Message.Action.GET_INPUT);
         message.setActualPlayer(gameServer.game.getActualPlayer());
         message.setText(playerName + ", press enter to start your turn");
-        gameServer.clients.stream().forEach(client -> client.writeMessage(message));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
         //waitOneSec();
         Message msg = readMessage(gameServer.game.getActualPlayer().getPlayerID());
 
@@ -81,7 +81,7 @@ public class TCPIOHandler implements IOHandler {
         message.setText("Choose player name");
         message.setPlayerID(playerNumber);
         //gameServer.clients.stream().forEach(client -> client.writeMessage(message));
-        gameServer.clients.get(playerNumber).writeMessage(message);
+        gameServer.sockets.get(playerNumber).writeMessage(message);
         //waitOneSec();
         Message msg = readMessage(playerNumber);
         return msg.text;
@@ -94,7 +94,7 @@ public class TCPIOHandler implements IOHandler {
         message.setPlayerID(getCurrentPlayerId());
         message.setOperation(Message.Action.UPDATE_TILES);
         message.setBoardTiles(boardTiles);
-        gameServer.clients.stream().forEach(client -> client.writeMessage(message));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
         /*gameServer.clients.get(0).writeMessage(message);
         waitOneSec();
         //gameServer.clients.get(1).writeMessage(message);
@@ -124,7 +124,7 @@ public class TCPIOHandler implements IOHandler {
         message.setPlayerID(getCurrentPlayerId());
 
         message.setText("Do you want to pick tile n. " + gameServer.game.getDice().getScore() + "?");
-        gameServer.clients.stream().forEach(client -> client.writeMessage(message));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
         //waitOneSec();
         Message msg = readMessage(gameServer.game.getActualPlayer().getPlayerID());
         //if(isYesOrNoChar(decision)) else
@@ -141,7 +141,7 @@ public class TCPIOHandler implements IOHandler {
 
         message.setOperation(Message.Action.GET_INPUT);
         message.setText("Do you want to pick?");
-        gameServer.clients.stream().forEach(client -> client.writeMessage(message));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
         //waitOneSec();
         Message msg = readMessage(gameServer.game.getActualPlayer().getPlayerID());
         //if(isYesOrNoChar(decision)) else
@@ -155,7 +155,7 @@ public class TCPIOHandler implements IOHandler {
         message.setDice(dice);
         message.setPlayers(players);
         message.setOperation(Message.Action.UPDATE_PLAYER);
-        gameServer.clients.stream().forEach(client -> client.writeMessage(message));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
 
     }
 
@@ -166,7 +166,7 @@ public class TCPIOHandler implements IOHandler {
         message.setOperation(Message.Action.GET_INPUT);
         message.setPlayerID(getCurrentPlayerId());
         message.setText("Choose a die face");
-        gameServer.clients.stream().forEach(client -> client.writeMessage(message));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
         //waitOneSec();
         Message msg = readMessage(gameServer.game.getActualPlayer().getPlayerID());
         return Die.getFaceByString(msg.text);
@@ -184,11 +184,11 @@ public class TCPIOHandler implements IOHandler {
     }
 
     public String readRxBuffer(int playerId){
-        return (gameServer.clients.get(playerId).readLine());
+        return (gameServer.sockets.get(playerId).readLine());
     }
 
     public Message readMessage(int playerId){
-        return gameServer.clients.get(playerId).readReceivedMessage();
+        return gameServer.sockets.get(playerId).readReceivedMessage();
     }
 
 
@@ -198,7 +198,7 @@ public class TCPIOHandler implements IOHandler {
         message.boardTiles = null;
         message.setOperation(Message.Action.UPDATE_PLAYER);
         message.setDice(dice);
-        gameServer.clients.stream().forEach(client -> client.writeMessage(message));
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
     }
 
     private int getCurrentPlayerId(){
@@ -210,7 +210,7 @@ public class TCPIOHandler implements IOHandler {
     }
 
     private SocketHandler getCurrentPlayerSocket(){
-        return this.gameServer.clients.get(getCurrentPlayerId());
+        return this.gameServer.sockets.get(getCurrentPlayerId());
     }
 
 }
