@@ -86,7 +86,7 @@ public class TestFileReader {
 
         String actualLogo = FileReader.readTextFile(Path.of(LogoResource.toURI()));
 
-        Assertions.assertEquals(LOGO, actualLogo);
+        Assertions.assertEquals(LOGO, actualLogo.replaceAll("\\r\\n?", "\n"));
     }
 
     @Test
