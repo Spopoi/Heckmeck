@@ -152,74 +152,78 @@ public String sendMessage(String msg) {
                 Message txMessage;
                 String[] choices = {"1", "2", "3", "4", "5", "w", "y"};
 
-                switch (rxMessage.operation) {
-                    case INIT:
-                        playerID = rxMessage.playerID;
-                        sendAck();
-                        break;
+                if(rxMessage != null){
+                    switch (rxMessage.operation) {
+                        case INIT:
+                            playerID = rxMessage.playerID;
+                            sendAck();
+                            break;
 
-                    case GET_PLAYER_NAME:
-                        txMessage = new Message();
-                        //if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
-                        io.printMessage(rxMessage.text);
-                        txMessage.setOperation(Message.Action.RESPONSE);
-                        txMessage.setPlayerID(playerID);
-                        if(botMode) txMessage.setText("Player"+ playerID);
-                        else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
+                        case GET_PLAYER_NAME:
+                            txMessage = new Message();
+                            //if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
+                            io.printMessage(rxMessage.text);
+                            txMessage.setOperation(Message.Action.RESPONSE);
+                            txMessage.setPlayerID(playerID);
+                            if(botMode) txMessage.setText("Player"+ playerID);
+                            else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
 
-                        if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
-                        else sendAck();
-                        break;
+                            if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
+                            else sendAck();
+                            break;
 
-                    case GET_INPUT:
-                        txMessage = new Message();
-                        //if(isYourTurn(rxMessage))
-                        io.printMessage(rxMessage.text);
+                        case GET_INPUT:
+                            txMessage = new Message();
+                            //if(isYourTurn(rxMessage))
+                            io.printMessage(rxMessage.text);
 
-                        txMessage.setOperation(Message.Action.RESPONSE);
-                        if(botMode) txMessage.setText(choices[i%choices.length]) ;
-                        else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
-                        i++;
-                        txMessage.setPlayerID(playerID);
+                            txMessage.setOperation(Message.Action.RESPONSE);
+                            if(botMode) txMessage.setText(choices[i%choices.length]) ;
+                            else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
+                            i++;
+                            txMessage.setPlayerID(playerID);
 
-                        if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
-                        else sendAck();
+                            if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
+                            else sendAck();
 
-                        break;
+                            break;
 
-                    case UPDATE_TILES:
-                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + rxMessage);
+                        case UPDATE_TILES:
+                            if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + rxMessage);
 
-                        io.showBoardTiles(rxMessage.boardTiles);
+                            io.showBoardTiles(rxMessage.boardTiles);
 
-                        sendAck();
-                        break;
+                            sendAck();
+                            break;
 
-                    case UPDATE_PLAYER:
+                        case UPDATE_PLAYER:
 
-                        io.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
-                        //io.showDice(rxMessage.dice);
-                        sendAck();
-                        break;
+                            io.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
+                            //io.showDice(rxMessage.dice);
+                            sendAck();
+                            break;
 
-                    case ERROR:
-                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " ERROR, message was: " + rxMessage.operation);
-                        System.out.println(rxMessage.text);
-                        sendAck();
-                        break;
+                        case ERROR:
+                            if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " ERROR, message was: " + rxMessage.operation);
+                            System.out.println(rxMessage.text);
+                            sendAck();
+                            break;
 
-                    case INFO:
-                        text = rxMessage.text;
-                        io.printMessage(text);
-                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
-                        sendAck();
-                        break;
+                        case INFO:
+                            text = rxMessage.text;
+                            io.printMessage(text);
+                            if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
+                            sendAck();
+                            break;
 
 
-                    default:
-                        break;
-                    //TODO mettere un default
+                        default:
+                            break;
+                        //TODO mettere un default
+                    }
                 }
+
+
 
             }
 

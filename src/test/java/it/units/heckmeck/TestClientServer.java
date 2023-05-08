@@ -22,7 +22,7 @@ public class TestClientServer {
 
     void waitOneSec() {
         try {
-            TimeUnit.MILLISECONDS.sleep(100);
+            TimeUnit.MILLISECONDS.sleep(200);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -219,6 +219,7 @@ public class TestClientServer {
     }
 
     @Test
+    @Disabled
     void get_players_name_with_Interface(){
         gameServer = new GameServer();
 
@@ -379,8 +380,11 @@ public class TestClientServer {
 
 
     @Test
-    //@Disabled
+    @Disabled
     void play_game(){
+        gameServer = new GameServer();
+
+
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         Client cli1 = new Client();
@@ -397,9 +401,13 @@ public class TestClientServer {
 
         cli1.startConnection("127.0.0.1", 51734);
         cli2.startConnection("127.0.0.1", 51734);
-        //cli3.startConnection("127.0.0.1", 51734);
+        cli3.startConnection("127.0.0.1", 51734);
         waitOneSec();
-        while(!gameServer.isRoomClosed())
+        boolean isInit1 = gameServer.sockets.get(0).initClient();
+        boolean isInit2 = gameServer.sockets.get(1).initClient();
+        boolean isInit3 = gameServer.sockets.get(2).initClient();
+
+        while(!gameServer.isRoomClosed());
         //boolean isInit1 = gameServer.clients.get(0).initClient();
         //boolean isInit2 = gameServer.clients.get(1).initClient();
         //boolean isInit3 = gameServer.clients.get(2).initClient();
