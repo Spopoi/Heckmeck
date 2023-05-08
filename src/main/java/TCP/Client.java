@@ -1,8 +1,6 @@
 package TCP;
 
 import CLI.CliIOHandler;
-import CLI.CliInputHandler;
-import CLI.CliOutputHandler;
 import Heckmeck.IOHandler;
 import com.google.gson.Gson;
 
@@ -11,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
@@ -27,6 +24,8 @@ public class Client implements Runnable{
     public Message message;
 
     public String text;
+
+    public Message rxMessage;
 
     private boolean connected = false;
 
@@ -145,7 +144,7 @@ public String sendMessage(String msg) {
     }
 
     private void commandInterpreter(boolean botMode, IOHandler io){
-        Message rxMessage;
+
         int i = 0;
         while (true){
             if(connected){
