@@ -54,4 +54,10 @@ public class StackOfTiles implements TilesCollection {
         return stackOfTiles;
     }
 
+    int getTotalNumberOfWorms() {
+        return stackOfTiles.stream()
+                .mapToInt(Tile::getWorms)
+                .sum();
+    }
+
 }

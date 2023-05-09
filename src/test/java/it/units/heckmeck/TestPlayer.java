@@ -107,4 +107,22 @@ public class TestPlayer {
         Assertions.assertEquals(expectedInfo, actualInfo);
     }
 
+    @Test
+    void check_total_worms_collected() {
+        Player player = Player.generatePlayer("Luigi");
+        Tile tile21 = Tile.generateTile(21);
+        Tile tile25 = Tile.generateTile(25);
+        Tile tile29 = Tile.generateTile(29);
+        Tile tile33 = Tile.generateTile(33);
+        int expectedWorms = 10;
+
+        player.pickTile(tile21);
+        player.pickTile(tile25);
+        player.pickTile(tile29);
+        player.pickTile(tile33);
+        int actualWorms = player.getWormScore();
+
+        Assertions.assertEquals(expectedWorms, actualWorms);
+    }
+
 }

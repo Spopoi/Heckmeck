@@ -67,6 +67,10 @@ public class Player {
         this.playerID = playerID;
     }
 
+    public int getWormScore() {
+        return playerTiles.getTotalNumberOfWorms();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

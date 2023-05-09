@@ -105,20 +105,26 @@ public class CliIOHandler implements IOHandler {
     }
 
     private String buildSummaryTableAsText(List<Player> otherPlayers) {
-        int playerNameWidth = otherPlayers.stream()
+
+        int maxLengthOfPlayerName = otherPlayers.stream()
                 .mapToInt(p -> p.getName().length())
                 .max()
-                .orElseThrow(NoSuchElementException::new);
+                .orElse(0);
+        int playerNameColumnWidth = Math.max("Player".length(), maxLengthOfPlayerName) + 2;
+        String playerColumnHeader = alignToColumn("Player", playerNameColumnWidth);
+
+        String topTileColumnHeader = alignToColumn("Top tile", 11);
+
+        String wormsColumnHeader = alignToColumn("Worms", 7);
 
         StringBuilder table = new StringBuilder();
-        String header = String.format("%-" + playerNameWidth + "s | %10s",
-                "Player", "Top tile");
+        String header = playerColumnHeader + "|" + topTileColumnHeader + "|" + wormsColumnHeader;
         String separator = "-".repeat(header.length());
         table.append(header).append(newLine).
                 append(separator).append(newLine);
 
         for (var player : otherPlayers) {
-            table.append(String.format("%-" + playerNameWidth + "s | %10s", player.getName(), player.getTopTileInfo()))
+            table.append(summaryRow(player, playerNameColumnWidth))
                     .append(newLine);
         }
 
@@ -181,6 +187,13 @@ public class CliIOHandler implements IOHandler {
         return null;
     }
 
+    public static String alignToColumn(String entry, int columnWidth) {
+        int padding = (columnWidth - entry.length())/2;
+        int paddingToAlignColumnDivider = columnWidth - 2*padding - entry.length();
+        return String.format("%" + padding + "s%s%" + (padding+paddingToAlignColumnDivider) + "s",
+                "", entry, "");
+    }
+
     private static Path getLogoPath() {
         URL tilesResource = CliIOHandler.class.getClassLoader().getResource(LOGO_FILE);
         Path resourcePath = null;
@@ -236,7 +249,7 @@ public class CliIOHandler implements IOHandler {
         int resultingHeight = Math.max(textBlock1Height, textBlock2Height);
 
         String pad = " ".repeat(textBlock1Width + finalSpaceBetweenBlocks);
-        
+
         List<String> lines1 = textBlock1.lines().toList();
         List<String> lines2 = textBlock2.lines().toList();
 
@@ -253,6 +266,13 @@ public class CliIOHandler implements IOHandler {
         return textBlock.lines()
                 .map(line -> String.format("%1$-" + width + "s", line))
                 .collect(Collectors.joining(newLine));
+    }
+
+    private String summaryRow(Player player, int playerNameColumnWidth) {
+        String alignedPlayerName = alignToColumn(player.getName(), playerNameColumnWidth);
+        String alignedTopTileInfo = alignToColumn(player.getTopTileInfo(), 11);
+        String alignedWormsInfo = alignToColumn(String.valueOf(player.getWormScore()), 5);
+        return alignedPlayerName + "|" + alignedTopTileInfo + "|" + alignedWormsInfo;
     }
 
     private String collectionToText(Collection<?> collection) {

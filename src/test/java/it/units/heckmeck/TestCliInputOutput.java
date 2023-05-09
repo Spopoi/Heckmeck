@@ -241,7 +241,6 @@ public class TestCliInputOutput {
         Assertions.assertEquals(INITIAL_PLAYER_STATUS, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
 
-
     private static String standardizeLineSeparator(String actualResponse) {
         return actualResponse.replaceAll("\\r\\n?", "\n");
     }
@@ -274,10 +273,10 @@ public class TestCliInputOutput {
 
     private static String getInitialPlayerStatus() {
         return """
-                Luigi's tiles:                   Player  |   Top tile
-                                                 --------------------
-                                                 player2 |   No tiles
-                Chosen dice: []                  player3 |   No tiles
+                Luigi's tiles:                    Player  | Top tile  | Worms\s
+                                                 -----------------------------
+                                                  player2 | No tiles  |  0 \s
+                Chosen dice: []                   player3 | No tiles  |  0 \s
                 Current dice score: 0           \s
                 WORM is chosen: false           \s
                                 
