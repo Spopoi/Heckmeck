@@ -12,16 +12,11 @@ public class GameServer implements Runnable{
     public ServerSocket ss;
     //private PrintWriter out;
     //private BufferedReader in;
-
-    public List<SocketHandler> clients = new ArrayList<SocketHandler>();
-
+    public List<SocketHandler> sockets = new ArrayList<SocketHandler>();
     private boolean hostClosedRoom = false;
     private Thread t1;
     private int numOfPlayers;
-
     public Game game;
-
-
     public GameServer(){
         try {
             ss = new ServerSocket(51734);
@@ -56,15 +51,11 @@ public class GameServer implements Runnable{
 
                 if (clientSocket.isConnected()) {
                     SocketHandler socketHandler = new SocketHandler(clientSocket, playerID);
-                    this.clients.add(socketHandler);
+                    this.sockets.add(socketHandler);
 
                     playerID++;
 
                 }
-
-
-
-
 
 
 
@@ -75,8 +66,8 @@ public class GameServer implements Runnable{
             }
 
 
-            clients.stream().forEach(e-> new Thread(e).start());
-            clients.stream().forEach(e-> e.initClient());
+            sockets.stream().forEach(e-> new Thread(e).start());
+            sockets.stream().forEach(e-> e.initClient());
             //System.out.println(this.currentClientPlayer);
 
             //currentClientPlayer = getClientById(currentPlayerID);
@@ -102,11 +93,11 @@ public class GameServer implements Runnable{
     }
 
     public void initClients(){          // TODO mettere return type boolean
-        clients.stream().forEach(e -> e.initClient());
+        sockets.stream().forEach(e -> e.initClient());
     }
 
     private SocketHandler getClientById(int id){
-        return clients.get(id);
+        return sockets.get(id);
     }
 
 

@@ -216,7 +216,7 @@ public class CliIOHandler implements IOHandler {
         return resourcePath;
     }
 
-    private String getInputString(){
+    public String getInputString(){
         return scan.nextLine();
     }
 

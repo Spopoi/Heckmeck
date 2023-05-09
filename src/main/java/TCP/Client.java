@@ -1,7 +1,7 @@
 package TCP;
 
-import CLI.CliInputHandler;
-import CLI.CliOutputHandler;
+import CLI.CliIOHandler;
+import Heckmeck.IOHandler;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 
@@ -26,10 +25,11 @@ public class Client implements Runnable{
 
     public String text;
 
+    public Message rxMessage;
+
     private boolean connected = false;
 
-    CliOutputHandler cliOut = new CliOutputHandler();
-    CliInputHandler cliIn = new CliInputHandler();
+
 
     private int playerID;
     void waitOneSec(){
@@ -128,22 +128,23 @@ public String sendMessage(String msg) {
 
     @Override
     public void run() {
-        commandInterpreter(true);
+        CliIOHandler cliIo = new CliIOHandler();
+
+        commandInterpreter(true, cliIo);
     }
 
     public static void main(String args[]){
         Client cli = new Client();
         cli.startConnection("127.0.0.1", 51734);
-        CliInputHandler input = new CliInputHandler();
-        CliOutputHandler output = new CliOutputHandler();
-        output.showWelcomeMessage();
 
-        //IOHandler io = new IOHandler(input, output);
-        cli.commandInterpreter(false);
+        CliIOHandler cliIo = new CliIOHandler();
+        cliIo.showWelcomeMessage();
+
+        cli.commandInterpreter(false, cliIo);
     }
 
-    private void commandInterpreter(boolean botMode){
-        Message rxMessage;
+    private void commandInterpreter(boolean botMode, IOHandler io){
+
         int i = 0;
         while (true){
             if(connected){
@@ -151,76 +152,78 @@ public String sendMessage(String msg) {
                 Message txMessage;
                 String[] choices = {"1", "2", "3", "4", "5", "w", "y"};
 
+                if(rxMessage != null){
+                    switch (rxMessage.operation) {
+                        case INIT:
+                            playerID = rxMessage.playerID;
+                            sendAck();
+                            break;
 
-                switch (rxMessage.operation) {
-                    case INIT:
-                        playerID = rxMessage.playerID;
-                        sendAck();
-                        break;
+                        case GET_PLAYER_NAME:
+                            txMessage = new Message();
+                            //if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
+                            io.printMessage(rxMessage.text);
+                            txMessage.setOperation(Message.Action.RESPONSE);
+                            txMessage.setPlayerID(playerID);
+                            if(botMode) txMessage.setText("Player"+ playerID);
+                            else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
 
-                    case GET_PLAYER_NAME:
-                        txMessage = new Message();
-                        //if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
-                        cliOut.printMessage(rxMessage.text);
-                        txMessage.setOperation(Message.Action.RESPONSE);
-                        txMessage.setPlayerID(playerID);
-                        if(botMode) txMessage.setText("Player"+ playerID);
-                        else if(isYourTurn(rxMessage)) txMessage.setText(cliIn.getInputString());
+                            if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
+                            else sendAck();
+                            break;
 
-                        if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
-                        else sendAck();
-                        break;
+                        case GET_INPUT:
+                            txMessage = new Message();
+                            //if(isYourTurn(rxMessage))
+                            io.printMessage(rxMessage.text);
 
+                            txMessage.setOperation(Message.Action.RESPONSE);
+                            if(botMode) txMessage.setText(choices[i%choices.length]) ;
+                            else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
+                            i++;
+                            txMessage.setPlayerID(playerID);
 
-                    case GET_INPUT:
-                        txMessage = new Message();
-                        //if(isYourTurn(rxMessage))
-                        cliOut.printMessage(rxMessage.text);
+                            if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
+                            else sendAck();
 
-                        txMessage.setOperation(Message.Action.RESPONSE);
-                        if(botMode) txMessage.setText(choices[i%choices.length]) ;
-                        else if(isYourTurn(rxMessage)) txMessage.setText(cliIn.getInputString());
-                        i++;
-                        txMessage.setPlayerID(playerID);
+                            break;
 
-                        if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
-                        else sendAck();
+                        case UPDATE_TILES:
+                            if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + rxMessage);
 
-                        break;
+                            io.showBoardTiles(rxMessage.boardTiles);
 
-                    case UPDATE_TILES:
-                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " UPDATE_TILES, message was: " + rxMessage);
+                            sendAck();
+                            break;
 
-                        cliOut.showTiles(rxMessage.boardTiles);
+                        case UPDATE_PLAYER:
 
-                        sendAck();
-                        break;
+                            io.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
+                            //io.showDice(rxMessage.dice);
+                            sendAck();
+                            break;
 
-                    case UPDATE_PLAYER:
+                        case ERROR:
+                            if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " ERROR, message was: " + rxMessage.operation);
+                            System.out.println(rxMessage.text);
+                            sendAck();
+                            break;
 
-                        cliOut.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
-                        cliOut.showDice(rxMessage.dice);
-                        sendAck();
-                        break;
-
-                    case ERROR:
-                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " ERROR, message was: " + rxMessage.operation);
-                        System.out.println(rxMessage.text);
-                        sendAck();
-                        break;
-
-                    case INFO:
-                        text = rxMessage.text;
-                        cliOut.printMessage(text);
-                        if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
-                        sendAck();
-                        break;
+                        case INFO:
+                            text = rxMessage.text;
+                            io.printMessage(text);
+                            if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
+                            sendAck();
+                            break;
 
 
-                    default:
-                        break;
-                    //TODO mettere un default
+                        default:
+                            break;
+                        //TODO mettere un default
+                    }
                 }
+
+
 
             }
 

@@ -79,5 +79,7 @@ public interface IOHandler {
 
     void showBustMessage();
 
+    String getInputString();
+
     String printError(String text);
 }
