@@ -39,7 +39,7 @@ public class Player {
     public String getTopTileInfo() {
         if (hasTile()) {
             Tile topTile = getLastPickedTile();
-            return topTile.getNumber() + " - " + topTile.getWormString();
+            return topTile.getNumber() + " " + topTile.getWormString();
         } else {
             return "No tiles";
         }

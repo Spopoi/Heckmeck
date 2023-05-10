@@ -90,13 +90,13 @@ public class TestPlayer {
             #--------------------------
             # tileNumber | expectedInfo
             #--------------------------
-                21       |  21 - ~
+                21       |  21 ~
             #--------------------------
-                25       |  25 - ~~
+                25       |  25 ~~
             #--------------------------
-                29       |  29 - ~~~
+                29       |  29 ~~~
             #--------------------------
-                33       |  33 - ~~~~
+                33       |  33 ~~~~
             """)
     void check_correctness_of_last_picked_tile_info_while_has_tiles(int tileNumber, String expectedInfo) {
         Player player = Player.generatePlayer("Luigi");
