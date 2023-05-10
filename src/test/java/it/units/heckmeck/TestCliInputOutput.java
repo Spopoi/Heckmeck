@@ -273,10 +273,10 @@ public class TestCliInputOutput {
 
     private static String getInitialPlayerStatus() {
         return """
-                Luigi's tiles:                    Player  | Top tile  | Worms\s
-                                                 -----------------------------
-                                                  player2 | No tiles  |  0 \s
-                Chosen dice: []                   player3 | No tiles  |  0 \s
+                Luigi's tiles:                    Player  | Top tile | Worms\s
+                                                 ----------------------------
+                                                  player2 | No tiles |   0  \s
+                Chosen dice: []                   player3 | No tiles |   0  \s
                 Current dice score: 0           \s
                 WORM is chosen: false           \s
                                 
