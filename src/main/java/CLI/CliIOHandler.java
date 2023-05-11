@@ -216,7 +216,7 @@ public class CliIOHandler implements IOHandler {
         int textBlock2Height = (int) textBlock2.lines().count();
         int resultingHeight = Math.max(textBlock1Height, textBlock2Height);
 
-        String pad = " ".repeat(textBlock1Width + finalSpaceBetweenBlocks);
+        String pad = " ".repeat(textBlock1Width);
 
         List<String> lines1 = textBlock1.lines().toList();
         List<String> lines2 = textBlock2.lines().toList();
@@ -232,7 +232,7 @@ public class CliIOHandler implements IOHandler {
 
     private static String padRightTextBlockWithSpaces(String textBlock, int width) {
         return textBlock.lines()
-                .map(line -> String.format("%1$-" + width + "s", line))
+                .map(line -> String.format("%-" + width + "s", line))
                 .collect(Collectors.joining(newLine));
     }
 

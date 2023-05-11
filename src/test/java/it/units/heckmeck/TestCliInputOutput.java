@@ -233,8 +233,11 @@ public class TestCliInputOutput {
         Player player1 = Player.generatePlayer(PLAYER_NAME);
         Player player2 = Player.generatePlayer("player2");
         Player player3 = Player.generatePlayer("player3");
-        Player[] players = {player1, player2, player3};
-
+        Player player4 = Player.generatePlayer("player4");
+        Player player5 = Player.generatePlayer("player5");
+        Player player6 = Player.generatePlayer("player6");
+        Player player7 = Player.generatePlayer("player7");
+        Player[] players = {player1, player2, player3, player4, player5, player6, player7};
 
         inputOutput.showPlayerData(player1, dice, players);
 
@@ -252,22 +255,22 @@ public class TestCliInputOutput {
     private static String getInitialBoard() {
         return """
                 The available tiles on the board now are:
-                  .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------.
-                  |  21  | |  22  | |  23  | |  24  | |  25  | |  26  | |  27  | |  28  | |  29  | |  30  | |  31  | |  32  | |  33  | |  34  | |  35  | |  36  |
-                  |  ~   | |  ~   | |  ~   | |  ~   | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  |
-                  |      | |      | |      | |      | |      | |      | |      | |      | |  ~   | |  ~   | |  ~   | |  ~   | |  ~~  | |  ~~  | |  ~~  | |  ~~  |
-                  '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------'
+                 .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------.
+                 |  21  | |  22  | |  23  | |  24  | |  25  | |  26  | |  27  | |  28  | |  29  | |  30  | |  31  | |  32  | |  33  | |  34  | |  35  | |  36  |
+                 |  ~   | |  ~   | |  ~   | |  ~   | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  |
+                 |      | |      | |      | |      | |      | |      | |      | |      | |  ~   | |  ~   | |  ~   | |  ~   | |  ~~  | |  ~~  | |  ~~  | |  ~~  |
+                 '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------'
                   
                 """;
     }
 
     private static String getExpectedAllDiceFromOutput() {
         return """
-                  .---------. .---------. .---------. .---------. .---------. .---------.
-                  |         | |      o  | |      o  | |  o   o  | |  o   o  | |   \\=\\   |
-                  |    o    | |         | |    o    | |         | |    o    | |   /=/   |
-                  |         | |  o      | |  o      | |  o   o  | |  o   o  | |   \\=\\   |
-                  '---------' '---------' '---------' '---------' '---------' '---------'
+                 .---------. .---------. .---------. .---------. .---------. .---------.
+                 |         | |      o  | |      o  | |  o   o  | |  o   o  | |   \\=\\   |
+                 |    o    | |         | |    o    | |         | |    o    | |   /=/   |
+                 |         | |  o      | |  o      | |  o   o  | |  o   o  | |   \\=\\   |
+                 '---------' '---------' '---------' '---------' '---------' '---------'
                 """;
     }
 
@@ -277,9 +280,11 @@ public class TestCliInputOutput {
                                                  ----------------------------
                                                   player2 | No tiles |   0  \s
                 Chosen dice: []                   player3 | No tiles |   0  \s
-                Current dice score: 0           \s
-                WORM is chosen: false           \s
-                                
+                Current dice score: 0             player4 | No tiles |   0  \s
+                WORM is chosen: false             player5 | No tiles |   0  \s
+                                                  player6 | No tiles |   0  \s
+                                                  player7 | No tiles |   0  \s
+
                 """;
     }
 
