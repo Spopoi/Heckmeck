@@ -1,6 +1,6 @@
-package Heckmeck;
+package CLI;
 
-import CLI.CliIOHandler;
+import Heckmeck.Game;
 import TCP.Server.GameServer;
 
 import java.io.IOException;
