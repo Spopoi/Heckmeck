@@ -121,6 +121,8 @@ public class GUIIOHandler implements IOHandler {
         tilesPanel.setLayout(new GridLayout(1,0,10, 10));
         tilesPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
         tilesPanel.setPreferredSize(new Dimension(0,125));
+        tilesPanel.setBackground(Color.LIGHT_GRAY);
+        //tilesPanel.setBackground(Color.PINK);
 
         for(Tile tile : boardTiles.getTiles()){
             JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber()));
@@ -162,31 +164,57 @@ public class GUIIOHandler implements IOHandler {
 
         showOthersPlayerPanel(player, players);
 
-        playerPane = new JPanel();
-        playerPane.setLayout(new BoxLayout(playerPane, BoxLayout.Y_AXIS));
-        playerPane.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 5));
+        int colIndex = 0;
 
-        JLabel playerName = new JLabel(player.getName());
-        playerName.setPreferredSize(new Dimension(300,50));
+        playerPane = new JPanel();
+        playerPane.setLayout(new GridBagLayout());
+        playerPane.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 5));
+
+        JLabel playerName = new JLabel("Player #" + player.getName());
+        playerName.setPreferredSize(new Dimension(250, 50));
         playerName.setFont(new Font("Serif", Font.BOLD, 30));
-        playerName.setBackground(Color.LIGHT_GRAY);
-        playerPane.add(playerName);
+        playerPane.add(playerName, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+        colIndex++;
 
         JLabel score = new JLabel("Your score: " + dice.getScore());
-        score.setPreferredSize(new Dimension(200,50));
-        score.setFont(new Font("Serif", Font.PLAIN, 20));
-        playerPane.add(score);
+        score.setPreferredSize(new Dimension(200, 50));
+        score.setFont(new Font("Serif", Font.PLAIN, 25));
+        score.setForeground(Color.red);
+        playerPane.add(score, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+        colIndex++;
+
+        JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+        separator.setPreferredSize(new Dimension(1, 8));
+        separator.setBorder(BorderFactory.createMatteBorder(2, 0, 1, 0, Color.black));
+        playerPane.add(separator, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(10, 0, 10, 0), 0, 0));
+        colIndex++;
 
         if(player.hasTile()) {
+
+            JLabel lastTileLabel = new JLabel("Last picked tile: ");
+            lastTileLabel.setPreferredSize(new Dimension(130, 50));
+            lastTileLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+            playerPane.add(lastTileLabel, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 1.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+            colIndex++;
+
             JLabel lastPlayerTile = new JLabel(getTileIcon(player.getLastPickedTile().getNumber()));
-            lastPlayerTile.setPreferredSize(new Dimension(80,90));
-            playerPane.add(lastPlayerTile);
+            lastPlayerTile.setPreferredSize(new Dimension(80, 90));
+            playerPane.add(lastPlayerTile, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 1.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+            colIndex++;
+
         }
 
+        if(!dice.getChosenDice().isEmpty()) {
+            JLabel chosenDiceLabel = new JLabel("Chosen dice:");
+            chosenDiceLabel.setPreferredSize(new Dimension(200, 50));
+            chosenDiceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+            playerPane.add(chosenDiceLabel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0));
+            colIndex++;
+        }
 
         JPanel dicePanel = new JPanel();
         dicePanel.setLayout(new GridBagLayout());
-        dicePanel.setMaximumSize(new Dimension(300,150));
+        dicePanel.setMaximumSize(new Dimension(250,150));
 
         int diceRowIndex = 0;
         for(Die die : dice.getChosenDice()){
@@ -201,8 +229,7 @@ public class GUIIOHandler implements IOHandler {
             diceRowIndex++;
         }
         dicePanel.setAlignmentX(LEFT_ALIGNMENT);
-
-        playerPane.add(dicePanel);
+        playerPane.add(dicePanel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, WEST, NONE, new Insets(0, 0, 60, 0), 0, 0 ));
 
         frame.add(playerPane, BorderLayout.WEST);
         frame.setVisible(true);
@@ -211,24 +238,31 @@ public class GUIIOHandler implements IOHandler {
     private void showOthersPlayerPanel(Player player, Player[] players) {
         frame.getContentPane().remove(othersPlayerPane);
         othersPlayerPane = new JPanel();
-        othersPlayerPane.setLayout(new BoxLayout(othersPlayerPane, BoxLayout.Y_AXIS));
-        othersPlayerPane.setPreferredSize(new Dimension(100,0));
-
+        othersPlayerPane.setLayout(new GridBagLayout());
+        othersPlayerPane.setPreferredSize(new Dimension(200,0));
+        othersPlayerPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 20));
+        int index= 0;
         for(Player otherPlayer : players){
             if(!player.equals(otherPlayer)){
                 if(otherPlayer.hasTile()){
-                    JLabel otherPlayerLabel = new JLabel(otherPlayer.getName() + "Tile: ");
-                    othersPlayerPane.add(otherPlayerLabel);
+                    JLabel otherPlayerLabel = new JLabel(otherPlayer.getName() + "'s last tile: ");
+                    otherPlayerLabel.setFont(new Font("Serif", Font.BOLD, 15));
+                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 1.0, 0.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
+
                     JLabel otherPlayerLastTile = new JLabel(getTileIcon(otherPlayer.getLastPickedTile().getNumber()));
-                    //otherPlayerLastTile.setPreferredSize(new Dimension(20,30));
-                    othersPlayerPane.add(otherPlayerLastTile);
-                    othersPlayerPane.add(Box.createVerticalGlue());
+                    otherPlayerLastTile.setPreferredSize(new Dimension(10,80));
+                    othersPlayerPane.add(otherPlayerLastTile, new GridBagConstraints(1, index, 1, 1, 1.0, 0.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
+
+                    //othersPlayerPane.add(Box.createVerticalGlue());
                 }
                 else{
                     JLabel otherPlayerLabel = new JLabel("<html>"+otherPlayer.getName() + "<br> No Tiles </html>");
-                    othersPlayerPane.add(otherPlayerLabel);
-                    othersPlayerPane.add(Box.createVerticalGlue());
+                    otherPlayerLabel.setFont(new Font("Serif", Font.BOLD, 15));
+                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 1.0, 0.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
+
+                    //othersPlayerPane.add(Box.createVerticalGlue());
                 }
+                index++;
             }
         }
         othersPlayerPane.setAlignmentX(CENTER);
@@ -239,14 +273,13 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public Die.Face chooseDie(Dice dice) {
+        //TODO: se chiudi la finestra deve aspettare un'altra selezione di dadi
         frame.getContentPane().remove(dicePanel);
         chosenFace = null;
 
         dicePanel = new JPanel();
         dicePanel.setLayout(new GridLayout(2,4,20, 20));
         dicePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 50, 50));
-
-
 
         for(Die die : dice.getDiceList()){
             JButton dieButton = new JButton(getDieIcon(die.getDieFace()));
