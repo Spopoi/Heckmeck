@@ -171,16 +171,16 @@ public class GUIIOHandler implements IOHandler {
         playerPane.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 5));
 
         JLabel playerName = new JLabel("Player #" + player.getName());
-        playerName.setPreferredSize(new Dimension(250, 50));
+        playerName.setPreferredSize(new Dimension(330, 50));
         playerName.setFont(new Font("Serif", Font.BOLD, 30));
         playerPane.add(playerName, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
         colIndex++;
 
-        JLabel score = new JLabel("Your score: " + dice.getScore());
+        JLabel score = new JLabel("Current score: " + dice.getScore());
         score.setPreferredSize(new Dimension(200, 50));
         score.setFont(new Font("Serif", Font.PLAIN, 25));
         score.setForeground(Color.red);
-        playerPane.add(score, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+        playerPane.add(score, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 0), 0, 0));
         colIndex++;
 
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -191,15 +191,15 @@ public class GUIIOHandler implements IOHandler {
 
         if(player.hasTile()) {
 
-            JLabel lastTileLabel = new JLabel("Last picked tile: ");
+            JLabel lastTileLabel = new JLabel("Top tile: ");
             lastTileLabel.setPreferredSize(new Dimension(130, 50));
             lastTileLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-            playerPane.add(lastTileLabel, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 1.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+            playerPane.add(lastTileLabel, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
             colIndex++;
 
             JLabel lastPlayerTile = new JLabel(getTileIcon(player.getLastPickedTile().getNumber()));
             lastPlayerTile.setPreferredSize(new Dimension(80, 90));
-            playerPane.add(lastPlayerTile, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 1.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+            playerPane.add(lastPlayerTile, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 0.0, GridBagConstraints.LINE_START, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
             colIndex++;
 
         }
@@ -208,7 +208,7 @@ public class GUIIOHandler implements IOHandler {
             JLabel chosenDiceLabel = new JLabel("Chosen dice:");
             chosenDiceLabel.setPreferredSize(new Dimension(200, 50));
             chosenDiceLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-            playerPane.add(chosenDiceLabel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0));
+            playerPane.add(chosenDiceLabel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, SOUTHWEST, NONE, new Insets(0, 0, 0, 0), 0, 0));
             colIndex++;
         }
 
@@ -229,7 +229,7 @@ public class GUIIOHandler implements IOHandler {
             diceRowIndex++;
         }
         dicePanel.setAlignmentX(LEFT_ALIGNMENT);
-        playerPane.add(dicePanel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, WEST, NONE, new Insets(0, 0, 60, 0), 0, 0 ));
+        playerPane.add(dicePanel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, SOUTHWEST, NONE, new Insets(0, 0, 50, 0), 0, 0 ));
 
         frame.add(playerPane, BorderLayout.WEST);
         frame.setVisible(true);
@@ -239,26 +239,26 @@ public class GUIIOHandler implements IOHandler {
         frame.getContentPane().remove(othersPlayerPane);
         othersPlayerPane = new JPanel();
         othersPlayerPane.setLayout(new GridBagLayout());
-        othersPlayerPane.setPreferredSize(new Dimension(200,0));
+        othersPlayerPane.setPreferredSize(new Dimension(250,0));
         othersPlayerPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 20));
         int index= 0;
         for(Player otherPlayer : players){
             if(!player.equals(otherPlayer)){
                 if(otherPlayer.hasTile()){
                     JLabel otherPlayerLabel = new JLabel(otherPlayer.getName() + "'s last tile: ");
-                    otherPlayerLabel.setFont(new Font("Serif", Font.BOLD, 15));
-                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 1.0, 0.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
+                    otherPlayerLabel.setFont(new Font("Serif", Font.PLAIN, 15));
+                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
 
                     JLabel otherPlayerLastTile = new JLabel(getTileIcon(otherPlayer.getLastPickedTile().getNumber()));
                     otherPlayerLastTile.setPreferredSize(new Dimension(10,80));
-                    othersPlayerPane.add(otherPlayerLastTile, new GridBagConstraints(1, index, 1, 1, 1.0, 0.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
+                    othersPlayerPane.add(otherPlayerLastTile, new GridBagConstraints(1, index, 1, 1, 1.0, 1.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
 
                     //othersPlayerPane.add(Box.createVerticalGlue());
                 }
                 else{
-                    JLabel otherPlayerLabel = new JLabel("<html>"+otherPlayer.getName() + "<br> No Tiles </html>");
-                    otherPlayerLabel.setFont(new Font("Serif", Font.BOLD, 15));
-                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 1.0, 0.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
+                    JLabel otherPlayerLabel = new JLabel(otherPlayer.getName() + ": no tiles");
+                    otherPlayerLabel.setFont(new Font("Serif", Font.PLAIN, 15));
+                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, PAGE_START, BOTH, new Insets(0, 0, 20, 0), 0, 0 ));
 
                     //othersPlayerPane.add(Box.createVerticalGlue());
                 }
