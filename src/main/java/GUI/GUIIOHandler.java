@@ -125,7 +125,7 @@ public class GUIIOHandler implements IOHandler {
         //tilesPanel.setBackground(Color.PINK);
 
         for(Tile tile : boardTiles.getTiles()){
-            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber()));
+            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 90, 80));
             tileIcon.setPreferredSize(new Dimension(80,90));
             tilesPanel.add(tileIcon);
 
@@ -184,17 +184,20 @@ public class GUIIOHandler implements IOHandler {
 
         if(player.hasTile()) {
 
+            JPanel playerTilePanel = new JPanel();
+            playerTilePanel.setLayout(new GridBagLayout());
+            playerTilePanel.setMaximumSize(new Dimension(30,150));
+
             JLabel lastTileLabel = new JLabel("Top tile: ");
             lastTileLabel.setPreferredSize(new Dimension(130, 50));
             lastTileLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-            playerPane.add(lastTileLabel, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 0.0, NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
-            colIndex++;
+            playerTilePanel.add(lastTileLabel, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, WEST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
 
-            JLabel lastPlayerTile = new JLabel(getTileIcon(player.getLastPickedTile().getNumber()));
+            JLabel lastPlayerTile = new JLabel(getTileIcon(player.getLastPickedTile().getNumber(), 50, 40));
             lastPlayerTile.setPreferredSize(new Dimension(80, 90));
-            playerPane.add(lastPlayerTile, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 0.0, NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
+            playerTilePanel.add(lastPlayerTile, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
+            playerPane.add(playerTilePanel, new GridBagConstraints(0, colIndex, 1, 1, 0.0, 0.0, NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 10, 0), 0, 0));
             colIndex++;
-
         }
 
         if(!dice.getChosenDice().isEmpty()) {
@@ -255,7 +258,7 @@ public class GUIIOHandler implements IOHandler {
                     otherPlayerLabel.setFont(new Font("Serif", Font.PLAIN, 15));
                     othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 0, 20, 0), 0, 0));
 
-                    JLabel otherPlayerLastTile = new JLabel(getTileIcon(otherPlayer.getLastPickedTile().getNumber()));
+                    JLabel otherPlayerLastTile = new JLabel(getTileIcon(otherPlayer.getLastPickedTile().getNumber(), 60,50));
                     otherPlayerLastTile.setPreferredSize(new Dimension(10, 80));
                     othersPlayerPane.add(otherPlayerLastTile, new GridBagConstraints(1, index, 1, 1, 1.0, 0.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 0, 20, 0), 0, 0));
 
@@ -334,10 +337,10 @@ public class GUIIOHandler implements IOHandler {
 
 
     //TODO: give the size of Tile Icon as parameter
-    private ImageIcon getTileIcon(int tileNumber){
+    private ImageIcon getTileIcon(int tileNumber, int height, int width){
         ImageIcon icon = new ImageIcon(tileNumberToIconPath.get(tileNumber));
         Image img = icon.getImage() ;
-        Image newimg = img.getScaledInstance(80 , 90,  java.awt.Image.SCALE_SMOOTH ) ;
+        Image newimg = img.getScaledInstance(width , height,  java.awt.Image.SCALE_SMOOTH ) ;
         return new ImageIcon( newimg );
     }
 
