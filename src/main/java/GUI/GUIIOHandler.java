@@ -119,9 +119,10 @@ public class GUIIOHandler implements IOHandler {
 
         tilesPanel = new JPanel();
         tilesPanel.setLayout(new GridLayout(1,0,10, 10));
-        tilesPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
+        tilesPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
         tilesPanel.setPreferredSize(new Dimension(0,125));
-        tilesPanel.setBackground(Color.LIGHT_GRAY);
+        tilesPanel.setOpaque(false);
+        //tilesPanel.setBackground(Color.LIGHT_GRAY);
         //tilesPanel.setBackground(Color.PINK);
 
         for(Tile tile : boardTiles.getTiles()){
@@ -170,7 +171,7 @@ public class GUIIOHandler implements IOHandler {
         playerPane.setLayout(new GridBagLayout());
         playerPane.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 5));
 
-        JLabel playerName = new JLabel("Player #" + player.getName());
+        JLabel playerName = new JLabel("Player " + player.getName());
         playerName.setPreferredSize(new Dimension(310, 50));
         playerName.setFont(new Font("Serif", Font.BOLD, 30));
         playerPane.add(playerName, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 0), 0, 0));
@@ -284,7 +285,20 @@ public class GUIIOHandler implements IOHandler {
         chosenFace = null;
         dicePanel = new JPanel(new GridBagLayout());
 
+//        JPanel dicePanel = new JPanel(new GridBagLayout()) {
+//            private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/table.jpg").getImage();
+//
+//            @Override
+//            protected void paintComponent(Graphics g) {
+//                super.paintComponent(g);
+//                // Draw the background image
+//                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+//            }
+//        };
+
+
         dicePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 50, 5));
+        dicePanel.setOpaque(false);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -336,7 +350,6 @@ public class GUIIOHandler implements IOHandler {
     }
 
 
-    //TODO: give the size of Tile Icon as parameter
     private ImageIcon getTileIcon(int tileNumber, int height, int width){
         ImageIcon icon = new ImageIcon(tileNumberToIconPath.get(tileNumber));
         Image img = icon.getImage() ;

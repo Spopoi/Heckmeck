@@ -16,7 +16,21 @@ public class HeckmeckGUI {
         JFrame frame = new JFrame("HECKMECK");
         frame.setSize(1100,600);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        JPanel imagePanel = new JPanel() {
+            private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/table.jpg").getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        frame.setContentPane(imagePanel);
+
         frame.getContentPane().setLayout(new BorderLayout(50,30));
+
         GUIIOHandler io = new GUIIOHandler(frame);
         Game game = new Game(io);
 
