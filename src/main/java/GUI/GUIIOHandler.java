@@ -171,7 +171,7 @@ public class GUIIOHandler implements IOHandler {
         playerPane.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 5));
 
         JLabel playerName = new JLabel("Player #" + player.getName());
-        playerName.setPreferredSize(new Dimension(330, 50));
+        playerName.setPreferredSize(new Dimension(310, 50));
         playerName.setFont(new Font("Serif", Font.BOLD, 30));
         playerPane.add(playerName, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.PAGE_START, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, 0), 0, 0));
         colIndex++;
@@ -211,18 +211,18 @@ public class GUIIOHandler implements IOHandler {
 
         int diceRowIndex = 0;
         for(Die die : dice.getChosenDice()){
-            JLabel dieIconLabel = new JLabel(getDieIcon(die.getDieFace()));
+            JLabel dieIconLabel = new JLabel(getDieIcon(die.getDieFace(),40));
             dieIconLabel.setPreferredSize(new Dimension(50,50));
 
             if(diceRowIndex < 4){
-                dicePanel.add(dieIconLabel, new GridBagConstraints(diceRowIndex, 0, 1, 1, 1.0, 0.0, WEST, NONE, new Insets(0, 0, 0, 5), 0, 0 ));
+                dicePanel.add(dieIconLabel, new GridBagConstraints(diceRowIndex, 0, 1, 1, 1.0, 0.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
             }else{
-                dicePanel.add(dieIconLabel, new GridBagConstraints(diceRowIndex - 4, 1, 1, 1, 1.0, 0.0, WEST, NONE, new Insets(10, 0, 0, 5), 0, 0 ));
+                dicePanel.add(dieIconLabel, new GridBagConstraints(diceRowIndex - 4, 1, 1, 1, 1.0, 0.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
             }
             diceRowIndex++;
         }
 
-        playerPane.add(dicePanel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, WEST, NONE, new Insets(0, 0, 15, 0), 0, 0 ));
+        playerPane.add(dicePanel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
 
         colIndex++;
         JSeparator separator_up = new JSeparator(SwingConstants.HORIZONTAL);
@@ -292,8 +292,8 @@ public class GUIIOHandler implements IOHandler {
 
         for (Die die : dice.getDiceList()) {
             JToggleButton dieButton = new JToggleButton();
-            dieButton.setIcon(getDieIcon(die.getDieFace()));
-            dieButton.setSelectedIcon(getDieIcon(die.getDieFace()));
+            dieButton.setIcon(getDieIcon(die.getDieFace(), 65));
+            dieButton.setSelectedIcon(getDieIcon(die.getDieFace(),65));
             dieButton.addActionListener(e -> chosenFace = die.getDieFace());
             dieButton.setPreferredSize(new Dimension(60, 60));
 
@@ -341,10 +341,10 @@ public class GUIIOHandler implements IOHandler {
         return new ImageIcon( newimg );
     }
 
-    private ImageIcon getDieIcon(Die.Face face){
+    private ImageIcon getDieIcon(Die.Face face, int size){
         ImageIcon icon = new ImageIcon(faceToIconPath.get(face));
         Image img = icon.getImage() ;
-        Image newimg = img.getScaledInstance(50 , 50,  java.awt.Image.SCALE_SMOOTH ) ;
+        Image newimg = img.getScaledInstance(size , size,  java.awt.Image.SCALE_SMOOTH ) ;
         return new ImageIcon( newimg );
     }
 }
