@@ -122,8 +122,7 @@ public class GUIIOHandler implements IOHandler {
         tilesPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
         tilesPanel.setPreferredSize(new Dimension(0,125));
         tilesPanel.setOpaque(false);
-        //tilesPanel.setBackground(Color.LIGHT_GRAY);
-        //tilesPanel.setBackground(Color.PINK);
+
 
         for(Tile tile : boardTiles.getTiles()){
             JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 90, 80));
@@ -163,11 +162,22 @@ public class GUIIOHandler implements IOHandler {
 
         frame.getContentPane().remove(playerPane);
 
+        JPanel playerPane = new JPanel() {
+            private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/wood_background.jpg").getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Draw the background image
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
         showOthersPlayerPanel(player, players);
 
         int colIndex = 0;
 
-        playerPane = new JPanel();
+        //playerPane = new JPanel();
         playerPane.setLayout(new GridBagLayout());
         playerPane.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 5));
 
