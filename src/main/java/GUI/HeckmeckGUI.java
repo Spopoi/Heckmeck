@@ -58,11 +58,7 @@ public class HeckmeckGUI {
 
         rulesPanel.add(backToMenuButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
         rulesPanel.add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-
-
-        //rulesPanel.add(backToMenuButton, BorderLayout.NORTH);
-        //rulesPanel.add(scrollPane, BorderLayout.CENTER);
-
+        
         frame.getContentPane().removeAll();
         frame.setContentPane(rulesPanel);
         frame.revalidate();
@@ -88,21 +84,20 @@ public class HeckmeckGUI {
         buttonsPanel.setOpaque(false);
 
         JButton playButton = new JButton("Play");
+        playButton.setFocusPainted(false);
         playButton.addActionListener(e -> switchToGamePanel());
         playButton.setBackground(Color.orange);
         buttonsPanel.add(playButton);
 
         JButton rulesButton = new JButton("Rules");
+
         rulesButton.addActionListener(e -> switchToRulesPanel());
         rulesButton.setBackground(Color.orange);
         buttonsPanel.add(rulesButton);
 
         JButton settingsButton = new JButton("Settings");
-        settingsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Implementa l'azione per il pulsante "Settings"
-            }
-        });
+
+        settingsButton.addActionListener(e -> switchToSettings());
         settingsButton.setBackground(Color.orange);
         buttonsPanel.add(settingsButton);
 
@@ -111,6 +106,10 @@ public class HeckmeckGUI {
         frame.getContentPane().removeAll();
         frame.setContentPane(menuPanel);
         frame.setVisible(true);
+    }
+
+    private static void switchToSettings() {
+        //TODO: cosa metterci? resize del frame...
     }
 
     private static void switchToGamePanel() {
