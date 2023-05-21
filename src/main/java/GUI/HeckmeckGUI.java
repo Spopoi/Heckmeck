@@ -18,27 +18,63 @@ public class HeckmeckGUI {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                initGUI();
             }
         });
     }
 
-    private static void createAndShowGUI() {
+    private static void initGUI() {
 
         frame = new JFrame("HECKMECK");
-        frame.setSize(1100, 600);
+        frame.setSize(1200, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+        switchToMenuPanel();
+    }
 
+    private static void switchToRulesPanel() {
+        JPanel rulesPanel = new JPanel(new BorderLayout());
+
+        JPanel imagesPanel = new JPanel(new GridLayout(2, 1));
+        JScrollPane scrollPane = new JScrollPane(imagesPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+        verticalScrollBar.setUnitIncrement(15);
+
+        ImageIcon rulesImage1 = new ImageIcon("src/main/java/GUI/Icons/Rules1.jpg");
+        JLabel rulesLabel1 = new JLabel(rulesImage1);
+        imagesPanel.add(rulesLabel1);
+
+        ImageIcon rulesImage2 = new ImageIcon("src/main/java/GUI/Icons/Rules2.jpg");
+        JLabel rulesLabel2 = new JLabel(rulesImage2);
+        imagesPanel.add(rulesLabel2);
+
+        JButton backToMenuButton = new JButton("Menu");
+        backToMenuButton.addActionListener(e -> switchToMenuPanel());
+
+
+        rulesPanel.add(backToMenuButton, BorderLayout.NORTH);
+        rulesPanel.add(scrollPane, BorderLayout.CENTER);
+
+        frame.getContentPane().removeAll();
+        frame.setContentPane(rulesPanel);
+        frame.revalidate();
+        //frame.repaint();
+    }
+
+    private static void switchToMenuPanel() {
+
+        //TODO: extract this method used to put in background a jpg image
         JPanel menuPanel = new JPanel() {
-        private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/heckmeckBackground.jpg").getImage();
+            private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/heckmeckBackground.jpg").getImage();
 
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
-    };
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
         menuPanel.setLayout(new GridBagLayout());
 
         JPanel buttonsPanel = new JPanel(new GridLayout(3, 1, 10, 20));
@@ -66,38 +102,9 @@ public class HeckmeckGUI {
 
         menuPanel.add(buttonsPanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, CENTER, GridBagConstraints.BOTH, new Insets(180, 0, 0, 0), 0, 0));
 
-        //menuPanel.add(buttonsPanel, BorderLayout.CENTER);
-        frame.getContentPane().add(menuPanel);
-        frame.setVisible(true);
-    }
-
-    private static void switchToRulesPanel() {
-        JPanel rulesPanel = new JPanel(new BorderLayout());
-
-        JPanel imagesPanel = new JPanel(new GridLayout(2, 1));
-        JScrollPane scrollPane = new JScrollPane(imagesPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
-        verticalScrollBar.setUnitIncrement(15);
-
-
-        ImageIcon rulesImage1 = new ImageIcon("src/main/java/GUI/Icons/Rules1.jpg");
-        JLabel rulesLabel1 = new JLabel(rulesImage1);
-        imagesPanel.add(rulesLabel1);
-
-        ImageIcon rulesImage2 = new ImageIcon("src/main/java/GUI/Icons/Rules2.jpg");
-        JLabel rulesLabel2 = new JLabel(rulesImage2);
-        imagesPanel.add(rulesLabel2);
-
-
-        rulesPanel.add(scrollPane, BorderLayout.CENTER);
-
         frame.getContentPane().removeAll();
-        frame.setContentPane(rulesPanel);
-        frame.revalidate();
-        frame.repaint();
+        frame.setContentPane(menuPanel);
+        frame.setVisible(true);
     }
 
     private static void switchToGamePanel() {
