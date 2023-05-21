@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static java.awt.GridBagConstraints.CENTER;
+import static java.awt.GridBagConstraints.NORTHWEST;
 
 
 public class HeckmeckGUI {
@@ -33,7 +34,7 @@ public class HeckmeckGUI {
     }
 
     private static void switchToRulesPanel() {
-        JPanel rulesPanel = new JPanel(new BorderLayout());
+        JPanel rulesPanel = new JPanel(new GridBagLayout());
 
         JPanel imagesPanel = new JPanel(new GridLayout(2, 1));
         JScrollPane scrollPane = new JScrollPane(imagesPanel);
@@ -52,10 +53,15 @@ public class HeckmeckGUI {
 
         JButton backToMenuButton = new JButton("Menu");
         backToMenuButton.addActionListener(e -> switchToMenuPanel());
+        backToMenuButton.setPreferredSize(new Dimension(70,70));
+        backToMenuButton.setBackground(Color.ORANGE);
+
+        rulesPanel.add(backToMenuButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+        rulesPanel.add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
 
-        rulesPanel.add(backToMenuButton, BorderLayout.NORTH);
-        rulesPanel.add(scrollPane, BorderLayout.CENTER);
+        //rulesPanel.add(backToMenuButton, BorderLayout.NORTH);
+        //rulesPanel.add(scrollPane, BorderLayout.CENTER);
 
         frame.getContentPane().removeAll();
         frame.setContentPane(rulesPanel);
