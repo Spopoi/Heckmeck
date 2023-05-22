@@ -5,6 +5,8 @@ import exception.IllegalInput;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -177,7 +179,6 @@ public class GUIIOHandler implements IOHandler {
 
         int colIndex = 0;
 
-        //playerPane = new JPanel();
         playerPane.setLayout(new GridBagLayout());
         playerPane.setBorder(BorderFactory.createEmptyBorder(0, 30, 10, 5));
 
@@ -219,9 +220,9 @@ public class GUIIOHandler implements IOHandler {
             colIndex++;
         }
 
-        JPanel dicePanel = new JPanel();
-        dicePanel.setLayout(new GridBagLayout());
-        dicePanel.setMaximumSize(new Dimension(250,150));
+        JPanel playerDicePanel = new JPanel(new GridBagLayout());
+        //playerDicePanel.setLayout(new GridBagLayout());
+        playerDicePanel.setMaximumSize(new Dimension(250,150));
 
         int diceRowIndex = 0;
         for(Die die : dice.getChosenDice()){
@@ -229,14 +230,14 @@ public class GUIIOHandler implements IOHandler {
             dieIconLabel.setPreferredSize(new Dimension(50,50));
 
             if(diceRowIndex < 4){
-                dicePanel.add(dieIconLabel, new GridBagConstraints(diceRowIndex, 0, 1, 1, 1.0, 0.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
+                playerDicePanel.add(dieIconLabel, new GridBagConstraints(diceRowIndex, 0, 1, 1, 1.0, 0.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
             }else{
-                dicePanel.add(dieIconLabel, new GridBagConstraints(diceRowIndex - 4, 1, 1, 1, 1.0, 0.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
+                playerDicePanel.add(dieIconLabel, new GridBagConstraints(diceRowIndex - 4, 1, 1, 1, 1.0, 0.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
             }
             diceRowIndex++;
         }
 
-        playerPane.add(dicePanel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
+        playerPane.add(playerDicePanel, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 1.0, WEST, NONE, new Insets(0, 0, 0, 0), 0, 0 ));
 
         colIndex++;
         JSeparator separator_up = new JSeparator(SwingConstants.HORIZONTAL);
@@ -252,7 +253,9 @@ public class GUIIOHandler implements IOHandler {
         playerPane.add(score, new GridBagConstraints(0, colIndex, 1, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 40, 0), 0, 0));
 
         frame.add(playerPane, BorderLayout.WEST);
-        frame.setVisible(true);
+        //frame.revalidate();
+        //frame.repaint();
+        //frame.setVisible(true);
     }
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
@@ -267,7 +270,7 @@ public class GUIIOHandler implements IOHandler {
                 if (otherPlayer.hasTile()) {
                     JLabel otherPlayerLabel = new JLabel("<html><b>" + otherPlayer.getName() + "</b>'s last tile: </html>");
                     otherPlayerLabel.setFont(new Font("Serif", Font.PLAIN, 15));
-                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 0, 20, 0), 0, 0));
+                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 20, 20, 0), 0, 0));
 
                     JLabel otherPlayerLastTile = new JLabel(getTileIcon(otherPlayer.getLastPickedTile().getNumber(), 60,50));
                     otherPlayerLastTile.setPreferredSize(new Dimension(10, 80));
@@ -284,28 +287,59 @@ public class GUIIOHandler implements IOHandler {
         }
 
         frame.add(othersPlayerPane, BorderLayout.EAST);
-        frame.setVisible(true);
+        //frame.setVisible(true);
 
     }
 
     @Override
     public Die.Face chooseDie(Dice dice) {
-        //TODO: se chiudi la finestra deve aspettare un'altra selezione di dadi
         frame.getContentPane().remove(dicePanel);
         chosenFace = null;
+
+        dicePanel(dice);
+
+        Timer timer = new Timer(100, new ActionListener() {
+            private int rollCount = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (rollCount < 10) {
+                    for (Component component : dicePanel.getComponents()) {
+                        if (component instanceof JToggleButton dieButton) {
+                            Die.Face randomFace = Die.generateDie().getDieFace();
+                            dieButton.setIcon(getDieIcon(randomFace, 65));
+                            dieButton.setSelectedIcon(getDieIcon(randomFace, 65));
+                        }
+                    }
+                    dicePanel.repaint();
+                    rollCount++;
+                } else {
+                    ((Timer) e.getSource()).stop();
+                    for (Component component : dicePanel.getComponents()) {
+                        if (component instanceof JToggleButton dieButton) {
+                            Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
+                            dieButton.setIcon(getDieIcon(originalFace, 65));
+                            dieButton.setSelectedIcon(getDieIcon(originalFace, 65));
+                        }
+                    }
+                    dicePanel.repaint();
+                }
+            }
+        });
+
+        timer.start();
+
+        while (chosenFace == null) {
+            Thread.onSpinWait();
+        }
+
+        return chosenFace;
+    }
+
+    private void dicePanel(Dice dice) {
+
+        frame.getContentPane().remove(dicePanel);
         dicePanel = new JPanel(new GridBagLayout());
-
-//        JPanel dicePanel = new JPanel(new GridBagLayout()) {
-//            private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/table.jpg").getImage();
-//
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                // Draw the background image
-//                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-//            }
-//        };
-
 
         dicePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 50, 5));
         dicePanel.setOpaque(false);
@@ -319,13 +353,14 @@ public class GUIIOHandler implements IOHandler {
 
         for (Die die : dice.getDiceList()) {
             JToggleButton dieButton = new JToggleButton();
-            dieButton.setIcon(getDieIcon(die.getDieFace(), 65));
-            dieButton.setSelectedIcon(getDieIcon(die.getDieFace(),65));
-            dieButton.addActionListener(e -> chosenFace = die.getDieFace());
+            Die.Face dieFace = die.getDieFace();
+            dieButton.setIcon(getDieIcon(dieFace, 65));
+            dieButton.setSelectedIcon(getDieIcon(dieFace, 65));
+            dieButton.addActionListener(e -> chosenFace = dieFace);
             dieButton.setPreferredSize(new Dimension(60, 60));
 
             dieButton.setBorder(null);
-            dieButton.setContentAreaFilled(false);
+            dieButton.putClientProperty("originalFace", dieFace); // Memorizza l'immagine originale del dado
             dicePanel.add(dieButton, gbc);
 
             gbc.gridx++;
@@ -335,14 +370,13 @@ public class GUIIOHandler implements IOHandler {
             }
         }
 
-        frame.getContentPane().add(dicePanel,BorderLayout.CENTER);
-        frame.setVisible(true);
-
-        while (chosenFace == null) {
-            Thread.onSpinWait();
-        }
-        return chosenFace;
+        frame.getContentPane().add(dicePanel, BorderLayout.CENTER);
+        frame.revalidate();
+        //frame.repaint();
     }
+    //frame.setVisible(true);
+
+
 
     @Override
     public void showBustMessage() {
