@@ -268,9 +268,9 @@ public class GUIIOHandler implements IOHandler {
         for (Player otherPlayer : players) {
             if (!player.equals(otherPlayer)) {
                 if (otherPlayer.hasTile()) {
-                    JLabel otherPlayerLabel = new JLabel("<html><b>" + otherPlayer.getName() + "</b>'s last tile: </html>");
+                    JLabel otherPlayerLabel = new JLabel("<html><b>" + otherPlayer.getName() + "</b>'s last tile: <br> Total worms: "+ otherPlayer.getWormScore() + " </html>");
                     otherPlayerLabel.setFont(new Font("Serif", Font.PLAIN, 15));
-                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 20, 20, 0), 0, 0));
+                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 20, 20, 5), 0, 0));
 
                     JLabel otherPlayerLastTile = new JLabel(getTileIcon(otherPlayer.getLastPickedTile().getNumber(), 60,50));
                     otherPlayerLastTile.setPreferredSize(new Dimension(10, 80));
