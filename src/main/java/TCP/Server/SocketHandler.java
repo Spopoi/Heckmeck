@@ -15,6 +15,8 @@ public class SocketHandler implements Runnable{
     private PrintWriter out;
     private BufferedReader in;
 
+    String playerName;
+
     private OutputStream outputStream;
     ObjectOutputStream objectOutputStream;
     InputStream inputStream;
@@ -37,34 +39,11 @@ public class SocketHandler implements Runnable{
 
 
     public void run(){
-        System.out.println("Connection in client handler ok, this is client thread #" + playerId);
+        System.out.println("Connection in socket handler ok, this is client thread #" + playerId);
 
-        this.out = new PrintWriter(outputStream, true);
-        this.in = new BufferedReader(new InputStreamReader(inputStream));
-        String incomingLine;
-
-            /*while(true){
-                incomingLine =  in.readLine();
-
-                if(incomingLine.equals("hello server")){
-                    //this.rxString = incomingLine;
-                    Message initMessage = new Message();
-                    initMessage.setOperation(Message.Action.INIT);
-                    initMessage.setText("Hello player"+playerId);
-                    initMessage.setPlayerID(playerId);
-                    writeMessage(initMessage);
-                    System.out.println("Server receiving: " + incomingLine);
-
-                    //writeLine("{\"operation\":\"INIT\",\"text\":\"Hello player"+ playerId +"\",\"playerID\":\""+ playerId +"\"}" );
-                }
-
-
-                else{
-                    //this.rxString = incomingLine;
-                System.out.println("Server receiving: " + incomingLine);
-
-                }
-            }*/
+        out = new PrintWriter(outputStream, true);
+        in = new BufferedReader(new InputStreamReader(inputStream));
+        initClient();
 
     }
 
@@ -80,13 +59,13 @@ public class SocketHandler implements Runnable{
     }
 
     public Message readReceivedMessage(){
-        return gson.fromJson(this.rxString, Message.class);
+        return gson.fromJson(rxString, Message.class);
     }
 
     public Message writeMessage(Message message){
         writeLine(gson.toJson(message));
         //System.out.println("RXSTRING after sending command was: "+ rxString);
-        return gson.fromJson(this.rxString, Message.class);
+        return gson.fromJson(rxString, Message.class);
 
     }
 
@@ -96,10 +75,14 @@ public class SocketHandler implements Runnable{
         out.println(message);
         //out.flush();
         try {
-            this.rxString =  in.readLine();
+            rxString =  in.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String getPlayerName(){
+        return playerName;
     }
 
     public boolean initClient(){
@@ -109,8 +92,12 @@ public class SocketHandler implements Runnable{
         msg.setOperation(Message.Action.INIT);
         msg.setText("Hello");
         Message respMsg = writeMessage(msg);
+        playerName = respMsg.text;
         return respMsg.playerID==playerId;
+    }
 
+    public boolean isInit(){
+        return playerName!=null;
     }
 
 }

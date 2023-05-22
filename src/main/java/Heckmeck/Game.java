@@ -94,9 +94,11 @@ public class Game {
 
     //TODO: rolli anche se finisci i dadi
     private boolean roll(){
-        io.showPlayerData(actualPlayer, dice, players);
+
         io.askRollDiceConfirmation(actualPlayer.getName());
         dice.rollDice();
+
+        io.showPlayerData(actualPlayer, dice, players);
         //io.showDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();

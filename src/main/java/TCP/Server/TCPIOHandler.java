@@ -17,34 +17,38 @@ public class TCPIOHandler implements IOHandler {
         this.gameServer = gameServer;
     }
 
+    private void sendBroadCast(Message msg){
+        gameServer.sockets.stream().forEach(client -> client.writeMessage(msg));
+    }
+
     @Override
     public void printMessage(String text) {
         Message msg = new Message();
         msg.setText(text);
         msg.setOperation(Message.Action.INFO);
         msg.setPlayerID(getCurrentPlayerId());
-        gameServer.sockets.stream().forEach(client -> client.writeMessage(msg));
+        sendBroadCast(msg);
     }
     @Override
     public String printError(String text){
         Message msg = new Message();
         msg.setText(text);
         msg.setOperation(Message.Action.ERROR);
-        gameServer.sockets.stream().forEach(client -> client.writeMessage(msg));
+        sendBroadCast(msg);
         Message respMsg = getCurrentPlayerSocket().readReceivedMessage();
         return respMsg.text;
     }
 
     @Override
     public void showTurnBeginConfirm(String playerName) {
-        System.out.println("ASKING PLAYER INPUT FOR: " + playerName);
-        Message message = new Message();
-        message.setOperation(Message.Action.GET_INPUT);
-        message.setActualPlayer(gameServer.game.getActualPlayer());
-        message.setText(playerName + ", press enter to start your turn");
-        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
+        //System.out.println("ASKING PLAYER INPUT FOR: " + playerName);
+        Message msg = setGameStatus();
+        msg.setOperation(Message.Action.GET_INPUT);
+        msg.setText(playerName + ", press enter to start your turn");
+        sendBroadCast(msg);
+
         //waitOneSec();
-        Message msg = readMessage(gameServer.game.getActualPlayer().getPlayerID());
+        Message respMsg = getCurrentPlayerSocket().readReceivedMessage();
 
     }
 
@@ -75,34 +79,24 @@ public class TCPIOHandler implements IOHandler {
     @Override
     public String choosePlayerName(int playerNumber) {
 
-        Message message = new Message();
+        //Message message = new Message();
         //message.setActualPlayer(gameServer.cu);
-        message.setOperation(Message.Action.GET_PLAYER_NAME);
-        message.setText("Choose player name");
-        message.setPlayerID(playerNumber);
+        //message.setOperation(Message.Action.GET_PLAYER_NAME);
+        //message.setText("Choose player name");
+        //message.setPlayerID(playerNumber);
         //gameServer.clients.stream().forEach(client -> client.writeMessage(message));
-        gameServer.sockets.get(playerNumber).writeMessage(message);
+        //gameServer.sockets.get(playerNumber).writeMessage(message);
         //waitOneSec();
-        Message msg = readMessage(playerNumber);
-        return msg.text;
+        //Message msg = readMessage(playerNumber);
+        return gameServer.sockets.get(playerNumber).getPlayerName(); //msg.text;
     }
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-        Message message = new Message();
+        Message msg = setGameStatus();
         //message.setActualPlayer(gameServer.game.getActualPlayer());
-        message.setPlayerID(getCurrentPlayerId());
-        message.setOperation(Message.Action.UPDATE_TILES);
-        message.setBoardTiles(boardTiles);
-        gameServer.sockets.stream().forEach(client -> client.writeMessage(message));
-        /*gameServer.clients.get(0).writeMessage(message);
-        waitOneSec();
-        //gameServer.clients.get(1).writeMessage(message);
-        waitOneSec();
-        //gameServer.clients.get(2).writeMessage(message);
-        waitOneSec();*/
-
-
+        msg.setOperation(Message.Action.UPDATE_TILES);
+        sendBroadCast(msg);
     }
 
     @Override
@@ -189,6 +183,15 @@ public class TCPIOHandler implements IOHandler {
 
     public Message readMessage(int playerId){
         return gameServer.sockets.get(playerId).readReceivedMessage();
+    }
+
+    private Message setGameStatus(){
+        Message message = new Message();
+        message.setActualPlayer(gameServer.game.getActualPlayer());
+        message.setPlayers(gameServer.game.getPlayers());
+        message.setDice(gameServer.game.getDice());
+        message.setBoardTiles(gameServer.game.getBoardTiles());
+        return message;
     }
 
 

@@ -1,7 +1,9 @@
 package CLI;
 
 import Heckmeck.Game;
+import TCP.Client;
 import TCP.Server.GameServer;
+import TCP.Server.TCPIOHandler;
 
 import java.io.IOException;
 
@@ -15,6 +17,10 @@ public class HeckmeckCLI {
         io.showWelcomeMessage();
         if (io.wantToPlayRemote()) {
             GameServer gameServer = new GameServer();
+            gameServer.setNumberOfPlayers(2);
+            Thread serverThread = new Thread(gameServer);
+            serverThread.start();
+            startLocalClient();
             // gameServer autonomously asks and manage if you want to be host or client
             // gameServer.init();
             // gameServer.play();
@@ -35,5 +41,13 @@ public class HeckmeckCLI {
         }
         Game game = new Game(players,output, input);
         game.play();*/
+    }
+
+    public static void startLocalClient(){
+        Client cli = new Client();
+        Thread cliThread = new Thread(cli);
+        cliThread.start();
+        cli.startConnection("127.0.0.1", 51734);
+
     }
 }

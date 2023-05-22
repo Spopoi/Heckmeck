@@ -130,15 +130,16 @@ public String sendMessage(String msg) {
     public void run() {
         CliIOHandler cliIo = new CliIOHandler();
 
-        commandInterpreter(true, cliIo);
+        commandInterpreter(false, cliIo);
     }
 
     public static void main(String args[]){
         Client cli = new Client();
         cli.startConnection("127.0.0.1", 51734);
-
         CliIOHandler cliIo = new CliIOHandler();
         cliIo.showWelcomeMessage();
+        cliIo.printMessage("Waiting for connection:");
+
 
         cli.commandInterpreter(false, cliIo);
     }
@@ -156,7 +157,17 @@ public String sendMessage(String msg) {
                     switch (rxMessage.operation) {
                         case INIT:
                             playerID = rxMessage.playerID;
-                            sendAck();
+                            txMessage = new Message();
+                            //if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " GET_PLAYER_NAME, message was: " + rxMessage.text);
+                            io.printMessage(rxMessage.text);
+                            io.printMessage("Select your name:");
+                            txMessage.setOperation(Message.Action.RESPONSE);
+                            txMessage.setPlayerID(playerID);
+                            //if(botMode) txMessage.setText("Player"+ playerID);
+                            if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
+                            io.printMessage("Waiting for other players...");
+                            sendMessage(gson.toJson(txMessage));
+                            //else sendAck();
                             break;
 
                         case GET_PLAYER_NAME:
@@ -165,8 +176,8 @@ public String sendMessage(String msg) {
                             io.printMessage(rxMessage.text);
                             txMessage.setOperation(Message.Action.RESPONSE);
                             txMessage.setPlayerID(playerID);
-                            if(botMode) txMessage.setText("Player"+ playerID);
-                            else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
+                            //if(botMode) txMessage.setText("Player"+ playerID);
+                            if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
 
                             if(isYourTurn(rxMessage)) sendMessage(gson.toJson(txMessage));
                             else sendAck();
@@ -174,12 +185,12 @@ public String sendMessage(String msg) {
 
                         case GET_INPUT:
                             txMessage = new Message();
-                            //if(isYourTurn(rxMessage))
                             io.printMessage(rxMessage.text);
 
                             txMessage.setOperation(Message.Action.RESPONSE);
-                            if(botMode) txMessage.setText(choices[i%choices.length]) ;
-                            else if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
+                            //if(botMode) txMessage.setText(choices[i%choices.length]) ;
+                            if(isYourTurn(rxMessage)) txMessage.setText(io.getInputString());
+                            else io.printMessage("Please wait for your turn");
                             i++;
                             txMessage.setPlayerID(playerID);
 
@@ -199,7 +210,7 @@ public String sendMessage(String msg) {
                         case UPDATE_PLAYER:
 
                             io.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
-                            //io.showDice(rxMessage.dice);
+                            io.showRolledDice(rxMessage.dice);
                             sendAck();
                             break;
 
@@ -212,7 +223,7 @@ public String sendMessage(String msg) {
                         case INFO:
                             text = rxMessage.text;
                             io.printMessage(text);
-                            if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
+                            //if(isYourTurn(rxMessage)) System.out.println("ID: " + playerID + " INFO, message was: " + text);
                             sendAck();
                             break;
 
