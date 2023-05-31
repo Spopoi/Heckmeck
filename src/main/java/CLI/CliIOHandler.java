@@ -2,6 +2,9 @@ package CLI;
 
 import Heckmeck.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -36,6 +39,16 @@ public class CliIOHandler implements IOHandler {
     public boolean wantToPlayRemote() {
         printMessage("Do you want to play remotely? Press 'y' or 'n' to select:");
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
+    }
+
+    public boolean wantToHost(){
+        printMessage("Do you want to host the game? Press 'y' or 'n' to select:");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
+    }
+
+    public String askIPToConnect(){
+        printMessage("Insert IP address of the host");
+        return getInputString();
     }
 
     @Override
