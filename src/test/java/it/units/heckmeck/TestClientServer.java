@@ -50,7 +50,7 @@ public class TestClientServer {
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         Thread cliThread = new Thread(cli);
         cliThread.start();
 
@@ -73,7 +73,7 @@ public class TestClientServer {
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
 
-        Client cli = new Client();
+        Client cli = new Client(true);
         Thread cliThread = new Thread(cli);
         cliThread.start();
 
@@ -105,7 +105,7 @@ public class TestClientServer {
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
         gameServer.setNumberOfPlayers(1);
-        Client cli = new Client();
+        Client cli = new Client(true);
         Thread cliThread = new Thread(cli);
         cliThread.start();
         cli.startConnection("127.0.0.1", 51734);
@@ -128,7 +128,7 @@ public class TestClientServer {
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-        Client cli1 = new Client();
+        Client cli1 = new Client(true);
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
         gameServer.setNumberOfPlayers(1);
@@ -146,10 +146,10 @@ public class TestClientServer {
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-        Client cli1 = new Client();
+        Client cli1 = new Client(true);
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
-        Client cli2 = new Client();
+        Client cli2 = new Client(true);
         Thread cli2Thread = new Thread(cli2);
         cli2Thread.start();
         gameServer.setNumberOfPlayers(2);
@@ -174,7 +174,7 @@ public class TestClientServer {
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-        Client cli1 = new Client();
+        Client cli1 = new Client(true);
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
         gameServer.setNumberOfPlayers(1);
@@ -197,7 +197,7 @@ public class TestClientServer {
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-        Client cli1 = new Client();
+        Client cli1 = new Client(true);
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
 
@@ -225,13 +225,13 @@ public class TestClientServer {
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-        Client cli1 = new Client();
+        Client cli1 = new Client(true);
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
-        Client cli2 = new Client();
+        Client cli2 = new Client(true);
         Thread cli2Thread = new Thread(cli2);
         cli2Thread.start();
-        Client cli3 = new Client();
+        Client cli3 = new Client(true);
         Thread cli3Thread = new Thread(cli3);
         cli3Thread.start();
 
@@ -284,13 +284,13 @@ public class TestClientServer {
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-        Client cli1 = new Client();
+        Client cli1 = new Client(true);
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
-        Client cli2 = new Client();
+        Client cli2 = new Client(true);
         Thread cli2Thread = new Thread(cli2);
         cli2Thread.start();
-        Client cli3 = new Client();
+        Client cli3 = new Client(true);
         Thread cli3Thread = new Thread(cli3);
         cli3Thread.start();
 
@@ -323,6 +323,39 @@ public class TestClientServer {
         gameServer.close();
     }
 
+    @Test
+    void tryToPlay(){
+        gameServer = new GameServer();
+
+
+        Thread serverThread = new Thread(gameServer);
+        serverThread.start();
+        Client cli1 = new Client(true);
+        Thread cli1Thread = new Thread(cli1);
+        cli1Thread.start();
+        Client cli2 = new Client(true);
+        Thread cli2Thread = new Thread(cli2);
+        cli2Thread.start();
+        Client cli3 = new Client(true);
+        Thread cli3Thread = new Thread(cli3);
+        cli3Thread.start();
+
+        gameServer.setNumberOfPlayers(3);
+
+        cli1.startConnection("127.0.0.1", 51734);
+        cli2.startConnection("127.0.0.1", 51734);
+        cli3.startConnection("127.0.0.1", 51734);
+        waitOneSec();
+        gameServer.game.getDice().eraseDice();
+        for(int i = 0; i<8; i++){
+            gameServer.game.getDice().addSpecificDie(Die.Face.WORM);
+        }
+
+
+    }
+
+
+
 
 
     @Test
@@ -333,13 +366,13 @@ public class TestClientServer {
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-        Client cli1 = new Client();
+        Client cli1 = new Client(true);
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
-        Client cli2 = new Client();
+        Client cli2 = new Client(true);
         Thread cli2Thread = new Thread(cli2);
         cli2Thread.start();
-        Client cli3 = new Client();
+        Client cli3 = new Client(true);
         Thread cli3Thread = new Thread(cli3);
         cli3Thread.start();
 
@@ -387,13 +420,13 @@ public class TestClientServer {
 
         Thread serverThread = new Thread(gameServer);
         serverThread.start();
-        Client cli1 = new Client();
+        Client cli1 = new Client(true);
         Thread cli1Thread = new Thread(cli1);
         cli1Thread.start();
-        Client cli2 = new Client();
+        Client cli2 = new Client(true);
         Thread cli2Thread = new Thread(cli2);
         cli2Thread.start();
-        Client cli3 = new Client();
+        Client cli3 = new Client(true);
         Thread cli3Thread = new Thread(cli3);
         cli3Thread.start();
 
