@@ -46,6 +46,11 @@ public class CliIOHandler implements IOHandler {
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
     }
 
+    public boolean wantToPlayAgain(){
+        printMessage("Do you want to return to main menu and start another game? Press 'y' or 'n' to select");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
+    }
+
     public String askIPToConnect(){
         printMessage("Insert IP address of the host");
         return getInputString();
