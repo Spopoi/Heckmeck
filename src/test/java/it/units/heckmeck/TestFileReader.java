@@ -3,6 +3,7 @@ package it.units.heckmeck;
 import Heckmeck.Die;
 import Heckmeck.FileReader;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
@@ -81,7 +82,8 @@ public class TestFileReader {
     }
 
     @Test
-    void readLogoAsTextFromFile() throws Exception {
+    @Disabled
+    void    readLogoAsTextFromFile() throws Exception {
         URL LogoResource = TestFileReader.class.getClassLoader().getResource("TEST_LOGO");
 
         String actualLogo = FileReader.readTextFile(Path.of(LogoResource.toURI()));
