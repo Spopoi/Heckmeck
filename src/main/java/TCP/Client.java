@@ -183,6 +183,17 @@ public String sendMessage(String msg) {
                             else sendAck();
                             break;
 
+                        case ASK_CONFIRM:
+                            txMessage = new Message();
+                            io.printMessage(rxMessage.text);
+                            txMessage.setOperation(Message.Action.RESPONSE);
+                            promptEnterKey();
+                            choice = "nothing";
+                            txMessage.setText(choice);
+                            txMessage.setPlayerID(playerID);
+                            sendMessage(gson.toJson(txMessage));
+                            break;
+
                         case GET_INPUT:
                             txMessage = new Message();
                             io.printMessage(rxMessage.text);
