@@ -8,20 +8,16 @@ import java.net.Socket;
 
 public class SocketHandler implements Runnable{
     public final int playerId;
-    //private Message message;
     private String rxString = "";
     private String txString = "";
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-
     String playerName;
-
     private OutputStream outputStream;
     ObjectOutputStream objectOutputStream;
     InputStream inputStream;
     Gson gson = new Gson();
-
 
     public SocketHandler(Socket clientSocket, int playerId) {
         this.clientSocket = clientSocket;
@@ -34,20 +30,13 @@ public class SocketHandler implements Runnable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
-
-
     public void run(){
         System.out.println("Connection in socket handler ok, this is client thread #" + playerId);
-
         out = new PrintWriter(outputStream, true);
         in = new BufferedReader(new InputStreamReader(inputStream));
         initClient();
-
     }
-
-
     public String readLine(){
         try {
             return in.readLine();
@@ -55,41 +44,22 @@ public class SocketHandler implements Runnable{
             throw new RuntimeException(e);
         }
     }
+    public void writeLine(String message){
+        out.println(message);
+        try {
+            rxString =  in.readLine();
+        } catch (IOException e) {
+            System.out.println("ERROR: Player"+ playerId+ " " + playerName + " seems to be disconnected");
+        }
+    }
 
     public Message readReceivedMessage(){
-        //System.out.println("This is socket Thread n. " + playerId + " beeing read. ReadReceivedMessage");
         return gson.fromJson(rxString, Message.class);
     }
 
     public Message writeMessage(Message message){
         writeLine(gson.toJson(message));
-        //System.out.println("This is socket Thread n. " + playerId + " beeing read. WrtiteMessage");
-
-        //System.out.println("RXSTRING after sending command was: "+ rxString);
         return gson.fromJson(rxString, Message.class);
-    }
-
-    public void sendMessage(Message message){
-        writeLine(gson.toJson(message));
-    }
-
-    public void writeLine(String message){
-        out.println(message);
-        //out.flush();
-        try {
-            rxString =  in.readLine();
-       //     System.out.println("This is socket Thread n. " + playerId );
-       //     System.out.println("Writing line: " + gson.fromJson(message, Message.class).text);
-       //     System.out.println("Receiving line: " + gson.fromJson(rxString, Message.class).text);
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public String getPlayerName(){
-        return playerName;
     }
 
     public boolean initClient(){
@@ -102,9 +72,4 @@ public class SocketHandler implements Runnable{
         //playerName = respMsg.text;
         return respMsg.playerID==playerId;
     }
-
-    public boolean isInit(){
-        return playerName!=null;
-    }
-
 }
