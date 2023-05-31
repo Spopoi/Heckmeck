@@ -9,6 +9,21 @@ import java.io.IOException;
 
 public class HeckmeckCLI {
     public static void main(String[] args) {
+        startMenu();
+
+
+        /*output.showMenu();
+        int numberOfPlayers = input.chooseNumberOfPlayers();
+        Player[] players = new Player[numberOfPlayers];
+        for (int i = 0; i < players.length; i++) {
+            output.showSetPlayerName();
+            players[i] = Player.generatePlayer(input.choosePlayerName());
+        }
+        Game game = new Game(players,output, input);
+        game.play();*/
+    }
+
+    public static void startMenu(){
         CliIOHandler io = new CliIOHandler();
 
         io.showWelcomeMessage();
@@ -26,17 +41,6 @@ public class HeckmeckCLI {
             game.play();
         }
 
-
-
-        /*output.showMenu();
-        int numberOfPlayers = input.chooseNumberOfPlayers();
-        Player[] players = new Player[numberOfPlayers];
-        for (int i = 0; i < players.length; i++) {
-            output.showSetPlayerName();
-            players[i] = Player.generatePlayer(input.choosePlayerName());
-        }
-        Game game = new Game(players,output, input);
-        game.play();*/
     }
 
     public static void startLocalClient(String IP){
