@@ -48,8 +48,6 @@ public class SocketHandler implements Runnable{
     }
 
 
-
-
     public String readLine(){
         try {
             return in.readLine();
@@ -59,23 +57,32 @@ public class SocketHandler implements Runnable{
     }
 
     public Message readReceivedMessage(){
+        //System.out.println("This is socket Thread n. " + playerId + " beeing read. ReadReceivedMessage");
         return gson.fromJson(rxString, Message.class);
     }
 
     public Message writeMessage(Message message){
         writeLine(gson.toJson(message));
+        //System.out.println("This is socket Thread n. " + playerId + " beeing read. WrtiteMessage");
+
         //System.out.println("RXSTRING after sending command was: "+ rxString);
         return gson.fromJson(rxString, Message.class);
-
     }
 
-
+    public void sendMessage(Message message){
+        writeLine(gson.toJson(message));
+    }
 
     public void writeLine(String message){
         out.println(message);
         //out.flush();
         try {
             rxString =  in.readLine();
+       //     System.out.println("This is socket Thread n. " + playerId );
+       //     System.out.println("Writing line: " + gson.fromJson(message, Message.class).text);
+       //     System.out.println("Receiving line: " + gson.fromJson(rxString, Message.class).text);
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -92,7 +99,7 @@ public class SocketHandler implements Runnable{
         msg.setOperation(Message.Action.INIT);
         msg.setText("Hello");
         Message respMsg = writeMessage(msg);
-        playerName = respMsg.text;
+        //playerName = respMsg.text;
         return respMsg.playerID==playerId;
     }
 
