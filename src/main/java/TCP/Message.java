@@ -33,7 +33,8 @@ public class Message implements Serializable {
         RESPONSE,
         ACK,
         GET_PLAYER_NAME,
-        ERROR
+        ERROR,
+        ASK_CONFIRM;
     }
 
 
