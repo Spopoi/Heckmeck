@@ -4,10 +4,9 @@ import Heckmeck.Game;
 import TCP.Client;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 public class GameServer implements Runnable {
@@ -39,8 +38,9 @@ public class GameServer implements Runnable {
 
     public void run() {
         try {
-            System.out.println("You are now hosting on this machine: tell you IP address to your friends:");
-            System.out.println(InetAddress.getLocalHost());
+            System.out.println("You are now hosting on this machine: tell your IP address to your friends!");
+
+            System.out.println(getIPAddress());
             acceptConnections();
             initClients();
 
@@ -101,5 +101,31 @@ public class GameServer implements Runnable {
         GameServer gameServer = new GameServer();
         Thread t1 = new Thread(gameServer);
         t1.start();
+    }
+
+    private static String getIPAddress(){
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                if (networkInterface.isLoopback() || !networkInterface.isUp()) {
+                    continue;
+                }
+
+                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = addresses.nextElement();
+                    String ipAddress = address.getHostAddress();
+                    if (ipAddress.startsWith("192.168.1.")) {
+                        return ipAddress;
+                    }
+                }
+            }
+
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return "";
+
     }
 }
