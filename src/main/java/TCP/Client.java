@@ -1,6 +1,7 @@
 package TCP;
 
 import CLI.CliIOHandler;
+import CLI.HeckmeckCLI;
 import Heckmeck.IOHandler;
 import com.google.gson.Gson;
 
@@ -74,7 +75,8 @@ public String sendMessage(String msg) {
 
         } catch (IOException e) {
             System.out.println("Error in receiving data. Stopping client");
-            System.exit(1);
+            if(cliIo.wantToPlayAgain()) HeckmeckCLI.startMenu();
+            else System.exit(0);
 
         }
         return resp;
@@ -98,7 +100,6 @@ public String sendMessage(String msg) {
             throw new RuntimeException(e);
         }
     }
-
 
 
     public void sendAck(){
