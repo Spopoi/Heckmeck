@@ -176,6 +176,8 @@ public String sendMessage(String msg) {
                             txMessage = new Message();
                             io.printMessage(rxMessage.text);
                             txMessage.setOperation(Message.Action.RESPONSE);
+                            //if(!botMode)choice = io.getInputString();
+                            //else choice = "";
                             choice = io.getInputString();
                             txMessage.setText(choice);
                             txMessage.setPlayerID(playerID);

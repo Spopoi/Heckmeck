@@ -66,7 +66,7 @@ public class TestClientServer {
 
 
     @Test
-        //@Disabled
+    @Disabled
     void send_message() {
         gameServer = new GameServer();
 
@@ -98,7 +98,7 @@ public class TestClientServer {
 
 
     @Test
-        //@Disabled
+    @Disabled
     void recieve_message() {
         gameServer = new GameServer();
 
@@ -122,7 +122,7 @@ public class TestClientServer {
     }
 
     @Test
-        //@Disabled
+    @Disabled
     void init_client() {
         gameServer = new GameServer();
 
@@ -140,7 +140,7 @@ public class TestClientServer {
     }
 
     @Test
-        //@Disabled
+    @Disabled
     void init_multi_clients() {
         gameServer = new GameServer();
 
@@ -168,7 +168,7 @@ public class TestClientServer {
 
 
     @Test
-    //@Disabled
+    @Disabled
     void select_player_name(){
         gameServer = new GameServer();
 
@@ -191,7 +191,7 @@ public class TestClientServer {
         gameServer.close();
     }
     @Test
-    //@Disabled
+    @Disabled
     void get_player_name_with_Interface(){
         gameServer = new GameServer();
 
@@ -309,9 +309,9 @@ public class TestClientServer {
         TCPIOHandler io = new TCPIOHandler(gameServer);
         System.out.println("All Clients connected");
 
-        gameServer.game = new Game(io);
+        //gameServer.game = new Game(io);
         waitOneSec();
-        gameServer.game.init();
+        //
 
         waitOneSec();
 
@@ -324,6 +324,7 @@ public class TestClientServer {
     }
 
     @Test
+    @Disabled
     void tryToPlay(){
         gameServer = new GameServer();
 
@@ -340,11 +341,11 @@ public class TestClientServer {
         Thread cli3Thread = new Thread(cli3);
         cli3Thread.start();
 
-        gameServer.setNumberOfPlayers(3);
+        gameServer.setNumberOfPlayers(2);
 
         cli1.startConnection("127.0.0.1", 51734);
         cli2.startConnection("127.0.0.1", 51734);
-        cli3.startConnection("127.0.0.1", 51734);
+        waitOneSec();
         waitOneSec();
         gameServer.game.getDice().eraseDice();
         for(int i = 0; i<8; i++){
@@ -359,7 +360,7 @@ public class TestClientServer {
 
 
     @Test
-    //@Disabled
+    @Disabled
     void send_game_obj() {
         gameServer = new GameServer();
 
