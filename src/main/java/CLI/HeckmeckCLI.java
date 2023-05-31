@@ -10,20 +10,16 @@ import java.io.IOException;
 public class HeckmeckCLI {
     public static void main(String[] args) {
         CliIOHandler io = new CliIOHandler();
-        // (?)
-        // io.getDesiredGame() to:
-        //   - ask if want to play
-        //   - ask if want remote or not
+
         io.showWelcomeMessage();
         if (io.wantToPlayRemote()) {
-            GameServer gameServer = new GameServer();
-            gameServer.setNumberOfPlayers(2);
-            Thread serverThread = new Thread(gameServer);
-            serverThread.start();
-            startLocalClient();
-            // gameServer autonomously asks and manage if you want to be host or client
-            // gameServer.init();
-            // gameServer.play();
+            if(io.wantToHost()){
+                startGameServer(io);
+                startLocalClient();
+            }
+            else{
+                startLocalClient(io.askIPToConnect());
+            }
         } else {
             Game game = new Game(io);
             game.init();
@@ -43,11 +39,20 @@ public class HeckmeckCLI {
         game.play();*/
     }
 
-    public static void startLocalClient(){
-        Client cli = new Client();
+    public static void startLocalClient(String IP){
+        Client cli = new Client(false);
         Thread cliThread = new Thread(cli);
         cliThread.start();
-        cli.startConnection("127.0.0.1", 51734);
+        cli.startConnection(IP, 51734);
 
     }
-}
+    public static void startLocalClient(){
+        startLocalClient("127.0.0.1");
+    }
+    public static void startGameServer(CliIOHandler io){
+        GameServer gameServer = new GameServer();
+        gameServer.setNumberOfPlayers(io.chooseNumberOfPlayers());
+        new Thread(gameServer).start();
+    }
+
+    }
