@@ -18,12 +18,12 @@ public class Game {
 
     public void init(){
         // io.showWelcomeMessage();
-
         int numberOfPlayers = io.chooseNumberOfPlayers();
         this.players = setupPlayers(numberOfPlayers);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
         this.actualPlayer = this.players[0];
+        io.printMessage("OK, let's begin!");
 
     }
     public void play(){
@@ -133,11 +133,14 @@ public class Game {
 
     private Player[] setupPlayers(int numberOfPlayers) {
         Player[] playersList = new Player[numberOfPlayers];
+
         for(int i=0; i<numberOfPlayers; i++){
+            //if(i == 1) actualPlayer = playersList[0];
+
             String playerName = io.choosePlayerName(i);
             while(isNameAlreadyPicked(playerName,playersList)){
                 io.printMessage(playerName + " Already picked name.. Please choose another one");
-                playerName = io.choosePlayerName(i+1);
+                playerName = io.choosePlayerName(i);
             }
             playersList[i] = Player.generatePlayer(playerName);
             playersList[i].setPlayerID(i); // TODO Modificato da dew54.. da fare "meglio"
