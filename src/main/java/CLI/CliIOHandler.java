@@ -20,7 +20,7 @@ public class CliIOHandler implements IOHandler {
     private static final String newLine = System.lineSeparator();
     private final Scanner scan;
 
-    public CliIOHandler(){
+    public CliIOHandler() {
         scan = new Scanner(System.in);
     }
 
@@ -41,17 +41,17 @@ public class CliIOHandler implements IOHandler {
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
     }
 
-    public boolean wantToHost(){
+    public boolean wantToHost() {
         printMessage("Do you want to host the game? Press 'y' or 'n' to select:");
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
     }
 
-    public boolean wantToPlayAgain(){
+    public boolean wantToPlayAgain() {
         printMessage("Do you want to return to main menu and start another game? Press 'y' or 'n' to select");
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
     }
 
-    public String askIPToConnect(){
+    public String askIPToConnect() {
         printMessage("Insert IP address of the host");
         return getInputString();
     }
@@ -89,7 +89,6 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showTurnBeginConfirm(String playerName) {
-        // TODO: remove code duplication in the ###### msg
         String mainMessage = "# " + playerName + ": hit enter to start your turn #";
         String separator = "#".repeat(mainMessage.length());
         printMessage(separator + newLine +
@@ -106,7 +105,6 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showPlayerData(Player actualPlayer, Dice dice, Player[] players) {
-        String actualPlayerInfoTemplate = FileReader.readTextFile(getActualPlayerInfoTemplate());
 
         List<Player> otherPlayers = Arrays.stream(players)
                 .filter(p -> !Objects.equals(p, actualPlayer))
@@ -115,13 +113,17 @@ public class CliIOHandler implements IOHandler {
                 .createHeader()
                 .fillWithPlayersData();
 
-        String actualPlayerInfo = actualPlayerInfoTemplate.replace("$ACTUAL_PLAYER", actualPlayer.getName())
+        String actualPlayerInfo = fillActualPlayerInfoTemplate(FileReader.readTextFile(getActualPlayerInfoTemplate()), actualPlayer, dice);
+
+        printMessage(new TextBlockConcatenator(actualPlayerInfo, summaryTable.toString(), " ", 12).concatenate() + newLine);
+    }
+
+    private String fillActualPlayerInfoTemplate(String actualPlayerInfoTemplate, Player actualPlayer, Dice dice) {
+        return actualPlayerInfoTemplate.replace("$ACTUAL_PLAYER", actualPlayer.getName())
                 .replace("$CURRENT_TILES", collectionToText(actualPlayer.getPlayerTiles()))
                 .replace("$CHOSEN_DICE", dice.getChosenDiceString())
                 .replace("$CURRENT_DICE_SCORE", String.valueOf(dice.getScore()))
                 .replace("$IS_WARM_SELECTED", String.valueOf(dice.isFaceChosen(Die.Face.WORM)));
-
-        printMessage(concatenateTextBlocks(actualPlayerInfo, summaryTable.toString(), 12) + newLine);
     }
 
     @Override
@@ -135,7 +137,7 @@ public class CliIOHandler implements IOHandler {
     @Override
     public boolean wantToSteal(Player robbedPlayer) {
         printMessage("Do you want to steal tile number " + robbedPlayer.getLastPickedTile().getNumber() +
-                " from "+ robbedPlayer.getName() +
+                " from " + robbedPlayer.getName() +
                 "? Press 'y' for stealing or 'n' for continuing your turn:");
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to steal or 'n' to continue your turn");
     }
@@ -172,7 +174,7 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showBustMessage() {
-        printMessage("#####################" +newLine+ "# BUUUUUSSSTTTTTT!! #" +newLine + "#####################" +newLine);
+        printMessage("#####################" + newLine + "# BUUUUUSSSTTTTTT!! #" + newLine + "#####################" + newLine);
     }
 
     @Override
@@ -202,16 +204,16 @@ public class CliIOHandler implements IOHandler {
         return resourcePath;
     }
 
-    public String getInputString(){
+    public String getInputString() {
         return scan.nextLine();
     }
 
-    private int getInputNumber(){
+    private int getInputNumber() {
         return Integer.parseInt(getInputString());
     }
 
     private boolean getYesOrNoAnswer(String invalidInputMessage) {
-        while(true){
+        while (true) {
             String decision = getInputString();
             if (Objects.equals(decision, "y")) {
                 return true;
@@ -223,42 +225,11 @@ public class CliIOHandler implements IOHandler {
         }
     }
 
-    private static String concatenateTextBlocks(String textBlock1, String textBlock2, Integer spaceBetweenBlocks) {
-        final int finalSpaceBetweenBlocks = spaceBetweenBlocks != null ? spaceBetweenBlocks : 1;
-        int textBlock1Height = (int) textBlock1.lines().count();
-        int textBlock1Width = textBlock1.lines()
-                .mapToInt(String::length)
-                .max().orElse(0);
-        textBlock1 = padRightTextBlockWithSpaces(textBlock1, textBlock1Width);
-
-        int textBlock2Height = (int) textBlock2.lines().count();
-        int resultingHeight = Math.max(textBlock1Height, textBlock2Height);
-
-        String pad = " ".repeat(textBlock1Width);
-
-        List<String> lines1 = textBlock1.lines().toList();
-        List<String> lines2 = textBlock2.lines().toList();
-
-        return IntStream.range(0, resultingHeight)
-                .mapToObj(i -> {
-                    String leftLine = i < textBlock1Height ? lines1.get(i) : pad;
-                    String rightLine = i < textBlock2Height ? lines2.get(i) : "";
-                    return leftLine + " ".repeat(finalSpaceBetweenBlocks) + rightLine;
-                })
-                .collect(Collectors.joining(newLine));
-    }
-
-    private static String padRightTextBlockWithSpaces(String textBlock, int width) {
-        return textBlock.lines()
-                .map(line -> String.format("%-" + width + "s", line))
-                .collect(Collectors.joining(newLine));
-    }
-
     private String collectionToText(Collection<?> collection) {
         String collectionAsText = "";
         for (var item : collection) {
             // at first iteration collectionAsText will have height=0 --> 2 spaces
-            collectionAsText = concatenateTextBlocks(collectionAsText, item.toString(), null);
+            collectionAsText = new TextBlockConcatenator(collectionAsText, item.toString(), " ", 1).concatenate();
         }
         return collectionAsText;
     }
