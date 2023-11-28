@@ -17,11 +17,7 @@ public class HeckmeckGUI {
     private static JPanel currentPanel;
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                initGUI();
-            }
-        });
+        SwingUtilities.invokeLater(HeckmeckGUI::initGUI);
     }
 
     private static void initGUI() {
@@ -67,16 +63,7 @@ public class HeckmeckGUI {
 
     private static void switchToMenuPanel() {
 
-        //TODO: extract this method used to put in background a jpg image
-        JPanel menuPanel = new JPanel() {
-            private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/heckmeckBackground.jpg").getImage();
-
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
+        ImagePanel menuPanel = new ImagePanel("src/main/java/GUI/Icons/heckmeckBackground.jpg");
         menuPanel.setLayout(new GridBagLayout());
 
         JPanel buttonsPanel = new JPanel(new GridLayout(3, 1, 10, 20));
@@ -114,15 +101,7 @@ public class HeckmeckGUI {
 
     private static void switchToGamePanel() {
 
-        JPanel imagePanel = new JPanel() {
-            private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/table.jpg").getImage();
-
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
+        ImagePanel imagePanel = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);
@@ -143,5 +122,20 @@ public class HeckmeckGUI {
 
         frame.revalidate();
         frame.repaint();
+    }
+
+    public static class ImagePanel extends JPanel {
+        //TODO: Move it?
+        private Image backgroundImage;
+
+        public ImagePanel(String imagePath) {
+            this.backgroundImage = new ImageIcon(imagePath).getImage();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
     }
 }
