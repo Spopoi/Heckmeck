@@ -115,7 +115,7 @@ public class CliIOHandler implements IOHandler {
 
         String actualPlayerInfo = fillActualPlayerInfoTemplate(FileReader.readTextFile(getActualPlayerInfoTemplate()), actualPlayer, dice);
 
-        printMessage(new TextBlockConcatenator(actualPlayerInfo, summaryTable.toString(), " ", 12).concatenate() + newLine);
+        printMessage(new TextBlockConcatenator(actualPlayerInfo, summaryTable.toString(), 12).concatenate() + newLine);
     }
 
     private String fillActualPlayerInfoTemplate(String actualPlayerInfoTemplate, Player actualPlayer, Dice dice) {
@@ -229,7 +229,7 @@ public class CliIOHandler implements IOHandler {
         String collectionAsText = "";
         for (var item : collection) {
             // at first iteration collectionAsText will have height=0 --> 2 spaces
-            collectionAsText = new TextBlockConcatenator(collectionAsText, item.toString(), " ", 1).concatenate();
+            collectionAsText = new TextBlockConcatenator(collectionAsText, item.toString(), 1).concatenate();
         }
         return collectionAsText;
     }
