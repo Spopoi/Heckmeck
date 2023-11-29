@@ -2,11 +2,9 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-
 import static GUI.HeckmeckGUI.switchToMenuPanel;
 
 public class RulesPanel extends JPanel {
-
     public RulesPanel() {
         setLayout(new GridBagLayout());
 
@@ -20,7 +18,6 @@ public class RulesPanel extends JPanel {
                 GridBagConstraints.NONE, new Insets(5, 5, 5, 0), 0, 0));
         add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
                 GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-
     }
 
     private JPanel createImagesPanel() {
@@ -45,5 +42,4 @@ public class RulesPanel extends JPanel {
 
         return backToMenuButton;
     }
-
 }

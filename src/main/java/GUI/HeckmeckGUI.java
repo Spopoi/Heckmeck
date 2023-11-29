@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HeckmeckGUI {
-
     private static JFrame frame;
 
     public static void main(String[] args) {
@@ -26,29 +25,17 @@ public class HeckmeckGUI {
 
     public static void switchToRulesPanel() {
         RulesPanel rulesPanel = new RulesPanel();
-
-        frame.getContentPane().removeAll();
-        frame.setContentPane(rulesPanel);
-        frame.revalidate();
-        frame.repaint();
+        updateFrame(rulesPanel);
     }
 
     public static void switchToMenuPanel(){
         MenuPanel menuPanel = new MenuPanel();
-        frame.getContentPane().removeAll();
-        frame.setContentPane(menuPanel);
-        frame.revalidate();
-        frame.repaint();
+        updateFrame(menuPanel);
     }
 
-
     public static void switchToSettings() {
-
         SettingsPanel settingsPanel = new SettingsPanel(frame);
-
-        frame.getContentPane().removeAll();
-        frame.setContentPane(settingsPanel);
-        frame.revalidate();
+        updateFrame(settingsPanel);
     }
 
 
@@ -72,7 +59,13 @@ public class HeckmeckGUI {
             }
         };
         worker.execute();
+        frame.revalidate();
+        frame.repaint();
+    }
 
+    private static void updateFrame(JPanel newPanel){
+        frame.getContentPane().removeAll();
+        frame.setContentPane(newPanel);
         frame.revalidate();
         frame.repaint();
     }

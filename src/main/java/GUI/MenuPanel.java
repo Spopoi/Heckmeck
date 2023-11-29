@@ -1,7 +1,6 @@
 package GUI;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static GUI.HeckmeckGUI.*;
@@ -9,6 +8,7 @@ import static GUI.HeckmeckGUI.*;
 public class MenuPanel extends ImagePanel {
 
     public MenuPanel() {
+        //TODO: Verificare se ImagePanel e' necessario o si puo' fare come in RulesPanel (ImageIcon)
         super("src/main/java/GUI/Icons/heckmeckBackground.jpg");
         setLayout(new GridBagLayout());
 
