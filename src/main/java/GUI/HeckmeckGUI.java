@@ -31,6 +31,17 @@ public class HeckmeckGUI {
     }
 
     private static void switchToRulesPanel() {
+        RulesPanel rulesPanel = new RulesPanel();
+
+        frame.getContentPane().removeAll();
+        frame.setContentPane(rulesPanel);
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    /*
+
+    private static void switchToRulesPanel() {
         JPanel rulesPanel = new JPanel(new GridBagLayout());
 
         JPanel imagesPanel = new JPanel(new GridLayout(2, 1));
@@ -62,6 +73,8 @@ public class HeckmeckGUI {
         frame.repaint();
     }
 
+
+     */
     public static void switchToMenuPanel() {
 
         ImagePanel menuPanel = new ImagePanel("src/main/java/GUI/Icons/heckmeckBackground.jpg");
