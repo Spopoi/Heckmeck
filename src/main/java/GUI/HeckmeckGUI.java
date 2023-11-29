@@ -59,10 +59,10 @@ public class HeckmeckGUI {
         frame.getContentPane().removeAll();
         frame.setContentPane(rulesPanel);
         frame.revalidate();
-        //frame.repaint();
+        frame.repaint();
     }
 
-    private static void switchToMenuPanel() {
+    public static void switchToMenuPanel() {
 
         ImagePanel menuPanel = new ImagePanel("src/main/java/GUI/Icons/heckmeckBackground.jpg");
         menuPanel.setLayout(new GridBagLayout());
@@ -98,82 +98,12 @@ public class HeckmeckGUI {
 
     private static void switchToSettings() {
         //TODO: cosa metterci? resize del frame...
-        JPanel settingsPanel = createSettingsPanel();
+        //JPanel settingsPanel = createSettingsPanel();
+        SettingsPanel settingsPanel = new SettingsPanel(frame);
 
         frame.getContentPane().removeAll();
         frame.setContentPane(settingsPanel);
         frame.revalidate();
-    }
-
-    private static final Color ORANGE_COLOR = new Color(255, 201, 150);
-    private static final Color BUTTON_COLOR = new Color(255, 174, 103);
-
-    private static JPanel createSettingsPanel() {
-        JPanel settingsPanel = new JPanel(new BorderLayout());
-        settingsPanel.setPreferredSize(frame.getSize());
-
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBorder(new EmptyBorder(0, 150, 50, 150));
-
-        JButton backButton = new JButton("Torna al Menu");
-        backButton.addActionListener(e -> switchToMenuPanel());
-        backButton.setBackground(BUTTON_COLOR);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttonPanel.add(backButton);
-
-        settingsPanel.add(buttonPanel, BorderLayout.NORTH);
-
-        JLabel titleLabel = new JLabel("Impostazioni");
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        int titleSpacing = 30;
-        titleLabel.setBorder(new EmptyBorder(20, 0, titleSpacing, 0));
-
-        centerPanel.add(titleLabel, BorderLayout.NORTH);
-
-        JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 50));
-        inputPanel.setBorder(new EmptyBorder(70, 50, 100, 50));
-
-        JLabel heightLabel = new JLabel("Altezza frame:");
-        heightLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        JTextField heightTextField = new JTextField();
-        JLabel widthLabel = new JLabel("Larghezza frame:");
-        widthLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        JTextField widthTextField = new JTextField();
-
-        inputPanel.add(heightLabel);
-        inputPanel.add(heightTextField);
-        inputPanel.add(widthLabel);
-        inputPanel.add(widthTextField);
-
-        inputPanel.setBackground(ORANGE_COLOR);
-        centerPanel.add(inputPanel, BorderLayout.CENTER);
-
-        JButton applyButton = new JButton("Applica");
-        applyButton.addActionListener(e -> applySettings(heightTextField, widthTextField));
-
-        applyButton.setBackground(BUTTON_COLOR);
-        centerPanel.add(applyButton, BorderLayout.SOUTH);
-        centerPanel.setBackground(ORANGE_COLOR);
-
-        settingsPanel.add(centerPanel, BorderLayout.CENTER);
-
-        settingsPanel.setBackground(ORANGE_COLOR);
-
-        return settingsPanel;
-    }
-
-    private static void applySettings(JTextField heightTextField, JTextField widthTextField) {
-        try {
-            int newHeight = Integer.parseInt(heightTextField.getText());
-            int newWidth = Integer.parseInt(widthTextField.getText());
-            frame.setSize(newWidth, newHeight);
-            frame.revalidate();
-            frame.repaint();
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Inserisci numeri validi per altezza e larghezza.");
-        }
     }
 
 
@@ -200,20 +130,5 @@ public class HeckmeckGUI {
 
         frame.revalidate();
         frame.repaint();
-    }
-
-    public static class ImagePanel extends JPanel {
-        //TODO: Move it?
-        private Image backgroundImage;
-
-        public ImagePanel(String imagePath) {
-            this.backgroundImage = new ImageIcon(imagePath).getImage();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
     }
 }
