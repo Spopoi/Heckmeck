@@ -8,8 +8,7 @@ import java.awt.*;
 import static GUI.HeckmeckGUI.switchToMenuPanel;
 
 public class SettingsPanel extends JPanel {
-    private static final Color ORANGE_COLOR = new Color(255, 201, 150);
-    private static final Color BUTTON_COLOR = new Color(255, 174, 103);
+    //private static final Color ORANGE_COLOR = new Color(255, 226, 201);
 
     private JTextField heightTextField;
     private JTextField widthTextField;
@@ -25,13 +24,13 @@ public class SettingsPanel extends JPanel {
         add(createButtonPanel(), BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
 
-        setBackground(ORANGE_COLOR);
+        //setBackground(ORANGE_COLOR);
     }
 
     private JPanel createButtonPanel() {
         JButton backButton = new JButton("Torna al Menu");
         backButton.addActionListener(e -> switchToMenuPanel());
-        backButton.setBackground(BUTTON_COLOR);
+        backButton.setBackground(Color.ORANGE);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(backButton);
@@ -57,7 +56,7 @@ public class SettingsPanel extends JPanel {
         JButton applyButton = createApplyButton();
         centerPanel.add(applyButton, BorderLayout.SOUTH);
 
-        centerPanel.setBackground(ORANGE_COLOR);
+        //centerPanel.setBackground(ORANGE_COLOR);
 
         return centerPanel;
     }
@@ -78,7 +77,7 @@ public class SettingsPanel extends JPanel {
         inputPanel.add(widthLabel);
         inputPanel.add(widthTextField);
 
-        inputPanel.setBackground(ORANGE_COLOR);
+        //inputPanel.setBackground(ORANGE_COLOR);
 
         return inputPanel;
     }
@@ -87,7 +86,7 @@ public class SettingsPanel extends JPanel {
         JButton applyButton = new JButton("Applica");
         applyButton.addActionListener(e -> applySettings());
 
-        applyButton.setBackground(BUTTON_COLOR);
+        applyButton.setBackground(Color.ORANGE);
 
         return applyButton;
     }

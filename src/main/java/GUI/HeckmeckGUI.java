@@ -3,19 +3,11 @@ package GUI;
 import Heckmeck.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import static java.awt.GridBagConstraints.CENTER;
-import static java.awt.GridBagConstraints.NORTHWEST;
-
 
 public class HeckmeckGUI {
 
     private static JFrame frame;
-    private static JPanel currentPanel;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(HeckmeckGUI::initGUI);
@@ -27,10 +19,12 @@ public class HeckmeckGUI {
         frame.setSize(1200, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
+
         switchToMenuPanel();
+        frame.setVisible(true);
     }
 
-    private static void switchToRulesPanel() {
+    public static void switchToRulesPanel() {
         RulesPanel rulesPanel = new RulesPanel();
 
         frame.getContentPane().removeAll();
@@ -39,79 +33,17 @@ public class HeckmeckGUI {
         frame.repaint();
     }
 
-    /*
-
-    private static void switchToRulesPanel() {
-        JPanel rulesPanel = new JPanel(new GridBagLayout());
-
-        JPanel imagesPanel = new JPanel(new GridLayout(2, 1));
-        JScrollPane scrollPane = new JScrollPane(imagesPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
-        verticalScrollBar.setUnitIncrement(15);
-
-        ImageIcon rulesImage1 = new ImageIcon("src/main/java/GUI/Icons/Rules1.jpg");
-        JLabel rulesLabel1 = new JLabel(rulesImage1);
-        imagesPanel.add(rulesLabel1);
-
-        ImageIcon rulesImage2 = new ImageIcon("src/main/java/GUI/Icons/Rules2.jpg");
-        JLabel rulesLabel2 = new JLabel(rulesImage2);
-        imagesPanel.add(rulesLabel2);
-
-        JButton backToMenuButton = new JButton("Menu");
-        backToMenuButton.addActionListener(e -> switchToMenuPanel());
-        backToMenuButton.setPreferredSize(new Dimension(70,70));
-        backToMenuButton.setBackground(Color.ORANGE);
-
-        rulesPanel.add(backToMenuButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, NORTHWEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-        rulesPanel.add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-        
+    public static void switchToMenuPanel(){
+        MenuPanel menuPanel = new MenuPanel();
         frame.getContentPane().removeAll();
-        frame.setContentPane(rulesPanel);
+        frame.setContentPane(menuPanel);
         frame.revalidate();
         frame.repaint();
     }
 
 
-     */
-    public static void switchToMenuPanel() {
+    public static void switchToSettings() {
 
-        ImagePanel menuPanel = new ImagePanel("src/main/java/GUI/Icons/heckmeckBackground.jpg");
-        menuPanel.setLayout(new GridBagLayout());
-
-        JPanel buttonsPanel = new JPanel(new GridLayout(3, 1, 10, 20));
-        buttonsPanel.setPreferredSize(new Dimension(300,200));
-        buttonsPanel.setOpaque(false);
-
-        JButton playButton = new JButton("Play");
-        playButton.setFocusPainted(false);
-        playButton.addActionListener(e -> switchToGamePanel());
-        playButton.setBackground(Color.orange);
-        buttonsPanel.add(playButton);
-
-        JButton rulesButton = new JButton("Rules");
-
-        rulesButton.addActionListener(e -> switchToRulesPanel());
-        rulesButton.setBackground(Color.orange);
-        buttonsPanel.add(rulesButton);
-
-        JButton settingsButton = new JButton("Settings");
-
-        settingsButton.addActionListener(e -> switchToSettings());
-        settingsButton.setBackground(Color.orange);
-        buttonsPanel.add(settingsButton);
-
-        menuPanel.add(buttonsPanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, CENTER, GridBagConstraints.BOTH, new Insets(180, 0, 0, 0), 0, 0));
-
-        frame.getContentPane().removeAll();
-        frame.setContentPane(menuPanel);
-        frame.setVisible(true);
-    }
-
-    private static void switchToSettings() {
-        //TODO: cosa metterci? resize del frame...
-        //JPanel settingsPanel = createSettingsPanel();
         SettingsPanel settingsPanel = new SettingsPanel(frame);
 
         frame.getContentPane().removeAll();

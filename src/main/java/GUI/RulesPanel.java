@@ -6,7 +6,6 @@ import java.awt.*;
 import static GUI.HeckmeckGUI.switchToMenuPanel;
 
 public class RulesPanel extends JPanel {
-    private static final Color ORANGE_COLOR = new Color(255, 174, 103);
 
     public RulesPanel() {
         setLayout(new GridBagLayout());
@@ -42,7 +41,7 @@ public class RulesPanel extends JPanel {
         JButton backToMenuButton = new JButton("Torna al Menu");
         backToMenuButton.addActionListener(e -> switchToMenuPanel());
         backToMenuButton.setPreferredSize(new Dimension(70, 70));
-        backToMenuButton.setBackground(ORANGE_COLOR);
+        backToMenuButton.setBackground(Color.ORANGE);
 
         return backToMenuButton;
     }
