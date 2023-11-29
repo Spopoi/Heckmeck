@@ -105,30 +105,35 @@ public class HeckmeckGUI {
         frame.revalidate();
     }
 
+    private static final Color ORANGE_COLOR = new Color(255, 201, 150);
+    private static final Color BUTTON_COLOR = new Color(255, 174, 103);
+
     private static JPanel createSettingsPanel() {
         JPanel settingsPanel = new JPanel(new BorderLayout());
         settingsPanel.setPreferredSize(frame.getSize());
 
-        // Aggiungi un bordo vuoto su tutti i lati
-        int borderWidth = 300; // Puoi regolare la larghezza del bordo come preferisci
-        settingsPanel.setBorder(new EmptyBorder(30, borderWidth, 80, borderWidth));
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBorder(new EmptyBorder(0, 150, 50, 150));
 
-        // Titolo "Impostazioni"
+        JButton backButton = new JButton("Torna al Menu");
+        backButton.addActionListener(e -> switchToMenuPanel());
+        backButton.setBackground(BUTTON_COLOR);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.add(backButton);
+
+        settingsPanel.add(buttonPanel, BorderLayout.NORTH);
+
         JLabel titleLabel = new JLabel("Impostazioni");
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        int titleSpacing = 30;
+        titleLabel.setBorder(new EmptyBorder(20, 0, titleSpacing, 0));
 
-        // Regola la dimensione del testo
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Puoi regolare il tipo di carattere, lo stile e la dimensione
+        centerPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Aggiungi spazio sotto il titolo
-        int titleSpacing = 30; // Puoi regolare la quantita di spazio come preferisci
-        titleLabel.setBorder(new EmptyBorder(0, 0, titleSpacing, 0));
-
-        settingsPanel.add(titleLabel, BorderLayout.NORTH);
-
-        // Pannello centrale per altezza e larghezza
         JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 50));
-        inputPanel.setBorder(new EmptyBorder(70,50,100,50));
+        inputPanel.setBorder(new EmptyBorder(70, 50, 100, 50));
 
         JLabel heightLabel = new JLabel("Altezza frame:");
         heightLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -142,35 +147,33 @@ public class HeckmeckGUI {
         inputPanel.add(widthLabel);
         inputPanel.add(widthTextField);
 
-        inputPanel.setBackground(new Color(255, 201, 150));
-        settingsPanel.add(inputPanel, BorderLayout.CENTER);
+        inputPanel.setBackground(ORANGE_COLOR);
+        centerPanel.add(inputPanel, BorderLayout.CENTER);
 
         JButton applyButton = new JButton("Applica");
-        applyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Imposta la nuova dimensione del frame
-                try {
-                    int newHeight = Integer.parseInt(heightTextField.getText());
-                    int newWidth = Integer.parseInt(widthTextField.getText());
-                    frame.setSize(newWidth, newHeight);
-                    // Aggiorna il frame
-                    frame.revalidate();
-                    frame.repaint();
-                } catch (NumberFormatException ex) {
-                    // Gestisci l'eccezione se l'input non e un numero
-                    JOptionPane.showMessageDialog(null, "Inserisci numeri validi per altezza e larghezza.");
-                }
-            }
-        });
+        applyButton.addActionListener(e -> applySettings(heightTextField, widthTextField));
 
-        applyButton.setBackground(new Color(255, 174, 103));
-        settingsPanel.add(applyButton, BorderLayout.SOUTH);
+        applyButton.setBackground(BUTTON_COLOR);
+        centerPanel.add(applyButton, BorderLayout.SOUTH);
+        centerPanel.setBackground(ORANGE_COLOR);
 
-        // Cambia il colore di sfondo del pannello
-        settingsPanel.setBackground(new Color(255, 201, 150)); // Colore arancione chiaro
+        settingsPanel.add(centerPanel, BorderLayout.CENTER);
+
+        settingsPanel.setBackground(ORANGE_COLOR);
 
         return settingsPanel;
+    }
+
+    private static void applySettings(JTextField heightTextField, JTextField widthTextField) {
+        try {
+            int newHeight = Integer.parseInt(heightTextField.getText());
+            int newWidth = Integer.parseInt(widthTextField.getText());
+            frame.setSize(newWidth, newHeight);
+            frame.revalidate();
+            frame.repaint();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Inserisci numeri validi per altezza e larghezza.");
+        }
     }
 
 
