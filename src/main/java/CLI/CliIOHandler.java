@@ -14,9 +14,6 @@ import java.util.stream.IntStream;
 
 public class CliIOHandler implements IOHandler {
 
-    public static final String LOGO_FILE = "LOGO";
-    public static final String ACTUAL_PLAYER_INFO_TEMPLATE_FILE = "PLAYER_INFO_TEMPLATE";
-
     private static final String newLine = System.lineSeparator();
     private final Scanner scan;
 
@@ -31,7 +28,7 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showWelcomeMessage() {
-        printMessage(FileReader.readTextFile(getLogoPath()));
+        printMessage(FileReader.readTextFile(Utils.getLogoPath()));
         printMessage("                      Welcome in Heckmeck");
     }
 
@@ -100,7 +97,7 @@ public class CliIOHandler implements IOHandler {
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         printMessage("The available tiles on the board now are:");
-        printMessage(collectionToText(boardTiles.getTiles()) + newLine);
+        printMessage(Utils.collectionToText(boardTiles.getTiles()) + newLine);
     }
 
     @Override
@@ -113,14 +110,14 @@ public class CliIOHandler implements IOHandler {
                 .createHeader()
                 .fillWithPlayersData();
 
-        String actualPlayerInfo = fillActualPlayerInfoTemplate(FileReader.readTextFile(getActualPlayerInfoTemplate()), actualPlayer, dice);
+        String actualPlayerInfo = fillActualPlayerInfoTemplate(FileReader.readTextFile(Utils.getActualPlayerInfoTemplate()), actualPlayer, dice);
 
         printMessage(new TextBlockConcatenator(actualPlayerInfo, summaryTable.toString(), 12).concatenate() + newLine);
     }
 
     private String fillActualPlayerInfoTemplate(String actualPlayerInfoTemplate, Player actualPlayer, Dice dice) {
         return actualPlayerInfoTemplate.replace("$ACTUAL_PLAYER", actualPlayer.getName())
-                .replace("$CURRENT_TILES", collectionToText(actualPlayer.getPlayerTiles()))
+                .replace("$CURRENT_TILES", Utils.collectionToText(actualPlayer.getPlayerTiles()))
                 .replace("$CHOSEN_DICE", dice.getChosenDiceString())
                 .replace("$CURRENT_DICE_SCORE", String.valueOf(dice.getScore()))
                 .replace("$IS_WARM_SELECTED", String.valueOf(dice.isFaceChosen(Die.Face.WORM)));
@@ -154,7 +151,7 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showRolledDice(Dice dice) {
-        printMessage(collectionToText(dice.getDiceList()));
+        printMessage(Utils.collectionToText(dice.getDiceList()));
     }
 
     @Override
@@ -182,28 +179,6 @@ public class CliIOHandler implements IOHandler {
         return null;
     }
 
-    private static Path getLogoPath() {
-        URL tilesResource = CliIOHandler.class.getClassLoader().getResource(LOGO_FILE);
-        Path resourcePath = null;
-        try {
-            resourcePath = Path.of(tilesResource.toURI());
-        } catch (URISyntaxException ex) {
-            System.out.println(ex);
-        }
-        return resourcePath;
-    }
-
-    private Path getActualPlayerInfoTemplate() {
-        URL tilesResource = CliIOHandler.class.getClassLoader().getResource(ACTUAL_PLAYER_INFO_TEMPLATE_FILE);
-        Path resourcePath = null;
-        try {
-            resourcePath = Path.of(tilesResource.toURI());
-        } catch (URISyntaxException ex) {
-            System.out.println(ex);
-        }
-        return resourcePath;
-    }
-
     public String getInputString() {
         return scan.nextLine();
     }
@@ -223,15 +198,6 @@ public class CliIOHandler implements IOHandler {
                 printMessage(invalidInputMessage);
             }
         }
-    }
-
-    private String collectionToText(Collection<?> collection) {
-        String collectionAsText = "";
-        for (var item : collection) {
-            // at first iteration collectionAsText will have height=0 --> 2 spaces
-            collectionAsText = new TextBlockConcatenator(collectionAsText, item.toString(), 1).concatenate();
-        }
-        return collectionAsText;
     }
 
 }
