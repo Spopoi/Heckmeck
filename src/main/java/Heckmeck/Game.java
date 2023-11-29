@@ -17,7 +17,7 @@ public class Game {
     }
 
     public void init(){
-        // io.showWelcomeMessage();
+
         int numberOfPlayers = io.chooseNumberOfPlayers();
         this.players = setupPlayers(numberOfPlayers);
         this.dice = Dice.init();
@@ -41,8 +41,6 @@ public class Game {
 
     private void playerTurn(){
         io.showTurnBeginConfirm(actualPlayer.getName());
-//        io.showBoardTiles(boardTiles);
-
         boolean isOnRun;
         do{
             io.showBoardTiles(boardTiles);
@@ -63,7 +61,6 @@ public class Game {
     private boolean canPick(){
         Tile minValueTile = boardTiles.getTiles().first();
         return dice.getScore() >= minValueTile.getNumber();
-        //return dice.getScore() >= boardTiles.getMinValueTile().getNumber();
     }
 
     private boolean wantToPick() {
@@ -99,7 +96,6 @@ public class Game {
         dice.rollDice();
 
         io.showPlayerData(actualPlayer, dice, players);
-        //io.showDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();
             dice.chooseDice(chosenDieFace);
@@ -155,7 +151,6 @@ public class Game {
     public Player[] getPlayers(){
         return players;
     }
-
 
     public BoardTiles getBoardTiles(){
         return boardTiles;

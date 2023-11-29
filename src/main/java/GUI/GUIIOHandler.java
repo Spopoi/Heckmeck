@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static GUI.HeckmeckGUI.switchToMenuPanel;
 import static javax.swing.JOptionPane.*;
 import static java.awt.GridBagConstraints.*;
 
@@ -68,7 +69,8 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void printMessage(String message) {
-        showMessageDialog(null, message);
+        //showMessageDialog(null, message);
+        showInternalMessageDialog(null, message, "Heckmeck message", INFORMATION_MESSAGE , getDieIcon(Die.Face.WORM,50));
     }
 
     @Override
@@ -80,7 +82,7 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showWelcomeMessage() {
-        printMessage("WELCOME to Heckmeck!");
+        printMessage("WELCOME to Heckmeck, GOOD LUCK!");
     }
 
     // TODO: REMOVE BEFORE COMMIT!!
@@ -91,16 +93,23 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public int chooseNumberOfPlayers() {
-        while(true){
-            try{
-                int numberOfPlayer = Integer.parseInt(showInputDialog(null, "Choose number of players between 2 and 7:"));
-                if(Rules.validNumberOfPlayer(numberOfPlayer)) return numberOfPlayer;
-                else throw new IllegalInput("Invalid number of player, please select a number between 2 and 7");
-            } catch (IllegalInput | NumberFormatException e) {
+        while (true) {
+            try {
+                String[] options = {"2", "3", "4", "5", "6", "7"};
+                String selectedOption = (String) JOptionPane.showInputDialog(null, "Choose number of players:", "Heckmeck", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+                if (selectedOption == null) {
+                    throw new IllegalInput("Selection of players canceled");
+                }
+
+                return Integer.parseInt(selectedOption);
+
+            } catch (IllegalInput e) {
                 printMessage(e.getMessage());
             }
         }
     }
+
 
     @Override
     public String choosePlayerName(int playerNumber) {
@@ -108,7 +117,7 @@ public class GUIIOHandler implements IOHandler {
         while(true) {
             try {
                 String playerName = showInputDialog(null, "Insert player name");
-                if (playerName.isBlank()) throw new IllegalInput("Blank name, choose a valid a one");
+                if (playerName == null || playerName.isBlank()) throw new IllegalInput("Blank name, choose a valid a one");
                 else return playerName;
             } catch (IllegalInput e) {
                 printMessage(e.getMessage());

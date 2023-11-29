@@ -8,16 +8,13 @@ import static GUI.HeckmeckGUI.*;
 public class MenuPanel extends ImagePanel {
 
     public MenuPanel() {
-        //TODO: Verificare se ImagePanel e' necessario o si puo' fare come in RulesPanel (ImageIcon)
+
         super("src/main/java/GUI/Icons/heckmeckBackground.jpg");
         setLayout(new GridBagLayout());
 
         JPanel buttonsPanel = createButtonsPanel();
-
         add(buttonsPanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
                 GridBagConstraints.BOTH, new Insets(180, 0, 0, 0), 0, 0));
-
-        setVisible(true);
     }
 
     private JPanel createButtonsPanel() {
