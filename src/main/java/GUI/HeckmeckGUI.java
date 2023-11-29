@@ -33,7 +33,7 @@ public class HeckmeckGUI {
         updateFrame(menuPanel);
     }
 
-    public static void switchToSettings() {
+    public static void switchToSettingsPanel() {
         SettingsPanel settingsPanel = new SettingsPanel(frame);
         updateFrame(settingsPanel);
     }

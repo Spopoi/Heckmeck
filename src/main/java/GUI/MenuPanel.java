@@ -31,7 +31,7 @@ public class MenuPanel extends ImagePanel {
         JButton rulesButton = createButton("Rules", e -> switchToRulesPanel());
         buttonsPanel.add(rulesButton);
 
-        JButton settingsButton = createButton("Settings", e -> switchToSettings());
+        JButton settingsButton = createButton("Settings", e -> switchToSettingsPanel());
         buttonsPanel.add(settingsButton);
 
         return buttonsPanel;
