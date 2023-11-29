@@ -4,8 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static GUI.HeckmeckGUI.switchToRulesPanel;
-import static GUI.HeckmeckGUI.switchToSettings;
+import static GUI.HeckmeckGUI.*;
 
 public class MenuPanel extends ImagePanel {
 
@@ -45,10 +44,4 @@ public class MenuPanel extends ImagePanel {
         button.setBackground(Color.ORANGE);
         return button;
     }
-
-    private void switchToGamePanel() {
-        // Implementa il tuo codice per passare al pannello di gioco
-        // ...
-    }
-
 }

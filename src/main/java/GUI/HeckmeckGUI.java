@@ -52,7 +52,7 @@ public class HeckmeckGUI {
     }
 
 
-    private static void switchToGamePanel() {
+    public static void switchToGamePanel() {
 
         ImagePanel imagePanel = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
 
