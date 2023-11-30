@@ -25,14 +25,15 @@ public class TCPIOHandler implements IOHandler {
         msg.setPlayerID(getCurrentPlayerId());
         sendBroadCast(msg);
     }
+    //TODO: MODIFICARE
     @Override
-    public String printError(String text){
+    public void printError(String text){
         Message msg = new Message();
         msg.setText(text);
         msg.setOperation(Message.Action.ERROR);
         sendBroadCast(msg);
         Message respMsg = getCurrentPlayerSocket().readReceivedMessage();
-        return respMsg.text;
+        //return respMsg.text;
     }
 
 

@@ -110,8 +110,8 @@ public class Game {
         while(true){
             io.showRolledDice(dice);
             Die.Face chosenDieFace = io.chooseDie(dice);
-            if(!dice.isFacePresent(chosenDieFace)) io.printMessage("This face is not present.. Pick another one!");
-            else if(dice.isFaceChosen(chosenDieFace)) io.printMessage("You have already chose this face, pick another one!");
+            if(!dice.isFacePresent(chosenDieFace)) io.printError("This face is not present.. Pick another one!");
+            else if(dice.isFaceChosen(chosenDieFace)) io.printError("You have already chose this face, pick another one!");
             else return chosenDieFace;
         }
     }
@@ -129,13 +129,10 @@ public class Game {
 
     private Player[] setupPlayers(int numberOfPlayers) {
         Player[] playersList = new Player[numberOfPlayers];
-
         for(int i=0; i<numberOfPlayers; i++){
-            //if(i == 1) actualPlayer = playersList[0];
-
             String playerName = io.choosePlayerName(i);
             while(isNameAlreadyPicked(playerName,playersList)){
-                io.printMessage(playerName + " Already picked name.. Please choose another one");
+                io.printError(playerName + " Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(i);
             }
             playersList[i] = Player.generatePlayer(playerName);

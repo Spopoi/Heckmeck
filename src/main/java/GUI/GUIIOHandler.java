@@ -73,6 +73,11 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
+    public void printError(String text) {
+        JOptionPane.showMessageDialog(null, text, "Errore", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
     public void showTurnBeginConfirm(String playerName) {
         frame.getContentPane().removeAll();
         frame.repaint();
@@ -107,17 +112,12 @@ public class GUIIOHandler implements IOHandler {
         if(wantToQuit == OK_OPTION) System.exit(0);
     }
 
-    //TODO: valutare se utilizzare metodo printMessage
-    private static void showErrorDialog(String message) {
-        JOptionPane.showMessageDialog(null, message, "Errore", JOptionPane.ERROR_MESSAGE);
-    }
-
     @Override
     public String choosePlayerName(int playerNumber) {
         while(true) {
             String playerName = showInputDialog(null, "Insert player name");
             if (playerName == null) wantToQuitHeckmeck();
-            else if(playerName.isBlank()) showErrorDialog("Blank name, choose a valid one");
+            else if(playerName.isBlank()) printError("Blank name, choose a valid one");
             else return playerName;
         }
     }
@@ -131,15 +131,13 @@ public class GUIIOHandler implements IOHandler {
         tilesPanel.setPreferredSize(new Dimension(0,125));
         tilesPanel.setOpaque(false);
 
-
         for(Tile tile : boardTiles.getTiles()){
             JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 90, 80));
             tileIcon.setPreferredSize(new Dimension(80,90));
             tilesPanel.add(tileIcon);
-
         }
         frame.getContentPane().add(tilesPanel,BorderLayout.NORTH);
-        frame.setVisible(true);
+        //frame.setVisible(true);
     }
 
     @Override
@@ -393,12 +391,6 @@ public class GUIIOHandler implements IOHandler {
     public String getInputString() {
         return null;
     }
-
-    @Override
-    public String printError(String text) {
-        return null;
-    }
-
 
     private ImageIcon getTileIcon(int tileNumber, int height, int width){
         ImageIcon icon = new ImageIcon(tileNumberToIconPath.get(tileNumber));

@@ -81,5 +81,5 @@ public interface IOHandler {
 
     String getInputString();
 
-    String printError(String text);
+    void printError(String text);
 }

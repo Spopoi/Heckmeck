@@ -166,9 +166,10 @@ public class CliIOHandler implements IOHandler {
         printMessage("#####################" + newLine + "# BUUUUUSSSTTTTTT!! #" + newLine + "#####################" + newLine);
     }
 
+    //TODO: MODIFICARE
     @Override
-    public String printError(String text) {
-        return null;
+    public void printError(String text) {
+       printMessage(text);
     }
 
     public String getInputString() {
