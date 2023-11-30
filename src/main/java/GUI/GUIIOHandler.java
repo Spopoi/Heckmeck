@@ -141,7 +141,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public void askRollDiceConfirmation(String playerName) {
+    public void askRollDiceConfirmation(String playerName){
         return;
     }
 
@@ -168,17 +168,7 @@ public class GUIIOHandler implements IOHandler {
 
         frame.getContentPane().remove(playerPane);
 
-        JPanel playerPane = new JPanel() {
-            private Image backgroundImage = new ImageIcon("src/main/java/GUI/Icons/wood_background.jpg").getImage();
-
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                // Draw the background image
-                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-
+        ImagePanel playerPane = new ImagePanel("src/main/java/GUI/Icons/wood_background.jpg");
         showOthersPlayerPanel(player, players);
 
         int colIndex = 0;
