@@ -69,7 +69,6 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void printMessage(String message) {
-        //showMessageDialog(null, message);
         showInternalMessageDialog(null, message, "Heckmeck message", INFORMATION_MESSAGE , getDieIcon(Die.Face.WORM,50));
     }
 
@@ -94,34 +93,32 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public int chooseNumberOfPlayers() {
         while (true) {
-            try {
-                String[] options = {"2", "3", "4", "5", "6", "7"};
-                String selectedOption = (String) JOptionPane.showInputDialog(null, "Choose number of players:", "Heckmeck", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            String[] options = {"2", "3", "4", "5", "6", "7"};
+            String selectedOption = (String) JOptionPane.showInputDialog(null, "Choose number of players:", "Heckmeck", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
-                if (selectedOption == null) {
-                    throw new IllegalInput("Selection of players canceled");
-                }
-
+            if (selectedOption == null) wantToQuitHeckmeck();
+            else if(Rules.validNumberOfPlayer(Integer.parseInt(selectedOption)))
                 return Integer.parseInt(selectedOption);
-
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
-            }
         }
     }
 
+    private static void wantToQuitHeckmeck() {
+        int wantToQuit = JOptionPane.showConfirmDialog(null, "Do you want to quit from Heckmeck?", "Heckmeck", JOptionPane.YES_NO_OPTION);
+        if(wantToQuit == OK_OPTION) System.exit(0);
+    }
+
+    //TODO: valutare se utilizzare metodo printMessage
+    private static void showErrorDialog(String message) {
+        JOptionPane.showMessageDialog(null, message, "Errore", JOptionPane.ERROR_MESSAGE);
+    }
 
     @Override
     public String choosePlayerName(int playerNumber) {
-
         while(true) {
-            try {
-                String playerName = showInputDialog(null, "Insert player name");
-                if (playerName == null || playerName.isBlank()) throw new IllegalInput("Blank name, choose a valid a one");
-                else return playerName;
-            } catch (IllegalInput e) {
-                printMessage(e.getMessage());
-            }
+            String playerName = showInputDialog(null, "Insert player name");
+            if (playerName == null) wantToQuitHeckmeck();
+            else if(playerName.isBlank()) showErrorDialog("Blank name, choose a valid one");
+            else return playerName;
         }
     }
 
