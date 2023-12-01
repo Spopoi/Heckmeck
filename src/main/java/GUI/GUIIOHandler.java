@@ -1,7 +1,7 @@
 package GUI;
 
+import GUI.Panels.ImagePanel;
 import Heckmeck.*;
-import exception.IllegalInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static GUI.HeckmeckGUI.switchToMenuPanel;
 import static javax.swing.JOptionPane.*;
 import static java.awt.GridBagConstraints.*;
 

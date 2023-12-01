@@ -1,5 +1,9 @@
 package GUI;
 
+import GUI.Panels.ImagePanel;
+import GUI.Panels.MenuPanel;
+import GUI.Panels.RulesPanel;
+import GUI.Panels.SettingsPanel;
 import Heckmeck.*;
 
 import javax.swing.*;
