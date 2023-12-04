@@ -204,6 +204,27 @@ public class TestCliInputOutput {
     }
 
     @ParameterizedTest
+    @MethodSource("blankUserInputForSelectingDiceProvider")
+    void skipBlankInputsWhenUserChooseDie(String userInput) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+        Dice dice = Dice.init();
+
+        try {
+            inputOutputHandler.chooseDie(dice);
+        } catch (java.util.NoSuchElementException ex) {
+            String expectedResponse = """
+                    Pick one unselected face:
+                    """;
+            String actualResponse = fakeStandardOutput.toString();
+            Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
+        }
+    }
+
+    @ParameterizedTest
     @MethodSource("wrongUserInputWhenPickingTilesProvider")
     void printWarningForWrongAnswersWhenPickingTiles(String userInput) {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
@@ -220,6 +241,28 @@ public class TestCliInputOutput {
                     Do you want to pick tile number 1 from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice
+                    """;
+            String actualResponse = fakeStandardOutput.toString();
+            Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("blankUserInputWhenPickingTilesProvider")
+    void skipBlankAnswersWhenPickingTiles(String userInput) {
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+
+        try {
+            inputOutputHandler.wantToPick(1, 1);
+        } catch (java.util.NoSuchElementException ex) {
+            String expectedResponse = """
+                    Your actual score is: 1
+                    Do you want to pick tile number 1 from board?
+                    Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     """;
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
@@ -319,12 +362,22 @@ public class TestCliInputOutput {
     }
 
     static Stream<String> wrongUserInputWhenPickingTilesProvider() {
-        return Stream.of("ciao", "", "mondo")
+        return Stream.of("ciao", "mondo")
+                .map(TestCliInputOutput::stringToUserInput);
+    }
+
+    static Stream<String> blankUserInputWhenPickingTilesProvider() {
+        return Stream.of("", "\t", "  ", " \t ")
                 .map(TestCliInputOutput::stringToUserInput);
     }
 
     static Stream<String> userInputForSelectingDiceProvider() {
-        return Stream.of("")
+        return Stream.of("ciao", "mondo")
+                .map(TestCliInputOutput::stringToUserInput);
+    }
+
+    static Stream<String> blankUserInputForSelectingDiceProvider() {
+        return Stream.of("", "\t", "  ", " \t ")
                 .map(TestCliInputOutput::stringToUserInput);
     }
 
