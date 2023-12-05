@@ -6,7 +6,6 @@ import Heckmeck.Dice;
 import Heckmeck.Die;
 import Heckmeck.Player;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -47,7 +46,6 @@ public class TestCliInputOutput {
             '5\n',5
             'w\n',w
             """)
-    @Disabled
     void readDieFaceFromValidUserInput(String userInput, String faceAsString) {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
