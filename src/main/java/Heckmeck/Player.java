@@ -17,7 +17,11 @@ public class Player {
     }
 
     public static Player generatePlayer(String playerName) {
-        return new Player(playerName);
+        return new Player(fixWhiteCarachter(playerName));
+    }
+
+    private static String fixWhiteCarachter(String playerName) {
+        return playerName.strip().replace("\t", "    ");
     }
 
     public String getName() {
