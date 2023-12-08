@@ -49,15 +49,20 @@ public class CliIOHandler implements IOHandler {
     public int chooseNumberOfPlayers() {
         printMessage("Choose number of players between 2 and 7:");
         while (true) {
-            try {
-                int numberOfPlayer = getInputNumber();
-                if (Rules.validNumberOfPlayer(numberOfPlayer)) {
-                    return numberOfPlayer;
-                } else {
+            String userInput = getInputString();
+            if (userInput.isBlank()) {
+                continue;
+            } else {
+                try {
+                    int numberOfPlayer = Integer.parseInt(userInput);
+                    if (Rules.validNumberOfPlayer(numberOfPlayer)) {
+                        return numberOfPlayer;
+                    } else {
+                        printMessage("Input is not correct, choose a number between 2 and 7:");
+                    }
+                } catch (NumberFormatException ex) {
                     printMessage("Input is not correct, choose a number between 2 and 7:");
                 }
-            } catch (NumberFormatException ex) {
-                printMessage("Input is not correct, choose a number between 2 and 7:");
             }
         }
     }
@@ -155,6 +160,8 @@ public class CliIOHandler implements IOHandler {
             // TODO: refactor Hide-delegate?
             if (Die.stringToFaceMap.containsKey(chosenDice)) {
                 return Die.stringToFaceMap.get(chosenDice);
+            } else if (chosenDice.isBlank()) {
+                continue;
             } else {
                 printMessage("Incorrect input, choose between {1, 2, 3, 4, 5, w}:");
             }
@@ -169,15 +176,11 @@ public class CliIOHandler implements IOHandler {
     //TODO: MODIFICARE
     @Override
     public void printError(String text) {
-       printMessage(text);
+        printMessage(text);
     }
 
     public String getInputString() {
         return scan.nextLine();
-    }
-
-    private int getInputNumber() {
-        return Integer.parseInt(getInputString());
     }
 
     private boolean getYesOrNoAnswer(String invalidInputMessage) {
@@ -187,6 +190,8 @@ public class CliIOHandler implements IOHandler {
                 return true;
             } else if (Objects.equals(decision, "n")) {
                 return false;
+            } else if (decision.isBlank()) {
+                continue;
             } else {
                 printMessage(invalidInputMessage);
             }
