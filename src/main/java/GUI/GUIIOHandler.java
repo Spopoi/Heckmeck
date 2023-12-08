@@ -17,6 +17,7 @@ import static java.awt.GridBagConstraints.*;
 
 public class GUIIOHandler implements IOHandler {
 
+    public static final Dimension TILE_DIMENSIONS = new Dimension(80, 90);
     //TODO: removing method's parameters and adding a Game local variable which contains players dice etc..
     private final JFrame frame;
     private PlayerDataPanel playerPane;
@@ -27,7 +28,7 @@ public class GUIIOHandler implements IOHandler {
     private volatile Die.Face chosenFace;
 
     private static final Map<Die.Face, String> faceToIconPath =
-            Collections.unmodifiableMap(new HashMap<Die.Face, String>() {{
+            Collections.unmodifiableMap(new HashMap<>() {{
                 put(Die.Face.ONE, "src/main/java/GUI/Icons/Dice/one.png");
                 put(Die.Face.TWO, "src/main/java/GUI/Icons/Dice/two.png");
                 put(Die.Face.THREE, "src/main/java/GUI/Icons/Dice/three.png");
@@ -37,7 +38,7 @@ public class GUIIOHandler implements IOHandler {
             }});
 
     private static final Map<Integer, String> tileNumberToIconPath =
-            Collections.unmodifiableMap(new HashMap<Integer, String>() {{
+            Collections.unmodifiableMap(new HashMap<>() {{
                 put(21, "src/main/java/GUI/Icons/Tiles/Tile_21.png");
                 put(22, "src/main/java/GUI/Icons/Tiles/Tile_22.png");
                 put(23, "src/main/java/GUI/Icons/Tiles/Tile_23.png");
@@ -59,7 +60,6 @@ public class GUIIOHandler implements IOHandler {
 
     public GUIIOHandler(JFrame frame){
         this.frame =frame;
-        //this.playerPane = new JPanel();
         this.dicePanel = new JPanel();
         this.othersPlayerPane = new JPanel();
         this.tilesPanel = new JPanel();
@@ -125,20 +125,17 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-
         tilesPanel = new JPanel();
         tilesPanel.setLayout(new GridLayout(1,0,10, 10));
         tilesPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
         tilesPanel.setPreferredSize(new Dimension(0,125));
         tilesPanel.setOpaque(false);
-
         for(Tile tile : boardTiles.getTiles()){
             JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 90, 80));
-            tileIcon.setPreferredSize(new Dimension(80,90));
+            tileIcon.setPreferredSize(TILE_DIMENSIONS);
             tilesPanel.add(tileIcon);
         }
-        frame.getContentPane().add(tilesPanel,BorderLayout.NORTH);
-        //frame.setVisible(true);
+        frame.add(tilesPanel,BorderLayout.NORTH);
     }
 
     @Override
@@ -166,14 +163,11 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showPlayerData(Player player, Dice dice, Player[] players) {
-
         showOthersPlayerPanel(player, players);
         playerPane.update(player, dice);
-        frame.getContentPane().remove(playerPane);
         frame.add(playerPane, BorderLayout.WEST);
         frame.revalidate();
         frame.repaint();
-
     }
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
