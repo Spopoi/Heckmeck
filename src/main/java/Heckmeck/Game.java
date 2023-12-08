@@ -17,7 +17,7 @@ public class Game {
     }
 
     public void init(){
-
+        //TODO: Risolvere bug quando prendi ultimo dado bust automatico
         int numberOfPlayers = io.chooseNumberOfPlayers();
         this.players = setupPlayers(numberOfPlayers);
         this.dice = Dice.init();
