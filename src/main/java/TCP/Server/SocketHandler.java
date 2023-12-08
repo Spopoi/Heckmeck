@@ -11,30 +11,21 @@ public class SocketHandler implements Runnable{
     private String rxString = "";
     private String txString = "";
     private Socket clientSocket;
-    private PrintWriter out;
-    private BufferedReader in;
+    public PrintWriter out;
+    public BufferedReader in;
     String playerName;
-    private OutputStream outputStream;
     ObjectOutputStream objectOutputStream;
     InputStream inputStream;
     Gson gson = new Gson();
 
-    public SocketHandler(Socket clientSocket, int playerId) {
-        this.clientSocket = clientSocket;
+    public SocketHandler(int playerId, BufferedReader in,  PrintWriter out) {
+        this.in = in;
+        this.out = out;
         this.playerId = playerId;
 
-        try {
-            outputStream = clientSocket.getOutputStream();
-            inputStream = clientSocket.getInputStream();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
     public void run(){
         System.out.println("Connection in socket handler ok, this is client thread #" + playerId);
-        out = new PrintWriter(outputStream, true);
-        in = new BufferedReader(new InputStreamReader(inputStream));
         initClient();
     }
     public String readLine(){
