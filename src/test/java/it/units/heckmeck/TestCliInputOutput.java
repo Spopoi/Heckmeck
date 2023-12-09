@@ -1,13 +1,11 @@
 package it.units.heckmeck;
 
 import CLI.CliIOHandler;
-import CLI.CliInputHandler;
 import Heckmeck.BoardTiles;
 import Heckmeck.Dice;
 import Heckmeck.Die;
 import Heckmeck.Player;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -38,32 +36,6 @@ public class TestCliInputOutput {
 
     private static final String newLine = System.lineSeparator();
 
-
-    // TODO: Should we ask if user wants to play?
-    @Test
-    @Disabled
-    void user_want_to_play() {
-        String userInput = "y\n";
-
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        CliInputHandler inputHandler = new CliInputHandler();
-
-        Assertions.assertTrue(inputHandler.wantToPlay());
-    }
-
-    @Test
-    @Disabled
-    void user_do_not_want_to_play() {
-        String userInput = "n\n";
-
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        CliInputHandler inputHandler = new CliInputHandler();
-
-        Assertions.assertFalse(inputHandler.wantToPlay());
-    }
-
     // TODO: chooseDie does not need dice
     @ParameterizedTest
     @CsvSource(ignoreLeadingAndTrailingWhitespace = false, textBlock = """
@@ -74,7 +46,6 @@ public class TestCliInputOutput {
             '5\n',5
             'w\n',w
             """)
-    @Disabled
     void readDieFaceFromValidUserInput(String userInput, String faceAsString) {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
