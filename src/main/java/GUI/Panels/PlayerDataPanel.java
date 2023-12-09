@@ -27,6 +27,7 @@ public class PlayerDataPanel extends ImagePanel{
         setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
 
         initPlayerNameLabel();
+        add(Box.createVerticalStrut(6));
         addHorizontalSeparator();
 
         initPlayerTilePanel();
