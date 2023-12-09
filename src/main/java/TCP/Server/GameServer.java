@@ -22,7 +22,7 @@ public class GameServer implements Runnable {
     public GameServer() {
         try {
             ss = new ServerSocket(51734);
-            io = new TCPIOHandler(this);
+
             this.numOfPlayers = 0;
 
         } catch (IOException e) {
@@ -49,9 +49,10 @@ public class GameServer implements Runnable {
             System.out.println("Error in acceptConnections()");
         }
 
+        io = new TCPIOHandler(sockets);
         game = new Game(io);
+        io.setGame(game);
         game.init();
-
         game.play();
     }
 
@@ -63,6 +64,7 @@ public class GameServer implements Runnable {
             Socket clientSocket;
 
             clientSocket = ss.accept();
+
             System.out.println("Accepted incoming connection #: " + playerID);
 
             if (clientSocket.isConnected()) {
@@ -76,6 +78,9 @@ public class GameServer implements Runnable {
                 }
                 PrintWriter out = new PrintWriter(outputStream, true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+
+                //IOBuffer IOBuffer = new IOBuffer(in, out);
+
                 this.sockets.add(new SocketHandler(playerID, in, out));
                 playerID++;
             }
