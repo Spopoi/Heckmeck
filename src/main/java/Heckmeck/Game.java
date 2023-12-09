@@ -11,6 +11,7 @@ public class Game {
     private final IOHandler io;
 
     private Player actualPlayer;
+    private int actualPlayerID;
 
     public Game(IOHandler io) {
        this.io = io;
@@ -19,6 +20,7 @@ public class Game {
     public void init(){
         //TODO: Risolvere bug quando prendi ultimo dado bust automatico
         int numberOfPlayers = io.chooseNumberOfPlayers();
+
         this.players = setupPlayers(numberOfPlayers);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
@@ -41,6 +43,7 @@ public class Game {
 
     private void playerTurn(){
         io.showTurnBeginConfirm(actualPlayer.getName());
+        //TODO il nome non serve più come parametro per showBeginConfirm()
         boolean isOnRun;
         do{
             io.showBoardTiles(boardTiles);
@@ -130,19 +133,24 @@ public class Game {
     private Player[] setupPlayers(int numberOfPlayers) {
         Player[] playersList = new Player[numberOfPlayers];
         for(int i=0; i<numberOfPlayers; i++){
+            playersList[i] = Player.generatePlayer(i);
+            this.actualPlayer = playersList[i];
             String playerName = io.choosePlayerName(i);
             while(isNameAlreadyPicked(playerName,playersList)){
                 io.printError(playerName + " Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(i);
             }
-            playersList[i] = Player.generatePlayer(playerName);
-            playersList[i].setPlayerID(i); // TODO Modificato da dew54.. da fare "meglio"
+            playersList[i].setPlayerName(playerName);
+
         }
         return playersList;
     }
 
     private boolean isNameAlreadyPicked(String name, Player[] playersList){
-        return Arrays.stream(playersList).filter(Objects::nonNull).anyMatch(player -> player.getName().equals(name));
+        return Arrays.stream(playersList).filter(Objects::nonNull).anyMatch(player -> {
+            String playerName = player.getName();
+            return playerName != null && playerName.equals(name);
+        });
     }
 
     public Player[] getPlayers(){
