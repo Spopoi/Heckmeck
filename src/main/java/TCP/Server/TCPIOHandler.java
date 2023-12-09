@@ -9,11 +9,15 @@ public class TCPIOHandler implements IOHandler {
 
 
     private final List<SocketHandler> sockets;
-    private final Game game;
+    private Game game;
 
-    public TCPIOHandler(List<SocketHandler> sockets,  Game game){
-        this.sockets = sockets;
+    public void setGame(Game game){
         this.game = game;
+    }
+
+    public TCPIOHandler(List<SocketHandler> sockets){
+        this.sockets = sockets;
+        //this.game = game;
     }
 
     private void sendBroadCast(Message msg){
@@ -43,9 +47,7 @@ public class TCPIOHandler implements IOHandler {
     @Override
     public void showTurnBeginConfirm(String playerName) {
         Message msg = setGameStatus();
-        msg.setText("Waiting for your turn");
-        msg.setOperation(Message.Action.INFO);
-        informEveryOtherClient(msg);
+        informEveryOtherClient();
         msg.setOperation(Message.Action.ASK_CONFIRM);
         msg.setText(playerName + ", press enter to start your turn");
         getCurrentPlayerSocket().writeMessage(msg);
@@ -64,19 +66,18 @@ public class TCPIOHandler implements IOHandler {
 
     @Override
     public int chooseNumberOfPlayers() {
-        return game.getPlayers().length;
+        return sockets.size();
     }
 
     @Override
-    public String choosePlayerName(int playerNumber) {
-
+    public String choosePlayerName(int playerID) {
         Message message = new Message();
         message.setActualPlayer(game.getActualPlayer());
         message.setOperation(Message.Action.GET_PLAYER_NAME);
         message.setText("Choose player name");
-        message.setPlayerID(playerNumber);
-        sockets.get(playerNumber).writeMessage(message);
-        return readMessage(playerNumber).text;
+        message.setPlayerID(playerID);
+        sockets.get(playerID).writeMessage(message);
+        return readMessage(playerID).text;
     }
 
     @Override
@@ -103,7 +104,7 @@ public class TCPIOHandler implements IOHandler {
         msg.setActualPlayer(game.getActualPlayer());
         msg.setOperation(Message.Action.GET_INPUT);
         msg.setPlayerID(getCurrentPlayerId());
-        msg.setText("Do you want to pick tile n. " + game.getDice().getScore() + "?");
+        msg.setText("Do you want to pick tile n. " + availableTileNumber + "?");
         sendBroadCast(msg);
         Message rxMsg = readMessage(game.getActualPlayer().getPlayerID());
         return "y".equalsIgnoreCase(rxMsg.text);  // TODO verificare il metodo di check
@@ -128,7 +129,6 @@ public class TCPIOHandler implements IOHandler {
         msg.setPlayers(players);
         msg.setOperation(Message.Action.UPDATE_PLAYER);
         sockets.stream().forEach(client -> client.writeMessage(msg));
-
     }
 
     @Override
@@ -136,7 +136,7 @@ public class TCPIOHandler implements IOHandler {
         Message msg = new Message();
         msg.setActualPlayer(game.getActualPlayer());
         msg.setPlayerID(getCurrentPlayerId());
-        informEveryOtherClient(msg);
+        informEveryOtherClient();
         msg.setOperation(Message.Action.GET_INPUT);
         msg.setText("Choose a die face");
         getCurrentPlayerSocket().writeMessage(msg);
@@ -145,7 +145,9 @@ public class TCPIOHandler implements IOHandler {
         return Die.getFaceByString(rxMsg.text);
     }
 
-    private void informEveryOtherClient(Message msg){
+    private void informEveryOtherClient(){
+        Message msg = setGameStatus();
+        msg.setText("Waiting for your turn");
         msg.setOperation(Message.Action.INFO);
         msg.setText("This is " + getCurrentPlayer().getName() + "'s turn, please wait for yours");
         getOtherPlayers().forEach(s -> s.writeMessage(msg));
@@ -188,8 +190,8 @@ public class TCPIOHandler implements IOHandler {
         return sockets.get(getCurrentPlayerId());
     }
 
-    private List<SocketHandler> getOtherPlayers(){
-        return sockets.stream().filter(p -> p.playerId != game.getActualPlayer().getPlayerID()).toList();
+    public List<SocketHandler> getOtherPlayers(){
+        return sockets.stream().filter(p -> p.getPlayerID() != game.getActualPlayer().getPlayerID()).toList();
     }
 
 }
