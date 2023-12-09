@@ -4,20 +4,20 @@ import java.util.LinkedList;
 
 public class Player {
 
-    private final String playerName;
+    private String playerName;
     private StackOfTiles playerTiles;
-    private int playerID;
+    private final int playerID;
 
-    private Player(String playerName){
-        this.playerName = playerName;
+    private Player(int playerID){
+        this.playerID = playerID;
         this.playerTiles = StackOfTiles.generate();
     }
     public LinkedList<Tile> getPlayerTiles(){
         return playerTiles.getTileList();
     }
 
-    public static Player generatePlayer(String playerName) {
-        return new Player(playerName);
+    public static Player generatePlayer(int playerID) {
+        return new Player(playerID);
     }
 
     public String getName() {
@@ -63,8 +63,8 @@ public class Player {
         return playerID;
     }
 
-    public void setPlayerID(int playerID) {
-        this.playerID = playerID;
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     public int getWormScore() {
