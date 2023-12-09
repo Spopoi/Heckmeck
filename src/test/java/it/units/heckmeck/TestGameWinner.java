@@ -11,9 +11,12 @@ public class TestGameWinner {
 
     @Test
     public void winnerWithHigherWormNumber(){
-        Player expectedWinner = Player.generatePlayer("winner");
-        Player loser1 = Player.generatePlayer("loser1");
-        Player loser2 = Player.generatePlayer("loser2");
+        Player expectedWinner = Player.generatePlayer(0);
+        expectedWinner.setPlayerName("winner");
+        Player loser1 = Player.generatePlayer(1);
+        loser1.setPlayerName("loser1");
+        Player loser2 = Player.generatePlayer(2);
+        loser2.setPlayerName("loser2");
 
         expectedWinner.pickTile(Tile.generateTile(30));
         loser1.pickTile(Tile.generateTile(21));
@@ -30,9 +33,12 @@ public class TestGameWinner {
 
     @Test
     public void winnerWithLowestNumberOfTiles(){
-        Player expectedWinner = Player.generatePlayer("winner");
-        Player loser1 = Player.generatePlayer("loser");
-        Player loser2 = Player.generatePlayer("loser2");
+        Player expectedWinner = Player.generatePlayer(0);
+        expectedWinner.setPlayerName("winner");
+        Player loser1 = Player.generatePlayer(1);
+        loser1.setPlayerName("loser1");
+        Player loser2 = Player.generatePlayer(2);
+        loser2.setPlayerName("loser2");
         expectedWinner.pickTile(Tile.generateTile(30));
         loser1.pickTile(Tile.generateTile(21));
         loser1.pickTile(Tile.generateTile(25));
@@ -48,9 +54,12 @@ public class TestGameWinner {
 
     @Test
     public void winnerWithHigherTileNumber(){
-        Player expectedWinner = Player.generatePlayer("winner");
-        Player loser1 = Player.generatePlayer("loser");
-        Player loser2 = Player.generatePlayer("loser2");
+        Player expectedWinner = Player.generatePlayer(0);
+        expectedWinner.setPlayerName("winner");
+        Player loser1 = Player.generatePlayer(1);
+        loser1.setPlayerName("loser1");
+        Player loser2 = Player.generatePlayer(2);
+        loser2.setPlayerName("loser2");
         expectedWinner.pickTile(Tile.generateTile(22));
         expectedWinner.pickTile(Tile.generateTile(26));
         loser1.pickTile(Tile.generateTile(21));

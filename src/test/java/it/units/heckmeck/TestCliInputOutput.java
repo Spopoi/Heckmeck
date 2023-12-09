@@ -244,13 +244,20 @@ public class TestCliInputOutput {
     void printInitialPlayerStatus() {
         setSystemOut(outStream);
         Dice dice = Dice.init();
-        Player player1 = Player.generatePlayer(PLAYER_NAME);
-        Player player2 = Player.generatePlayer("player2");
-        Player player3 = Player.generatePlayer("player3");
-        Player player4 = Player.generatePlayer("player4");
-        Player player5 = Player.generatePlayer("player5");
-        Player player6 = Player.generatePlayer("player6");
-        Player player7 = Player.generatePlayer("player7");
+        Player player1 = Player.generatePlayer(0);
+        player1.setPlayerName(PLAYER_NAME);
+        Player player2 = Player.generatePlayer(1);
+        player2.setPlayerName("player2");
+        Player player3 = Player.generatePlayer(2);
+        player3.setPlayerName("player3");
+        Player player4 = Player.generatePlayer(3);
+        player4.setPlayerName("player4");
+        Player player5 = Player.generatePlayer(4);
+        player5.setPlayerName("player5");
+        Player player6 = Player.generatePlayer(5);
+        player6.setPlayerName("player6");
+        Player player7 = Player.generatePlayer(6);
+        player7.setPlayerName("player7");
         Player[] players = {player1, player2, player3, player4, player5, player6, player7};
 
         inputOutput.showPlayerData(player1, dice, players);
