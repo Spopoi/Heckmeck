@@ -59,7 +59,7 @@ public class Game {
 
     private boolean pick(){
         //assume worm chosen
-        if(canPick() &&  (dice.getChosenDice().size() >= 8 || wantToPick())) {
+        if(canPick() &&  (dice.getChosenDice().size() >= Dice.initialNumOfDice || wantToPick())) {
             pickTile();
             return true;
         }
@@ -82,7 +82,7 @@ public class Game {
         Tile availableTile = boardTiles.nearestTile(dice.getScore());
         boardTiles.remove(availableTile);
         actualPlayer.pickTile(availableTile);
-        io.printMessage("Hai preso la tessera numero " + availableTile.getNumber() +"!");
+        io.printMessage("You got tile number " + availableTile.getNumber() +"!");
     }
 
     private boolean steal(){
@@ -102,10 +102,8 @@ public class Game {
 
     //TODO: rolli anche se finisci i dadi
     private boolean roll(){
-
         io.askRollDiceConfirmation(actualPlayer.getName());
         dice.rollDice();
-
         io.showPlayerData(actualPlayer, dice, players);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();

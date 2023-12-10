@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Dice {
-    private final int  initialNumOfDice = 8;
+    public final static int  initialNumOfDice = 8;
     private List<Die> diceList;
     private List<Die> chosenDiceList;
 
