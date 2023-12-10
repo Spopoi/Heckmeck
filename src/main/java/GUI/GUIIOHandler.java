@@ -146,6 +146,7 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showRolledDice(Dice dice) {
+        //TODO: aggiungere roll dadi
         dicePanel(dice);
     }
 
@@ -327,6 +328,11 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showBustMessage() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         printMessage("BUUUUUSTTTT!!!!");
     }
 
