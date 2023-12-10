@@ -26,22 +26,16 @@ public class Client implements Runnable{
     public Message message;
 
     public String text;
-
     public Message rxMessage;
-
     private boolean connected = false;
-
-    CliIOHandler cliIo;
-
+    IOHandler io;
     private boolean botMode = false;
-
-
-
     private int playerID;
 
-    public Client(boolean botMode){
+    public Client(boolean botMode, IOHandler io){
         this.botMode = botMode;
-        cliIo = new CliIOHandler();
+        this.io = io;
+        //cliIo = new CliIOHandler();
     }
 
 
@@ -58,15 +52,15 @@ public class Client implements Runnable{
 
         } catch (IOException e) {
             System.out.println("Error in starting client connection, check the IP address and try again");
-            startConnection(cliIo.askIPToConnect(), 51734);
+            startConnection(io.askIPToConnect(), 51734);
         }
     }
 
-public String sendMessage(String msg) {
-        out.println(msg);
-        String resp = "";
-        return resp;
-    }
+    public String sendMessage(String msg) {
+            out.println(msg);
+            String resp = "";
+            return resp;
+        }
 
     public String readRxBuffer(){
         String resp = null;
@@ -75,9 +69,8 @@ public String sendMessage(String msg) {
 
         } catch (IOException e) {
             System.out.println("Error in receiving data. Stopping client");
-            if(cliIo.wantToPlayAgain()) HeckmeckCLI.startMenu();
+            if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
             else System.exit(0);
-
         }
         return resp;
     }
@@ -116,28 +109,28 @@ public String sendMessage(String msg) {
 
     @Override
     public void run() {
-        commandInterpreter(botMode, cliIo);
+        commandInterpreter(botMode);
     }
 
     public static void main(String args[]){
-        Client cli = new Client(false);
-        cli.startConnection("127.0.0.1", 51734);
         CliIOHandler cliIo = new CliIOHandler();
+        Client cli = new Client(false, cliIo);
+        cli.startConnection("127.0.0.1", 51734);
+
         cliIo.showWelcomeMessage();
         cliIo.printMessage("Waiting for your turn to chose your name:");
 
 
-        cli.commandInterpreter(false, cliIo);
+        cli.commandInterpreter(false);
     }
 
-    void commandInterpreter(boolean botMode, IOHandler io){
+    void commandInterpreter(boolean botMode){
 
         int i = 0;
         while (true){
             if(connected){
                 rxMessage = readIncomingMessage();
-                Message txMessage;
-                String choice;
+
                 if(rxMessage != null){
                     switch (rxMessage.operation) {
                         case INIT:
@@ -146,49 +139,29 @@ public String sendMessage(String msg) {
                             break;
 
                         case GET_PLAYER_NAME:
-                            txMessage = new Message();
                             io.printMessage(rxMessage.text);
-                            txMessage.setOperation(Message.Action.RESPONSE);
-                            txMessage.setPlayerID(playerID);
                             io.printMessage("Select your name:");
-                            if(botMode) txMessage.setText("Player"+ playerID);
-                            else txMessage.setText(io.getInputString());
-                            cliIo.printMessage("You chose " + txMessage.text + ", wait for other players!");
-                            sendMessage(gson.toJson(txMessage));
+                            String playerName = perform_get_player_name(botMode);
+                            io.printMessage("You chose " + playerName + ", wait for other players!");
                             break;
 
                         case ASK_CONFIRM:
-                            txMessage = new Message();
                             io.printMessage(rxMessage.text);
-                            txMessage.setOperation(Message.Action.RESPONSE);
-                            promptEnterKey();
-                            choice = "nothing";
-                            txMessage.setText(choice);
-                            txMessage.setPlayerID(playerID);
-                            sendMessage(gson.toJson(txMessage));
+                            perform_ask_confirm();
                             break;
 
                         case GET_INPUT:
+                            io.printMessage(rxMessage.text);
                             if(!isYourTurn(rxMessage)) {
                                 sendAck();
                                 break;
                             }
-                            txMessage = new Message();
-                            io.printMessage(rxMessage.text);
-                            txMessage.setOperation(Message.Action.RESPONSE);
-                            //if(!botMode)choice = io.getInputString();
-                            //else choice = "";
-                            choice = io.getInputString();
-                            txMessage.setText(choice);
-                            txMessage.setPlayerID(playerID);
-                            sendMessage(gson.toJson(txMessage));
-
+                            perform_get_input();
                             break;
 
                         case UPDATE_TILES:
                             io.showBoardTiles(rxMessage.boardTiles);
                             sendAck();
-
                             break;
 
                         case UPDATE_PLAYER:
@@ -213,6 +186,7 @@ public String sendMessage(String msg) {
 
 
                         default:
+
                             break;
                         //TODO mettere un default
                     }
@@ -223,6 +197,40 @@ public String sendMessage(String msg) {
             }
 
         }
+    }
+
+    private void perform_get_input() {
+        String choice;
+        Message txMessage;
+        txMessage = new Message();
+        txMessage.setOperation(Message.Action.RESPONSE);
+        choice = io.getInputString();
+        txMessage.setText(choice);
+        txMessage.setPlayerID(playerID);
+        sendMessage(gson.toJson(txMessage));
+    }
+
+    private void perform_ask_confirm() {
+        Message txMessage;
+        String choice;
+        txMessage = new Message();
+        txMessage.setOperation(Message.Action.RESPONSE);
+        promptEnterKey();
+        choice = "nothing";
+        txMessage.setText(choice);
+        txMessage.setPlayerID(playerID);
+        sendMessage(gson.toJson(txMessage));
+    }
+
+    private String perform_get_player_name(boolean botMode) {
+        Message txMessage;
+        txMessage = new Message();
+        txMessage.setOperation(Message.Action.RESPONSE);
+        txMessage.setPlayerID(playerID);
+        if(botMode) txMessage.setText("Player"+ playerID);
+        else txMessage.setText(io.getInputString());
+        sendMessage(gson.toJson(txMessage));
+        return txMessage.text;
     }
 
 
