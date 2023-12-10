@@ -29,11 +29,13 @@ public class HeckmeckCLI {
         io.showWelcomeMessage();
         if (io.wantToPlayRemote()) {
             if(io.wantToHost()){
-                startGameServer(io);
-                startLocalClient();
+                int numOfPlayers = io.chooseNumberOfPlayers();
+                startGameServer(numOfPlayers);
+
+                startLocalClient(io);
             }
             else{
-                startLocalClient(io.askIPToConnect());
+                startLocalClient(io.askIPToConnect(), io);
             }
         } else {
             Game game = new Game(io);
@@ -43,19 +45,19 @@ public class HeckmeckCLI {
 
     }
 
-    public static void startLocalClient(String IP){
-        Client cli = new Client(false);
+    public static void startLocalClient(String IP, CliIOHandler io){
+        Client cli = new Client(false, io);
         Thread cliThread = new Thread(cli);
         cliThread.start();
         cli.startConnection(IP, 51734);
 
     }
-    public static void startLocalClient(){
-        startLocalClient("127.0.0.1");
+    public static void startLocalClient(CliIOHandler io){
+        startLocalClient("127.0.0.1", io);
     }
-    public static void startGameServer(CliIOHandler io){
+    public static void startGameServer(int  numOfPlayers){
         GameServer gameServer = new GameServer();
-        gameServer.setNumberOfPlayers(io.chooseNumberOfPlayers());
+        gameServer.setNumberOfPlayers(numOfPlayers);
         new Thread(gameServer).start();
     }
 

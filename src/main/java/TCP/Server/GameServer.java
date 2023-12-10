@@ -22,7 +22,6 @@ public class GameServer implements Runnable {
     public GameServer() {
         try {
             ss = new ServerSocket(51734);
-
             this.numOfPlayers = 0;
 
         } catch (IOException e) {
