@@ -49,8 +49,6 @@ public class TestTCPIOHandler {
         Player pl2 = Player.generatePlayer(1);
         pl2.setPlayerName("1");
 
-
-
         Player[] players = {pl1, pl2};
         when(game.getPlayers()).thenReturn(players);
         when(game.getActualPlayer()).thenReturn(pl1);
@@ -58,6 +56,7 @@ public class TestTCPIOHandler {
         //when(game.getActualPlayer().getPlayerID()).thenReturn(0);
 
         io = new TCPIOHandler(sockets);
+        io.setGame(game);
     }
 
     @Test
@@ -96,10 +95,11 @@ public class TestTCPIOHandler {
     @Test
     public void testShowTurnBeginConfirm() {
         // Prepare test data
-        String playerName = "TestPlayer";
 
+        Player player = Player.generatePlayer(0);
+        player.setPlayerName("TestPlayer");
         // Perform the method under test
-        io.showTurnBeginConfirm(playerName);
+        io.showTurnBeginConfirm(player);
         // Verify that the correct messages are sent
         ArgumentCaptor<Message> messageCaptor = ArgumentCaptor.forClass(Message.class);
         // Verify broadcast message
@@ -136,6 +136,6 @@ public class TestTCPIOHandler {
         msg.setPlayerID(0);
         when(sockets.get(0).readReceivedMessage()).thenReturn(respMsg);
         boolean yn = io.wantToPick(10, 10);
-        Assertions.assertEquals(true,yn );
+        Assertions.assertEquals(true, yn );
     }
 }
