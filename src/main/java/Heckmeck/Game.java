@@ -42,7 +42,7 @@ public class Game {
     }
 
     private void playerTurn(){
-        io.showTurnBeginConfirm(actualPlayer.getName());
+        io.showTurnBeginConfirm(actualPlayer);
         //TODO il nome non serve più come parametro per showBeginConfirm()
         boolean isOnRun;
         do{
