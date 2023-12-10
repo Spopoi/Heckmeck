@@ -177,7 +177,7 @@ public class GUIIOHandler implements IOHandler {
         othersPlayerPane.setBorder(new EmptyBorder(new Insets(10,10,10,10)));
 
         JLabel scoreboardLabel = new JLabel("Scoreboard");
-        scoreboardLabel.setPreferredSize(new Dimension(250, 30));
+        scoreboardLabel.setPreferredSize(new Dimension(220, 30));
         scoreboardLabel.setFont(new Font("Serif", Font.BOLD, 30));
         scoreboardLabel.setAlignmentX(CENTER_ALIGNMENT);
         othersPlayerPane.add(scoreboardLabel);
@@ -202,7 +202,7 @@ public class GUIIOHandler implements IOHandler {
     private static JSeparator makeHorizontalSeparator() {
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-        separator.setMaximumSize(new Dimension(250,15));
+        separator.setMaximumSize(new Dimension(220,15));
         separator.setAlignmentX(Component.CENTER_ALIGNMENT);
         return separator;
     }
@@ -215,7 +215,7 @@ public class GUIIOHandler implements IOHandler {
         playerPanel.setOpaque(false);
 
         JLabel playerName = new JLabel(otherPlayer.getName());
-        playerName.setPreferredSize(new Dimension(250, 30));
+        playerName.setPreferredSize(new Dimension(220, 30));
         playerName.setFont(new Font("Serif", Font.BOLD, 25));
         playerName.setAlignmentX(CENTER_ALIGNMENT);
         playerPanel.add(playerName);
