@@ -3,7 +3,7 @@ package Heckmeck;
 public interface IOHandler {
     void printMessage(String message);
 
-    void showTurnBeginConfirm(String playerName);
+    void showTurnBeginConfirm(Player player);
     void showWelcomeMessage();
 
     boolean wantToPlayRemote();
@@ -82,4 +82,8 @@ public interface IOHandler {
     String getInputString();
 
     void printError(String text);
+
+    String askIPToConnect();
+
+    boolean wantToPlayAgain();
 }

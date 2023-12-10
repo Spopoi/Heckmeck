@@ -1,6 +1,5 @@
 package GUI;
 
-import GUI.Panels.ImagePanel;
 import GUI.Panels.PlayerDataPanel;
 import Heckmeck.*;
 
@@ -79,10 +78,20 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public void showTurnBeginConfirm(String playerName) {
+    public String askIPToConnect() {
+        return null;
+    }
+
+    @Override
+    public boolean wantToPlayAgain() {
+        return false;
+    }
+
+    @Override
+    public void showTurnBeginConfirm(Player player) {
         frame.getContentPane().removeAll();
         frame.repaint();
-        printMessage(playerName + " turn, press ok for starting: ");
+        printMessage(player.getName() + " turn, press ok for starting: ");
     }
 
     @Override

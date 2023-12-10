@@ -82,8 +82,8 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public void showTurnBeginConfirm(String playerName) {
-        String mainMessage = "# " + playerName + ": hit enter to start your turn #";
+    public void showTurnBeginConfirm(Player player) {
+        String mainMessage = "# " + player.getName() + ": hit enter to start your turn #";
         String separator = "#".repeat(mainMessage.length());
         printMessage(separator + newLine +
                 mainMessage + newLine +
