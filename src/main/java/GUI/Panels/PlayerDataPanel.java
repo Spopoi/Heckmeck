@@ -90,6 +90,7 @@ public class PlayerDataPanel extends ImagePanel{
         add(playerName);
     }
 
+    //TODO: refactoring tileNumber = -1
     private void initTilePanel(int tileNumber) {
         playerTilePanel.removeAll();
         JLabel lastTileLabel = new JLabel("Top tile: ");
@@ -99,8 +100,7 @@ public class PlayerDataPanel extends ImagePanel{
         playerTilePanel.add(Box.createRigidArea(new Dimension(100, 0)));
 
         JLabel lastPlayerTile = new JLabel();
-        if(tileNumber != -1) lastPlayerTile.setIcon(getTileIcon(tileNumber, 50, 40));
-        else lastPlayerTile.setText("No tiles");
+        if(tileNumber != -1) lastPlayerTile.setIcon(getTileIcon(tileNumber, 60, 50));
         playerTilePanel.add(lastPlayerTile);
     }
 
