@@ -146,13 +146,13 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showRolledDice(Dice dice) {
-        return;
+        dicePanel(dice);
     }
 
     // TODO: move method to the new signature
     @Override
     public boolean wantToPick(int actualDiceScore, int availableTileNumber) {
-        int result = showConfirmDialog(null, "Actual score: " + actualDiceScore + "\nDo you want to pick tile number " + availableTileNumber + "?");
+        int result = showConfirmDialog(null, "Actual score: " + actualDiceScore + "\nDo you want to pick tile " + availableTileNumber + "?");
         return result == JOptionPane.OK_OPTION;
     }
 
