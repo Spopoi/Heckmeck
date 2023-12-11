@@ -35,13 +35,13 @@ class Utils {
         return resourcePath;
     }
 
-    public static String collectionToText(Collection<?> collection) {
-        String collectionAsText = "";
+    public static String collectionToString(Collection<?> collection) {
+        TextBlock collectionAsTextBlock = new TextBlock("");
         for (var item : collection) {
             // at first iteration collectionAsText will have height=0 --> 2 spaces
-            collectionAsText = new TextBlockConcatenator(collectionAsText, item.toString(), 1).concatenate();
+            collectionAsTextBlock.concatenateWith(new TextBlock(item.toString()), 1);
         }
-        return collectionAsText;
+        return collectionAsTextBlock.toString();
     }
 
 }
