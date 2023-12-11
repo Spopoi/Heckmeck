@@ -64,7 +64,11 @@ public class Player {
     }
 
     public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+        this.playerName = fixWhiteCharacter(playerName);
+    }
+
+    private static String fixWhiteCharacter(String playerName) {
+        return playerName.strip().replace("\t", "    ");
     }
 
     public int getWormScore() {

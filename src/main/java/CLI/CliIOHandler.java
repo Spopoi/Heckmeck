@@ -94,7 +94,7 @@ public class CliIOHandler implements IOHandler {
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         printMessage("The available tiles on the board now are:");
-        printMessage(Utils.collectionToText(boardTiles.getTiles()) + newLine);
+        printMessage(Utils.collectionToString(boardTiles.getTiles()) + newLine);
     }
 
     @Override
@@ -109,12 +109,13 @@ public class CliIOHandler implements IOHandler {
 
         String actualPlayerInfo = fillActualPlayerInfoTemplate(FileReader.readTextFile(Utils.getActualPlayerInfoTemplate()), actualPlayer, dice);
 
-        printMessage(new TextBlockConcatenator(actualPlayerInfo, summaryTable.toString(), 12).concatenate() + newLine);
+        TextBlock playerData = new TextBlock(actualPlayerInfo).concatenateWith(new TextBlock(summaryTable.toString()), 12);
+        printMessage(playerData.toString() + newLine);
     }
 
     private String fillActualPlayerInfoTemplate(String actualPlayerInfoTemplate, Player actualPlayer, Dice dice) {
         return actualPlayerInfoTemplate.replace("$ACTUAL_PLAYER", actualPlayer.getName())
-                .replace("$CURRENT_TILES", Utils.collectionToText(actualPlayer.getPlayerTiles()))
+                .replace("$CURRENT_TILES", Utils.collectionToString(actualPlayer.getPlayerTiles()))
                 .replace("$CHOSEN_DICE", dice.getChosenDiceString())
                 .replace("$CURRENT_DICE_SCORE", String.valueOf(dice.getScore()))
                 .replace("$IS_WARM_SELECTED", String.valueOf(dice.isFaceChosen(Die.Face.WORM)));
@@ -148,7 +149,7 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showRolledDice(Dice dice) {
-        printMessage(Utils.collectionToText(dice.getDiceList()));
+        printMessage(Utils.collectionToString(dice.getDiceList()));
     }
 
     @Override

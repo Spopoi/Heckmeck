@@ -16,6 +16,7 @@ public class PlayerDataPanel extends ImagePanel{
     private JPanel playerDicePanel;
     private JLabel score;
     private JPanel playerTilePanel;
+    private final int panelWidth = 300;
 
     public PlayerDataPanel(String imagePath) {
         super(imagePath);
@@ -27,6 +28,7 @@ public class PlayerDataPanel extends ImagePanel{
         setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
 
         initPlayerNameLabel();
+        add(Box.createVerticalStrut(6));
         addHorizontalSeparator();
 
         initPlayerTilePanel();
@@ -39,7 +41,7 @@ public class PlayerDataPanel extends ImagePanel{
 
     private void addHorizontalSeparator() {
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        separator.setPreferredSize(new Dimension(300, 5)); // Imposta la dimensione preferita
+        separator.setPreferredSize(new Dimension(panelWidth, 5)); // Imposta la dimensione preferita
         separator.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0)); // Imposta il margine
         separator.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(separator);
@@ -47,7 +49,7 @@ public class PlayerDataPanel extends ImagePanel{
 
     private void initScoreLabel() {
         score = new JLabel();
-        score.setPreferredSize(new Dimension(300, 45));
+        score.setPreferredSize(new Dimension(panelWidth, 45));
         score.setFont(new Font("Serif", Font.PLAIN, 30));
         score.setForeground(Color.red);
         score.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -64,7 +66,7 @@ public class PlayerDataPanel extends ImagePanel{
 
         playerDicePanel = new JPanel();
         playerDicePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        playerDicePanel.setPreferredSize(new Dimension(300,120));
+        playerDicePanel.setPreferredSize(new Dimension(panelWidth,120));
         playerDicePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         playerDicePanel.setOpaque(false);
         add(playerDicePanel);
@@ -73,7 +75,7 @@ public class PlayerDataPanel extends ImagePanel{
     private void initPlayerTilePanel() {
         playerTilePanel = new JPanel();
         playerTilePanel.setLayout(new BoxLayout(playerTilePanel, BoxLayout.X_AXIS));
-        playerTilePanel.setPreferredSize(new Dimension(300,100));
+        playerTilePanel.setPreferredSize(new Dimension(panelWidth,100));
         playerTilePanel.setAlignmentX(LEFT_ALIGNMENT);
         playerTilePanel.setOpaque(false);
         initTilePanel(-1);
@@ -82,12 +84,13 @@ public class PlayerDataPanel extends ImagePanel{
 
     private void initPlayerNameLabel() {
         playerName = new JLabel();
-        playerName.setPreferredSize(new Dimension(300, 50));
+        playerName.setPreferredSize(new Dimension(panelWidth, 50));
         playerName.setFont(new Font("Serif", Font.BOLD, 30));
         playerName.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(playerName);
     }
 
+    //TODO: refactoring tileNumber = -1
     private void initTilePanel(int tileNumber) {
         playerTilePanel.removeAll();
         JLabel lastTileLabel = new JLabel("Top tile: ");
@@ -97,8 +100,7 @@ public class PlayerDataPanel extends ImagePanel{
         playerTilePanel.add(Box.createRigidArea(new Dimension(100, 0)));
 
         JLabel lastPlayerTile = new JLabel();
-        if(tileNumber != -1) lastPlayerTile.setIcon(getTileIcon(tileNumber, 50, 40));
-        else lastPlayerTile.setText("No tiles");
+        if(tileNumber != -1) lastPlayerTile.setIcon(getTileIcon(tileNumber, 60, 50));
         playerTilePanel.add(lastPlayerTile);
     }
 

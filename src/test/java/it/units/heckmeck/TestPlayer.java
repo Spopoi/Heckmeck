@@ -7,8 +7,13 @@ import exception.IllegalTileAddition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.stream.Stream;
+
 
 public class TestPlayer {
 
@@ -21,6 +26,24 @@ public class TestPlayer {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expectedName, player.getName()),
                 () -> Assertions.assertFalse(player.hasTile())
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("playerNamesWithWhiteCharactersAndTheirCleanedUpVersions")
+    void check_player_name_with_white_characters_are_correctly_cleaned_up(String passedName, String expectedName) {
+        Player player = Player.generatePlayer(0);
+        player.setPlayerName(passedName);
+
+        Assertions.assertEquals(expectedName, player.getName());
+    }
+
+    static Stream<Arguments> playerNamesWithWhiteCharactersAndTheirCleanedUpVersions() {
+        return Stream.of(
+                Arguments.of("Luigi    \t\n", "Luigi"),
+                Arguments.of("\t\n     Luigi", "Luigi"),
+                Arguments.of("\tLu\tigi\t", "Lu    igi"),
+                Arguments.of("Lu igi", "Lu igi")
         );
     }
 

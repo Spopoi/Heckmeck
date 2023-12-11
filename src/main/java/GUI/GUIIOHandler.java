@@ -4,6 +4,7 @@ import GUI.Panels.PlayerDataPanel;
 import Heckmeck.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,12 +59,12 @@ public class GUIIOHandler implements IOHandler {
             }});
 
     public GUIIOHandler(JFrame frame){
-        this.frame =frame;
-        this.dicePanel = new JPanel();
-        this.othersPlayerPane = new JPanel();
-        this.tilesPanel = new JPanel();
-        this.messagePanel = new JPanel();
-        this.playerPane = new PlayerDataPanel("src/main/java/GUI/Icons/table.jpg");
+        this.frame = frame;
+        dicePanel = new JPanel();
+        othersPlayerPane = new JPanel();
+        tilesPanel = new JPanel();
+        messagePanel = new JPanel();
+        playerPane = new PlayerDataPanel("src/main/java/GUI/Icons/table.jpg");
         frame.setVisible(true);
     }
 
@@ -154,7 +155,8 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showRolledDice(Dice dice) {
-        return;
+        //TODO: aggiungere roll dadi
+        dicePanel(dice);
     }
 
     // TODO: move method to the new signature
@@ -180,42 +182,88 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
-        frame.getContentPane().remove(othersPlayerPane);
-        othersPlayerPane = new JPanel();
-        othersPlayerPane.setLayout(new GridBagLayout());
-        othersPlayerPane.setPreferredSize(new Dimension(230, 200));
-        othersPlayerPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 20));
-        int index = 0;
+        othersPlayerPane = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
+        othersPlayerPane.setLayout(new BoxLayout(othersPlayerPane, BoxLayout.Y_AXIS));
+        othersPlayerPane.setBorder(new EmptyBorder(new Insets(10,10,10,10)));
+
+        JLabel scoreboardLabel = new JLabel("Scoreboard");
+        scoreboardLabel.setPreferredSize(new Dimension(220, 30));
+        scoreboardLabel.setFont(new Font("Serif", Font.BOLD, 30));
+        scoreboardLabel.setAlignmentX(CENTER_ALIGNMENT);
+        othersPlayerPane.add(scoreboardLabel);
+        othersPlayerPane.add(Box.createVerticalStrut(10));
+        othersPlayerPane.add(makeHorizontalSeparator());
+
         for (Player otherPlayer : players) {
             if (!player.equals(otherPlayer)) {
-                if (otherPlayer.hasTile()) {
-                    JLabel otherPlayerLabel = new JLabel("<html><b>" + otherPlayer.getName() + "</b>'s last tile: <br> Total worms: "+ otherPlayer.getWormScore() + " </html>");
-                    otherPlayerLabel.setFont(new Font("Serif", Font.PLAIN, 15));
-                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 20, 20, 5), 0, 0));
-
-                    JLabel otherPlayerLastTile = new JLabel(getTileIcon(otherPlayer.getLastPickedTile().getNumber(), 60,50));
-                    otherPlayerLastTile.setPreferredSize(new Dimension(10, 80));
-                    othersPlayerPane.add(otherPlayerLastTile, new GridBagConstraints(1, index, 1, 1, 1.0, 0.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 0, 20, 0), 0, 0));
-
-                } else {
-                    JLabel otherPlayerLabel = new JLabel("<html> <b>" + otherPlayer.getName() + "</b> : no tiles </html>");
-                    otherPlayerLabel.setFont(new Font("Serif", Font.PLAIN, 15));
-                    othersPlayerPane.add(otherPlayerLabel, new GridBagConstraints(0, index, 1, 1, 0.0, 1.0, GridBagConstraints.PAGE_START, GridBagConstraints.BOTH, new Insets(0, 0, 20, 0), 0, 0));
-
-                }
-                index++;
+                othersPlayerPane.add(makeOtherPlayerPanel(otherPlayer));
+                othersPlayerPane.add(makeHorizontalSeparator());
             }
         }
-        frame.add(othersPlayerPane, BorderLayout.EAST);
+        //TODO: Mettere scrollPane solo se tanti giocatori presenti
+        JScrollPane scrollPane = new JScrollPane(othersPlayerPane);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        frame.add(scrollPane, BorderLayout.EAST);
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    private static JSeparator makeHorizontalSeparator() {
+        JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+        separator.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+        separator.setMaximumSize(new Dimension(220,15));
+        separator.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return separator;
+    }
+
+    private JPanel makeOtherPlayerPanel(Player otherPlayer) {
+        JPanel playerPanel = new JPanel();
+        playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
+        playerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        playerPanel.setOpaque(false);
+
+        JLabel playerName = new JLabel(otherPlayer.getName());
+        playerName.setPreferredSize(new Dimension(220, 30));
+        playerName.setFont(new Font("Serif", Font.BOLD, 25));
+        playerName.setAlignmentX(CENTER_ALIGNMENT);
+        playerPanel.add(playerName);
+        playerPanel.add(Box.createVerticalStrut(8));
+
+        JLabel lastPlayerTile = new JLabel();
+        lastPlayerTile.setAlignmentX(CENTER_ALIGNMENT);
+        if(otherPlayer.hasTile()){
+            int tileNumber = otherPlayer.getLastPickedTile().getNumber();
+            lastPlayerTile.setIcon(getTileIcon(tileNumber, 60, 50));
+            playerPanel.add(lastPlayerTile);
+            playerPanel.add(Box.createVerticalStrut(10));
+        }
+        JLabel scoreLabel = new JLabel("Worm score: " + otherPlayer.getWormScore());
+        scoreLabel.setFont(new Font("Serif", Font.PLAIN, 20));
+        scoreLabel.setForeground(Color.RED);
+        scoreLabel.setAlignmentX(CENTER_ALIGNMENT);
+        playerPanel.add(scoreLabel);
+
+        return playerPanel;
     }
 
     @Override
     public Die.Face chooseDie(Player currentPlayer, Dice dice) {
         frame.getContentPane().remove(dicePanel);
         chosenFace = null;
+        rollDiceAnimation();
 
+        frame.getContentPane().remove(dicePanel);
         dicePanel(dice);
 
+        while (chosenFace == null) {
+            Thread.onSpinWait();
+        }
+        return chosenFace;
+    }
+
+    private void rollDiceAnimation() {
         Timer timer = new Timer(100, new ActionListener() {
             private int rollCount = 0;
 
@@ -226,7 +274,6 @@ public class GUIIOHandler implements IOHandler {
                         if (component instanceof JToggleButton dieButton) {
                             Die.Face randomFace = Die.generateDie().getDieFace();
                             dieButton.setIcon(getDieIcon(randomFace, 65));
-                            dieButton.setSelectedIcon(getDieIcon(randomFace, 65));
                         }
                     }
                     dicePanel.repaint();
@@ -237,7 +284,6 @@ public class GUIIOHandler implements IOHandler {
                         if (component instanceof JToggleButton dieButton) {
                             Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
                             dieButton.setIcon(getDieIcon(originalFace, 65));
-                            dieButton.setSelectedIcon(getDieIcon(originalFace, 65));
                         }
                     }
                     dicePanel.repaint();
@@ -246,12 +292,6 @@ public class GUIIOHandler implements IOHandler {
         });
 
         timer.start();
-
-        while (chosenFace == null) {
-            Thread.onSpinWait();
-        }
-
-        return chosenFace;
     }
 
     private void dicePanel(Dice dice) {
@@ -292,12 +332,14 @@ public class GUIIOHandler implements IOHandler {
         frame.revalidate();
         //frame.repaint();
     }
-    //frame.setVisible(true);
-
-
 
     @Override
     public void showBustMessage() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         printMessage("BUUUUUSTTTT!!!!");
     }
 

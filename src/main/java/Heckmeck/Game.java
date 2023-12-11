@@ -58,7 +58,12 @@ public class Game {
     }
 
     private boolean pick(){
-        return (canPick() && wantToPick());
+        //assume worm chosen
+        if(canPick() &&  (dice.getChosenDice().size() >= Dice.initialNumOfDice || wantToPick())) {
+            pickTile();
+            return true;
+        }
+        return false;
     }
 
     private boolean canPick(){
@@ -68,17 +73,20 @@ public class Game {
 
     private boolean wantToPick() {
         // Assume canPick()
-        Tile searchedTile = Tile.generateTile(dice.getScore());
-        Tile availableTile = boardTiles.smallerTileNearestTo(searchedTile);  // if canPick() should never return null "theoretically"
-        if (io.wantToPick(actualPlayer, searchedTile.getNumber(), availableTile.getNumber())) {
-            boardTiles.remove(availableTile);
-            actualPlayer.pickTile(availableTile);
-            return true;
-        }
-        return false;
+        int diceScore = dice.getScore();
+        Tile availableTile = boardTiles.nearestTile(diceScore);
+        return io.wantToPick(diceScore, availableTile.getNumber());
+    }
+
+    private void pickTile(){
+        Tile availableTile = boardTiles.nearestTile(dice.getScore());
+        boardTiles.remove(availableTile);
+        actualPlayer.pickTile(availableTile);
+        io.printMessage("You got tile number " + availableTile.getNumber() +"!");
     }
 
     private boolean steal(){
+        //assume worm chosen
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;
         for(Player robbedPlayer : players){
@@ -94,16 +102,14 @@ public class Game {
 
     //TODO: rolli anche se finisci i dadi
     private boolean roll(){
-
         io.askRollDiceConfirmation(actualPlayer.getName());
         dice.rollDice();
-
         io.showPlayerData(actualPlayer, dice, players);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();
             dice.chooseDice(chosenDieFace);
             return true;
-        } else{
+        }else{
             bust();
             return false;
         }
