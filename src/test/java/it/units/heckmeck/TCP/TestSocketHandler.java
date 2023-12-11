@@ -47,7 +47,7 @@ class TestSocketHandler {
     @Test
     void testWriteMessage() {
 
-        Message msg = new Message();
+        Message msg = Message.generateMessage();
         msg.setPlayerID(1);
         msg.setText("Test Line");
         String msgString = gson.toJson(msg);
@@ -59,7 +59,7 @@ class TestSocketHandler {
 
     @Test
     void testInitClient() throws IOException {
-        Message msg = new Message();
+        Message msg = Message.generateMessage();
         msg.setPlayerID(1);
         msg.setOperation(Message.Action.INIT);
         msg.setText("Hello");

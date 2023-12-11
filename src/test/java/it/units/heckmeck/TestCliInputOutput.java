@@ -18,6 +18,8 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.stream.Stream;
 
+import static org.mockito.Mockito.mock;
+
 public class TestCliInputOutput {
 
     private static final String INITIAL_BOARD = getInitialBoard();
@@ -52,7 +54,8 @@ public class TestCliInputOutput {
         CliIOHandler inputHandler = new CliIOHandler();
 
         Die.Face expectedFace = Die.getFaceByString(faceAsString);
-        Die.Face obtainedFace = inputHandler.chooseDie(null);
+        Player player = mock(Player.class);
+        Die.Face obtainedFace = inputHandler.chooseDie(player, null);
 
         Assertions.assertEquals(expectedFace, obtainedFace);
     }
@@ -161,9 +164,9 @@ public class TestCliInputOutput {
         System.setOut(new PrintStream(fakeStandardOutput));
         CliIOHandler inputOutputHandler = new CliIOHandler();
         Dice dice = Dice.init();
-
+        Player player = mock(Player.class);
         try {
-            inputOutputHandler.chooseDie(dice);
+            inputOutputHandler.chooseDie(player, dice);
         } catch (java.util.NoSuchElementException ex) {
             String expectedResponse = """
                     Pick one unselected face:
@@ -183,9 +186,10 @@ public class TestCliInputOutput {
         System.setOut(new PrintStream(fakeStandardOutput));
         CliIOHandler inputOutputHandler = new CliIOHandler();
         Dice dice = Dice.init();
+        Player player = mock(Player.class);
 
         try {
-            inputOutputHandler.chooseDie(dice);
+            inputOutputHandler.chooseDie(player, dice);
         } catch (java.util.NoSuchElementException ex) {
             String expectedResponse = """
                     Pick one unselected face:
@@ -204,8 +208,10 @@ public class TestCliInputOutput {
         System.setOut(new PrintStream(fakeStandardOutput));
         CliIOHandler inputOutputHandler = new CliIOHandler();
 
+        Player player = mock(Player.class);
+
         try {
-            inputOutputHandler.wantToPick(1, 1);
+            inputOutputHandler.wantToPick(player, 1, 1);
         } catch (java.util.NoSuchElementException ex) {
             String expectedResponse = """
                     Your actual score is: 1
@@ -226,9 +232,9 @@ public class TestCliInputOutput {
         ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
         System.setOut(new PrintStream(fakeStandardOutput));
         CliIOHandler inputOutputHandler = new CliIOHandler();
-
+        Player player = mock(Player.class);
         try {
-            inputOutputHandler.wantToPick(1, 1);
+            inputOutputHandler.wantToPick(player, 1, 1);
         } catch (java.util.NoSuchElementException ex) {
             String expectedResponse = """
                     Your actual score is: 1

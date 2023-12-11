@@ -5,17 +5,11 @@ import Heckmeck.Player;
 import TCP.Message;
 import TCP.Server.SocketHandler;
 import TCP.Server.TCPIOHandler;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +33,7 @@ public class TestTCPIOHandler {
         sockets.add(client1);
         sockets.add(client2);
 
-        msg = new Message();
+        msg = Message.generateMessage();
         msg.setPlayerID(0);
         msg.setText("Test Line");
 
@@ -56,12 +50,11 @@ public class TestTCPIOHandler {
         //when(game.getActualPlayer().getPlayerID()).thenReturn(0);
 
         io = new TCPIOHandler(sockets);
-        io.setGame(game);
     }
 
     @Test
     public void testGetOtherPlayers(){
-        List<SocketHandler> others = io.getOtherPlayers();
+        List<SocketHandler> others = io.getOtherPlayersSockets(game.getActualPlayer());
         SocketHandler cl1 = sockets.get(1);
         SocketHandler cl2 = others.get(0);
         Assertions.assertEquals(cl1, cl2);
@@ -110,12 +103,12 @@ public class TestTCPIOHandler {
 
         verify(sockets.get(1)).writeMessage(messageCaptor.capture());
         capturedMessage = messageCaptor.getValue();
-        assertEquals("This is 0's turn, please wait for yours", capturedMessage.text);
+        assertEquals("This is TestPlayer's turn, please wait for yours", capturedMessage.text);
         assertEquals(Message.Action.INFO, capturedMessage.operation);
     }
     @Test
     public void testChoosePlayerName(){
-        Message respMsg = new Message();
+        Message respMsg = Message.generateMessage();
         respMsg.setText("playerName");
         msg.setActualPlayer(game.getPlayers()[0]);
         msg.setOperation(Message.Action.GET_PLAYER_NAME);
@@ -128,14 +121,15 @@ public class TestTCPIOHandler {
 
     @Test
     public void testWantToPick(){
-        Message respMsg = new Message();
+        Message respMsg = Message.generateMessage();
         respMsg.setText("y");
         msg.setActualPlayer(game.getPlayers()[0]);
         msg.setOperation(Message.Action.GET_INPUT);
         msg.setText("Do you want to pick tile n. 10 ?");
         msg.setPlayerID(0);
         when(sockets.get(0).readReceivedMessage()).thenReturn(respMsg);
-        boolean yn = io.wantToPick(10, 10);
+
+        boolean yn = io.wantToPick(game.getActualPlayer(), 10, 10);
         Assertions.assertEquals(true, yn );
     }
 }
