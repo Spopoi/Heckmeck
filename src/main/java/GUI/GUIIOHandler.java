@@ -241,11 +241,19 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public Die.Face chooseDie(Dice dice) {
-        frame.getContentPane().remove(dicePanel);
         chosenFace = null;
+        rollDiceAnimation();
 
+        frame.getContentPane().remove(dicePanel);
         dicePanel(dice);
 
+        while (chosenFace == null) {
+            Thread.onSpinWait();
+        }
+        return chosenFace;
+    }
+
+    private void rollDiceAnimation() {
         Timer timer = new Timer(100, new ActionListener() {
             private int rollCount = 0;
 
@@ -256,7 +264,6 @@ public class GUIIOHandler implements IOHandler {
                         if (component instanceof JToggleButton dieButton) {
                             Die.Face randomFace = Die.generateDie().getDieFace();
                             dieButton.setIcon(getDieIcon(randomFace, 65));
-                            dieButton.setSelectedIcon(getDieIcon(randomFace, 65));
                         }
                     }
                     dicePanel.repaint();
@@ -267,7 +274,6 @@ public class GUIIOHandler implements IOHandler {
                         if (component instanceof JToggleButton dieButton) {
                             Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
                             dieButton.setIcon(getDieIcon(originalFace, 65));
-                            dieButton.setSelectedIcon(getDieIcon(originalFace, 65));
                         }
                     }
                     dicePanel.repaint();
@@ -276,12 +282,6 @@ public class GUIIOHandler implements IOHandler {
         });
 
         timer.start();
-
-        while (chosenFace == null) {
-            Thread.onSpinWait();
-        }
-
-        return chosenFace;
     }
 
     private void dicePanel(Dice dice) {
@@ -322,9 +322,6 @@ public class GUIIOHandler implements IOHandler {
         frame.revalidate();
         //frame.repaint();
     }
-    //frame.setVisible(true);
-
-
 
     @Override
     public void showBustMessage() {
