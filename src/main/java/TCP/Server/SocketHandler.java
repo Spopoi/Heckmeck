@@ -17,7 +17,6 @@ public class SocketHandler implements Runnable{
     String playerName;
     ObjectOutputStream objectOutputStream;
     InputStream inputStream;
-    Gson gson = new Gson();
 
     public SocketHandler(int playerId, BufferedReader in, PrintWriter out) {
         this.in = in;
@@ -51,16 +50,16 @@ public class SocketHandler implements Runnable{
     }
 
     public Message readReceivedMessage(){
-        return gson.fromJson(rxString, Message.class);
+        return Message.fromJSON(rxString);
     }
 
     public Message writeMessage(Message message){
-        writeLine(gson.toJson(message));
-        return gson.fromJson(rxString, Message.class);
+        writeLine(message.toJSON());
+        return Message.fromJSON(rxString);
     }
 
     public boolean initClient(){
-        Message msg = new Message();
+        Message msg = Message.generateMessage();
         System.out.println("Socket handler init client: " + playerId);
         msg.setPlayerID(playerId);
         msg.setOperation(Message.Action.INIT);

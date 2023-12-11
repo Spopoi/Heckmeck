@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class Message implements Serializable {
 
-
+    static Gson gson = new Gson();
     public Dice dice;
     public BoardTiles boardTiles;
     public Player actualPlayer;
@@ -19,9 +19,15 @@ public class Message implements Serializable {
     public int playerID;
 
 
-    public Message(){
+    private Message(){
 
     }
+
+    public static Message generateMessage(){
+        return new Message();
+    }
+
+
 
 
     public  enum Action {
@@ -70,5 +76,12 @@ public class Message implements Serializable {
 
     public void setPlayers(Player[] players) {
         this.players = (players);
+    }
+
+    public String toJSON(){
+        return gson.toJson(this, Message.class);
+    }
+    public static Message fromJSON(String json){
+        return gson.fromJson(json, Message.class);
     }
 }
