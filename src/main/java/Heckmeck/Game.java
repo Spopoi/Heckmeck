@@ -75,7 +75,7 @@ public class Game {
         // Assume canPick()
         int diceScore = dice.getScore();
         Tile availableTile = boardTiles.nearestTile(diceScore);
-        return io.wantToPick(diceScore, availableTile.getNumber());
+        return io.wantToPick(actualPlayer, diceScore, availableTile.getNumber());
     }
 
     private void pickTile(){

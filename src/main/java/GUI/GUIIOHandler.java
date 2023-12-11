@@ -1,5 +1,6 @@
 package GUI;
 
+import GUI.Panels.ImagePanel;
 import GUI.Panels.PlayerDataPanel;
 import Heckmeck.*;
 
@@ -161,21 +162,21 @@ public class GUIIOHandler implements IOHandler {
 
     // TODO: move method to the new signature
     @Override
-    public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
-        int result = showConfirmDialog(null, "Do you want to pick? Your actual score is " +actualDiceScore);
+    public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
+        int result = showConfirmDialog(null, "Actual score: " + actualDiceScore + "\nDo you want to pick tile " + availableTileNumber + "?");
         return result == JOptionPane.OK_OPTION;
     }
 
     @Override
-    public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
+    public boolean wantToSteal(Player player, Player robbedPlayer) {
         int result = showConfirmDialog(null, "Do you want to steal tile #" + robbedPlayer.getLastPickedTile().getNumber() + " from "+ robbedPlayer.getName()+"?");
         return result == JOptionPane.OK_OPTION;
     }
 
     @Override
-    public void showPlayerData(Player currentPlayer, Dice dice, Player[] players) {
-        showOthersPlayerPanel(currentPlayer, players);
-        playerPane.update(currentPlayer, dice);
+    public void showPlayerData(Player player, Dice dice, Player[] players) {
+        showOthersPlayerPanel(player, players);
+        playerPane.update(player, dice);
         frame.add(playerPane, BorderLayout.WEST);
         frame.revalidate();
         frame.repaint();
@@ -249,8 +250,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public Die.Face chooseDie(Player currentPlayer, Dice dice) {
-        frame.getContentPane().remove(dicePanel);
+    public Die.Face chooseDie(Player player, Dice dice) {
         chosenFace = null;
         rollDiceAnimation();
 
@@ -354,7 +354,7 @@ public class GUIIOHandler implements IOHandler {
         Image newimg = img.getScaledInstance(width , height,  java.awt.Image.SCALE_SMOOTH ) ;
         return new ImageIcon( newimg );
     }
-//TODO: vedere se spostare
+    //TODO: vedere se spostare
     public static ImageIcon getDieIcon(Die.Face face, int size){
         ImageIcon icon = new ImageIcon(faceToIconPath.get(face));
         Image img = icon.getImage() ;
