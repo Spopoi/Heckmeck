@@ -121,7 +121,7 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public boolean wantToPick(int actualDiceScore, int availableTileNumber) {
+    public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
         printMessage("Your actual score is: " + actualDiceScore);
         printMessage("Do you want to pick tile number " + availableTileNumber + " from board?" + newLine +
                 "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
@@ -129,7 +129,7 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public boolean wantToSteal(Player robbedPlayer) {
+    public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
         printMessage("Do you want to steal tile number " + robbedPlayer.getLastPickedTile().getNumber() +
                 " from " + robbedPlayer.getName() +
                 "? Press 'y' for stealing or 'n' for continuing your turn:");
@@ -152,7 +152,7 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public Die.Face chooseDie(Dice dice) {
+    public Die.Face chooseDie(Player currentPlayer, Dice dice) {
         // TODO: bug input infinite loop
         printMessage("Pick one unselected face:");
         while (true) {

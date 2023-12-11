@@ -159,21 +159,21 @@ public class GUIIOHandler implements IOHandler {
 
     // TODO: move method to the new signature
     @Override
-    public boolean wantToPick(int actualDiceScore, int availableTileNumber) {
+    public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
         int result = showConfirmDialog(null, "Do you want to pick? Your actual score is " +actualDiceScore);
         return result == JOptionPane.OK_OPTION;
     }
 
     @Override
-    public boolean wantToSteal(Player robbedPlayer) {
+    public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
         int result = showConfirmDialog(null, "Do you want to steal tile #" + robbedPlayer.getLastPickedTile().getNumber() + " from "+ robbedPlayer.getName()+"?");
         return result == JOptionPane.OK_OPTION;
     }
 
     @Override
-    public void showPlayerData(Player player, Dice dice, Player[] players) {
-        showOthersPlayerPanel(player, players);
-        playerPane.update(player, dice);
+    public void showPlayerData(Player currentPlayer, Dice dice, Player[] players) {
+        showOthersPlayerPanel(currentPlayer, players);
+        playerPane.update(currentPlayer, dice);
         frame.add(playerPane, BorderLayout.WEST);
         frame.revalidate();
         frame.repaint();
@@ -210,7 +210,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public Die.Face chooseDie(Dice dice) {
+    public Die.Face chooseDie(Player currentPlayer, Dice dice) {
         frame.getContentPane().remove(dicePanel);
         chosenFace = null;
 
