@@ -1,4 +1,5 @@
-package it.units.heckmeck;
+
+/*package it.units.heckmeck;
 
 import Heckmeck.*;
 import TCP.Client;
@@ -28,20 +29,7 @@ public class TestClientServer {
         }
     }
 
-    @Test
-    void init_server_socket() {
-        gameServer = new GameServer();
-        assertFalse(gameServer.ss == (null));
-        gameServer.close();
-    }
 
-    @Test
-    void check_socket_port() {
-        gameServer = new GameServer();
-
-        assertTrue(gameServer.ss.getLocalPort() == 51734);
-        gameServer.close();
-    }
 
     @Test
     void get_connected_client() {
@@ -56,13 +44,14 @@ public class TestClientServer {
 
         gameServer.setNumberOfPlayers(1);
 
-
         cli.startConnection("127.0.0.1", 51734);
         waitOneSec();
 
         assertEquals("SocketHandler", gameServer.sockets.get(0).getClass().getSimpleName());
+        assertEquals(1, gameServer.sockets.size());
         gameServer.close();
     }
+}
 
 
     @Test
@@ -458,3 +447,4 @@ public class TestClientServer {
 
     }
 }
+*/

@@ -1,5 +1,7 @@
 package GUI.Panels;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -7,6 +9,8 @@ import java.awt.event.ActionListener;
 import static GUI.HeckmeckGUI.*;
 
 public class MenuPanel extends ImagePanel {
+
+    private final Font buttonFont = new Font(UIManager.getFont("Button.font").getName(), Font.BOLD, 14);
 
     public MenuPanel() {
 
@@ -23,13 +27,16 @@ public class MenuPanel extends ImagePanel {
         buttonsPanel.setPreferredSize(new Dimension(300, 200));
         buttonsPanel.setOpaque(false);
 
-        JButton playButton = createButton("Play", e -> switchToGamePanel());
+        JButton playButton = createButton("PLAY", e -> switchToGamePanel());
+        playButton.setFont(buttonFont);
         buttonsPanel.add(playButton);
 
-        JButton rulesButton = createButton("Rules", e -> switchToRulesPanel());
+        JButton rulesButton = createButton("RULES", e -> switchToRulesPanel());
+        rulesButton.setFont(buttonFont);
         buttonsPanel.add(rulesButton);
 
-        JButton settingsButton = createButton("Settings", e -> switchToSettingsPanel());
+        JButton settingsButton = createButton("SETTINGS", e -> switchToSettingsPanel());
+        settingsButton.setFont(buttonFont);
         buttonsPanel.add(settingsButton);
 
         return buttonsPanel;

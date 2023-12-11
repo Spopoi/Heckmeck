@@ -3,7 +3,7 @@ package TCP.Server;
 import Heckmeck.Game;
 import TCP.Client;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -22,7 +22,7 @@ public class GameServer implements Runnable {
     public GameServer() {
         try {
             ss = new ServerSocket(51734);
-            io = new TCPIOHandler(this);
+
             this.numOfPlayers = 0;
 
         } catch (IOException e) {
@@ -38,6 +38,7 @@ public class GameServer implements Runnable {
 
     public void run() {
         try {
+            //TODO spostare messaggi in un writer
             System.out.println("You are now hosting on this machine: tell your IP address to your friends!");
 
             System.out.println(getIPAddress());
@@ -48,9 +49,10 @@ public class GameServer implements Runnable {
             System.out.println("Error in acceptConnections()");
         }
 
+        io = new TCPIOHandler(sockets);
         game = new Game(io);
+        io.setGame(game);
         game.init();
-
         game.play();
     }
 
@@ -62,10 +64,24 @@ public class GameServer implements Runnable {
             Socket clientSocket;
 
             clientSocket = ss.accept();
+
             System.out.println("Accepted incoming connection #: " + playerID);
 
             if (clientSocket.isConnected()) {
-                this.sockets.add(new SocketHandler(clientSocket, playerID));
+                OutputStream outputStream;
+                InputStream inputStream;
+                try {
+                    outputStream = clientSocket.getOutputStream();
+                    inputStream = clientSocket.getInputStream();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                PrintWriter out = new PrintWriter(outputStream, true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+
+                //IOBuffer IOBuffer = new IOBuffer(in, out);
+
+                this.sockets.add(new SocketHandler(playerID, in, out));
                 playerID++;
             }
             if (playerID == 8 || playerID == numOfPlayers) {

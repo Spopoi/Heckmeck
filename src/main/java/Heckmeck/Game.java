@@ -11,14 +11,16 @@ public class Game {
     private final IOHandler io;
 
     private Player actualPlayer;
+    private int actualPlayerID;
 
     public Game(IOHandler io) {
        this.io = io;
     }
 
     public void init(){
-
+        //TODO: Risolvere bug quando prendi ultimo dado bust automatico
         int numberOfPlayers = io.chooseNumberOfPlayers();
+
         this.players = setupPlayers(numberOfPlayers);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
@@ -41,6 +43,7 @@ public class Game {
 
     private void playerTurn(){
         io.showTurnBeginConfirm(actualPlayer.getName());
+        //TODO il nome non serve più come parametro per showBeginConfirm()
         boolean isOnRun;
         do{
             io.showBoardTiles(boardTiles);
@@ -55,7 +58,12 @@ public class Game {
     }
 
     private boolean pick(){
-        return (canPick() && wantToPick());
+        //assume worm chosen
+        if(canPick() &&  (dice.getChosenDice().size() >= Dice.initialNumOfDice || wantToPick())) {
+            pickTile();
+            return true;
+        }
+        return false;
     }
 
     private boolean canPick(){
@@ -65,17 +73,20 @@ public class Game {
 
     private boolean wantToPick() {
         // Assume canPick()
-        Tile searchedTile = Tile.generateTile(dice.getScore());
-        Tile availableTile = boardTiles.smallerTileNearestTo(searchedTile);  // if canPick() should never return null "theoretically"
-        if (io.wantToPick(searchedTile.getNumber(), availableTile.getNumber())) {
-            boardTiles.remove(availableTile);
-            actualPlayer.pickTile(availableTile);
-            return true;
-        }
-        return false;
+        int diceScore = dice.getScore();
+        Tile availableTile = boardTiles.nearestTile(diceScore);
+        return io.wantToPick(diceScore, availableTile.getNumber());
+    }
+
+    private void pickTile(){
+        Tile availableTile = boardTiles.nearestTile(dice.getScore());
+        boardTiles.remove(availableTile);
+        actualPlayer.pickTile(availableTile);
+        io.printMessage("You got tile number " + availableTile.getNumber() +"!");
     }
 
     private boolean steal(){
+        //assume worm chosen
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;
         for(Player robbedPlayer : players){
@@ -91,16 +102,14 @@ public class Game {
 
     //TODO: rolli anche se finisci i dadi
     private boolean roll(){
-
         io.askRollDiceConfirmation(actualPlayer.getName());
         dice.rollDice();
-
         io.showPlayerData(actualPlayer, dice, players);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();
             dice.chooseDice(chosenDieFace);
             return true;
-        } else{
+        }else{
             bust();
             return false;
         }
@@ -130,19 +139,24 @@ public class Game {
     private Player[] setupPlayers(int numberOfPlayers) {
         Player[] playersList = new Player[numberOfPlayers];
         for(int i=0; i<numberOfPlayers; i++){
+            playersList[i] = Player.generatePlayer(i);
+            this.actualPlayer = playersList[i];
             String playerName = io.choosePlayerName(i);
             while(isNameAlreadyPicked(playerName,playersList)){
                 io.printError(playerName + " Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(i);
             }
-            playersList[i] = Player.generatePlayer(playerName);
-            playersList[i].setPlayerID(i); // TODO Modificato da dew54.. da fare "meglio"
+            playersList[i].setPlayerName(playerName);
+
         }
         return playersList;
     }
 
     private boolean isNameAlreadyPicked(String name, Player[] playersList){
-        return Arrays.stream(playersList).filter(Objects::nonNull).anyMatch(player -> player.getName().equals(name));
+        return Arrays.stream(playersList).filter(Objects::nonNull).anyMatch(player -> {
+            String playerName = player.getName();
+            return playerName != null && playerName.equals(name);
+        });
     }
 
     public Player[] getPlayers(){

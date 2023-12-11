@@ -20,7 +20,8 @@ public class TestPlayer {
     @ParameterizedTest
     @CsvSource(value = {"Luigi, Luigi", "Mario, Mario", "Sara, Sara"})
     void check_player_initialization(String passedName, String expectedName) {
-        Player player = Player.generatePlayer(passedName);
+        Player player = Player.generatePlayer(0);
+        player.setPlayerName(passedName);
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expectedName, player.getName()),
@@ -31,7 +32,8 @@ public class TestPlayer {
     @ParameterizedTest
     @MethodSource("playerNamesWithWhiteCharactersAndTheirCleanedUpVersions")
     void check_player_name_with_white_characters_are_correctly_cleaned_up(String passedName, String expectedName) {
-        Player player = Player.generatePlayer(passedName);
+        Player player = Player.generatePlayer(0);
+        player.setPlayerName(passedName);
 
         Assertions.assertEquals(expectedName, player.getName());
     }
@@ -48,7 +50,7 @@ public class TestPlayer {
     @ParameterizedTest
     @ValueSource(ints = {21, 22, 23, 24})
     void player_add_tile(int tileNumber) {
-        Player player = Player.generatePlayer("Luigi");
+        Player player = Player.generatePlayer(0);
         Tile desiredTile = Tile.generateTile(tileNumber);
         player.pickTile(desiredTile);
         Assertions.assertEquals(desiredTile, player.getLastPickedTile());
@@ -57,8 +59,8 @@ public class TestPlayer {
     @Test
     void check_player_pick_one_tile_from_another_player() {
         BoardTiles board = BoardTiles.init();
-        Player robbed = Player.generatePlayer("Derubato");
-        Player robber = Player.generatePlayer("Ladro");
+        Player robbed = Player.generatePlayer(0);
+        Player robber = Player.generatePlayer(1);
         Tile desiredTile = Tile.generateTile(21);
         robbed.pickTile(desiredTile);
         robber.stealTileFromPlayer(robbed);
@@ -69,7 +71,7 @@ public class TestPlayer {
     @Test
     void check_that_player_can_not_add_twice_the_same_tile_on_its_own_stack() {
         Tile newTile = Tile.generateTile(21);
-        Player player = Player.generatePlayer("Luigi");
+        Player player = Player.generatePlayer(0);
         String expectedMessage = "Tile number 21 is already present in the collection";
 
         player.pickTile(newTile);
@@ -80,9 +82,9 @@ public class TestPlayer {
     }
 
     @Test
-    void check_cannot_steal_from_an_empty_player_stack() {
-        Player player = Player.generatePlayer("Ladro");
-        Player robbedPlayer = Player.generatePlayer("Derubato");
+    void check_cannot_steal_from_an_empty_player_stack(){
+        Player player = Player.generatePlayer(0);
+        Player robbedPlayer = Player.generatePlayer(1);
         int score = 30;
         Assertions.assertFalse(player.canStealFrom(robbedPlayer, score));
     }
@@ -90,16 +92,16 @@ public class TestPlayer {
 
     @ParameterizedTest
     @ValueSource(ints = {21, 23, 24, 25, 30})
-    void check_cannot_steal_tile_with_not_equal_score(int score) {
-        Player player = Player.generatePlayer("Ladro");
-        Player robbedPlayer = Player.generatePlayer("Derubato");
+    void check_cannot_steal_tile_with_not_equal_score(int score){
+        Player player = Player.generatePlayer(0);
+        Player robbedPlayer = Player.generatePlayer(1);
         robbedPlayer.pickTile(Tile.generateTile(22));
         Assertions.assertFalse(player.canStealFrom(robbedPlayer, score));
     }
 
     @Test
     void check_correctness_of_last_picked_tile_info_while_has_no_tiles() {
-        Player player = Player.generatePlayer("Luigi");
+        Player player = Player.generatePlayer(0);
         String expectedInfo = "No tiles";
 
         String actualInfo = player.getTopTileInfo();
@@ -121,7 +123,7 @@ public class TestPlayer {
                 33       |  33 ~~~~
             """)
     void check_correctness_of_last_picked_tile_info_while_has_tiles(int tileNumber, String expectedInfo) {
-        Player player = Player.generatePlayer("Luigi");
+        Player player = Player.generatePlayer(0);
 
         player.pickTile(Tile.generateTile(tileNumber));
         String actualInfo = player.getTopTileInfo();
@@ -131,7 +133,7 @@ public class TestPlayer {
 
     @Test
     void check_total_worms_collected() {
-        Player player = Player.generatePlayer("Luigi");
+        Player player = Player.generatePlayer(0);
         Tile tile21 = Tile.generateTile(21);
         Tile tile25 = Tile.generateTile(25);
         Tile tile29 = Tile.generateTile(29);
