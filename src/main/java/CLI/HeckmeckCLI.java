@@ -5,7 +5,11 @@ import TCP.Client;
 import TCP.Server.GameServer;
 import TCP.Server.TCPIOHandler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class HeckmeckCLI {
     public static void main(String[] args) {
@@ -46,10 +50,24 @@ public class HeckmeckCLI {
     }
 
     public static void startLocalClient(String IP, CliIOHandler io){
-        Client cli = new Client(false, io);
+
+
+        Socket clientSocket = null;
+        PrintWriter out;
+        BufferedReader in;
+        try {
+            clientSocket = new Socket("127.0.0.1", 51734);
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Client cli = new Client(false, io, in, out);
         Thread cliThread = new Thread(cli);
         cliThread.start();
-        cli.startConnection(IP, 51734);
+        cli.commandInterpreter(false);
+        //cli.startConnection(IP, 51734);
 
     }
     public static void startLocalClient(CliIOHandler io){

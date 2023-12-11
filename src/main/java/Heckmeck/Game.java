@@ -70,7 +70,7 @@ public class Game {
         // Assume canPick()
         Tile searchedTile = Tile.generateTile(dice.getScore());
         Tile availableTile = boardTiles.smallerTileNearestTo(searchedTile);  // if canPick() should never return null "theoretically"
-        if (io.wantToPick(searchedTile.getNumber(), availableTile.getNumber())) {
+        if (io.wantToPick(actualPlayer, searchedTile.getNumber(), availableTile.getNumber())) {
             boardTiles.remove(availableTile);
             actualPlayer.pickTile(availableTile);
             return true;
@@ -83,7 +83,7 @@ public class Game {
         if(playerScore < Tile.tileMinNumber) return false;
         for(Player robbedPlayer : players){
             if(!robbedPlayer.equals(actualPlayer) && actualPlayer.canStealFrom(robbedPlayer,playerScore)){
-                if(io.wantToSteal(robbedPlayer)){
+                if(io.wantToSteal(actualPlayer, robbedPlayer)){
                     actualPlayer.stealTileFromPlayer(robbedPlayer);
                     return true;
                 } else return false;
@@ -112,7 +112,7 @@ public class Game {
     private Die.Face pickDieFace() {
         while(true){
             io.showRolledDice(dice);
-            Die.Face chosenDieFace = io.chooseDie(dice);
+            Die.Face chosenDieFace = io.chooseDie(actualPlayer, dice);
             if(!dice.isFacePresent(chosenDieFace)) io.printError("This face is not present.. Pick another one!");
             else if(dice.isFaceChosen(chosenDieFace)) io.printError("You have already chose this face, pick another one!");
             else return chosenDieFace;
