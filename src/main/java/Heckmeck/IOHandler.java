@@ -38,7 +38,7 @@ public interface IOHandler {
 
     void showRolledDice(Dice dice);
 
-    boolean wantToPick(int actualDiceScore, int availableTileNumber);
+    boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber);
 
     /*        output.printMessage("Actual score: " + diceScore);
             output.showWantToPick();
@@ -51,7 +51,7 @@ public interface IOHandler {
             }
         }*/
 
-    boolean wantToSteal(Player robbedPlayer);
+    boolean wantToSteal(Player currentPlayer, Player robbedPlayer);
 
    /*     output.showWantToSteal(robbedPlayer);
         while(true) {
@@ -62,9 +62,9 @@ public interface IOHandler {
             }
         }
     }*/
-    void showPlayerData(Player player, Dice dice, Player[] players);
+    void showPlayerData(Player currentPlayer, Dice dice, Player[] players);
     //void showDice(Dice dice);
-    Die.Face chooseDie(Dice dice);
+    Die.Face chooseDie(Player currentPlayer, Dice dice);
 //        output.printMessage("Pick one unselected face");
 //        while (true) {
 //            try {
