@@ -158,6 +158,34 @@ public class GUIIOHandler implements IOHandler {
     public void showRolledDice(Dice dice) {
         //TODO: aggiungere roll dadi
         dicePanel(dice);
+        Timer timer = new Timer(100, new ActionListener() {
+            private int rollCount = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (rollCount < 10) {
+                    for (Component component : dicePanel.getComponents()) {
+                        if (component instanceof JToggleButton dieButton) {
+                            Die.Face randomFace = Die.generateDie().getDieFace();
+                            dieButton.setIcon(getDieIcon(randomFace, 65));
+                        }
+                    }
+                    dicePanel.repaint();
+                    rollCount++;
+                } else {
+                    ((Timer) e.getSource()).stop();
+                    for (Component component : dicePanel.getComponents()) {
+                        if (component instanceof JToggleButton dieButton) {
+                            Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
+                            dieButton.setIcon(getDieIcon(originalFace, 65));
+                        }
+                    }
+                    dicePanel.repaint();
+                }
+            }
+        });
+
+        timer.start();
     }
 
     // TODO: move method to the new signature
@@ -252,7 +280,7 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public Die.Face chooseDie(Player player, Dice dice) {
         chosenFace = null;
-        rollDiceAnimation();
+        //rollDiceAnimation();
 
         frame.getContentPane().remove(dicePanel);
         dicePanel(dice);
@@ -264,34 +292,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void rollDiceAnimation() {
-        Timer timer = new Timer(100, new ActionListener() {
-            private int rollCount = 0;
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (rollCount < 10) {
-                    for (Component component : dicePanel.getComponents()) {
-                        if (component instanceof JToggleButton dieButton) {
-                            Die.Face randomFace = Die.generateDie().getDieFace();
-                            dieButton.setIcon(getDieIcon(randomFace, 65));
-                        }
-                    }
-                    dicePanel.repaint();
-                    rollCount++;
-                } else {
-                    ((Timer) e.getSource()).stop();
-                    for (Component component : dicePanel.getComponents()) {
-                        if (component instanceof JToggleButton dieButton) {
-                            Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
-                            dieButton.setIcon(getDieIcon(originalFace, 65));
-                        }
-                    }
-                    dicePanel.repaint();
-                }
-            }
-        });
-
-        timer.start();
     }
 
     private void dicePanel(Dice dice) {

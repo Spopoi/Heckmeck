@@ -105,6 +105,7 @@ public class Game {
         io.askRollDiceConfirmation(actualPlayer.getName());
         dice.rollDice();
         io.showPlayerData(actualPlayer, dice, players);
+        io.showRolledDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();
             dice.chooseDice(chosenDieFace);
@@ -117,7 +118,6 @@ public class Game {
 
     private Die.Face pickDieFace() {
         while(true){
-            io.showRolledDice(dice);
             Die.Face chosenDieFace = io.chooseDie(actualPlayer, dice);
             if(!dice.isFacePresent(chosenDieFace)) io.printError("This face is not present.. Pick another one!");
             else if(dice.isFaceChosen(chosenDieFace)) io.printError("You have already chose this face, pick another one!");
@@ -127,7 +127,6 @@ public class Game {
 
     //TODO: Rimettere in gioco tessere persa dal giocatore
     private void bust(){
-        io.showRolledDice(dice);
         io.showBustMessage();
         if(actualPlayer.hasTile()){
             boardTiles.add(actualPlayer.getLastPickedTile());
