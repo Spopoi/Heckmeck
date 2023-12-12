@@ -149,45 +149,6 @@ public class GUIIOHandler implements IOHandler {
         frame.add(tilesPanel,BorderLayout.NORTH);
     }
 
-    @Override
-    public void askRollDiceConfirmation(String playerName){
-        return;
-    }
-
-    @Override
-    public void showRolledDice(Dice dice) {
-        //TODO: aggiungere roll dadi
-        dicePanel(dice);
-        Timer timer = new Timer(100, new ActionListener() {
-            private int rollCount = 0;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (rollCount < 10) {
-                    for (Component component : dicePanel.getComponents()) {
-                        if (component instanceof JToggleButton dieButton) {
-                            Die.Face randomFace = Die.generateDie().getDieFace();
-                            dieButton.setIcon(getDieIcon(randomFace, 65));
-                        }
-                    }
-                    dicePanel.repaint();
-                    rollCount++;
-                } else {
-                    ((Timer) e.getSource()).stop();
-                    for (Component component : dicePanel.getComponents()) {
-                        if (component instanceof JToggleButton dieButton) {
-                            Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
-                            dieButton.setIcon(getDieIcon(originalFace, 65));
-                        }
-                    }
-                    dicePanel.repaint();
-                }
-            }
-        });
-
-        timer.start();
-    }
-
     // TODO: move method to the new signature
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
@@ -291,10 +252,6 @@ public class GUIIOHandler implements IOHandler {
         return chosenFace;
     }
 
-    private void rollDiceAnimation() {
-
-    }
-
     private void dicePanel(Dice dice) {
 
         frame.getContentPane().remove(dicePanel);
@@ -335,9 +292,47 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
+    public void askRollDiceConfirmation(String playerName){
+        return;
+    }
+
+    @Override
+    public void showRolledDice(Dice dice) {
+        //TODO: aggiungere roll dadi
+        dicePanel(dice);
+        Timer timer = new Timer(100, new ActionListener() {
+            private int rollCount = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (rollCount < 10) {
+                    for (Component component : dicePanel.getComponents()) {
+                        if (component instanceof JToggleButton dieButton) {
+                            Die.Face randomFace = Die.generateDie().getDieFace();
+                            dieButton.setIcon(getDieIcon(randomFace, 65));
+                        }
+                    }
+                    dicePanel.repaint();
+                    rollCount++;
+                } else {
+                    ((Timer) e.getSource()).stop();
+                    for (Component component : dicePanel.getComponents()) {
+                        if (component instanceof JToggleButton dieButton) {
+                            Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
+                            dieButton.setIcon(getDieIcon(originalFace, 65));
+                        }
+                    }
+                    dicePanel.repaint();
+                }
+            }
+        });
+        timer.start();
+    }
+
+    @Override
     public void showBustMessage() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

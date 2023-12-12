@@ -4,29 +4,23 @@ import java.util.*;
 import static Heckmeck.Die.Face;
 
 public class Game {
-
     private Player[] players;
     private Dice dice;
     private BoardTiles boardTiles;
     private final IOHandler io;
-
     private Player actualPlayer;
-    private int actualPlayerID;
 
     public Game(IOHandler io) {
        this.io = io;
     }
 
     public void init(){
-        //TODO: Risolvere bug quando prendi ultimo dado bust automatico
         int numberOfPlayers = io.chooseNumberOfPlayers();
-
         this.players = setupPlayers(numberOfPlayers);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
         this.actualPlayer = this.players[0];
         io.printMessage("OK, let's begin!");
-
     }
     public void play(){
         int playerNumber = 0;
@@ -43,17 +37,15 @@ public class Game {
 
     private void playerTurn(){
         io.showTurnBeginConfirm(actualPlayer);
-        //TODO il nome non serve più come parametro per showBeginConfirm()
         boolean isOnRun;
         do{
             io.showBoardTiles(boardTiles);
-            if (dice.isFaceChosen(Face.WORM)) {
+            if (dice.isFaceChosen(Face.WORM) || dice.getNumOfDice() == 0){
                 if (steal() || pick()) {
                     isOnRun = false;
                 } else isOnRun = roll();
             } else isOnRun = roll();
         } while (isOnRun);
-
         dice.resetDice();
     }
 
@@ -100,8 +92,8 @@ public class Game {
         return false;
     }
 
-    //TODO: rolli anche se finisci i dadi
     private boolean roll(){
+        if(dice.getNumOfDice() == 0) return false;
         io.askRollDiceConfirmation(actualPlayer.getName());
         dice.rollDice();
         io.showPlayerData(actualPlayer, dice, players);
@@ -146,7 +138,6 @@ public class Game {
                 playerName = io.choosePlayerName(i);
             }
             playersList[i].setPlayerName(playerName);
-
         }
         return playersList;
     }
