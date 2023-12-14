@@ -36,7 +36,6 @@ public class TestClient {
 
     @Test
     void testSendMessage(){
-
         client.sendMessage("Test Line");
         verify(out).println("Test Line");
     }
@@ -66,6 +65,12 @@ public class TestClient {
         txMessage.setPlayerID(0);
         client.perform_get_input();
         verify(out).println(txMessage.toJSON());
+
+    }
+    @Test
+    void testCommandInterpreter_GET_PLAYER_NAME(){
+        Message msg = Message.generateMessage();
+        msg.setOperation(Message.Action.GET_PLAYER_NAME);
 
 
     }
