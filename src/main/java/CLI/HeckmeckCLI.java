@@ -35,7 +35,6 @@ public class HeckmeckCLI {
             if(io.wantToHost()){
                 int numOfPlayers = io.chooseNumberOfPlayers();
                 startGameServer(numOfPlayers);
-
                 startLocalClient(io);
             }
             else{
@@ -56,7 +55,7 @@ public class HeckmeckCLI {
         PrintWriter out;
         BufferedReader in;
         try {
-            clientSocket = new Socket("127.0.0.1", 51734);
+            clientSocket = new Socket(IP, 51734);
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
@@ -66,7 +65,7 @@ public class HeckmeckCLI {
         Client cli = new Client(false, io, in, out);
         Thread cliThread = new Thread(cli);
         cliThread.start();
-        cli.commandInterpreter(false);
+        //cli.commandInterpreter(false);
         //cli.startConnection(IP, 51734);
 
     }

@@ -38,6 +38,7 @@ public class Client implements Runnable{
         this.io = io;
         this.in = in;
         this.out = out;
+        connected = true;
         //cliIo = new CliIOHandler();
     }
 
@@ -95,17 +96,6 @@ public class Client implements Runnable{
 
     @Override
     public void run() {
-        Socket clientSocket = null;
-        PrintWriter out;
-        BufferedReader in;
-        try {
-            clientSocket = new Socket("127.0.0.1", 51734);
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         commandInterpreter(botMode);
     }
 
@@ -132,7 +122,7 @@ public class Client implements Runnable{
 
 
         cliIo.showWelcomeMessage();
-        cliIo.printMessage("Waiting for your turn to chose your name:");
+        cliIo.printMessage("Waiting for your turn to start");
 
 
         cli.commandInterpreter(false);
@@ -145,6 +135,7 @@ public class Client implements Runnable{
             try{
 
                 if(connected) {
+
                     rxMessage = readIncomingMessage();
 
                     if (rxMessage != null) {
@@ -155,7 +146,7 @@ public class Client implements Runnable{
                                 break;
 
                             case GET_PLAYER_NAME:
-                                io.printMessage(rxMessage.text);
+                                //io.printMessage(rxMessage.text);
                                 io.printMessage("Select your name:");
                                 String playerName = perform_get_player_name(botMode);
                                 io.printMessage("You chose " + playerName + ", wait for other players!");
@@ -240,7 +231,7 @@ public class Client implements Runnable{
         sendMessage(txMessage.toJSON());
     }
 
-    private String perform_get_player_name(boolean botMode) {
+    public String perform_get_player_name(boolean botMode) {
         Message txMessage;
         txMessage = Message.generateMessage();
         txMessage.setOperation(Message.Action.RESPONSE);

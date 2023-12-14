@@ -21,12 +21,10 @@ public class HeckmeckGUI {
     }
 
     private static void initGUI() {
-
         frame = new JFrame("HECKMECK");
         frame.setSize(1100, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-
         switchToMenuPanel();
         frame.setVisible(true);
     }

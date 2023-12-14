@@ -41,6 +41,7 @@ public class SocketHandler implements Runnable{
     }
     public String writeLine(String message){
         out.println(message);
+
         try {
             rxString =  in.readLine();
         } catch (IOException e) {
@@ -54,6 +55,7 @@ public class SocketHandler implements Runnable{
     }
 
     public Message writeMessage(Message message){
+
         writeLine(message.toJSON());
         return Message.fromJSON(rxString);
     }
@@ -65,6 +67,7 @@ public class SocketHandler implements Runnable{
         msg.setOperation(Message.Action.INIT);
         msg.setText("Hello");
         Message respMsg = writeMessage(msg);
+
         //playerName = respMsg.text;
         return respMsg.playerID==playerId;
     }

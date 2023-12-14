@@ -50,32 +50,39 @@ public class Message implements Serializable {
 
     }
 
-    public void setPlayerID(int pId) {
+    public Message setPlayerID(int pId) {
         playerID = pId;
+        return this;
     }
 
-    public void setOperation(Action operation) {
+    public Message setOperation(Action operation) {
         this.operation = operation;
+        return this;
     }
 
-    public void setText(String text) {
+    public Message setText(String text) {
         this.text = text;
+        return this;
     }
 
-    public void setDice(Dice dice) {
+    public Message setDice(Dice dice) {
         this.dice = (dice);
+        return this;
     }
 
-    public void setBoardTiles(BoardTiles boardTiles) {
+    public Message setBoardTiles(BoardTiles boardTiles) {
         this.boardTiles = (boardTiles);
+        return this;
     }
 
-    public void setActualPlayer(Player actualPlayer) {
+    public Message setActualPlayer(Player actualPlayer) {
         this.actualPlayer = (actualPlayer);
+        return this;
     }
 
-    public void setPlayers(Player[] players) {
+    public Message setPlayers(Player[] players) {
         this.players = (players);
+        return this;
     }
 
     public String toJSON(){

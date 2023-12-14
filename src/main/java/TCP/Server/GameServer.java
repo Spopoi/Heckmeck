@@ -50,7 +50,6 @@ public class GameServer implements Runnable {
 
         io = new TCPIOHandler(sockets);
         game = new Game(io);
-
         game.init();
         game.play();
     }

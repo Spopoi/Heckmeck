@@ -22,18 +22,21 @@ public class TCPIOHandler implements IOHandler {
 
     @Override
     public void printMessage(String text) {
-        msg.setText(text);
-        msg.setOperation(Message.Action.INFO);
-        sendBroadCast(msg);
+        sendBroadCast(
+                Message.generateMessage().
+                    setOperation(Message.Action.INFO).
+                    setText(text)
+        );
     }
 
     @Override
     public void printError(String text){
-        msg.setText(text);
-        msg.setOperation(Message.Action.ERROR);
-        sendBroadCast(msg);
+        sendBroadCast(
+                Message.generateMessage().
+                        setOperation(Message.Action.ERROR).
+                        setText(text)
+        );
     }
-
     @Override
     public String askIPToConnect() {
         return null;
@@ -48,20 +51,18 @@ public class TCPIOHandler implements IOHandler {
 
     @Override
     public void showTurnBeginConfirm(Player currentPlayer) {
-        
         informEveryOtherClient(currentPlayer);
-        msg.setOperation(Message.Action.ASK_CONFIRM);
-        msg.setText(currentPlayer.getName() + ", press enter to start your turn");
-        informPlayer(currentPlayer, msg);
+        informPlayer(
+                currentPlayer,
+                Message.generateMessage().
+                        setOperation(Message.Action.ASK_CONFIRM).
+                        setText(currentPlayer.getName() + ", press enter to start your turn")
+        );
     }
-
-
-
     @Override
     public void showWelcomeMessage() {
 
     }
-
     // TODO: REMOVE BEFORE COMMIT!!
     @Override
     public boolean wantToPlayRemote() {
@@ -75,22 +76,24 @@ public class TCPIOHandler implements IOHandler {
 
     @Override
     public String choosePlayerName(int playerID) {
-        
-        msg.setOperation(Message.Action.GET_PLAYER_NAME);
-        msg.setText("Choose player name");
-        msg.setPlayerID(playerID);
-        sockets.get(playerID).writeMessage(msg);
+        informPlayer(
+                playerID,
+                Message.generateMessage().
+                        setOperation(Message.Action.GET_PLAYER_NAME).
+                        setText("Choose player name").
+                        setPlayerID(playerID)
+        );
         return readMessage(playerID).text;
     }
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-        
-        msg.setBoardTiles(boardTiles);
-        msg.setOperation(Message.Action.UPDATE_TILES);
-        sendBroadCast(msg);
+        sendBroadCast(
+                Message.generateMessage().
+                    setOperation(Message.Action.UPDATE_TILES).
+                    setBoardTiles(boardTiles)
+        );
     }
-
     @Override
     public void askRollDiceConfirmation(String playerName) {
         return;
@@ -104,49 +107,56 @@ public class TCPIOHandler implements IOHandler {
     // TODO: move method to the new signature
     @Override
     public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
-        
-        msg.setOperation(Message.Action.GET_INPUT);
-        msg.setText("Do you want to pick tile n. " + availableTileNumber + "?");
-        sendBroadCast(msg);
-        Message rxMsg = readMessage(currentPlayer.getPlayerID());
-        return "y".equalsIgnoreCase(rxMsg.text);  // TODO verificare il metodo di check
+        sendBroadCast(
+                Message.generateMessage().
+                    setOperation(Message.Action.GET_INPUT).
+                    setText("Do you want to pick tile n. " + availableTileNumber + "?").setPlayerID(currentPlayer.getPlayerID())
+        );
+        return "y".equalsIgnoreCase(readMessage(currentPlayer).text);
     }
     @Override
     public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
-        msg.setOperation(Message.Action.GET_INPUT);
-        msg.setText("Do you want to steal?");
-        sockets.stream().forEach(client -> client.writeMessage(msg));
-        Message rxMsg = readMessage(robbedPlayer.getPlayerID());
-        return "y".equalsIgnoreCase(rxMsg.text);
+        sendBroadCast(
+                Message.generateMessage().
+                        setOperation(Message.Action.GET_INPUT).
+                        setText("Do you want to steal?")
+        );
+        return "y".equalsIgnoreCase(readMessage(currentPlayer).text);
     }
 
     @Override
     public void showPlayerData(Player currentPlayer, Dice dice, Player[] players) {
-        msg.setDice(dice);
-        msg.setPlayers(players);
-        msg.setActualPlayer(currentPlayer);
-        msg.setOperation(Message.Action.UPDATE_PLAYER);
-        sockets.stream().forEach(client -> client.writeMessage(msg));
+        sendBroadCast(
+                Message.generateMessage().
+                        setOperation(Message.Action.UPDATE_PLAYER).
+                        setDice(dice).
+                        setPlayers(players).
+                        setActualPlayer(currentPlayer)
+        );
     }
 
     @Override
     public Die.Face chooseDie(Player currentPlayer, Dice dice) {
         informEveryOtherClient(currentPlayer);
-        msg.setOperation(Message.Action.GET_INPUT);
-        msg.setText("Choose a die face");
-        msg.setActualPlayer(currentPlayer);
-        informPlayer(currentPlayer, msg);
-        Message rxMsg = readMessage(currentPlayer.getPlayerID());
-        return Die.getFaceByString(rxMsg.text);
+        informPlayer(
+                currentPlayer,
+                Message.generateMessage().
+                        setOperation(Message.Action.GET_INPUT).
+                        setText("Choose a die face").
+                        setActualPlayer(currentPlayer)
+        );
+        return Die.getFaceByString(readMessage(currentPlayer).text);
     }
 
     private void informEveryOtherClient(Player currentPlayer){
-        Message msg = Message.generateMessage();
-        msg.setOperation(Message.Action.INFO);
-        msg.setText("This is " + currentPlayer.getName() + "'s turn, please wait for yours");
-        getOtherPlayersSockets(currentPlayer).forEach(s -> s.writeMessage(msg));
+        getOtherPlayersSockets(currentPlayer).
+                forEach(s -> s.writeMessage(
+                                Message.generateMessage().
+                                        setOperation(Message.Action.INFO).
+                                        setText("This is " + currentPlayer.getName() + "'s turn, please wait for yours")
+                        )
+                );
     }
-
     @Override
     public void showBustMessage() {
         printMessage("## BUST! ##");
@@ -160,9 +170,8 @@ public class TCPIOHandler implements IOHandler {
     public Message readMessage(int playerId){
         return sockets.get(playerId).readReceivedMessage();
     }
-
-    private Message setGameStatus(){
-        return Message.generateMessage();
+    public Message readMessage(Player player){
+        return readMessage(player.getPlayerID());
     }
 
     private SocketHandler getPlayerSocket(Player currentPlayer){
@@ -174,6 +183,9 @@ public class TCPIOHandler implements IOHandler {
     }
 
     private void informPlayer(Player player, Message msg) {
-        getPlayerSocket(player).writeMessage(msg);
+        getPlayerSocket(player).writeMessage(msg.setPlayerID(player.getPlayerID()));
+    }
+    private void informPlayer(int playerID, Message msg){
+        sockets.get(playerID).writeMessage(msg);
     }
 }
