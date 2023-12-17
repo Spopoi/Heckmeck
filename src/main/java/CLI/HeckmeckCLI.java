@@ -1,6 +1,7 @@
 package CLI;
 
 import Heckmeck.Game;
+import Heckmeck.IOHandler;
 import TCP.Client;
 import TCP.Server.GameServer;
 import TCP.Server.TCPIOHandler;
@@ -48,7 +49,9 @@ public class HeckmeckCLI {
 
     }
 
-    public static void startLocalClient(String IP, CliIOHandler io){
+
+    //TODO: Move methods?
+    public static void startLocalClient(String IP, IOHandler io){
 
 
         Socket clientSocket = null;
@@ -69,7 +72,7 @@ public class HeckmeckCLI {
         //cli.startConnection(IP, 51734);
 
     }
-    public static void startLocalClient(CliIOHandler io){
+    public static void startLocalClient(IOHandler io){
         startLocalClient("127.0.0.1", io);
     }
     public static void startGameServer(int  numOfPlayers){

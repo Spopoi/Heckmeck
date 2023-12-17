@@ -106,6 +106,20 @@ public class GUIIOHandler implements IOHandler {
         return false;
     }
 
+    public boolean wantToHost(){
+        int result = JOptionPane.showOptionDialog(
+                null,
+                "Do you want to host?",
+                "Heckmeck multiplayer",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                getDieIcon(Die.Face.WORM,50),
+                null,
+                null
+        );
+        return result == JOptionPane.YES_OPTION;
+    }
+
     @Override
     public int chooseNumberOfPlayers() {
         while (true) {

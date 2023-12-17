@@ -10,6 +10,9 @@ import com.formdev.flatlaf.intellijthemes.FlatArcIJTheme;
 import javax.swing.*;
 import java.awt.*;
 
+import static CLI.HeckmeckCLI.startGameServer;
+import static CLI.HeckmeckCLI.startLocalClient;
+
 public class HeckmeckGUI {
     private static JFrame frame;
 
@@ -43,9 +46,21 @@ public class HeckmeckGUI {
     }
 
     public static void switchToMultiplayerPanel() {
-        GameServer gameServer = new GameServer();
-        gameServer.setNumberOfPlayers(2);
-        new Thread(gameServer).start();
+        ImagePanel imagePanel = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
+
+        frame.getContentPane().removeAll();
+        frame.setContentPane(imagePanel);
+        frame.getContentPane().setLayout(new BorderLayout(50, 30));
+
+        GUIIOHandler io = new GUIIOHandler(frame);
+        if(io.wantToHost()){
+            int numOfPlayers = io.chooseNumberOfPlayers();
+            startGameServer(numOfPlayers);
+            startLocalClient(io);
+        }
+        else{
+            startLocalClient(io.askIPToConnect(), io);
+        }
     }
 
     public static void switchToGamePanel() {
