@@ -1,10 +1,8 @@
 package GUI;
 
-import GUI.Panels.ImagePanel;
-import GUI.Panels.MenuPanel;
-import GUI.Panels.RulesPanel;
-import GUI.Panels.SettingsPanel;
+import GUI.Panels.*;
 import Heckmeck.*;
+import TCP.Server.GameServer;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
 import com.formdev.flatlaf.intellijthemes.FlatArcIJTheme;
@@ -44,6 +42,11 @@ public class HeckmeckGUI {
         updateFrame(settingsPanel);
     }
 
+    public static void switchToMultiplayerPanel() {
+        GameServer gameServer = new GameServer();
+        gameServer.setNumberOfPlayers(2);
+        new Thread(gameServer).start();
+    }
 
     public static void switchToGamePanel() {
         ImagePanel imagePanel = new ImagePanel("src/main/java/GUI/Icons/table.jpg");

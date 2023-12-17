@@ -25,7 +25,6 @@ public class GUIIOHandler implements IOHandler {
     private JPanel dicePanel;
     private JPanel othersPlayerPane;
     private JPanel tilesPanel;
-    private JPanel messagePanel;
     private volatile Die.Face chosenFace;
 
     private static final Map<Die.Face, String> faceToIconPath =
@@ -64,7 +63,6 @@ public class GUIIOHandler implements IOHandler {
         dicePanel = new JPanel();
         othersPlayerPane = new JPanel();
         tilesPanel = new JPanel();
-        messagePanel = new JPanel();
         playerPane = new PlayerDataPanel("src/main/java/GUI/Icons/table.jpg");
         frame.setVisible(true);
     }
@@ -84,6 +82,7 @@ public class GUIIOHandler implements IOHandler {
         return null;
     }
 
+    //TODO: togliere dall'interfaccia?
     @Override
     public boolean wantToPlayAgain() {
         return false;
@@ -149,11 +148,19 @@ public class GUIIOHandler implements IOHandler {
         frame.add(tilesPanel,BorderLayout.NORTH);
     }
 
-    // TODO: move method to the new signature
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
-        int result = showConfirmDialog(null, "Actual score: " + actualDiceScore + "\nDo you want to pick tile " + availableTileNumber + "?");
-        return result == JOptionPane.OK_OPTION;
+        int result = JOptionPane.showOptionDialog(
+                null,
+                "Actual score: " + actualDiceScore + "\nDo you want to pick tile " + availableTileNumber + "?",
+                "Heckmeck",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                getDieIcon(Die.Face.WORM,50),
+                null,
+                null
+        );
+        return result == JOptionPane.YES_OPTION;
     }
 
     @Override

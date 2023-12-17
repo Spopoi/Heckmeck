@@ -23,13 +23,17 @@ public class MenuPanel extends ImagePanel {
     }
 
     private JPanel createButtonsPanel() {
-        JPanel buttonsPanel = new JPanel(new GridLayout(3, 1, 10, 20));
-        buttonsPanel.setPreferredSize(new Dimension(300, 200));
+        JPanel buttonsPanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        buttonsPanel.setPreferredSize(new Dimension(350, 250));
         buttonsPanel.setOpaque(false);
 
         JButton playButton = createButton("PLAY", e -> switchToGamePanel());
         playButton.setFont(buttonFont);
         buttonsPanel.add(playButton);
+
+        JButton multiplayerButton = createButton("MULTIPLAYER", e -> switchToMultiplayerPanel());
+        multiplayerButton.setFont(buttonFont);
+        buttonsPanel.add(multiplayerButton);
 
         JButton rulesButton = createButton("RULES", e -> switchToRulesPanel());
         rulesButton.setFont(buttonFont);

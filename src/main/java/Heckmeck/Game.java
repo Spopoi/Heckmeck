@@ -152,7 +152,6 @@ public class Game {
     public Player[] getPlayers(){
         return players;
     }
-
     public BoardTiles getBoardTiles(){
         return boardTiles;
     }
