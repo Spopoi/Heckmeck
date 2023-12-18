@@ -2,11 +2,7 @@ package GUI;
 
 import GUI.Panels.*;
 import Heckmeck.*;
-import TCP.Server.GameServer;
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
-import com.formdev.flatlaf.intellijthemes.FlatArcIJTheme;
-
 import javax.swing.*;
 import java.awt.*;
 

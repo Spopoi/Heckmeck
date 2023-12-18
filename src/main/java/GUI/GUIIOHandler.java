@@ -1,5 +1,6 @@
 package GUI;
 
+import GUI.Panels.DicePanel;
 import GUI.Panels.ImagePanel;
 import GUI.Panels.PlayerDataPanel;
 import Heckmeck.*;
@@ -12,9 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import static javax.swing.JOptionPane.*;
-import static java.awt.GridBagConstraints.*;
 
 public class GUIIOHandler implements IOHandler {
 
@@ -22,7 +21,7 @@ public class GUIIOHandler implements IOHandler {
     //TODO: removing method's parameters and adding a Game local variable which contains players dice etc..
     private final JFrame frame;
     private PlayerDataPanel playerPane;
-    private JPanel dicePanel;
+    private DicePanel dicePanel;
     private JPanel othersPlayerPane;
     private JPanel tilesPanel;
     private volatile Die.Face chosenFace;
@@ -60,7 +59,7 @@ public class GUIIOHandler implements IOHandler {
 
     public GUIIOHandler(JFrame frame){
         this.frame = frame;
-        dicePanel = new JPanel();
+        dicePanel = new DicePanel();
         othersPlayerPane = new JPanel();
         tilesPanel = new JPanel();
         playerPane = new PlayerDataPanel("src/main/java/GUI/Icons/table.jpg");
@@ -75,6 +74,11 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public void printError(String text) {
         JOptionPane.showMessageDialog(null, text, "Errore", JOptionPane.ERROR_MESSAGE);
+    }
+
+    @Override
+    public void showWelcomeMessage() {
+        printMessage("WELCOME to Heckmeck, GOOD LUCK!");
     }
 
     @Override
@@ -93,11 +97,6 @@ public class GUIIOHandler implements IOHandler {
         frame.getContentPane().removeAll();
         frame.repaint();
         printMessage(player.getName() + " turn, press ok for starting: ");
-    }
-
-    @Override
-    public void showWelcomeMessage() {
-        printMessage("WELCOME to Heckmeck, GOOD LUCK!");
     }
 
     // TODO: REMOVE BEFORE COMMIT!!
@@ -261,55 +260,15 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public Die.Face chooseDie(Player player, Dice dice) {
-        chosenFace = null;
-        //rollDiceAnimation();
-
         frame.getContentPane().remove(dicePanel);
-        dicePanel(dice);
-
-        while (chosenFace == null) {
-            Thread.onSpinWait();
-        }
-        return chosenFace;
-    }
-
-    private void dicePanel(Dice dice) {
-
-        frame.getContentPane().remove(dicePanel);
-        dicePanel = new JPanel(new GridBagLayout());
-
-        dicePanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 50, 5));
-        dicePanel.setOpaque(false);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(20, 20, 30, 20); // Add spacing between components
-        gbc.anchor = NORTH; // Center the panel
-        gbc.fill = GridBagConstraints.NONE; // Don't fill the available space
-
-        for (Die die : dice.getDiceList()) {
-            JToggleButton dieButton = new JToggleButton();
-            Die.Face dieFace = die.getDieFace();
-            dieButton.setIcon(getDieIcon(dieFace, 65));
-            dieButton.setSelectedIcon(getDieIcon(dieFace, 65));
-            dieButton.addActionListener(e -> chosenFace = dieFace);
-            dieButton.setPreferredSize(new Dimension(60, 60));
-
-            dieButton.setBorder(null);
-            dieButton.putClientProperty("originalFace", dieFace); // Memorizza l'immagine originale del dado
-            dicePanel.add(dieButton, gbc);
-
-            gbc.gridx++;
-            if (gbc.gridx > 3) {
-                gbc.gridx = 0;
-                gbc.gridy++;
-            }
-        }
-
+        dicePanel.updateDice(dice);
         frame.getContentPane().add(dicePanel, BorderLayout.CENTER);
         frame.revalidate();
-        //frame.repaint();
+
+        while (dicePanel.getChosenFace() == null) {
+            Thread.onSpinWait();
+        }
+        return dicePanel.getChosenFace();
     }
 
     @Override
@@ -319,35 +278,8 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showRolledDice(Dice dice) {
-        //TODO: aggiungere roll dadi
-        dicePanel(dice);
-        Timer timer = new Timer(100, new ActionListener() {
-            private int rollCount = 0;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (rollCount < 10) {
-                    for (Component component : dicePanel.getComponents()) {
-                        if (component instanceof JToggleButton dieButton) {
-                            Die.Face randomFace = Die.generateDie().getDieFace();
-                            dieButton.setIcon(getDieIcon(randomFace, 65));
-                        }
-                    }
-                    dicePanel.repaint();
-                    rollCount++;
-                } else {
-                    ((Timer) e.getSource()).stop();
-                    for (Component component : dicePanel.getComponents()) {
-                        if (component instanceof JToggleButton dieButton) {
-                            Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
-                            dieButton.setIcon(getDieIcon(originalFace, 65));
-                        }
-                    }
-                    dicePanel.repaint();
-                }
-            }
-        });
-        timer.start();
+        dicePanel.updateDice(dice);
+        dicePanel.rollDiceAnimation();
     }
 
     @Override
