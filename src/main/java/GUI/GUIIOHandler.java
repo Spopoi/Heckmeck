@@ -3,6 +3,7 @@ package GUI;
 import GUI.Panels.DicePanel;
 import GUI.Panels.ImagePanel;
 import GUI.Panels.PlayerDataPanel;
+import GUI.Panels.ScoreboardPanel;
 import Heckmeck.*;
 
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class GUIIOHandler implements IOHandler {
     private final JFrame frame;
     private PlayerDataPanel playerPane;
     private DicePanel dicePanel;
-    private JPanel othersPlayerPane;
+    private ScoreboardPanel scoreboardPanel;
     private JPanel tilesPanel;
     private volatile Die.Face chosenFace;
 
@@ -60,7 +61,7 @@ public class GUIIOHandler implements IOHandler {
     public GUIIOHandler(JFrame frame){
         this.frame = frame;
         dicePanel = new DicePanel();
-        othersPlayerPane = new JPanel();
+        //scoreboardPanel = new ScoreboardPanel();
         tilesPanel = new JPanel();
         playerPane = new PlayerDataPanel("src/main/java/GUI/Icons/table.jpg");
         frame.setVisible(true);
@@ -192,7 +193,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
-        othersPlayerPane = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
+       /* othersPlayerPane = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
         othersPlayerPane.setLayout(new BoxLayout(othersPlayerPane, BoxLayout.Y_AXIS));
         othersPlayerPane.setBorder(new EmptyBorder(new Insets(10,10,10,10)));
 
@@ -209,9 +210,12 @@ public class GUIIOHandler implements IOHandler {
                 othersPlayerPane.add(makeOtherPlayerPanel(otherPlayer));
                 othersPlayerPane.add(makeHorizontalSeparator());
             }
-        }
+        }*/
+        scoreboardPanel = new ScoreboardPanel(player,players);
+        //scoreboardPanel.update(player,players);
+
         //TODO: Mettere scrollPane solo se tanti giocatori presenti
-        JScrollPane scrollPane = new JScrollPane(othersPlayerPane);
+        JScrollPane scrollPane = new JScrollPane(scoreboardPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         frame.add(scrollPane, BorderLayout.EAST);
@@ -219,44 +223,6 @@ public class GUIIOHandler implements IOHandler {
         frame.repaint();
     }
 
-    private static JSeparator makeHorizontalSeparator() {
-        JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        separator.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-        separator.setMaximumSize(new Dimension(220,15));
-        separator.setAlignmentX(Component.CENTER_ALIGNMENT);
-        return separator;
-    }
-
-    private JPanel makeOtherPlayerPanel(Player otherPlayer) {
-        JPanel playerPanel = new JPanel();
-        playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
-        playerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        playerPanel.setOpaque(false);
-
-        JLabel playerName = new JLabel(otherPlayer.getName());
-        playerName.setPreferredSize(new Dimension(220, 30));
-        playerName.setFont(new Font("Serif", Font.BOLD, 25));
-        playerName.setAlignmentX(CENTER_ALIGNMENT);
-        playerPanel.add(playerName);
-        playerPanel.add(Box.createVerticalStrut(8));
-
-        JLabel lastPlayerTile = new JLabel();
-        lastPlayerTile.setAlignmentX(CENTER_ALIGNMENT);
-        if(otherPlayer.hasTile()){
-            int tileNumber = otherPlayer.getLastPickedTile().getNumber();
-            lastPlayerTile.setIcon(getTileIcon(tileNumber, 60, 50));
-            playerPanel.add(lastPlayerTile);
-            playerPanel.add(Box.createVerticalStrut(10));
-        }
-        JLabel scoreLabel = new JLabel("Worm score: " + otherPlayer.getWormScore());
-        scoreLabel.setFont(new Font("Serif", Font.PLAIN, 20));
-        scoreLabel.setForeground(Color.RED);
-        scoreLabel.setAlignmentX(CENTER_ALIGNMENT);
-        playerPanel.add(scoreLabel);
-
-        return playerPanel;
-    }
 
     @Override
     public Die.Face chooseDie(Player player, Dice dice) {

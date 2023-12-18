@@ -28,9 +28,9 @@ public class DicePanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(20, 20, 30, 20); // Add spacing between components
-        gbc.anchor = NORTH; // Center the panel
-        gbc.fill = GridBagConstraints.NONE; // Don't fill the available space
+        gbc.insets = new Insets(20, 20, 30, 20);
+        gbc.anchor = NORTH;
+        gbc.fill = GridBagConstraints.NONE;
 
         for (Die die : dice.getDiceList()) {
             JToggleButton dieButton = new JToggleButton();
@@ -41,7 +41,7 @@ public class DicePanel extends JPanel {
             dieButton.setPreferredSize(new Dimension(60, 60));
 
             dieButton.setBorder(null);
-            dieButton.putClientProperty("originalFace", dieFace); // Memorizza l'immagine originale del dado
+            dieButton.putClientProperty("originalFace", dieFace);
             add(dieButton, gbc);
 
             gbc.gridx++;
