@@ -9,12 +9,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.stream.Stream;
 
@@ -22,61 +20,47 @@ import static org.mockito.Mockito.mock;
 
 public class TestCliInputOutput {
 
-    private static final String INITIAL_BOARD = getInitialBoard();
-
-    public static final String EXPECTED_ALL_DICE = getExpectedAllDiceFromOutput();
-
     public static final String PLAYER_NAME = "Luigi";
 
-    public static final String INITIAL_PLAYER_STATUS = getInitialPlayerStatus();
+    private final Player fakePlayer = mock(Player.class);
 
     ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
 
-    private final PrintStream outStream = new PrintStream(fakeStandardOutput);
+    private final PrintStream fakeOutputStream = new PrintStream(fakeStandardOutput);
 
-    private final CliIOHandler inputOutput = new CliIOHandler();
-
-    private static final String newLine = System.lineSeparator();
+    private final CliIOHandler testInputOutput = new CliIOHandler(System.in, fakeOutputStream);
 
     // TODO: chooseDie does not need dice
     @ParameterizedTest
-    @CsvSource(ignoreLeadingAndTrailingWhitespace = false, textBlock = """
-            '1\n',1
-            '2\n',2
-            '3\n',3
-            '4\n',4
-            '5\n',5
-            'w\n',w
-            """)
-    void readDieFaceFromValidUserInput(String userInput, String faceAsString) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        CliIOHandler inputHandler = new CliIOHandler();
+    @MethodSource("wrongUserInputForNumberOfPlayersProvider")
+    void wrongNumberOfPlayersAreNotAccepted(String userInput) {
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
+        String expectedResponse = """
+                Choose number of players between 2 and 7:
+                Input is not correct, choose a number between 2 and 7:
+                """;
 
-        Die.Face expectedFace = Die.getFaceByString(faceAsString);
-        Player player = mock(Player.class);
-        Die.Face obtainedFace = inputHandler.chooseDie(player, null);
-
-        Assertions.assertEquals(expectedFace, obtainedFace);
+        try {
+            testInputOutput.chooseNumberOfPlayers();
+        } catch (java.util.NoSuchElementException ex){
+            String actualResponse = fakeStandardOutput.toString();
+            Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
+        }
     }
 
     @ParameterizedTest
-    @MethodSource("wrongUserInputForNumberOfPlayersProvider")
-    void wrongNumberOfPlayersAreNotAccepted(String userInput) {
-        System.out.println(userInput);
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
+    @MethodSource("blankUserInputForPlayerNameProvider")
+    void blankPlayerNameNotAccepted(String userInput) {
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
+        String expectedResponse = """
+                    Insert the name for player1:
+                    Name of a player can not be blank.
+                    Insert the name for player1:
+                    """;
 
         try {
-            inputOutputHandler.chooseNumberOfPlayers();
+            testInputOutput.choosePlayerName(1);
         } catch (java.util.NoSuchElementException ex){
-            String expectedResponse = """
-                    Choose number of players between 2 and 7:
-                    Input is not correct, choose a number between 2 and 7:
-                    """;
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
@@ -85,93 +69,75 @@ public class TestCliInputOutput {
     @ParameterizedTest
     @MethodSource("correctUserInputForNumberOfPlayersProvider")
     void correctNumberOfPlayersAreAccepted(String userInput, int expectedReadNumber) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
 
-        Assertions.assertEquals(expectedReadNumber, inputOutputHandler.chooseNumberOfPlayers());
-    }
+        int numberActuallyRead = testInputOutput.chooseNumberOfPlayers();
 
-    @ParameterizedTest
-    @MethodSource("blankUserInputForPlayerNameProvider")
-    void blankPlayerNameNotAccepted(String userInput) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
-
-        try {
-            inputOutputHandler.choosePlayerName(1);
-        } catch (java.util.NoSuchElementException ex){
-            String expectedResponse = """
-                    Insert the name for player1:
-                    Name of a player can not be blank.
-                    Insert the name for player1:
-                    """;
-            String actualResponse = fakeStandardOutput.toString();
-            Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
-        }
-
+        Assertions.assertEquals(expectedReadNumber, numberActuallyRead);
     }
 
     @ParameterizedTest
     @MethodSource("correctUserInputForPlayerNameProvider")
     void correctPlayerNameAreAccepted(String userInput, String expectedReadPlayerName) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
 
-        Assertions.assertEquals(expectedReadPlayerName, inputOutputHandler.choosePlayerName(1));
+        String playerNameActuallyRead = testInputOutput.choosePlayerName(1);
+
+        Assertions.assertEquals(expectedReadPlayerName, playerNameActuallyRead);
+
     }
 
     @Test
     void printInitialBoardConfiguration() {
         BoardTiles boardTiles = BoardTiles.init();
+        String expectedPrintedBoard = """
+                The available tiles on the board now are:
+                 .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------.
+                 |  21  | |  22  | |  23  | |  24  | |  25  | |  26  | |  27  | |  28  | |  29  | |  30  | |  31  | |  32  | |  33  | |  34  | |  35  | |  36  |
+                 |  ~   | |  ~   | |  ~   | |  ~   | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  |
+                 |      | |      | |      | |      | |      | |      | |      | |      | |  ~   | |  ~   | |  ~   | |  ~   | |  ~~  | |  ~~  | |  ~~  | |  ~~  |
+                 '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------'
+                  
+                """;
 
-        setSystemOut(outStream);
-        inputOutput.showBoardTiles(boardTiles);
+        testInputOutput.showBoardTiles(boardTiles);
 
-        Assertions.assertEquals(INITIAL_BOARD, standardizeLineSeparator(fakeStandardOutput.toString().replaceAll("\u001B\\[[;\\d]*m", "")));
+        Assertions.assertEquals(expectedPrintedBoard, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
 
     @Test
     void correctlyPrintRolledDice() {
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
         Dice dice = Dice.init();
-
         dice.eraseDice();
         for (var dieFace : Die.Face.values()) {
             dice.addSpecificDie(dieFace);
         }
-        inputOutputHandler.showRolledDice(dice);
+        String expectedPrintedDice = """
+                .---------. .---------. .---------. .---------. .---------. .---------.
+                |         | |      o  | |      o  | |  o   o  | |  o   o  | |   \\=\\   |
+                |    o    | |         | |    o    | |         | |    o    | |   /=/   |
+                |         | |  o      | |  o      | |  o   o  | |  o   o  | |   \\=\\   |
+                '---------' '---------' '---------' '---------' '---------' '---------'
+                """;
 
-        Assertions.assertEquals(EXPECTED_ALL_DICE, standardizeLineSeparator(fakeStandardOutput.toString()));
+        testInputOutput.showRolledDice(dice);
+
+        Assertions.assertEquals(expectedPrintedDice, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
 
     @ParameterizedTest
     @MethodSource("userInputForSelectingDiceProvider")
     void rejectWrongInputsWhenUserChooseDie(String userInput) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         Dice dice = Dice.init();
-        Player player = mock(Player.class);
-        try {
-            inputOutputHandler.chooseDie(player, dice);
-        } catch (java.util.NoSuchElementException ex) {
-            String expectedResponse = """
+        String expectedResponse = """
                     Pick one unselected face:
                     Incorrect input, choose between {1, 2, 3, 4, 5, w}:
                     """;
+
+        try {
+            testInputOutput.chooseDie(fakePlayer, dice);
+        } catch (java.util.NoSuchElementException ex) {
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
@@ -180,45 +146,45 @@ public class TestCliInputOutput {
     @ParameterizedTest
     @MethodSource("blankUserInputForSelectingDiceProvider")
     void skipBlankInputsWhenUserChooseDie(String userInput) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         Dice dice = Dice.init();
-        Player player = mock(Player.class);
-
-        try {
-            inputOutputHandler.chooseDie(player, dice);
-        } catch (java.util.NoSuchElementException ex) {
-            String expectedResponse = """
+        String expectedResponse = """
                     Pick one unselected face:
                     """;
+
+        try {
+            testInputOutput.chooseDie(fakePlayer, dice);
+        } catch (java.util.NoSuchElementException ex) {
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
     }
 
     @ParameterizedTest
+    @MethodSource("correctUserInputForSelectingDiceProvider")
+    void readDieFaceFromValidUserInput(String userInput, String faceAsString) {
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
+
+        Die.Face expectedFace = Die.getFaceByString(faceAsString);
+        Die.Face obtainedFace = testInputOutput.chooseDie(fakePlayer, null);
+
+        Assertions.assertEquals(expectedFace, obtainedFace);
+    }
+
+    @ParameterizedTest
     @MethodSource("wrongUserInputWhenPickingTilesProvider")
     void printWarningForWrongAnswersWhenPickingTiles(String userInput) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
-
-        Player player = mock(Player.class);
-
-        try {
-            inputOutputHandler.wantToPick(player, 1, 1);
-        } catch (java.util.NoSuchElementException ex) {
-            String expectedResponse = """
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
+        String expectedResponse = """
                     Your actual score is: 1
                     Do you want to pick tile number 1 from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice
                     """;
+
+        try {
+            testInputOutput.wantToPick(fakePlayer, 1, 1);
+        } catch (java.util.NoSuchElementException ex) {
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
@@ -227,20 +193,16 @@ public class TestCliInputOutput {
     @ParameterizedTest
     @MethodSource("blankUserInputWhenPickingTilesProvider")
     void skipBlankAnswersWhenPickingTiles(String userInput) {
-        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
-        System.setIn(fakeStandardInput);
-        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
-        Player player = mock(Player.class);
-        try {
-            inputOutputHandler.wantToPick(player, 1, 1);
-        } catch (java.util.NoSuchElementException ex) {
-            String expectedResponse = """
+        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
+        String expectedResponse = """
                     Your actual score is: 1
                     Do you want to pick tile number 1 from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     """;
+
+        try {
+            testInputOutput.wantToPick(fakePlayer, 1, 1);
+        } catch (java.util.NoSuchElementException ex) {
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
@@ -248,8 +210,26 @@ public class TestCliInputOutput {
 
     @Test
     void printInitialPlayerStatus() {
-        setSystemOut(outStream);
         Dice dice = Dice.init();
+        Player[] listOfAllPlayers = initialiazeMaxNumberOfPlayer();
+        String expectedPrintedPlayerStatus = """
+                Luigi's tiles:                    Player  | Top tile | Worms\s
+                                                 ----------------------------
+                                                  player2 | No tiles |   0  \s
+                Chosen dice: []                   player3 | No tiles |   0  \s
+                Current dice score: 0             player4 | No tiles |   0  \s
+                WORM is chosen: false             player5 | No tiles |   0  \s
+                                                  player6 | No tiles |   0  \s
+                                                  player7 | No tiles |   0  \s
+
+                """;
+
+        testInputOutput.showPlayerData(listOfAllPlayers[0], dice, listOfAllPlayers);
+
+        Assertions.assertEquals(expectedPrintedPlayerStatus, standardizeLineSeparator(fakeStandardOutput.toString()));
+    }
+
+    private Player[] initialiazeMaxNumberOfPlayer() {
         Player player1 = Player.generatePlayer(0);
         player1.setPlayerName(PLAYER_NAME);
         Player player2 = Player.generatePlayer(1);
@@ -264,59 +244,26 @@ public class TestCliInputOutput {
         player6.setPlayerName("player6");
         Player player7 = Player.generatePlayer(6);
         player7.setPlayerName("player7");
-        Player[] players = {player1, player2, player3, player4, player5, player6, player7};
-
-        inputOutput.showPlayerData(player1, dice, players);
-
-        Assertions.assertEquals(INITIAL_PLAYER_STATUS, standardizeLineSeparator(fakeStandardOutput.toString()));
+        return new Player[]{player1, player2, player3, player4, player5, player6, player7};
     }
 
     private static String standardizeLineSeparator(String actualResponse) {
         return actualResponse.replaceAll("\\r\\n?", "\n");
     }
 
-    private static void setSystemOut(PrintStream outStream) {
-        System.setOut(outStream);
-    }
-
-    private static String getInitialBoard() {
-        return """
-                The available tiles on the board now are:
-                 .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------. .------.
-                 |  21  | |  22  | |  23  | |  24  | |  25  | |  26  | |  27  | |  28  | |  29  | |  30  | |  31  | |  32  | |  33  | |  34  | |  35  | |  36  |
-                 |  ~   | |  ~   | |  ~   | |  ~   | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  | |  ~~  |
-                 |      | |      | |      | |      | |      | |      | |      | |      | |  ~   | |  ~   | |  ~   | |  ~   | |  ~~  | |  ~~  | |  ~~  | |  ~~  |
-                 '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------' '------'
-                  
-                """;
-    }
-
-    private static String getExpectedAllDiceFromOutput() {
-        return """
-                 .---------. .---------. .---------. .---------. .---------. .---------.
-                 |         | |      o  | |      o  | |  o   o  | |  o   o  | |   \\=\\   |
-                 |    o    | |         | |    o    | |         | |    o    | |   /=/   |
-                 |         | |  o      | |  o      | |  o   o  | |  o   o  | |   \\=\\   |
-                 '---------' '---------' '---------' '---------' '---------' '---------'
-                """;
-    }
-
-    private static String getInitialPlayerStatus() {
-        return """
-                Luigi's tiles:                    Player  | Top tile | Worms\s
-                                                 ----------------------------
-                                                  player2 | No tiles |   0  \s
-                Chosen dice: []                   player3 | No tiles |   0  \s
-                Current dice score: 0             player4 | No tiles |   0  \s
-                WORM is chosen: false             player5 | No tiles |   0  \s
-                                                  player6 | No tiles |   0  \s
-                                                  player7 | No tiles |   0  \s
-
-                """;
-    }
-
     static String stringToUserInput(String text) {
-        return text + newLine;
+        return text + System.lineSeparator();
+    }
+
+    static Stream<Arguments> correctUserInputForSelectingDiceProvider() {
+        return Stream.of(
+                Arguments.arguments(stringToUserInput("1"), "1"),
+                Arguments.arguments(stringToUserInput("2"), "2"),
+                Arguments.arguments(stringToUserInput("3"), "3"),
+                Arguments.arguments(stringToUserInput("4"), "4"),
+                Arguments.arguments(stringToUserInput("5"), "5"),
+                Arguments.arguments(stringToUserInput("w"), "w")
+        );
     }
 
     static Stream<String> wrongUserInputForNumberOfPlayersProvider(){

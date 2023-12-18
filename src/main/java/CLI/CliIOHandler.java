@@ -2,20 +2,37 @@ package CLI;
 
 import Heckmeck.*;
 
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.*;
 
 public class CliIOHandler implements IOHandler {
 
     private static final String newLine = System.lineSeparator();
-    private final Scanner scan;
+    private Scanner scan;
+    private PrintStream outputWhereToPrint;
 
     public CliIOHandler() {
-        scan = new Scanner(System.in);
+        this(System.in, System.out);
+    }
+
+    public CliIOHandler(InputStream inputStream, PrintStream printStream) {
+        setOutput(printStream);
+        scan = new Scanner(inputStream);
+    }
+
+    public void setInput(InputStream inputStream) {
+        scan.close();
+        scan = new Scanner(inputStream);
+    }
+
+    public void setOutput(PrintStream printStream) {
+        outputWhereToPrint = printStream;
     }
 
     @Override
     public void printMessage(String message) {
-        System.out.println(message);
+        outputWhereToPrint.println(message);
     }
 
     @Override
