@@ -193,26 +193,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
-       /* othersPlayerPane = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
-        othersPlayerPane.setLayout(new BoxLayout(othersPlayerPane, BoxLayout.Y_AXIS));
-        othersPlayerPane.setBorder(new EmptyBorder(new Insets(10,10,10,10)));
-
-        JLabel scoreboardLabel = new JLabel("Scoreboard");
-        scoreboardLabel.setPreferredSize(new Dimension(220, 30));
-        scoreboardLabel.setFont(new Font("Serif", Font.BOLD, 30));
-        scoreboardLabel.setAlignmentX(CENTER_ALIGNMENT);
-        othersPlayerPane.add(scoreboardLabel);
-        othersPlayerPane.add(Box.createVerticalStrut(10));
-        othersPlayerPane.add(makeHorizontalSeparator());
-
-        for (Player otherPlayer : players) {
-            if (!player.equals(otherPlayer)) {
-                othersPlayerPane.add(makeOtherPlayerPanel(otherPlayer));
-                othersPlayerPane.add(makeHorizontalSeparator());
-            }
-        }*/
         scoreboardPanel = new ScoreboardPanel(player,players);
-        //scoreboardPanel.update(player,players);
 
         //TODO: Mettere scrollPane solo se tanti giocatori presenti
         JScrollPane scrollPane = new JScrollPane(scoreboardPanel);
@@ -223,14 +204,9 @@ public class GUIIOHandler implements IOHandler {
         frame.repaint();
     }
 
-
     @Override
     public Die.Face chooseDie(Player player, Dice dice) {
-        frame.getContentPane().remove(dicePanel);
-        dicePanel.updateDice(dice);
-        frame.getContentPane().add(dicePanel, BorderLayout.CENTER);
-        frame.revalidate();
-
+        updateDicePanel(dice);
         while (dicePanel.getChosenFace() == null) {
             Thread.onSpinWait();
         }
@@ -238,14 +214,20 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public void askRollDiceConfirmation(String playerName){
-        return;
+    public void showRolledDice(Dice dice) {
+        updateDicePanel(dice);
+        dicePanel.rollDiceAnimation();
     }
 
-    @Override
-    public void showRolledDice(Dice dice) {
+    private void updateDicePanel(Dice dice){
+        frame.getContentPane().remove(dicePanel);
         dicePanel.updateDice(dice);
-        dicePanel.rollDiceAnimation();
+        frame.getContentPane().add(dicePanel, BorderLayout.CENTER);
+        frame.revalidate();
+    }
+    @Override
+    public void askRollDiceConfirmation(String playerName){
+        return;
     }
 
     @Override
