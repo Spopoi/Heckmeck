@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static GUI.GUIIOHandler.getTileIcon;
+import static GUI.Icons.IconHandler.getTileIcon;
 
 public class ScoreboardPanel extends ImagePanel {
     public ScoreboardPanel(Player player, Player[] players){

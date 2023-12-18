@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static GUI.GUIIOHandler.getDieIcon;
+import static GUI.Icons.IconHandler.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;
 
 public class DicePanel extends JPanel {

@@ -8,7 +8,9 @@ import Heckmeck.Player;
 import javax.swing.*;
 import java.awt.*;
 
-import static GUI.GUIIOHandler.getTileIcon;
+import static GUI.Icons.IconHandler.getDieIcon;
+import static GUI.Icons.IconHandler.getTileIcon;
+
 
 public class PlayerDataPanel extends ImagePanel{
 
@@ -118,7 +120,7 @@ public class PlayerDataPanel extends ImagePanel{
     private void updateDicePanel(Dice dice) {
         playerDicePanel.removeAll();
         for(Die die : dice.getChosenDice()){
-            JLabel dieIconLabel = new JLabel(GUIIOHandler.getDieIcon(die.getDieFace(),50));
+            JLabel dieIconLabel = new JLabel(getDieIcon(die.getDieFace(),50));
             dieIconLabel.setPreferredSize(new Dimension(50,55));
             playerDicePanel.add(dieIconLabel);
             playerDicePanel.add(Box.createRigidArea(new Dimension(13,0)));

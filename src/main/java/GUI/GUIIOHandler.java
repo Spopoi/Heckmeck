@@ -1,67 +1,29 @@
 package GUI;
 
 import GUI.Panels.DicePanel;
-import GUI.Panels.ImagePanel;
 import GUI.Panels.PlayerDataPanel;
 import GUI.Panels.ScoreboardPanel;
 import Heckmeck.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+
+import static GUI.Icons.IconHandler.getDieIcon;
+import static GUI.Icons.IconHandler.getTileIcon;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
 
-    public static final Dimension TILE_DIMENSIONS = new Dimension(80, 90);
-    //TODO: removing method's parameters and adding a Game local variable which contains players dice etc..
+    public static final Dimension BOARD_TILE_DIMENSIONS = new Dimension(80, 90);
     private final JFrame frame;
     private PlayerDataPanel playerPane;
     private DicePanel dicePanel;
     private ScoreboardPanel scoreboardPanel;
     private JPanel tilesPanel;
-    private volatile Die.Face chosenFace;
-
-    private static final Map<Die.Face, String> faceToIconPath =
-            Collections.unmodifiableMap(new HashMap<>() {{
-                put(Die.Face.ONE, "src/main/java/GUI/Icons/Dice/one.png");
-                put(Die.Face.TWO, "src/main/java/GUI/Icons/Dice/two.png");
-                put(Die.Face.THREE, "src/main/java/GUI/Icons/Dice/three.png");
-                put(Die.Face.FOUR, "src/main/java/GUI/Icons/Dice/four.png");
-                put(Die.Face.FIVE, "src/main/java/GUI/Icons/Dice/five.png");
-                put(Die.Face.WORM, "src/main/java/GUI/Icons/Dice/worm.png");
-            }});
-
-    private static final Map<Integer, String> tileNumberToIconPath =
-            Collections.unmodifiableMap(new HashMap<>() {{
-                put(21, "src/main/java/GUI/Icons/Tiles/Tile_21.png");
-                put(22, "src/main/java/GUI/Icons/Tiles/Tile_22.png");
-                put(23, "src/main/java/GUI/Icons/Tiles/Tile_23.png");
-                put(24, "src/main/java/GUI/Icons/Tiles/Tile_24.png");
-                put(25, "src/main/java/GUI/Icons/Tiles/Tile_25.png");
-                put(26, "src/main/java/GUI/Icons/Tiles/Tile_26.png");
-                put(27, "src/main/java/GUI/Icons/Tiles/Tile_27.png");
-                put(28, "src/main/java/GUI/Icons/Tiles/Tile_28.png");
-                put(29, "src/main/java/GUI/Icons/Tiles/Tile_29.png");
-                put(30, "src/main/java/GUI/Icons/Tiles/Tile_30.png");
-                put(31, "src/main/java/GUI/Icons/Tiles/Tile_31.png");
-                put(32, "src/main/java/GUI/Icons/Tiles/Tile_32.png");
-                put(33, "src/main/java/GUI/Icons/Tiles/Tile_33.png");
-                put(34, "src/main/java/GUI/Icons/Tiles/Tile_34.png");
-                put(35, "src/main/java/GUI/Icons/Tiles/Tile_35.png");
-                put(36, "src/main/java/GUI/Icons/Tiles/Tile_36.png");
-
-            }});
 
     public GUIIOHandler(JFrame frame){
         this.frame = frame;
         dicePanel = new DicePanel();
-        //scoreboardPanel = new ScoreboardPanel();
         tilesPanel = new JPanel();
         playerPane = new PlayerDataPanel("src/main/java/GUI/Icons/table.jpg");
         frame.setVisible(true);
@@ -156,7 +118,7 @@ public class GUIIOHandler implements IOHandler {
         tilesPanel.setOpaque(false);
         for(Tile tile : boardTiles.getTiles()){
             JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 90, 80));
-            tileIcon.setPreferredSize(TILE_DIMENSIONS);
+            tileIcon.setPreferredSize(BOARD_TILE_DIMENSIONS);
             tilesPanel.add(tileIcon);
         }
         frame.add(tilesPanel,BorderLayout.NORTH);
@@ -195,7 +157,6 @@ public class GUIIOHandler implements IOHandler {
     private void showOthersPlayerPanel(Player player, Player[] players) {
         scoreboardPanel = new ScoreboardPanel(player,players);
 
-        //TODO: Mettere scrollPane solo se tanti giocatori presenti
         JScrollPane scrollPane = new JScrollPane(scoreboardPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -245,17 +206,4 @@ public class GUIIOHandler implements IOHandler {
         return null;
     }
 
-    public static ImageIcon getTileIcon(int tileNumber, int height, int width){
-        ImageIcon icon = new ImageIcon(tileNumberToIconPath.get(tileNumber));
-        Image img = icon.getImage() ;
-        Image newimg = img.getScaledInstance(width , height,  java.awt.Image.SCALE_SMOOTH ) ;
-        return new ImageIcon( newimg );
-    }
-    //TODO: vedere se spostare
-    public static ImageIcon getDieIcon(Die.Face face, int size){
-        ImageIcon icon = new ImageIcon(faceToIconPath.get(face));
-        Image img = icon.getImage() ;
-        Image newimg = img.getScaledInstance(size , size,  java.awt.Image.SCALE_SMOOTH ) ;
-        return new ImageIcon( newimg );
-    }
 }
