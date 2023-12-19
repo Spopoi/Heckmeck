@@ -6,7 +6,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static GUI.Icons.IconHandler.getTileIcon;
+import static Heckmeck.FileReader.getTileIcon;
+
 
 public class ScoreboardPanel extends ImagePanel {
     public ScoreboardPanel(Player player, Player[] players){

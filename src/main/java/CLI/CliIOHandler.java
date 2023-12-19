@@ -86,7 +86,6 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public String choosePlayerName(int playerNumber) {
-        // TODO: manage tabs in names, breaks everything
         while (true) {
             printMessage("Insert the name for player" + playerNumber + ":");
             String playerName = getInputString();

@@ -8,8 +8,8 @@ import Heckmeck.*;
 import javax.swing.*;
 import java.awt.*;
 
-import static GUI.Icons.IconHandler.getDieIcon;
-import static GUI.Icons.IconHandler.getTileIcon;
+import static Heckmeck.FileReader.getDieIcon;
+import static Heckmeck.FileReader.getTileIcon;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {

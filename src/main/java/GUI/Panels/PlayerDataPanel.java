@@ -1,6 +1,5 @@
 package GUI.Panels;
 
-import GUI.GUIIOHandler;
 import Heckmeck.Dice;
 import Heckmeck.Die;
 import Heckmeck.Player;
@@ -8,8 +7,8 @@ import Heckmeck.Player;
 import javax.swing.*;
 import java.awt.*;
 
-import static GUI.Icons.IconHandler.getDieIcon;
-import static GUI.Icons.IconHandler.getTileIcon;
+import static Heckmeck.FileReader.getDieIcon;
+import static Heckmeck.FileReader.getTileIcon;
 
 
 public class PlayerDataPanel extends ImagePanel{
