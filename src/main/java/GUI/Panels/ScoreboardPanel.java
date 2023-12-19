@@ -6,12 +6,12 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
 import static Heckmeck.FileReader.getTileIcon;
-
 
 public class ScoreboardPanel extends ImagePanel {
     public ScoreboardPanel(Player player, Player[] players){
-        super("src/main/resources/Icons/table.jpg");
+        super(BACKGROUND_IMAGE_PATH);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(new EmptyBorder(new Insets(10,10,10,10)));
 

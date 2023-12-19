@@ -11,6 +11,7 @@ import static CLI.HeckmeckCLI.startLocalClient;
 
 public class HeckmeckGUI {
     private static JFrame frame;
+    public static final String BACKGROUND_IMAGE_PATH = "src/main/resources/Icons/table.jpg";
 
     public static void main(String[] args) throws UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(new FlatIntelliJLaf());
@@ -42,7 +43,7 @@ public class HeckmeckGUI {
     }
 
     public static void switchToMultiplayerPanel() {
-        ImagePanel imagePanel = new ImagePanel("src/main/resources/Icons/table.jpg");
+        ImagePanel imagePanel = new ImagePanel(BACKGROUND_IMAGE_PATH);
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);
@@ -60,7 +61,7 @@ public class HeckmeckGUI {
     }
 
     public static void switchToGamePanel() {
-        ImagePanel imagePanel = new ImagePanel("src/main/resources/Icons/table.jpg");
+        ImagePanel imagePanel = new ImagePanel(BACKGROUND_IMAGE_PATH);
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);

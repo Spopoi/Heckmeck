@@ -42,8 +42,8 @@ public class PlayerDataPanel extends ImagePanel{
 
     private void addHorizontalSeparator() {
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        separator.setPreferredSize(new Dimension(panelWidth, 5)); // Imposta la dimensione preferita
-        separator.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0)); // Imposta il margine
+        separator.setPreferredSize(new Dimension(panelWidth, 5));
+        separator.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         separator.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(separator);
     }
