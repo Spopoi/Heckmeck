@@ -1,6 +1,5 @@
 package GUI.Panels;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +13,7 @@ public class MenuPanel extends ImagePanel {
 
     public MenuPanel() {
 
-        super("src/main/java/GUI/Icons/heckmeckBackground.jpg");
+        super("src/main/resources/Icons/heckmeckBackground.jpg");
         setLayout(new GridBagLayout());
 
         JPanel buttonsPanel = createButtonsPanel();

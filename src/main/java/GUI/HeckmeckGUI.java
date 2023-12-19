@@ -42,7 +42,7 @@ public class HeckmeckGUI {
     }
 
     public static void switchToMultiplayerPanel() {
-        ImagePanel imagePanel = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
+        ImagePanel imagePanel = new ImagePanel("src/main/resources/Icons/table.jpg");
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);
@@ -60,7 +60,7 @@ public class HeckmeckGUI {
     }
 
     public static void switchToGamePanel() {
-        ImagePanel imagePanel = new ImagePanel("src/main/java/GUI/Icons/table.jpg");
+        ImagePanel imagePanel = new ImagePanel("src/main/resources/Icons/table.jpg");
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);

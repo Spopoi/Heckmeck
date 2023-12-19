@@ -25,7 +25,7 @@ public class GUIIOHandler implements IOHandler {
         this.frame = frame;
         dicePanel = new DicePanel();
         tilesPanel = new JPanel();
-        playerPane = new PlayerDataPanel("src/main/java/GUI/Icons/table.jpg");
+        playerPane = new PlayerDataPanel("src/main/resources/Icons/table.jpg");
         frame.setVisible(true);
     }
 

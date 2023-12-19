@@ -11,7 +11,7 @@ import static Heckmeck.FileReader.getTileIcon;
 
 public class ScoreboardPanel extends ImagePanel {
     public ScoreboardPanel(Player player, Player[] players){
-        super("src/main/java/GUI/Icons/table.jpg");
+        super("src/main/resources/Icons/table.jpg");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(new EmptyBorder(new Insets(10,10,10,10)));
 
