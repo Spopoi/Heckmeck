@@ -2,17 +2,21 @@ package GUI;
 
 import GUI.Panels.DicePanel;
 import GUI.Panels.PlayerDataPanel;
+import GUI.Panels.RoundedPanel;
 import GUI.Panels.ScoreboardPanel;
 import Heckmeck.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 
 import static Heckmeck.FileReader.getDieIcon;
 import static Heckmeck.FileReader.getTileIcon;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
+
+    private static final int MAX_TILE_WIDTH = 90;
 
     public static final Dimension BOARD_TILE_DIMENSIONS = new Dimension(80, 90);
     private final JFrame frame;
@@ -111,17 +115,23 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
+        //TODO: put a maximum size to tile's width
         tilesPanel = new JPanel();
-        tilesPanel.setLayout(new GridLayout(1,0,10, 10));
+        tilesPanel.setLayout(new GridLayout(1, 0, 10, 10));
         tilesPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
-        tilesPanel.setPreferredSize(new Dimension(0,125));
+        tilesPanel.setPreferredSize(new Dimension(0, 110));
         tilesPanel.setOpaque(false);
-        for(Tile tile : boardTiles.getTiles()){
-            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 90, 80));
-            tileIcon.setPreferredSize(BOARD_TILE_DIMENSIONS);
-            tilesPanel.add(tileIcon);
+
+        for (Tile tile : boardTiles.getTiles()) {
+            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 75, 60));
+            tileIcon.setMaximumSize(new Dimension(100,110));
+
+            RoundedPanel roundedTilePanel = new RoundedPanel(20);
+            roundedTilePanel.setLayout(new BorderLayout());
+            roundedTilePanel.add(tileIcon, BorderLayout.CENTER);
+            tilesPanel.add(roundedTilePanel);
         }
-        frame.add(tilesPanel,BorderLayout.NORTH);
+        frame.add(tilesPanel, BorderLayout.NORTH);
     }
 
     @Override
