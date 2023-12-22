@@ -24,12 +24,22 @@ public class GUIIOHandler implements IOHandler {
     private DicePanel dicePanel;
     private ScoreboardPanel scoreboardPanel;
     private JPanel tilesPanel;
+    private int tilesPanelHeight;
+    private int lateralPanelWidth;
+
+    //TODO: move it in HECKMECKGUI?
+    public static Font titleFont = new Font("Serif", Font.BOLD, 30);
+    public static Font textFont = new Font("Serif", Font.PLAIN, 25);
 
     public GUIIOHandler(JFrame frame){
         this.frame = frame;
         dicePanel = new DicePanel();
         tilesPanel = new JPanel();
+        tilesPanelHeight = frame.getHeight()/4;
+        lateralPanelWidth = frame.getWidth()/4;
         playerPane = new PlayerDataPanel("src/main/resources/Icons/table.jpg");
+        playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
+
         frame.setVisible(true);
     }
 
@@ -113,7 +123,24 @@ public class GUIIOHandler implements IOHandler {
         }
     }
 
+
     @Override
+    public void showBoardTiles(BoardTiles boardTiles) {
+        if(tilesPanel != null) frame.remove(tilesPanel);
+        tilesPanel = new JPanel();
+        tilesPanel.setLayout(new GridLayout(1,0,10, 10));
+        tilesPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
+        tilesPanel.setPreferredSize(new Dimension(0,tilesPanelHeight));
+        tilesPanel.setOpaque(false);
+        for(Tile tile : boardTiles.getTiles()){
+            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 90, 80));
+            tileIcon.setPreferredSize(BOARD_TILE_DIMENSIONS);
+            tilesPanel.add(tileIcon);
+        }
+        frame.add(tilesPanel,BorderLayout.NORTH);
+    }
+
+   /* @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         //TODO: put a maximum size to tile's width
         tilesPanel = new JPanel();
@@ -124,7 +151,7 @@ public class GUIIOHandler implements IOHandler {
 
         for (Tile tile : boardTiles.getTiles()) {
             JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 75, 60));
-            tileIcon.setMaximumSize(new Dimension(100,110));
+            tileIcon.setMaximumSize(new Dimension(60,110));
 
             RoundedPanel roundedTilePanel = new RoundedPanel(20);
             roundedTilePanel.setLayout(new BorderLayout());
@@ -132,7 +159,7 @@ public class GUIIOHandler implements IOHandler {
             tilesPanel.add(roundedTilePanel);
         }
         frame.add(tilesPanel, BorderLayout.NORTH);
-    }
+    }*/
 
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
@@ -165,10 +192,12 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
+        if(scoreboardPanel != null) frame.remove(scoreboardPanel);
         scoreboardPanel = new ScoreboardPanel(player,players);
 
         JScrollPane scrollPane = new JScrollPane(scoreboardPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
 
         frame.add(scrollPane, BorderLayout.EAST);
         frame.revalidate();
