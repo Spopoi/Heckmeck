@@ -8,17 +8,13 @@ import Heckmeck.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 
 import static Heckmeck.FileReader.getDieIcon;
 import static Heckmeck.FileReader.getTileIcon;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
-
-    private static final int MAX_TILE_WIDTH = 90;
-
-    public static final Dimension BOARD_TILE_DIMENSIONS = new Dimension(80, 90);
+    public static Dimension BOARD_TILE_DIMENSIONS;
     private final JFrame frame;
     private PlayerDataPanel playerPane;
     private DicePanel dicePanel;
@@ -30,15 +26,23 @@ public class GUIIOHandler implements IOHandler {
     //TODO: move it in HECKMECKGUI?
     public static Font titleFont = new Font("Serif", Font.BOLD, 30);
     public static Font textFont = new Font("Serif", Font.PLAIN, 25);
+    private static double panelToFrameRatio = 0.25;
+    private static double boardTileToFrameRatio = 0.8;
+    private static double tileToBoardRatio = 0.7;
+
+    private int boardTileWidth;
 
     public GUIIOHandler(JFrame frame){
         this.frame = frame;
         dicePanel = new DicePanel();
         tilesPanel = new JPanel();
-        tilesPanelHeight = frame.getHeight()/4;
-        lateralPanelWidth = frame.getWidth()/4;
+        tilesPanelHeight = (int)(frame.getHeight() * panelToFrameRatio);
+        lateralPanelWidth = (int)(frame.getWidth() * panelToFrameRatio);
         playerPane = new PlayerDataPanel("src/main/resources/Icons/table.jpg");
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
+        //int spaceBetweenTiles = 13 * BoardTiles.numberOfTiles;
+        boardTileWidth = (int)((frame.getWidth() * boardTileToFrameRatio )/BoardTiles.numberOfTiles);
+        BOARD_TILE_DIMENSIONS = new Dimension(boardTileWidth, (int) (tilesPanelHeight * tileToBoardRatio));
 
         frame.setVisible(true);
     }
@@ -123,35 +127,21 @@ public class GUIIOHandler implements IOHandler {
         }
     }
 
-
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-        if(tilesPanel != null) frame.remove(tilesPanel);
+        if (tilesPanel != null) frame.remove(tilesPanel);
         tilesPanel = new JPanel();
-        tilesPanel.setLayout(new GridLayout(1,0,10, 10));
-        tilesPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
-        tilesPanel.setPreferredSize(new Dimension(0,tilesPanelHeight));
-        tilesPanel.setOpaque(false);
-        for(Tile tile : boardTiles.getTiles()){
-            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 90, 80));
-            tileIcon.setPreferredSize(BOARD_TILE_DIMENSIONS);
-            tilesPanel.add(tileIcon);
-        }
-        frame.add(tilesPanel,BorderLayout.NORTH);
-    }
+        tilesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        tilesPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
-   /* @Override
-    public void showBoardTiles(BoardTiles boardTiles) {
-        //TODO: put a maximum size to tile's width
-        tilesPanel = new JPanel();
-        tilesPanel.setLayout(new GridLayout(1, 0, 10, 10));
-        tilesPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
-        tilesPanel.setPreferredSize(new Dimension(0, 110));
+        int MAX_PANEL_WIDTH = boardTiles.getTiles().size() * BOARD_TILE_DIMENSIONS.width;
+        tilesPanel.setPreferredSize(new Dimension(MAX_PANEL_WIDTH, tilesPanelHeight));
+
         tilesPanel.setOpaque(false);
 
         for (Tile tile : boardTiles.getTiles()) {
-            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), 75, 60));
-            tileIcon.setMaximumSize(new Dimension(60,110));
+            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), BOARD_TILE_DIMENSIONS.height * 8/10 , BOARD_TILE_DIMENSIONS.width * 9/10));
+            tileIcon.setPreferredSize(BOARD_TILE_DIMENSIONS);
 
             RoundedPanel roundedTilePanel = new RoundedPanel(20);
             roundedTilePanel.setLayout(new BorderLayout());
@@ -159,7 +149,7 @@ public class GUIIOHandler implements IOHandler {
             tilesPanel.add(roundedTilePanel);
         }
         frame.add(tilesPanel, BorderLayout.NORTH);
-    }*/
+    }
 
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {

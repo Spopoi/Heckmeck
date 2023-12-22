@@ -120,8 +120,8 @@ public class PlayerDataPanel extends ImagePanel{
     private void updateDicePanel(Dice dice) {
         playerDicePanel.removeAll();
         for(Die die : dice.getChosenDice()){
-            JLabel dieIconLabel = new JLabel(getDieIcon(die.getDieFace(),45));
-            dieIconLabel.setPreferredSize(new Dimension(50,45));
+            JLabel dieIconLabel = new JLabel(getDieIcon(die.getDieFace(),55));
+            dieIconLabel.setPreferredSize(new Dimension(60,55));
             playerDicePanel.add(dieIconLabel);
         }
     }
