@@ -13,8 +13,13 @@ class Utils {
     private Utils() {
     }
 
+    //TODO FAre un getFilesPath
     public static Path getLogoPath() {
-        URL tilesResource = CliIOHandler.class.getClassLoader().getResource(LOGO_FILE);
+        return getPath(LOGO_FILE);
+    }
+
+    public static Path getPath(String fileName) {
+        URL tilesResource = CliIOHandler.class.getClassLoader().getResource(fileName);
         Path resourcePath = null;
         try {
             resourcePath = Path.of(tilesResource.toURI());
