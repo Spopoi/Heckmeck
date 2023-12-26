@@ -22,7 +22,7 @@ public class TestGameServer {
     @BeforeEach
     void setUp() throws IOException {
 
-        gameServer = new GameServer();
+        gameServer = new GameServer(2);
 
     }
     @AfterEach
@@ -46,7 +46,7 @@ public class TestGameServer {
         when(socket.getOutputStream()).thenReturn(mock(OutputStream.class));
         when(socket.getInputStream()).thenReturn(mock(InputStream.class));
         gameServer.acceptConnections();
-        Assertions.assertEquals(8, gameServer.sockets.size());
+        Assertions.assertEquals(2, gameServer.sockets.size());
     }
 
 }

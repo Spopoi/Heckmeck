@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.stream.Stream;
 
@@ -51,19 +52,25 @@ public class TestCliInputOutput {
     @ParameterizedTest
     @MethodSource("blankUserInputForPlayerNameProvider")
     void blankPlayerNameNotAccepted(String userInput) {
-        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
-        String expectedResponse = """
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
+        Player player = Player.generatePlayer(1);
+
+        try {
+            inputOutputHandler.choosePlayerName(player);
+        } catch (java.util.NoSuchElementException ex){
+            String expectedResponse = """
                     Insert the name for player1:
                     Name of a player can not be blank.
                     Insert the name for player1:
                     """;
-
-        try {
-            testInputOutput.choosePlayerName(1);
-        } catch (java.util.NoSuchElementException ex){
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
+
     }
 
     @ParameterizedTest
@@ -79,12 +86,13 @@ public class TestCliInputOutput {
     @ParameterizedTest
     @MethodSource("correctUserInputForPlayerNameProvider")
     void correctPlayerNameAreAccepted(String userInput, String expectedReadPlayerName) {
-        testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
+        InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
+        System.setIn(fakeStandardInput);
+        ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(fakeStandardOutput));
+        CliIOHandler inputOutputHandler = new CliIOHandler();
 
-        String playerNameActuallyRead = testInputOutput.choosePlayerName(1);
-
-        Assertions.assertEquals(expectedReadPlayerName, playerNameActuallyRead);
-
+        Assertions.assertEquals(expectedReadPlayerName, inputOutputHandler.choosePlayerName(Player.generatePlayer(0)));
     }
 
     @Test

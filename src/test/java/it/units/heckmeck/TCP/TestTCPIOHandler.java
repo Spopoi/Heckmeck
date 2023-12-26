@@ -115,7 +115,7 @@ public class TestTCPIOHandler {
         msg.setText("Choose player name");
         msg.setPlayerID(0);
         when(sockets.get(0).readReceivedMessage()).thenReturn(respMsg);
-        String response = io.choosePlayerName(0);
+        String response = io.choosePlayerName(Player.generatePlayer(0));
         Assertions.assertEquals("playerName", response);
     }
 
