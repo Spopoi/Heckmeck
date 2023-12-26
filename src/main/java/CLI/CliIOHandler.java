@@ -85,9 +85,10 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public String choosePlayerName(int playerNumber) {
+    public String choosePlayerName(Player player) {
+        // TODO: manage tabs in names, breaks everything
         while (true) {
-            printMessage("Insert the name for player" + playerNumber + ":");
+            printMessage("Insert the name for player" + player.getPlayerID() + ":");
             String playerName = getInputString();
             if (playerName.isBlank()) {
                 printMessage("Name of a player can not be blank.");

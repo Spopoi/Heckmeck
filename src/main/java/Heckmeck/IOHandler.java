@@ -20,7 +20,7 @@ public interface IOHandler {
                 }
             }
         }*/
-    String choosePlayerName(int playerNumber);
+    String choosePlayerName(Player player);
 /*        output.printMessage("Insert the name for player" + playerNumber);
         while(true) {
             try {

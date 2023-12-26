@@ -118,7 +118,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public String choosePlayerName(int playerNumber) {
+    public String choosePlayerName(Player player) {
         while(true) {
             String playerName = showInputDialog(null, "Insert player name");
             if (playerName == null) wantToQuitHeckmeck();

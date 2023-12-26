@@ -9,8 +9,6 @@ public class TCPIOHandler implements IOHandler {
 
 
     private final List<SocketHandler> sockets;
-    private final Message msg = Message.generateMessage();
-
 
     public TCPIOHandler(List<SocketHandler> sockets){
         this.sockets = sockets;
@@ -24,8 +22,8 @@ public class TCPIOHandler implements IOHandler {
     public void printMessage(String text) {
         sendBroadCast(
                 Message.generateMessage().
-                    setOperation(Message.Action.INFO).
-                    setText(text)
+                        setOperation(Message.Action.INFO).
+                        setText(text)
         );
     }
 
@@ -75,23 +73,23 @@ public class TCPIOHandler implements IOHandler {
     }
 
     @Override
-    public String choosePlayerName(int playerID) {
+    public String choosePlayerName(Player player) {
         informPlayer(
-                playerID,
+                player.getPlayerID(),
                 Message.generateMessage().
                         setOperation(Message.Action.GET_PLAYER_NAME).
                         setText("Choose player name").
-                        setPlayerID(playerID)
+                        setPlayerID(player.getPlayerID())
         );
-        return readMessage(playerID).text;
+        return readMessage(player.getPlayerID()).text;
     }
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         sendBroadCast(
                 Message.generateMessage().
-                    setOperation(Message.Action.UPDATE_TILES).
-                    setBoardTiles(boardTiles)
+                        setOperation(Message.Action.UPDATE_TILES).
+                        setBoardTiles(boardTiles)
         );
     }
     @Override
@@ -109,8 +107,8 @@ public class TCPIOHandler implements IOHandler {
     public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
         sendBroadCast(
                 Message.generateMessage().
-                    setOperation(Message.Action.GET_INPUT).
-                    setText("Do you want to pick tile n. " + availableTileNumber + "?").setPlayerID(currentPlayer.getPlayerID())
+                        setOperation(Message.Action.GET_INPUT).
+                        setText("Do you want to pick tile n. " + availableTileNumber + "?").setPlayerID(currentPlayer.getPlayerID())
         );
         return "y".equalsIgnoreCase(readMessage(currentPlayer).text);
     }
@@ -153,7 +151,8 @@ public class TCPIOHandler implements IOHandler {
                 forEach(s -> s.writeMessage(
                                 Message.generateMessage().
                                         setOperation(Message.Action.INFO).
-                                        setText("This is " + currentPlayer.getName() + "'s turn, please wait for yours")
+                                        setText("This is " + currentPlayer.getName() + "'s turn, please wait for yours").
+                                        setActualPlayer(currentPlayer)
                         )
                 );
     }
@@ -185,7 +184,7 @@ public class TCPIOHandler implements IOHandler {
     private void informPlayer(Player player, Message msg) {
         getPlayerSocket(player).writeMessage(msg.setPlayerID(player.getPlayerID()));
     }
-    private void informPlayer(int playerID, Message msg){
-        sockets.get(playerID).writeMessage(msg);
+    private Message informPlayer(int playerID, Message msg){
+        return sockets.get(playerID).writeMessage(msg);
     }
 }
