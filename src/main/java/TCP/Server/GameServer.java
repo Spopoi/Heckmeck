@@ -14,32 +14,23 @@ public class GameServer implements Runnable {
     public List<SocketHandler> sockets = new ArrayList<SocketHandler>();
     private boolean hostClosedRoom = false;
     private Thread t1;
-    private int numOfPlayers;
+    private final int numOfPlayers;
     public Game game;
 
-    private TCPIOHandler io;
-
-    public GameServer() {
+    public GameServer(int numOfPlayers) {
         try {
             ss = new ServerSocket(51734);
-            this.numOfPlayers = 0;
+            this.numOfPlayers = numOfPlayers;
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
-
-    //TODO da cambiare probabilmente.. sarebbe bello se il numero venisse calcolato in base ai player nella stanza
-    public void setNumberOfPlayers(int numOfPlayers) {
-        this.numOfPlayers = numOfPlayers;
-    }
-
     public void run() {
         try {
             //TODO spostare messaggi in un writer
             System.out.println("You are now hosting on this machine: tell your IP address to your friends!");
-
             System.out.println(getIPAddress());
             acceptConnections();
             initClients();
@@ -48,7 +39,7 @@ public class GameServer implements Runnable {
             System.out.println("Error in acceptConnections()");
         }
 
-        io = new TCPIOHandler(sockets);
+        TCPIOHandler io = new TCPIOHandler(sockets);
         game = new Game(io);
         game.init();
         game.play();
@@ -60,9 +51,7 @@ public class GameServer implements Runnable {
         int playerID = 0;
         while (!isRoomClosed()) {
             Socket clientSocket;
-
             clientSocket = ss.accept();
-
             System.out.println("Accepted incoming connection #: " + playerID);
 
             if (clientSocket.isConnected()) {
@@ -77,12 +66,10 @@ public class GameServer implements Runnable {
                 PrintWriter out = new PrintWriter(outputStream, true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 
-                //IOBuffer IOBuffer = new IOBuffer(in, out);
-
                 this.sockets.add(new SocketHandler(playerID, in, out));
                 playerID++;
             }
-            if (playerID == 8 || playerID == numOfPlayers) {
+            if (playerID == 7 || playerID == numOfPlayers) {
                 closeRoom();
             }
         }
@@ -101,7 +88,7 @@ public class GameServer implements Runnable {
     }
 
     public void initClients() {
-        sockets.stream().forEach(e -> new Thread(e).start());
+        sockets.forEach(e -> new Thread(e).start());
     }
 
     public void close() {
@@ -110,11 +97,6 @@ public class GameServer implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-    public static void main(String[] args) {
-        GameServer gameServer = new GameServer();
-        Thread t1 = new Thread(gameServer);
-        t1.start();
     }
 
     private static String getIPAddress(){

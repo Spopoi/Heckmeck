@@ -45,10 +45,10 @@ public class Client implements Runnable{
 
 
     public String sendMessage(String line) {
-            out.println(line);
-            String resp = "";
-            return resp;
-        }
+        out.println(line);
+        String resp = "";
+        return resp;
+    }
 
     public String readRxBuffer(){
         String resp = null;

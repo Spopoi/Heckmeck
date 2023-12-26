@@ -76,8 +76,7 @@ public class HeckmeckCLI {
         startLocalClient("127.0.0.1", io);
     }
     public static void startGameServer(int  numOfPlayers){
-        GameServer gameServer = new GameServer();
-        gameServer.setNumberOfPlayers(numOfPlayers);
+        GameServer gameServer = new GameServer(numOfPlayers);
         new Thread(gameServer).start();
     }
 
