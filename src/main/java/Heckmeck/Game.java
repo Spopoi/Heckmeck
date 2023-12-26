@@ -132,10 +132,10 @@ public class Game {
         for(int i=0; i<numberOfPlayers; i++){
             playersList[i] = Player.generatePlayer(i);
             this.actualPlayer = playersList[i];
-            String playerName = io.choosePlayerName(i);
+            String playerName = io.choosePlayerName(playersList[i]);
             while(isNameAlreadyPicked(playerName,playersList)){
                 io.printError(playerName + " Already picked name.. Please choose another one");
-                playerName = io.choosePlayerName(i);
+                playerName = io.choosePlayerName(playersList[i]);
             }
             playersList[i].setPlayerName(playerName);
         }
