@@ -1,7 +1,7 @@
 package it.units.heckmeck.TCP;
 
 import TCP.Message;
-import TCP.Server.SocketHandler;
+import TCP.Server.ClientHandler;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,26 +21,26 @@ import static org.mockito.Mockito.*;
 class TestSocketHandler {
     PrintWriter out;
     BufferedReader in;
-    SocketHandler socketHandler;
+    ClientHandler clientHandler;
     Gson gson = new Gson();
     @BeforeEach
     void setUp(){
         out = mock(PrintWriter.class);
         in = mock(BufferedReader.class);
-        socketHandler = new SocketHandler(1, in, out);
+        clientHandler = new ClientHandler(1, in, out);
     }
 
     @Test
     void testReadLine() throws IOException {
 
         when(in.readLine()).thenReturn("Test Line");
-        String result = socketHandler.readLine();
+        String result = clientHandler.readLine();
         assertEquals("Test Line", result);
     }
 
     @Test
     void testWriteLine() throws IOException {
-        socketHandler.writeLine("Test Message");
+        clientHandler.writeLine("Test Message");
         verify(out).println("Test Message");
     }
 
@@ -51,9 +51,9 @@ class TestSocketHandler {
         msg.setPlayerID(1);
         msg.setText("Test Line");
         String msgString = gson.toJson(msg);
-        when(socketHandler.writeLine(msgString)).thenReturn(msgString);
-        socketHandler.writeMessage(msg);
-        Message message = socketHandler.readReceivedMessage();
+        when(clientHandler.writeLine(msgString)).thenReturn(msgString);
+        clientHandler.writeMessage(msg);
+        Message message = clientHandler.readReceivedMessage();
         assertEquals(msg.text, message.text);
     }
 
@@ -64,7 +64,7 @@ class TestSocketHandler {
         msg.setOperation(Message.Action.INIT);
         msg.setText("Hello");
         when(in.readLine()).thenReturn(gson.toJson(msg, msg.getClass()));
-        Assertions.assertTrue(socketHandler.initClient());
+        Assertions.assertTrue(clientHandler.initClient());
     }
 
 

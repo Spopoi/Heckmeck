@@ -3,7 +3,7 @@ package it.units.heckmeck.TCP;
 import Heckmeck.Game;
 import Heckmeck.Player;
 import TCP.Message;
-import TCP.Server.SocketHandler;
+import TCP.Server.ClientHandler;
 import TCP.Server.TCPIOHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,15 +18,15 @@ import static org.mockito.Mockito.*;
 
 public class TestTCPIOHandler {
 
-    List<SocketHandler> sockets;
+    List<ClientHandler> sockets;
     Message msg;
     Game game;
     TCPIOHandler io;
     @BeforeEach
     void setUp(){
         sockets = new ArrayList<>(2);
-        SocketHandler client1 = mock(SocketHandler.class);
-        SocketHandler client2 = mock(SocketHandler.class);
+        ClientHandler client1 = mock(ClientHandler.class);
+        ClientHandler client2 = mock(ClientHandler.class);
         when(client1.getPlayerID()).thenReturn(0);
         when(client2.getPlayerID()).thenReturn(1);
 
@@ -54,9 +54,9 @@ public class TestTCPIOHandler {
 
     @Test
     public void testGetOtherPlayers(){
-        List<SocketHandler> others = io.getOtherPlayersSockets(game.getActualPlayer());
-        SocketHandler cl1 = sockets.get(1);
-        SocketHandler cl2 = others.get(0);
+        List<ClientHandler> others = io.getOtherPlayersSockets(game.getActualPlayer());
+        ClientHandler cl1 = sockets.get(1);
+        ClientHandler cl2 = others.get(0);
         Assertions.assertEquals(cl1, cl2);
         Assertions.assertEquals(1, others.size());
     }

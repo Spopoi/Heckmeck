@@ -8,9 +8,9 @@ import java.util.List;
 public class TCPIOHandler implements IOHandler {
 
 
-    private final List<SocketHandler> sockets;
+    private final List<ClientHandler> sockets;
 
-    public TCPIOHandler(List<SocketHandler> sockets){
+    public TCPIOHandler(List<ClientHandler> sockets){
         this.sockets = sockets;
     }
 
@@ -173,11 +173,11 @@ public class TCPIOHandler implements IOHandler {
         return readMessage(player.getPlayerID());
     }
 
-    private SocketHandler getPlayerSocket(Player currentPlayer){
+    private ClientHandler getPlayerSocket(Player currentPlayer){
         return sockets.get(currentPlayer.getPlayerID());
     }
 
-    public List<SocketHandler> getOtherPlayersSockets(Player currentPlayer){
+    public List<ClientHandler> getOtherPlayersSockets(Player currentPlayer){
         return sockets.stream().filter(p -> p.getPlayerID() != currentPlayer.getPlayerID()).toList();
     }
 

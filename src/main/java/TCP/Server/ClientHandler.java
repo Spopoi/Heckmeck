@@ -1,12 +1,10 @@
 package TCP.Server;
 
 import TCP.Message;
-import com.google.gson.Gson;
 
 import java.io.*;
-import java.net.Socket;
 
-public class SocketHandler implements Runnable{
+public class ClientHandler implements Runnable{
     public final int playerId;
     //private final IOBufferInterface ioBuffer;
     private final BufferedReader in;
@@ -18,7 +16,7 @@ public class SocketHandler implements Runnable{
     ObjectOutputStream objectOutputStream;
     InputStream inputStream;
 
-    public SocketHandler(int playerId, BufferedReader in, PrintWriter out) {
+    public ClientHandler(int playerId, BufferedReader in, PrintWriter out) {
         this.in = in;
         this.out = out;
         this.playerId = playerId;

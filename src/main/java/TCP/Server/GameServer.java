@@ -1,7 +1,6 @@
 package TCP.Server;
 
 import Heckmeck.Game;
-import TCP.Client;
 
 import java.io.*;
 import java.net.*;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class GameServer implements Runnable {
     public ServerSocket ss;
-    public List<SocketHandler> sockets = new ArrayList<SocketHandler>();
+    public List<ClientHandler> clients = new ArrayList<ClientHandler>();
     private boolean hostClosedRoom = false;
     private Thread t1;
     private final int numOfPlayers;
@@ -39,7 +38,7 @@ public class GameServer implements Runnable {
             System.out.println("Error in acceptConnections()");
         }
 
-        TCPIOHandler io = new TCPIOHandler(sockets);
+        TCPIOHandler io = new TCPIOHandler(clients);
         game = new Game(io);
         game.init();
         game.play();
@@ -66,7 +65,7 @@ public class GameServer implements Runnable {
                 PrintWriter out = new PrintWriter(outputStream, true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 
-                this.sockets.add(new SocketHandler(playerID, in, out));
+                this.clients.add(new ClientHandler(playerID, in, out));
                 playerID++;
             }
             if (playerID == 7 || playerID == numOfPlayers) {
@@ -88,7 +87,7 @@ public class GameServer implements Runnable {
     }
 
     public void initClients() {
-        sockets.forEach(e -> new Thread(e).start());
+        clients.forEach(e -> new Thread(e).start());
     }
 
     public void close() {
