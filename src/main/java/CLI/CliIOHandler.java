@@ -216,4 +216,23 @@ public class CliIOHandler implements IOHandler {
         }
     }
 
+    public String getInitialChoice(String invalidInputMessage){
+        while (true) {
+            String decision = getInputString();
+            if (Objects.equals(decision, "1")) {
+                return decision;
+            } else if (Objects.equals(decision, "2")) {
+                return decision;
+            } else if (Objects.equals(decision, "3")) {
+                return decision;
+            } else if (Objects.equals(decision, "4")) {
+                return decision;
+            } else if (decision.isBlank()) {
+                continue;
+            } else {
+                printMessage(invalidInputMessage);
+            }
+        }
+    }
+
 }

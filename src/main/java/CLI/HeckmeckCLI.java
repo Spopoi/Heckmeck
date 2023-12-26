@@ -1,5 +1,6 @@
 package CLI;
 
+import Heckmeck.FileReader;
 import Heckmeck.Game;
 import Heckmeck.IOHandler;
 import TCP.Client;
@@ -15,38 +16,50 @@ import java.net.Socket;
 public class HeckmeckCLI {
     public static void main(String[] args) {
         startMenu();
-
-
-        /*output.showMenu();
-        int numberOfPlayers = input.chooseNumberOfPlayers();
-        Player[] players = new Player[numberOfPlayers];
-        for (int i = 0; i < players.length; i++) {
-            output.showSetPlayerName();
-            players[i] = Player.generatePlayer(input.choosePlayerName());
-        }
-        Game game = new Game(players,output, input);
-        game.play();*/
     }
 
     public static void startMenu(){
         CliIOHandler io = new CliIOHandler();
-
         io.showWelcomeMessage();
-        if (io.wantToPlayRemote()) {
-            if(io.wantToHost()){
-                int numOfPlayers = io.chooseNumberOfPlayers();
-                startGameServer(numOfPlayers);
-                startLocalClient(io);
-            }
-            else{
-                startLocalClient(io.askIPToConnect(), io);
-            }
-        } else {
-            Game game = new Game(io);
-            game.init();
-            game.play();
-        }
 
+        do {
+            io.printMessage("""
+                    Choose what you want to do:
+                        - (1) Start Heckmeck
+                        - (2) Multiplayer
+                        - (3) Rules
+                        - (4) Exit                        
+                    """);
+
+            String choice = io.getInitialChoice(
+                    "Incorrect input, insert one possible choice (1, 2, 3, 4)"
+            );
+
+            switch (choice) {
+                case "1":
+                    Game game = new Game(io);
+                    game.init();
+                    game.play();
+                    break;
+                case "2":
+                    if (io.wantToHost()) {
+                        int numOfPlayers = io.chooseNumberOfPlayers();
+                        startGameServer(numOfPlayers);
+                        startLocalClient(io);
+                    } else {
+                        startLocalClient(io.askIPToConnect(), io);
+                    }
+                    break;
+                case "3":
+                    io.printMessage(FileReader.readTextFile(Utils.getPath("RULES")));
+                    break;
+                case "4":
+                    io.printMessage("Exiting Heckmeck. Goodbye!");
+                    return; // Exit the program
+                default:
+                    io.printError("Incorrect input, choose between 1, 2, 3, 4");
+            }
+        } while (true);
     }
 
 
@@ -80,4 +93,5 @@ public class HeckmeckCLI {
         new Thread(gameServer).start();
     }
 
-    }
+
+}
