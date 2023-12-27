@@ -75,6 +75,9 @@ public class Player {
         return playerTiles.getTotalNumberOfWorms();
     }
 
+    public void clearPlayer(){
+        this.playerTiles = null;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
