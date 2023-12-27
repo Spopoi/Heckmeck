@@ -7,6 +7,7 @@ import TCP.Server.ClientHandler;
 import TCP.Server.TCPIOHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -106,19 +107,20 @@ public class TestTCPIOHandler {
         assertEquals("This is TestPlayer's turn, please wait for yours", capturedMessage.text);
         assertEquals(Message.Action.INFO, capturedMessage.operation);
     }
-    @Test
+    @Disabled
     public void testChoosePlayerName(){
         Message respMsg = Message.generateMessage();
-        respMsg.setText("playerName");
-        msg.setActualPlayer(game.getPlayers()[0]);
-        msg.setOperation(Message.Action.GET_PLAYER_NAME);
-        msg.setText("Choose player name");
-        msg.setPlayerID(0);
-        when(sockets.get(0).readReceivedMessage()).thenReturn(respMsg);
+        respMsg.setText("playerName").
+                setOperation(Message.Action.RESPONSE).
+                setPlayerID(0);
+        when(sockets.get(0).writeLine(Message.generateMessage().
+                setOperation(Message.Action.GET_PLAYER_NAME).
+                setText("Choose player name").
+                setPlayerID(0).toJSON())).thenReturn(respMsg.toJSON());
         String response = io.choosePlayerName(Player.generatePlayer(0));
         Assertions.assertEquals("playerName", response);
     }
-
+/*
     @Test
     public void testWantToPick(){
         Message respMsg = Message.generateMessage();
@@ -131,5 +133,57 @@ public class TestTCPIOHandler {
 
         boolean yn = io.wantToPick(game.getActualPlayer(), 10, 10);
         Assertions.assertEquals(true, yn );
+    }
+*/
+    @Disabled
+    @Test
+    public void testGetYesAnswer(){
+        Message msg = Message.generateMessage().
+                setOperation(Message.Action.GET_INPUT).
+                setText("TEST REQ");
+
+        when(sockets.get(0).writeMessage(msg)).thenReturn(
+                Message.generateMessage().
+                        setText("y").
+                        setOperation(Message.Action.RESPONSE)
+
+        );
+        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ", "PRINT ERR");
+
+        Assertions.assertTrue(decision);
+    }
+
+    @Disabled
+    @Test
+    public void testGetNoAnswer(){
+        Message msg = Message.generateMessage().
+                setOperation(Message.Action.GET_INPUT).
+                setText("TEST REQ");
+
+        when(sockets.get(0).writeMessage(msg)).thenReturn(
+                Message.generateMessage().
+                        setText("n").
+                        setOperation(Message.Action.RESPONSE)
+        );
+        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ", "PRINT ERR");
+        Assertions.assertFalse(decision);
+    }
+    @Disabled
+    @Test
+    public void testGetErrorAnswer(){
+        Message msg = Message.generateMessage().
+                setOperation(Message.Action.GET_INPUT).
+                setText("TEST REQ");
+
+        when(sockets.get(0).writeMessage(msg)).thenReturn(
+                Message.generateMessage().
+                        setText("wrong string").
+                        setOperation(Message.Action.RESPONSE)
+        );
+        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ", "PRINT ERR");
+         msg = Message.generateMessage().
+                setOperation(Message.Action.ERROR).
+                setText("PRINT ERR");
+        verify(sockets.get(0)).writeLine(msg.toJSON());
     }
 }

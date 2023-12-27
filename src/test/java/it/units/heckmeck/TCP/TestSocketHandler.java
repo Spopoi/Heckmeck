@@ -52,8 +52,7 @@ class TestSocketHandler {
         msg.setText("Test Line");
         String msgString = gson.toJson(msg);
         when(clientHandler.writeLine(msgString)).thenReturn(msgString);
-        clientHandler.writeMessage(msg);
-        Message message = clientHandler.readReceivedMessage();
+        Message message = clientHandler.writeMessage(msg);
         assertEquals(msg.text, message.text);
     }
 
