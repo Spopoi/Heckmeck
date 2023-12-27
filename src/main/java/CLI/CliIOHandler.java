@@ -41,11 +41,6 @@ public class CliIOHandler implements IOHandler {
         printMessage("                      Welcome in Heckmeck");
     }
 
-    @Override
-    public boolean wantToPlayRemote() {
-        printMessage("Do you want to play remotely? Press 'y' or 'n' to select:");
-        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
-    }
 
     public boolean wantToHost() {
         printMessage("Do you want to host the game? Press 'y' or 'n' to select:");
@@ -53,8 +48,8 @@ public class CliIOHandler implements IOHandler {
     }
 
     public boolean wantToPlayAgain() {
-        printMessage("Do you want to return to main menu and start another game? Press 'y' or 'n' to select");
-        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
+        printMessage("Do you want to play again (y) or go back to main Menu (n)?");
+        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play again 'n' to return to menu");
     }
 
     public String askIPToConnect() {
@@ -215,6 +210,7 @@ public class CliIOHandler implements IOHandler {
             }
         }
     }
+
 
     public String getInitialChoice(String invalidInputMessage){
         while (true) {

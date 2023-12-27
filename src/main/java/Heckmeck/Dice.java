@@ -48,7 +48,7 @@ public class Dice {
 
     public void chooseDice(Die.Face face) {
         chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
-        diceList.removeIf(e -> e.getDieFace() == face);
+        diceList.removeIf(e -> e.getDieFace().equals(face));
     }
 
     public List <Die> getChosenDice(){
@@ -75,7 +75,7 @@ public class Dice {
 
     public boolean canPickAFace(){
         List<Die> choosableDie = diceList.stream().filter(e -> !isFaceChosen(e.getDieFace())).toList();
-        return choosableDie.size() != 0;
+        return !choosableDie.isEmpty();
     }
 
 }
