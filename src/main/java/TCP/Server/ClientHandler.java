@@ -9,8 +9,7 @@ public class ClientHandler implements Runnable{
     //private final IOBufferInterface ioBuffer;
     private final BufferedReader in;
     private final PrintWriter out;
-    private String rxString = "";
-    private String txString = "";
+
 
     String playerName;
     ObjectOutputStream objectOutputStream;
@@ -23,7 +22,7 @@ public class ClientHandler implements Runnable{
 
     }
     public void run(){
-        System.out.println("Connection in socket handler ok, this is client thread #" + playerId);
+        System.out.println("Connection established for player number: " + playerId);
         initClient();
     }
 
@@ -39,40 +38,29 @@ public class ClientHandler implements Runnable{
     }
     public String writeLine(String message){
         out.println(message);
-
-        try {
-            rxString =  in.readLine();
-        } catch (IOException e) {
-            System.out.println("ERROR: Player"+ playerId+ " " + playerName + " seems to be disconnected");
-        }
+        String rxString = readLine();
+        //rxString =  readLine();
         return rxString;
     }
 
-    public Message readReceivedMessage(){
-        return Message.fromJSON(rxString);
-    }
+    //public Message readReceivedMessage(){
+    //    return Message.fromJSON(rxString);
+    //}
 
     public Message writeMessage(Message message){
-
-        writeLine(message.toJSON());
-        return Message.fromJSON(rxString);
+        return Message.fromJSON(writeLine(message.toJSON()));
     }
 
     public boolean initClient(){
         Message msg = Message.generateMessage();
-        System.out.println("Socket handler init client: " + playerId);
+        System.out.println("Player " + playerId + " initialised");
         msg.setPlayerID(playerId);
         msg.setOperation(Message.Action.INIT);
         msg.setText("Hello");
         Message respMsg = writeMessage(msg);
-
-        //playerName = respMsg.text;
         return respMsg.playerID==playerId;
     }
 
-    public void testGetOtherPlayers(){
-
-    }
 }
 
 //TODO Via Lorenzo Butti 3
