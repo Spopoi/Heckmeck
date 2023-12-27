@@ -103,29 +103,7 @@ public class Client implements Runnable{
 
         //cli.startConnection("127.0.0.1", 51734);
 
-
-        Socket clientSocket = null;
-        PrintWriter out;
-        BufferedReader in;
-        try {
-            clientSocket = new Socket("127.0.0.1", 51734);
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        CliIOHandler cliIo = new CliIOHandler();
-        Client cli = new Client(false, cliIo, in, out);
-
-
-        cliIo.showWelcomeMessage();
-        cliIo.printMessage("Waiting for your turn to start");
-
-
-        cli.commandInterpreter(false);
+        HeckmeckCLI.startMenu();
     }
 
     public void commandInterpreter( boolean botMode){
