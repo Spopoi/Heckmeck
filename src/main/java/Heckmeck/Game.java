@@ -33,6 +33,7 @@ public class Game {
         }
         Player winnerPlayer = Rules.whoIsTheWinner(players);
         io.printMessage("Congratulation to "+winnerPlayer.getName() + ", you are the WINNER!!");
+        if(io.wantToPlayAgain()) restartGame();
     }
 
     private void playerTurn(){
@@ -40,6 +41,7 @@ public class Game {
         boolean isOnRun;
         do{
             io.showBoardTiles(boardTiles);
+            io.showPlayerData(actualPlayer, dice, players);
             if (dice.isFaceChosen(Face.WORM) || dice.getNumOfDice() == 0){
                 if (steal() || pick()) {
                     isOnRun = false;
@@ -96,7 +98,7 @@ public class Game {
         if(dice.getNumOfDice() == 0) return false;
         io.askRollDiceConfirmation(actualPlayer.getName());
         dice.rollDice();
-        io.showPlayerData(actualPlayer, dice, players);
+        //io.showPlayerData(actualPlayer, dice, players);
         io.showRolledDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();
@@ -149,15 +151,16 @@ public class Game {
         });
     }
 
-    public Player[] getPlayers(){
-        return players;
+    public void restartGame(){
+        Arrays.stream(players).sequential().forEach(player -> player.clearPlayer());
+        this.dice = Dice.init();
+        this.boardTiles = BoardTiles.init();
+        this.actualPlayer = this.players[0];
+        io.printMessage("OK, let's begin!");
+        play();
     }
-    public BoardTiles getBoardTiles(){
-        return boardTiles;
-    }
-    public Dice getDice(){
-        return dice;
-    }
+
+
     public Player getActualPlayer(){
         return actualPlayer;
     }
