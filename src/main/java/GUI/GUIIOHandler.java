@@ -73,6 +73,8 @@ public class GUIIOHandler implements IOHandler {
         return false;
     }
 
+
+
     @Override
     public void showTurnBeginConfirm(Player player) {
         frame.getContentPane().removeAll();
@@ -81,10 +83,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     // TODO: REMOVE BEFORE COMMIT!!
-    @Override
-    public boolean wantToPlayRemote() {
-        return false;
-    }
+
 
     public boolean wantToHost(){
         int result = JOptionPane.showOptionDialog(
