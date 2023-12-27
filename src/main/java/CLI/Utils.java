@@ -8,14 +8,20 @@ import java.util.Collection;
 class Utils {
 
     private static final String LOGO_FILE = "LOGO";
+    private static final String RULES = "RULES";
+
     private static final String ACTUAL_PLAYER_INFO_TEMPLATE_FILE = "PLAYER_INFO_TEMPLATE";
 
     private Utils() {
     }
 
-    //TODO FAre un getFilesPath
+
     public static Path getLogoPath() {
         return getPath(LOGO_FILE);
+    }
+
+    public static Path getRulesPath(){
+        return getPath(RULES);
     }
 
     public static Path getPath(String fileName) {

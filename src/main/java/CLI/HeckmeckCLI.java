@@ -51,13 +51,13 @@ public class HeckmeckCLI {
                     }
                     break;
                 case "3":
-                    io.printMessage(FileReader.readTextFile(Utils.getPath("RULES")));
+                    io.printMessage(FileReader.readTextFile(Utils.getRulesPath()));
                     break;
                 case "4":
                     io.printMessage("Exiting Heckmeck. Goodbye!");
                     return; // Exit the program
                 default:
-                    io.printError("Incorrect input, choose between 1, 2, 3, 4");
+                    break;
             }
         } while (true);
     }
@@ -81,8 +81,13 @@ public class HeckmeckCLI {
         Client cli = new Client(false, io, in, out);
         Thread cliThread = new Thread(cli);
         cliThread.start();
-        //cli.commandInterpreter(false);
-        //cli.startConnection(IP, 51734);
+        io.printMessage("Local client started, waiting for your turn to begin");
+        try {
+            cliThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
     public static void startLocalClient(IOHandler io){
