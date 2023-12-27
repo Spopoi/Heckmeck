@@ -45,7 +45,7 @@ public class TestTCPIOHandler {
         pl2.setPlayerName("1");
 
         Player[] players = {pl1, pl2};
-        when(game.getPlayers()).thenReturn(players);
+
         when(game.getActualPlayer()).thenReturn(pl1);
 
         //when(game.getActualPlayer().getPlayerID()).thenReturn(0);
@@ -104,7 +104,7 @@ public class TestTCPIOHandler {
 
         verify(sockets.get(1)).writeMessage(messageCaptor.capture());
         capturedMessage = messageCaptor.getValue();
-        assertEquals("This is TestPlayer's turn, please wait for yours", capturedMessage.text);
+        assertEquals("This is not your turn, please wait", capturedMessage.text);
         assertEquals(Message.Action.INFO, capturedMessage.operation);
     }
     @Disabled
