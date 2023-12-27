@@ -32,13 +32,15 @@ public class GameServer implements Runnable {
             System.out.println("You are now hosting on this machine: tell your IP address to your friends!");
             System.out.println(getIPAddress());
             acceptConnections();
-            initClients();
+            //initClients();
 
         } catch (IOException e) {
             System.out.println("Error in acceptConnections()");
         }
 
         TCPIOHandler io = new TCPIOHandler(clients);
+        io.showWelcomeMessage();
+
         game = new Game(io);
         game.init();
         game.play();
@@ -86,9 +88,7 @@ public class GameServer implements Runnable {
         return numOfPlayers;
     }
 
-    public void initClients() {
-        clients.forEach(e -> new Thread(e).start());
-    }
+
 
     public void close() {
         try {
