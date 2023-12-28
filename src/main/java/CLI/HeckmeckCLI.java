@@ -49,6 +49,7 @@ public class HeckmeckCLI {
                     break;
                 case "4":
                     io.printMessage("Exiting Heckmeck. Goodbye!");
+                    return; // Exit the program
                 default:
                     break;
             }
