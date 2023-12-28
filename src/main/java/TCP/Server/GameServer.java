@@ -1,5 +1,6 @@
 package TCP.Server;
 
+import CLI.Utils;
 import Heckmeck.Game;
 
 import java.io.*;
@@ -97,29 +98,7 @@ public class GameServer implements Runnable {
         }
     }
 
-    private static String getIPAddress(){
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            while (interfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = interfaces.nextElement();
-                if (networkInterface.isLoopback() || !networkInterface.isUp()) {
-                    continue;
-                }
-
-                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
-                while (addresses.hasMoreElements()) {
-                    InetAddress address = addresses.nextElement();
-                    String ipAddress = address.getHostAddress();
-                    if (ipAddress.startsWith("192.168.1.")) {
-                        return ipAddress;
-                    }
-                }
-            }
-
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        return "";
-
+    private static String getIPAddress() {
+        return Utils.getLanIpAddress();
     }
 }
