@@ -142,7 +142,7 @@ public class GUIIOHandler implements IOHandler {
             JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), BOARD_TILE_DIMENSIONS.height * 8/10 , BOARD_TILE_DIMENSIONS.width * 9/10));
             tileIcon.setPreferredSize(BOARD_TILE_DIMENSIONS);
 
-            RoundedPanel roundedTilePanel = new RoundedPanel(20);
+            RoundedPanel roundedTilePanel = new RoundedPanel( null);
             roundedTilePanel.setLayout(new BorderLayout());
             roundedTilePanel.add(tileIcon, BorderLayout.CENTER);
             tilesPanel.add(roundedTilePanel);

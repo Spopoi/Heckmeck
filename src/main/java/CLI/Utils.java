@@ -19,7 +19,7 @@ public class Utils {
 
     private Utils() {
     }
-
+//Todo: refactoring?
 
     public static Path getLogoPath() {
         return getPath(LOGO_FILE);

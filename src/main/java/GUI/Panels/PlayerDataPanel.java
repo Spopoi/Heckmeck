@@ -13,7 +13,7 @@ import static Heckmeck.FileReader.getDieIcon;
 import static Heckmeck.FileReader.getTileIcon;
 
 
-public class PlayerDataPanel extends ImagePanel{
+public class PlayerDataPanel extends RoundedPanel{
 
     private JLabel playerName;
     private JPanel playerDicePanel;
