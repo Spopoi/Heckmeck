@@ -37,7 +37,7 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showWelcomeMessage() {
-        printMessage(FileReader.readTextFile(Utils.getLogoPath()));
+        printMessage(Utils.getLogo());
         printMessage("                      Welcome in Heckmeck");
     }
 
@@ -119,7 +119,7 @@ public class CliIOHandler implements IOHandler {
                 .createHeader()
                 .fillWithPlayersData();
 
-        String actualPlayerInfo = fillActualPlayerInfoTemplate(FileReader.readTextFile(Utils.getActualPlayerInfoTemplate()), actualPlayer, dice);
+        String actualPlayerInfo = fillActualPlayerInfoTemplate(Utils.getActualPlayerInfoTemplate(), actualPlayer, dice);
 
         TextBlock playerData = new TextBlock(actualPlayerInfo).concatenateWith(new TextBlock(summaryTable.toString()), 12);
         printMessage(playerData.toString());
@@ -212,7 +212,7 @@ public class CliIOHandler implements IOHandler {
     }
 
 
-    public String getInitialChoice(String invalidInputMessage){
+    public String getInitialChoice(){
         while (true) {
             String decision = getInputString();
             if (Objects.equals(decision, "1")) {
@@ -226,7 +226,7 @@ public class CliIOHandler implements IOHandler {
             } else if (decision.isBlank()) {
                 continue;
             } else {
-                printMessage(invalidInputMessage);
+                printMessage("Incorrect input, insert one possible choice (1, 2, 3, 4)");
             }
         }
     }
