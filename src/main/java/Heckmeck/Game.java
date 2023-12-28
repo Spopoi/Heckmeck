@@ -44,7 +44,7 @@ public class Game {
         do{
             io.showBoardTiles(boardTiles);
             io.showPlayerData(actualPlayer, dice, players);
-            if (dice.isFaceChosen(Face.WORM) || dice.getNumOfDice() == 0){
+            if (dice.isFaceChosen(Face.WORM)){
                 if (steal() || pick()) {
                     isOnRun = false;
                 } else isOnRun = roll();
@@ -97,7 +97,10 @@ public class Game {
     }
 
     private boolean roll(){
-        if(dice.getNumOfDice() == 0) return false;
+        if(dice.getNumOfDice() == 0) {
+            bust();
+            return false;
+        }
         io.askRollDiceConfirmation(actualPlayer.getName());
         dice.rollDice();
         //io.showPlayerData(actualPlayer, dice, players);
