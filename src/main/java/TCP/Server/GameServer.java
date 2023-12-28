@@ -56,18 +56,8 @@ public class GameServer implements Runnable {
             System.out.println("Accepted incoming connection #: " + playerID);
 
             if (clientSocket.isConnected()) {
-                OutputStream outputStream;
-                InputStream inputStream;
-                try {
-                    outputStream = clientSocket.getOutputStream();
-                    inputStream = clientSocket.getInputStream();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                PrintWriter out = new PrintWriter(outputStream, true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
 
-                this.clients.add(new ClientHandler(playerID, in, out));
+                this.clients.add(Utils.startClientHandler(playerID, clientSocket));
                 playerID++;
             }
             if (playerID == 7 || playerID == numOfPlayers) {
@@ -83,12 +73,6 @@ public class GameServer implements Runnable {
     public void closeRoom() {
         hostClosedRoom = true;
     }
-
-    public int getNumOfPlayers() {
-        return numOfPlayers;
-    }
-
-
 
     public void close() {
         try {
