@@ -6,26 +6,17 @@ import java.io.*;
 
 public class ClientHandler implements Runnable{
     public final int playerId;
-    //private final IOBufferInterface ioBuffer;
     private final BufferedReader in;
     private final PrintWriter out;
-
-
-    String playerName;
-    ObjectOutputStream objectOutputStream;
-    InputStream inputStream;
-
     public ClientHandler(int playerId, BufferedReader in, PrintWriter out) {
         this.in = in;
         this.out = out;
         this.playerId = playerId;
-
     }
     public void run(){
         System.out.println("Connection established for player number: " + playerId);
         initClient();
     }
-
     public int getPlayerID(){
         return this.playerId;
     }
@@ -38,19 +29,11 @@ public class ClientHandler implements Runnable{
     }
     public String writeLine(String message){
         out.println(message);
-        String rxString = readLine();
-        //rxString =  readLine();
-        return rxString;
+        return readLine();
     }
-
-    //public Message readReceivedMessage(){
-    //    return Message.fromJSON(rxString);
-    //}
-
     public Message writeMessage(Message message){
         return Message.fromJSON(writeLine(message.toJSON()));
     }
-
     public boolean initClient(){
         Message msg = Message.generateMessage();
         System.out.println("Player " + playerId + " initialised");
@@ -60,7 +43,4 @@ public class ClientHandler implements Runnable{
         Message respMsg = writeMessage(msg);
         return respMsg.playerID==playerId;
     }
-
 }
-
-//TODO Via Lorenzo Butti 3

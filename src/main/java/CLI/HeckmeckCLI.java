@@ -28,7 +28,7 @@ public class HeckmeckCLI {
                         - (1) Start Heckmeck
                         - (2) Multiplayer
                         - (3) Rules
-                        - (4) Exit                        
+                        - (4) Exit\s
                     """);
 
             String choice = io.getInitialChoice(
@@ -46,6 +46,7 @@ public class HeckmeckCLI {
                         int numOfPlayers = io.chooseNumberOfPlayers();
                         startGameServer(numOfPlayers);
                         startLocalClient(io);
+
                     } else {
                         startLocalClient(io.askIPToConnect(), io);
                     }
@@ -55,30 +56,16 @@ public class HeckmeckCLI {
                     break;
                 case "4":
                     io.printMessage("Exiting Heckmeck. Goodbye!");
-                    return; // Exit the program
+                    System.exit(0);
+                    return;
                 default:
                     break;
             }
         } while (true);
     }
-
-
     //TODO: Move methods?
     public static void startLocalClient(String IP, IOHandler io){
-
-
-        Socket clientSocket = null;
-        PrintWriter out;
-        BufferedReader in;
-        try {
-            clientSocket = new Socket(IP, 51734);
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        Client cli = new Client(false, io, in, out);
+        Client cli = Utils.startClient(IP, io);
         Thread cliThread = new Thread(cli);
         cliThread.start();
         io.printMessage("Local client started, waiting for your turn to begin");
@@ -87,8 +74,6 @@ public class HeckmeckCLI {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
     }
     public static void startLocalClient(IOHandler io){
         startLocalClient("127.0.0.1", io);
@@ -97,6 +82,4 @@ public class HeckmeckCLI {
         GameServer gameServer = new GameServer(numOfPlayers);
         new Thread(gameServer).start();
     }
-
-
 }
