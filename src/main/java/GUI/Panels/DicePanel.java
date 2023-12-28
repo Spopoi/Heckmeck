@@ -12,7 +12,6 @@ import static Heckmeck.FileReader.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;
 
 public class DicePanel extends JPanel {
-
     private Die.Face chosenFace;
 
     public DicePanel(){
@@ -25,37 +24,45 @@ public class DicePanel extends JPanel {
     public void updateDice(Dice dice){
         this.removeAll();
         chosenFace = null;
+        GridBagConstraints gbc = initGridBagConstraints();
+        for (Die die : dice.getDiceList()) {
+            JToggleButton dieButton = makeDiceButton(die);
+            add(dieButton, gbc);
+            updateGridBagConstraints(gbc);
+        }
+    }
+
+    private void updateGridBagConstraints(GridBagConstraints gbc) {
+        gbc.gridx++;
+        if (gbc.gridx > 3) {
+            gbc.gridx = 0;
+            gbc.gridy++;
+        }
+    }
+
+    private static GridBagConstraints initGridBagConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(20, 20, 30, 20);
         gbc.anchor = NORTH;
         gbc.fill = GridBagConstraints.NONE;
+        return gbc;
+    }
 
-        for (Die die : dice.getDiceList()) {
-            JToggleButton dieButton = new JToggleButton();
-            Die.Face dieFace = die.getDieFace();
-            dieButton.setIcon(getDieIcon(dieFace, 65));
-            dieButton.setSelectedIcon(getDieIcon(dieFace, 65));
-            dieButton.addActionListener(e -> chosenFace = dieFace);
-            dieButton.setPreferredSize(new Dimension(60, 60));
-
-            dieButton.setBorder(null);
-            dieButton.putClientProperty("originalFace", dieFace);
-            add(dieButton, gbc);
-
-            gbc.gridx++;
-            if (gbc.gridx > 3) {
-                gbc.gridx = 0;
-                gbc.gridy++;
-            }
-        }
+    private JToggleButton makeDiceButton(Die die) {
+        JToggleButton dieButton = new JToggleButton();
+        Die.Face dieFace = die.getDieFace();
+        dieButton.setIcon(getDieIcon(dieFace, 65));
+        dieButton.setBorder(null);
+        dieButton.putClientProperty("originalFace", dieFace);
+        dieButton.addActionListener(e -> chosenFace = dieFace);
+        return dieButton;
     }
 
     public void rollDiceAnimation(){
         Timer timer = new Timer(100, new ActionListener() {
             private int rollCount = 0;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (rollCount < 10) {
