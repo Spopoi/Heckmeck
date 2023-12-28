@@ -1,5 +1,6 @@
 package CLI;
 
+import Heckmeck.FileReader;
 import Heckmeck.IOHandler;
 import TCP.Client;
 import TCP.Server.ClientHandler;
@@ -14,19 +15,30 @@ public class Utils {
 
     private static final String LOGO_FILE = "LOGO";
     private static final String RULES = "RULES";
+    private static final String MENU = "MENU";
+
+    private static final String MULTIPLAYER = "MULTIPLAYER";
+
 
     private static final String ACTUAL_PLAYER_INFO_TEMPLATE_FILE = "PLAYER_INFO_TEMPLATE";
-
+//TODO togliere costruttore non usato?
     private Utils() {
     }
 //Todo: refactoring?
 
-    public static Path getLogoPath() {
-        return getPath(LOGO_FILE);
+    public static String getLogo() {
+        return getFileString(getPath(LOGO_FILE));
+    }
+    public static String getMultyplayerPath(){
+        return getFileString(getPath(MULTIPLAYER));
     }
 
-    public static Path getRulesPath(){
-        return getPath(RULES);
+    public static String getMenu(){
+        return getFileString(getPath(MENU));
+    }
+
+    public static String getRules(){
+        return getFileString(getPath(RULES));
     }
 
     public static Path getPath(String fileName) {
@@ -40,8 +52,12 @@ public class Utils {
         return resourcePath;
     }
 
-    public static Path getActualPlayerInfoTemplate() {
-        return getPath(ACTUAL_PLAYER_INFO_TEMPLATE_FILE);
+    public static String getActualPlayerInfoTemplate() {
+        return getFileString(getPath(ACTUAL_PLAYER_INFO_TEMPLATE_FILE));
+    }
+
+    public static String getFileString(Path filepath){
+        return FileReader.readTextFile(filepath);
     }
 
     public static String collectionToString(Collection<?> collection) {
@@ -52,6 +68,8 @@ public class Utils {
         }
         return collectionAsTextBlock.toString();
     }
+
+
 
     public static String getLanIpAddress() {
         try {
@@ -108,7 +126,6 @@ public class Utils {
             throw new RuntimeException(e);
         }
         return new Client(false, io, in, out);
-
     }
 
 
