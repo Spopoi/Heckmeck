@@ -1,5 +1,6 @@
 package TCP.Server;
 
+import CLI.Utils;
 import Heckmeck.*;
 import TCP.Message;
 
@@ -17,13 +18,10 @@ public class TCPIOHandler implements IOHandler {
         this.sockets = sockets;
         threads = new ArrayList<>(sockets.size());
         initClients();
-
     }
-
     private void sendBroadCast(Message msg){
         sockets.forEach(client -> client.writeMessage(msg));
     }
-
     public void initClients() {
         sockets.forEach(socket -> {
             Thread t = new Thread(socket);
@@ -31,7 +29,6 @@ public class TCPIOHandler implements IOHandler {
             t.start();
         });
     }
-
     @Override
     public void printMessage(String text) {
         sendBroadCast(
@@ -40,7 +37,6 @@ public class TCPIOHandler implements IOHandler {
                         setText(text)
         );
     }
-
     @Override
     public void printError(String text){
         sendBroadCast(
@@ -53,7 +49,6 @@ public class TCPIOHandler implements IOHandler {
     public String askIPToConnect() {
         return null;
     }
-
 
     @Override
     public boolean wantToPlayAgain() {
@@ -69,28 +64,18 @@ public class TCPIOHandler implements IOHandler {
                 currentPlayer,
                 Message.generateMessage().
                         setOperation(Message.Action.ASK_CONFIRM).
-                        setText(currentPlayer.getName() + ", press enter to start your turn")
+                        setText("Press enter to start your turn").
+                        setActualPlayer(currentPlayer)
         );
     }
     @Override
     public void showWelcomeMessage() {
-        printMessage("""
-                 __ __       _    _    _       _                    \s
-                |  \\  \\ _ _ | | _| |_ <_> ___ | | ___  _ _  ___  _ _\s
-                |     || | || |  | |  | || . \\| |<_> || | |/ ._>| '_>
-                |_|_|_|`___||_|  |_|  |_||  _/|_|<___|`_. |\\___.|_| \s
-                                         |_|          <___'         \s
-                """
-
-        );
+        printMessage(Utils.getMultyplayerPath());
     }
-
-
     @Override
     public int chooseNumberOfPlayers() {
         return sockets.size();
     }
-
     @Override
     public String choosePlayerName(Player player) {
         informEveryOtherClient(player);
@@ -103,7 +88,6 @@ public class TCPIOHandler implements IOHandler {
                 );
         return resp.text;
     }
-
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         sendBroadCast(
@@ -119,6 +103,7 @@ public class TCPIOHandler implements IOHandler {
 
     @Override
     public void showRolledDice(Dice dice) {
+
 
     }
 
