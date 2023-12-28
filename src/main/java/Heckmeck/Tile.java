@@ -1,6 +1,5 @@
 package Heckmeck;
 
-import exception.IllegalTileNumber;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -67,10 +66,7 @@ public class Tile implements Comparable<Tile> {
         return "~".repeat(this.getWorms()); // TODO spostare sopra
     }
 
-    public static Tile generateTile(int number) throws IllegalTileNumber {
-        if (number < 21 || number > 36) {
-            throw new IllegalTileNumber(number);
-        }
+    public static Tile generateTile(int number) {
         return new Tile(number);
     }
 

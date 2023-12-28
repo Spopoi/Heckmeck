@@ -3,7 +3,6 @@ package it.units.heckmeck;
 import Heckmeck.Player;
 import Heckmeck.Tile;
 import Heckmeck.BoardTiles;
-import exception.IllegalTileAddition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -66,19 +65,6 @@ public class TestPlayer {
         robber.stealTileFromPlayer(robbed);
 
         Assertions.assertEquals(desiredTile, robber.getLastPickedTile());
-    }
-
-    @Test
-    void check_that_player_can_not_add_twice_the_same_tile_on_its_own_stack() {
-        Tile newTile = Tile.generateTile(21);
-        Player player = Player.generatePlayer(0);
-        String expectedMessage = "Tile number 21 is already present in the collection";
-
-        player.pickTile(newTile);
-
-        Exception ex = Assertions.assertThrows(IllegalTileAddition.class, () ->
-                player.pickTile(newTile));
-        Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
 
     @Test

@@ -1,9 +1,7 @@
 package Heckmeck;
 
-import exception.IllegalTileAddition;
 
 import java.util.LinkedList;
-import java.util.Objects;
 
 
 public class StackOfTiles implements TilesCollection {
@@ -28,10 +26,7 @@ public class StackOfTiles implements TilesCollection {
     }
 
     @Override
-    public void add(Tile newTile) throws IllegalTileAddition{
-        if (hasTile(newTile)) {
-            throw new IllegalTileAddition(newTile.getNumber());
-        }
+    public void add(Tile newTile) {
         stackOfTiles.add(newTile);
     }
 
