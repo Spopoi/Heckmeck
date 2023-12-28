@@ -16,17 +16,8 @@ public class HeckmeckCLI {
         io.showWelcomeMessage();
 
         do {
-            io.printMessage("""
-                    Choose what you want to do:
-                        - (1) Start Heckmeck
-                        - (2) Multiplayer
-                        - (3) Rules
-                        - (4) Exit\s
-                    """);
-
-            String choice = io.getInitialChoice(
-                    "Incorrect input, insert one possible choice (1, 2, 3, 4)"
-            );
+            io.printMessage(Utils.getMenu());
+            String choice = io.getInitialChoice();
 
             switch (choice) {
                 case "1":
@@ -45,10 +36,11 @@ public class HeckmeckCLI {
                     }
                     break;
                 case "3":
-                    io.printMessage(FileReader.readTextFile(Utils.getRulesPath()));
+                    io.printMessage(Utils.getRules());
                     break;
                 case "4":
                     io.printMessage("Exiting Heckmeck. Goodbye!");
+                    System.exit(0);
                     return; // Exit the program
                 default:
                     break;
