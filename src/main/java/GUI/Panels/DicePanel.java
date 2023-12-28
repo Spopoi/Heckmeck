@@ -13,11 +13,14 @@ import static java.awt.GridBagConstraints.NORTH;
 
 public class DicePanel extends JPanel {
     private Die.Face chosenFace;
+    private final static int topEmptyBorder = 0;
+    private final static int sideEmptyBorder = 5;
+    private final static int bottomEmptyBorder = 50;
 
     public DicePanel(){
         super();
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createEmptyBorder(0, 5, 50, 5));
+        setBorder(BorderFactory.createEmptyBorder(topEmptyBorder, sideEmptyBorder, bottomEmptyBorder, sideEmptyBorder));
         setOpaque(false);
     }
 
