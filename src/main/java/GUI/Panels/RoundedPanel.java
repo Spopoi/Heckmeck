@@ -16,7 +16,7 @@ public class RoundedPanel extends JPanel {
         if (imagePath != null) {
             backgroundImage = new ImageIcon(imagePath).getImage();
         }
-        setOpaque(false); // Rendi il pannello trasparente
+        setOpaque(false);
     }
 
     @Override
@@ -33,16 +33,10 @@ public class RoundedPanel extends JPanel {
         g2d.clip(roundedRect);
 
         if (backgroundImage != null) {
-            // Imposta l'opacita per rendere l'immagine di sfondo trasparente
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-
-            // Disegna l'immagine di sfondo
             g2d.drawImage(backgroundImage, 0, 0, width, height, this);
-
-            // Ripristina l'opacita predefinita
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         } else {
-            // Se l'immagine di sfondo a null, imposta il colore di sfondo a bianco
             g2d.setColor(Color.WHITE);
             g2d.fillRoundRect(0, 0, width, height, 20, 20);
         }
