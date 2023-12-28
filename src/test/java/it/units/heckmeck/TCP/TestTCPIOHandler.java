@@ -96,7 +96,7 @@ public class TestTCPIOHandler {
         // Verify broadcast message
         verify(sockets.get(0)).writeMessage(messageCaptor.capture());
         Message capturedMessage = messageCaptor.getValue();
-        assertEquals("TestPlayer, press enter to start your turn", capturedMessage.text);
+        assertEquals("Press enter to start your turn", capturedMessage.text);
         assertEquals(Message.Action.ASK_CONFIRM, capturedMessage.operation);
 
         verify(sockets.get(1)).writeMessage(messageCaptor.capture());
