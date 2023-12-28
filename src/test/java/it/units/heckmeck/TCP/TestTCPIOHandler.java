@@ -30,14 +30,11 @@ public class TestTCPIOHandler {
         ClientHandler client2 = mock(ClientHandler.class);
         when(client1.getPlayerID()).thenReturn(0);
         when(client2.getPlayerID()).thenReturn(1);
-
         sockets.add(client1);
         sockets.add(client2);
-
         msg = Message.generateMessage();
         msg.setPlayerID(0);
         msg.setText("Test Line");
-
         game = mock(Game.class);
         Player pl1 = Player.generatePlayer(0);
         pl1.setPlayerName("0");
