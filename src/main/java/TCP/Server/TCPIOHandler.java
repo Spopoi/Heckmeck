@@ -8,22 +8,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class TCPIOHandler implements IOHandler {
-
-
     private final List<ClientHandler> sockets;
     private final List<Thread> threads;
-
     public TCPIOHandler(List<ClientHandler> sockets){
         this.sockets = sockets;
         threads = new ArrayList<>(sockets.size());
         initClients();
-
     }
-
     private void sendBroadCast(Message msg){
         sockets.forEach(client -> client.writeMessage(msg));
     }
-
     public void initClients() {
         sockets.forEach(socket -> {
             Thread t = new Thread(socket);
@@ -31,7 +25,6 @@ public class TCPIOHandler implements IOHandler {
             t.start();
         });
     }
-
     @Override
     public void printMessage(String text) {
         sendBroadCast(
@@ -40,7 +33,6 @@ public class TCPIOHandler implements IOHandler {
                         setText(text)
         );
     }
-
     @Override
     public void printError(String text){
         sendBroadCast(
@@ -53,8 +45,6 @@ public class TCPIOHandler implements IOHandler {
     public String askIPToConnect() {
         return null;
     }
-
-
     @Override
     public boolean wantToPlayAgain() {
         return getYesOrNoAnswer(
@@ -81,16 +71,12 @@ public class TCPIOHandler implements IOHandler {
                 |_|_|_|`___||_|  |_|  |_||  _/|_|<___|`_. |\\___.|_| \s
                                          |_|          <___'         \s
                 """
-
         );
     }
-
-
     @Override
     public int chooseNumberOfPlayers() {
         return sockets.size();
     }
-
     @Override
     public String choosePlayerName(Player player) {
         informEveryOtherClient(player);
@@ -103,7 +89,6 @@ public class TCPIOHandler implements IOHandler {
                 );
         return resp.text;
     }
-
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         sendBroadCast(
@@ -114,14 +99,12 @@ public class TCPIOHandler implements IOHandler {
     }
     @Override
     public void askRollDiceConfirmation(String playerName) {
-        return;
-    }
 
+    }
     @Override
     public void showRolledDice(Dice dice) {
-        return;
-    }
 
+    }
     // TODO: move method to the new signature
     @Override
     public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
@@ -131,7 +114,6 @@ public class TCPIOHandler implements IOHandler {
     public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
         return getYesOrNoAnswer(currentPlayer.getPlayerID(), "Do you want to steal " + robbedPlayer.getName() + "' s tile?", "Invalid choice, try again");
     }
-
     @Override
     public void showPlayerData(Player currentPlayer, Dice dice, Player[] players) {
         sendBroadCast(
@@ -142,7 +124,6 @@ public class TCPIOHandler implements IOHandler {
                         setActualPlayer(currentPlayer)
         );
     }
-
     @Override
     public Die.Face chooseDie(Player currentPlayer, Dice dice) {
         informEveryOtherClient(currentPlayer);
@@ -155,7 +136,6 @@ public class TCPIOHandler implements IOHandler {
         );
         return Die.getFaceByString(msg.text);
     }
-
     private void informEveryOtherClient(Player currentPlayer){
         getOtherPlayersSockets(currentPlayer).
                 forEach(s -> s.writeMessage(
@@ -170,16 +150,13 @@ public class TCPIOHandler implements IOHandler {
     public void showBustMessage() {
         printMessage("## BUST! ##");
     }
-
     @Override
     public String getInputString() {
         return null;
     }
-
     public List<ClientHandler> getOtherPlayersSockets(Player currentPlayer){
         return sockets.stream().filter(p -> p.getPlayerID() != currentPlayer.getPlayerID()).toList();
     }
-
     private Message informPlayer(Player player, Message msg) {
         return informPlayer(player.getPlayerID(), msg);
     }
@@ -189,10 +166,8 @@ public class TCPIOHandler implements IOHandler {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
         return sockets.get(playerID).writeMessage(msg.setPlayerID(playerID));
     }
-
     private ClientHandler getHostClient(){
         return sockets.get(0);
     }
@@ -203,7 +178,6 @@ public class TCPIOHandler implements IOHandler {
                             setOperation(Message.Action.GET_INPUT).
                             setText(textToDisplay)
             ).text;
-
             if (Objects.equals(decision, "y")) {
                 return true;
             } else if (Objects.equals(decision, "n")) {

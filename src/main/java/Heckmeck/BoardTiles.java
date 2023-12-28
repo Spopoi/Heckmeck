@@ -34,7 +34,6 @@ public class BoardTiles implements TilesCollection {
         Tile searchedTile = Tile.generateTile(score);
         return tiles.floor(searchedTile);
     }
-
     @Override
     public void add(Tile newTile){
         tiles.add(newTile);

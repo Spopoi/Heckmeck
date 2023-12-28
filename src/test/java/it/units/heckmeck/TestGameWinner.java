@@ -1,9 +1,6 @@
 package it.units.heckmeck;
 
-import Heckmeck.BoardTiles;
-import Heckmeck.Player;
-import Heckmeck.Rules;
-import Heckmeck.Tile;
+import Heckmeck.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -73,4 +70,6 @@ public class TestGameWinner {
                 () -> Assertions.assertNotEquals(loser2, winner)
         );
     }
+
+
 }

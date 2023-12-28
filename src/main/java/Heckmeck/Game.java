@@ -135,7 +135,7 @@ public class Game {
             playersList[i] = Player.generatePlayer(i);
             this.actualPlayer = playersList[i];
             String playerName = io.choosePlayerName(playersList[i]);
-            while(isNameAlreadyPicked(playerName,playersList)){
+            while(isNameAlreadyPicked(playerName, playersList)){
                 io.printError(playerName + " Already picked name.. Please choose another one");
                 playerName = io.choosePlayerName(playersList[i]);
             }
@@ -152,7 +152,7 @@ public class Game {
     }
 
     public void restartGame(){
-        Arrays.stream(players).sequential().forEach(player -> player.clearPlayer());
+        Arrays.stream(players).sequential().forEach(Player::clearPlayer);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
         this.actualPlayer = this.players[0];
