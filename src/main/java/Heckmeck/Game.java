@@ -26,6 +26,7 @@ public class Game {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
         while(!boardTiles.isEmpty()){
+
             playerTurn();
             playerNumber++;
             if(playerNumber >= players.length) playerNumber = 0;
@@ -38,6 +39,7 @@ public class Game {
 
     private void playerTurn(){
         io.showTurnBeginConfirm(actualPlayer);
+
         boolean isOnRun;
         do{
             io.showBoardTiles(boardTiles);
