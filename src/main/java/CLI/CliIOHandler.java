@@ -97,7 +97,7 @@ public class CliIOHandler implements IOHandler {
     public void showTurnBeginConfirm(Player player) {
         String mainMessage = "# " + player.getName() + ": hit enter to start your turn #";
         String separator = "#".repeat(mainMessage.length());
-        printMessage(separator + newLine +
+        printMessage(newLine + separator + newLine +
                 mainMessage + newLine +
                 separator);
         getInputString();
@@ -106,7 +106,7 @@ public class CliIOHandler implements IOHandler {
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         printMessage("The available tiles on the board now are:");
-        printMessage(Utils.collectionToString(boardTiles.getTiles()) + newLine);
+        printMessage(Utils.collectionToString(boardTiles.getTiles()));
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CliIOHandler implements IOHandler {
         String actualPlayerInfo = fillActualPlayerInfoTemplate(FileReader.readTextFile(Utils.getActualPlayerInfoTemplate()), actualPlayer, dice);
 
         TextBlock playerData = new TextBlock(actualPlayerInfo).concatenateWith(new TextBlock(summaryTable.toString()), 12);
-        printMessage(playerData.toString() + newLine);
+        printMessage(playerData.toString());
     }
 
     private String fillActualPlayerInfoTemplate(String actualPlayerInfoTemplate, Player actualPlayer, Dice dice) {
@@ -153,7 +153,7 @@ public class CliIOHandler implements IOHandler {
     public void askRollDiceConfirmation(String playerName) {
         String mainMessage = "# " + playerName + ": hit enter to roll dice #";
         String separator = "#".repeat(mainMessage.length());
-        printMessage(separator + newLine +
+        printMessage(newLine + separator + newLine +
                 mainMessage + newLine +
                 separator);
         getInputString();
@@ -183,7 +183,7 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showBustMessage() {
-        printMessage("#####################" + newLine + "# BUUUUUSSSTTTTTT!! #" + newLine + "#####################" + newLine);
+        printMessage("#####################" + newLine + "# BUUUUUSSSTTTTTT!! #" + newLine + "#####################");
     }
 
     //TODO: MODIFICARE
