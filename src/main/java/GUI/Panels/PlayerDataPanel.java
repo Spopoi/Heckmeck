@@ -19,6 +19,7 @@ public class PlayerDataPanel extends RoundedPanel{
     private JPanel playerDicePanel;
     private JLabel score;
     private JPanel playerTilePanel;
+    private JLabel playerWormScore;
 
     public PlayerDataPanel(String imagePath) {
         super(imagePath);
@@ -33,12 +34,25 @@ public class PlayerDataPanel extends RoundedPanel{
         add(Box.createVerticalStrut(6));
         addHorizontalSeparator();
 
+        initPlayerWormScore();
+        add(Box.createRigidArea(getDimensions(10)));
+
         initPlayerTilePanel();
-        add(Box.createRigidArea(getDimensions(20)));
+        add(Box.createRigidArea(getDimensions(15)));
 
         initPlayerDicePanel();
+        add(Box.createRigidArea(getDimensions(5)));
+
         addHorizontalSeparator();
         initScoreLabel();
+    }
+
+    private void initPlayerWormScore() {
+        playerWormScore = new JLabel();
+        playerWormScore.setPreferredSize(getDimensions(45));
+        playerWormScore.setFont(textFont);
+        playerWormScore.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(playerWormScore);
     }
 
     private void addHorizontalSeparator() {
@@ -108,6 +122,7 @@ public class PlayerDataPanel extends RoundedPanel{
 
     public void update(Player player, Dice dice){
         playerName.setText("Player " + player.getName());
+        playerWormScore.setText("Worm score: " + player.getWormScore());
         updateDicePanel(dice);
         score.setText("Current score: " + dice.getScore());
         if(player.hasTile()){
@@ -116,6 +131,8 @@ public class PlayerDataPanel extends RoundedPanel{
             initTilePanel(-1);
         }
     }
+
+
 
     private void updateDicePanel(Dice dice) {
         playerDicePanel.removeAll();
