@@ -215,7 +215,7 @@ public class GUIIOHandler implements IOHandler {
         frame.revalidate();
     }
     @Override
-    public void askRollDiceConfirmation(String playerName){
+    public void askRollDiceConfirmation(Player playerName){
         return;
     }
 
