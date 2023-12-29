@@ -101,7 +101,7 @@ public class Game {
             bust();
             return false;
         }
-        io.askRollDiceConfirmation(actualPlayer.getName());
+        io.askRollDiceConfirmation(actualPlayer);
         dice.rollDice();
         //io.showPlayerData(actualPlayer, dice, players);
         io.showRolledDice(dice);
