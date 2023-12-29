@@ -1,7 +1,9 @@
 package Heckmeck;
 
+import Heckmeck.Components.*;
+
 import java.util.*;
-import static Heckmeck.Die.Face;
+import static Heckmeck.Components.Die.Face;
 
 public class Game {
     private Player[] players;

@@ -1,5 +1,7 @@
-package Heckmeck;
+package Heckmeck.Components;
 
+
+import Utils.FileReader;
 
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,7 +13,7 @@ import java.util.Objects;
 
 public class Tile implements Comparable<Tile> {
 
-    private final static String RESOURCE_FILE = "TILES";
+    private final static String RESOURCE_FILE = "CLI/TILES";
     public final static int tileMinNumber = 21;
     public final static int tileMaxNumber = 36;
     private final int number;

@@ -1,4 +1,4 @@
-package Heckmeck;
+package Heckmeck.Components;
 
 
 import java.util.LinkedList;

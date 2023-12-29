@@ -11,10 +11,6 @@ public class ClientHandler implements Runnable{
     private final PrintWriter out;
 
 
-    String playerName;
-    ObjectOutputStream objectOutputStream;
-    InputStream inputStream;
-
     public ClientHandler(int playerId, BufferedReader in, PrintWriter out) {
         this.in = in;
         this.out = out;

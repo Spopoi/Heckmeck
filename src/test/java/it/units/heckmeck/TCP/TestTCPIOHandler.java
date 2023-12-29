@@ -1,10 +1,10 @@
 package it.units.heckmeck.TCP;
 
 import Heckmeck.Game;
-import Heckmeck.Player;
+import Heckmeck.Components.Player;
 import TCP.Message;
 import TCP.Server.ClientHandler;
-import TCP.Server.TCPIOHandler;
+import TCP.TCPIOHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -145,7 +145,7 @@ public class TestTCPIOHandler {
                         setOperation(Message.Action.RESPONSE)
 
         );
-        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ", "PRINT ERR");
+        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ");
 
         Assertions.assertTrue(decision);
     }
@@ -162,7 +162,7 @@ public class TestTCPIOHandler {
                         setText("n").
                         setOperation(Message.Action.RESPONSE)
         );
-        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ", "PRINT ERR");
+        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ");
         Assertions.assertFalse(decision);
     }
     @Disabled
@@ -177,10 +177,10 @@ public class TestTCPIOHandler {
                         setText("wrong string").
                         setOperation(Message.Action.RESPONSE)
         );
-        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ", "PRINT ERR");
+        boolean decision = io.getYesOrNoAnswer(0, "TEST REQ");
          msg = Message.generateMessage().
                 setOperation(Message.Action.ERROR).
-                setText("PRINT ERR");
+                setText("Invalid input, choose between y or n");
         verify(sockets.get(0)).writeLine(msg.toJSON());
     }
 }

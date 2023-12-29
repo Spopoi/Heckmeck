@@ -1,6 +1,8 @@
 package CLI;
 
-import Heckmeck.FileReader;
+import Utils.CLI.Utils;
+import Utils.TCP.ConnectionHandler;
+
 import Heckmeck.Game;
 import Heckmeck.IOHandler;
 import TCP.Client;
@@ -49,7 +51,7 @@ public class HeckmeckCLI {
     }
     //TODO: Move methods?
     public static void startLocalClient(String IP, IOHandler io){
-        Client cli = Utils.startClient(IP, io);
+        Client cli = ConnectionHandler.startClient(IP, io);
         Thread cliThread = new Thread(cli);
         cliThread.start();
         io.printMessage("Local client started, waiting for your turn to begin");

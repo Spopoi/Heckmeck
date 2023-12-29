@@ -1,12 +1,12 @@
-package CLI;
+package Utils.CLI;
 
-import Heckmeck.Player;
+import Heckmeck.Components.Player;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
-class SummaryTable {
+public class SummaryTable {
 
     private final StringBuilder table;
 
@@ -34,12 +34,12 @@ class SummaryTable {
     private static final String ROW_SEPARATOR = "-";
 
 
-    SummaryTable(List<Player> playerList) {
+    public SummaryTable(List<Player> playerList) {
         this.table = new StringBuilder();
         this.playersList = playerList;
     }
 
-    SummaryTable createHeader() {
+    public SummaryTable createHeader() {
         String columnTitlesRow = alignToColumn(column.PLAYER_NAME.title(), column.PLAYER_NAME) + COLUMN_SEPARATOR +
                 alignToColumn(column.LAST_PICKED_TILE.title(), column.LAST_PICKED_TILE) + COLUMN_SEPARATOR +
                 alignToColumn(column.NUMBER_OF_TOTAL_WORM_COLLECTED.title(), column.NUMBER_OF_TOTAL_WORM_COLLECTED);
@@ -73,7 +73,7 @@ class SummaryTable {
                 .orElse(column.PLAYER_NAME.title());
     }
 
-    SummaryTable fillWithPlayersData() {
+    public SummaryTable fillWithPlayersData() {
         for (var player : playersList) {
             table.append(getPlayerInfoRow(player))
                     .append(newLine);
@@ -81,6 +81,7 @@ class SummaryTable {
         return this;
     }
 
+    //TODO Aggiungere punteggio vermi del giocatore corrente nella tabella
     private String getPlayerInfoRow(Player player) {
         return alignToColumn(player.getName(), column.PLAYER_NAME) + COLUMN_SEPARATOR +
                 alignToColumn(player.getTopTileInfo(), column.LAST_PICKED_TILE) + COLUMN_SEPARATOR +

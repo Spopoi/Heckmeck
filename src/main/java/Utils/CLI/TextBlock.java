@@ -1,10 +1,10 @@
-package CLI;
+package Utils.CLI;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-class TextBlock {
+public class TextBlock {
 
     private String text;
     private int height;

@@ -1,16 +1,16 @@
 package GUI.Panels;
 
-import Heckmeck.Dice;
-import Heckmeck.Die;
-import Heckmeck.Player;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Player;
 
 import javax.swing.*;
 import java.awt.*;
 
 import static GUI.GUIIOHandler.textFont;
 import static GUI.GUIIOHandler.titleFont;
-import static Heckmeck.FileReader.getDieIcon;
-import static Heckmeck.FileReader.getTileIcon;
+import static Utils.FileReader.getDieIcon;
+import static Utils.FileReader.getTileIcon;
 
 
 public class PlayerDataPanel extends RoundedPanel{

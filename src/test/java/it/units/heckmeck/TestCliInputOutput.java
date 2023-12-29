@@ -1,10 +1,10 @@
 package it.units.heckmeck;
 
 import CLI.CliIOHandler;
-import Heckmeck.BoardTiles;
-import Heckmeck.Dice;
-import Heckmeck.Die;
-import Heckmeck.Player;
+import Heckmeck.Components.BoardTiles;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Player;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

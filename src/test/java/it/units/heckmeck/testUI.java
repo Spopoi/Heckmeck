@@ -9,7 +9,7 @@
 //import CLI.CliHandler;
 //
 //import static CLI.CliHandler.*;
-//import static Heckmeck.Die.face.*;
+//import static Heckmeck.Components.Die.face.*;
 //
 //public class testUI {
 //

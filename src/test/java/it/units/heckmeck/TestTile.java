@@ -1,7 +1,7 @@
 package it.units.heckmeck;
 
-import Heckmeck.FileReader;
-import Heckmeck.Tile;
+import Utils.FileReader;
+import Heckmeck.Components.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

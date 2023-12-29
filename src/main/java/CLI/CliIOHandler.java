@@ -1,6 +1,13 @@
 package CLI;
 
+import Utils.CLI.SummaryTable;
+import Utils.CLI.TextBlock;
+import Utils.CLI.Utils;
 import Heckmeck.*;
+import Heckmeck.Components.BoardTiles;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Player;
 
 import java.io.InputStream;
 import java.io.PrintStream;

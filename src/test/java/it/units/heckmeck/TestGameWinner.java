@@ -1,9 +1,8 @@
 package it.units.heckmeck;
 
-import Heckmeck.BoardTiles;
-import Heckmeck.Player;
+import Heckmeck.Components.Player;
 import Heckmeck.Rules;
-import Heckmeck.Tile;
+import Heckmeck.Components.Tile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

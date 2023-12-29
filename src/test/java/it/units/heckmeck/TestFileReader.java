@@ -1,7 +1,7 @@
 package it.units.heckmeck;
 
-import Heckmeck.Die;
-import Heckmeck.FileReader;
+import Heckmeck.Components.Die;
+import Utils.FileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

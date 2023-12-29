@@ -11,7 +11,7 @@ import static CLI.HeckmeckCLI.startLocalClient;
 
 public class HeckmeckGUI {
     private static JFrame frame;
-    public static final String BACKGROUND_IMAGE_PATH = "src/main/resources/Icons/yellowBackground.png";
+    public static final String BACKGROUND_IMAGE_PATH = "src/main/resources/GUI/yellowBackground.png";
 
     public static void main(String[] args) throws UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(new FlatIntelliJLaf());

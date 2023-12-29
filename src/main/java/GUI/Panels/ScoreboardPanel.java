@@ -1,6 +1,6 @@
 package GUI.Panels;
 
-import Heckmeck.Player;
+import Heckmeck.Components.Player;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -9,7 +9,7 @@ import java.awt.*;
 import static GUI.GUIIOHandler.textFont;
 import static GUI.GUIIOHandler.titleFont;
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
-import static Heckmeck.FileReader.getTileIcon;
+import static Utils.FileReader.getTileIcon;
 
 public class ScoreboardPanel extends ImagePanel {
     public ScoreboardPanel(Player player, Player[] players){

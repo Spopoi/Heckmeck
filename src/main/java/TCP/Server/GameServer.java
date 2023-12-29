@@ -1,7 +1,8 @@
 package TCP.Server;
 
-import CLI.Utils;
+import Utils.TCP.ConnectionHandler;
 import Heckmeck.Game;
+import TCP.TCPIOHandler;
 
 import java.io.*;
 import java.net.*;
@@ -57,7 +58,7 @@ public class GameServer implements Runnable {
 
             if (clientSocket.isConnected()) {
 
-                this.clients.add(Utils.startClientHandler(playerID, clientSocket));
+                this.clients.add(ConnectionHandler.startClientHandler(playerID, clientSocket));
                 playerID++;
             }
             if (playerID == 7 || playerID == numOfPlayers) {
@@ -83,6 +84,6 @@ public class GameServer implements Runnable {
     }
 
     private static String getIPAddress() {
-        return Utils.getLanIpAddress();
+        return ConnectionHandler.getLanIpAddress();
     }
 }

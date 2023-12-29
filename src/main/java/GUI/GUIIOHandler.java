@@ -5,13 +5,14 @@ import GUI.Panels.PlayerDataPanel;
 import GUI.Panels.RoundedPanel;
 import GUI.Panels.ScoreboardPanel;
 import Heckmeck.*;
+import Heckmeck.Components.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
-import static Heckmeck.FileReader.getDieIcon;
-import static Heckmeck.FileReader.getTileIcon;
+import static Utils.FileReader.getDieIcon;
+import static Utils.FileReader.getTileIcon;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {

@@ -1,8 +1,12 @@
-package TCP.Server;
+package TCP;
 
-import CLI.Utils;
+import Utils.CLI.Utils;
 import Heckmeck.*;
-import TCP.Message;
+import Heckmeck.Components.BoardTiles;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Player;
+import TCP.Server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +58,8 @@ public class TCPIOHandler implements IOHandler {
     public boolean wantToPlayAgain() {
         return getYesOrNoAnswer(
                 getHostClient().playerId,
-                "Do you want to play again? (y/n)",
-                "Invalid input, choose between y or n");
+                "Do you want to play again? (y/n)"
+                );
     }
     @Override
     public void showTurnBeginConfirm(Player currentPlayer) {
@@ -103,7 +107,6 @@ public class TCPIOHandler implements IOHandler {
 
     @Override
     public void showRolledDice(Dice dice) {
-
         sendBroadCast(
                 Message.generateMessage().
                         setOperation(Message.Action.UPDATE_DICE).
@@ -111,14 +114,13 @@ public class TCPIOHandler implements IOHandler {
         );
     }
 
-    // TODO: move method to the new signature
     @Override
     public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
-        return getYesOrNoAnswer(currentPlayer.getPlayerID(), "Do you want to pick tile n. " + availableTileNumber + "?", "Invalid choice, try again");
+        return getYesOrNoAnswer(currentPlayer.getPlayerID(), "Do you want to pick tile n. " + availableTileNumber + "?");
     }
     @Override
     public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
-        return getYesOrNoAnswer(currentPlayer.getPlayerID(), "Do you want to steal " + robbedPlayer.getName() + "' s tile?", "Invalid choice, try again");
+        return getYesOrNoAnswer(currentPlayer.getPlayerID(), "Do you want to steal " + robbedPlayer.getName() + "' s tile?");
     }
 
     @Override
@@ -131,7 +133,6 @@ public class TCPIOHandler implements IOHandler {
                         setActualPlayer(currentPlayer)
         );
     }
-
     @Override
     public Die.Face chooseDie(Player currentPlayer, Dice dice) {
         informEveryOtherClient(currentPlayer);
@@ -144,7 +145,6 @@ public class TCPIOHandler implements IOHandler {
         );
         return Die.getFaceByString(msg.text);
     }
-
     private void informEveryOtherClient(Player currentPlayer){
         getOtherPlayersSockets(currentPlayer).
                 forEach(s -> s.writeMessage(
@@ -168,7 +168,6 @@ public class TCPIOHandler implements IOHandler {
     public List<ClientHandler> getOtherPlayersSockets(Player currentPlayer){
         return sockets.stream().filter(p -> p.getPlayerID() != currentPlayer.getPlayerID()).toList();
     }
-
     private Message informPlayer(Player player, Message msg) {
         return informPlayer(player.getPlayerID(), msg);
     }
@@ -178,14 +177,13 @@ public class TCPIOHandler implements IOHandler {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
         return sockets.get(playerID).writeMessage(msg.setPlayerID(playerID));
     }
 
     private ClientHandler getHostClient(){
         return sockets.get(0);
     }
-    public boolean getYesOrNoAnswer(int playerID, String textToDisplay, String invalidInputMessage){
+    public boolean getYesOrNoAnswer(int playerID, String textToDisplay){
         while(true){
             String decision = informPlayer(playerID,
                     Message.generateMessage().
@@ -200,7 +198,7 @@ public class TCPIOHandler implements IOHandler {
             } else if (decision.isBlank()) {
                 continue;
             } else {
-                printError(invalidInputMessage);
+                printError("Invalid input, choose between y or n");
             }
         }
     }

@@ -13,7 +13,7 @@ public class MenuPanel extends ImagePanel {
 
     public MenuPanel() {
 
-        super("src/main/resources/Icons/heckmeckBackground.jpg");
+        super("src/main/resources/GUI/heckmeckBackground.jpg");
         setLayout(new GridBagLayout());
 
         JPanel buttonsPanel = createButtonsPanel();

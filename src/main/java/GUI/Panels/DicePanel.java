@@ -1,12 +1,12 @@
 package GUI.Panels;
 
-import Heckmeck.Dice;
-import Heckmeck.Die;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Die;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static Heckmeck.FileReader.getDieIcon;
+import static Utils.FileReader.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;
 
 public class DicePanel extends JPanel {

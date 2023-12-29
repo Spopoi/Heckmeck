@@ -1,5 +1,5 @@
 package it.units.heckmeck;
-import Heckmeck.FileReader;
+import Utils.FileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,13 +8,13 @@ import java.nio.file.Path;
 import java.util.stream.*;
 import java.util.*;
 
-import Heckmeck.Die;
-import Heckmeck.Dice;
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Dice;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import static Heckmeck.Die.Face.*;
+import static Heckmeck.Components.Die.Face.*;
 
 public class TestDice {
 

@@ -1,5 +1,6 @@
-package Heckmeck;
+package Utils;
 
+import Heckmeck.Components.Die;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -16,31 +17,31 @@ import java.util.Map;
 public class FileReader {
     private static final Map<Die.Face, String> faceToIconPath =
             Collections.unmodifiableMap(new HashMap<>() {{
-                put(Die.Face.ONE, "src/main/resources/Icons/Dice/one.png");
-                put(Die.Face.TWO, "src/main/resources/Icons/Dice/two.png");
-                put(Die.Face.THREE, "src/main/resources/Icons/Dice/three.png");
-                put(Die.Face.FOUR, "src/main/resources/Icons/Dice/four.png");
-                put(Die.Face.FIVE, "src/main/resources/Icons/Dice/five.png");
-                put(Die.Face.WORM, "src/main/resources/Icons/Dice/worm.png");
+                put(Die.Face.ONE, "src/main/resources/GUI/Dice/one.png");
+                put(Die.Face.TWO, "src/main/resources/GUI/Dice/two.png");
+                put(Die.Face.THREE, "src/main/resources/GUI/Dice/three.png");
+                put(Die.Face.FOUR, "src/main/resources/GUI/Dice/four.png");
+                put(Die.Face.FIVE, "src/main/resources/GUI/Dice/five.png");
+                put(Die.Face.WORM, "src/main/resources/GUI/Dice/worm.png");
             }});
     private static final Map<Integer, String> tileNumberToIconPath =
             Collections.unmodifiableMap(new HashMap<>() {{
-                put(21, "src/main/resources/Icons/Tiles/Tile_21.png");
-                put(22, "src/main/resources/Icons/Tiles/Tile_22.png");
-                put(23, "src/main/resources/Icons/Tiles/Tile_23.png");
-                put(24, "src/main/resources/Icons/Tiles/Tile_24.png");
-                put(25, "src/main/resources/Icons/Tiles/Tile_25.png");
-                put(26, "src/main/resources/Icons/Tiles/Tile_26.png");
-                put(27, "src/main/resources/Icons/Tiles/Tile_27.png");
-                put(28, "src/main/resources/Icons/Tiles/Tile_28.png");
-                put(29, "src/main/resources/Icons/Tiles/Tile_29.png");
-                put(30, "src/main/resources/Icons/Tiles/Tile_30.png");
-                put(31, "src/main/resources/Icons/Tiles/Tile_31.png");
-                put(32, "src/main/resources/Icons/Tiles/Tile_32.png");
-                put(33, "src/main/resources/Icons/Tiles/Tile_33.png");
-                put(34, "src/main/resources/Icons/Tiles/Tile_34.png");
-                put(35, "src/main/resources/Icons/Tiles/Tile_35.png");
-                put(36, "src/main/resources/Icons/Tiles/Tile_36.png");
+                put(21, "src/main/resources/GUI/Tiles/Tile_21.png");
+                put(22, "src/main/resources/GUI/Tiles/Tile_22.png");
+                put(23, "src/main/resources/GUI/Tiles/Tile_23.png");
+                put(24, "src/main/resources/GUI/Tiles/Tile_24.png");
+                put(25, "src/main/resources/GUI/Tiles/Tile_25.png");
+                put(26, "src/main/resources/GUI/Tiles/Tile_26.png");
+                put(27, "src/main/resources/GUI/Tiles/Tile_27.png");
+                put(28, "src/main/resources/GUI/Tiles/Tile_28.png");
+                put(29, "src/main/resources/GUI/Tiles/Tile_29.png");
+                put(30, "src/main/resources/GUI/Tiles/Tile_30.png");
+                put(31, "src/main/resources/GUI/Tiles/Tile_31.png");
+                put(32, "src/main/resources/GUI/Tiles/Tile_32.png");
+                put(33, "src/main/resources/GUI/Tiles/Tile_33.png");
+                put(34, "src/main/resources/GUI/Tiles/Tile_34.png");
+                put(35, "src/main/resources/GUI/Tiles/Tile_35.png");
+                put(36, "src/main/resources/GUI/Tiles/Tile_36.png");
 
             }});
 

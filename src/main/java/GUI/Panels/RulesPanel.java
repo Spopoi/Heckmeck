@@ -23,11 +23,11 @@ public class RulesPanel extends JPanel {
     private JPanel createImagesPanel() {
         JPanel imagesPanel = new JPanel(new GridLayout(2, 1));
 
-        ImageIcon rulesImage1 = new ImageIcon("src/main/resources/Icons/Rules1.jpg");
+        ImageIcon rulesImage1 = new ImageIcon("src/main/resources/GUI/Rules1.jpg");
         JLabel rulesLabel1 = new JLabel(rulesImage1);
         imagesPanel.add(rulesLabel1);
 
-        ImageIcon rulesImage2 = new ImageIcon("src/main/resources/Icons/Rules2.jpg");
+        ImageIcon rulesImage2 = new ImageIcon("src/main/resources/GUI/Rules2.jpg");
         JLabel rulesLabel2 = new JLabel(rulesImage2);
         imagesPanel.add(rulesLabel2);
 

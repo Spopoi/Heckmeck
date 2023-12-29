@@ -1,5 +1,10 @@
 package Heckmeck;
 
+import Heckmeck.Components.BoardTiles;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Player;
+
 public interface IOHandler {
     void printMessage(String message);
 

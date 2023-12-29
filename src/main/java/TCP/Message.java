@@ -1,8 +1,8 @@
 package TCP;
 
-import Heckmeck.BoardTiles;
-import Heckmeck.Dice;
-import Heckmeck.Player;
+import Heckmeck.Components.BoardTiles;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Player;
 import com.google.gson.Gson;
 
 import java.io.Serializable;

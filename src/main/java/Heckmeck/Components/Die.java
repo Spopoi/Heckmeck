@@ -1,4 +1,6 @@
-package Heckmeck;
+package Heckmeck.Components;
+import Utils.FileReader;
+
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -11,7 +13,7 @@ public class Die {
     private Face dieFace;
     private static final Random PRNG = new Random();
 
-    public static final String RESOURCE_FILE = "DIE_FACES";
+    public static final String RESOURCE_FILE = "CLI/DIE_FACES";
 
     public enum Face {
         ONE,

@@ -1,4 +1,4 @@
-package Heckmeck;
+package Heckmeck.Components;
 
 
 import java.util.*;
@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 public class BoardTiles implements TilesCollection {
     public static final int numberOfTiles = 16;
-    private TreeSet<Tile> tiles;
+    private final TreeSet<Tile> tiles;
 
     public BoardTiles(TreeSet<Tile> tiles) {
         this.tiles = tiles;
