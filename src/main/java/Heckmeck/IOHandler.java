@@ -12,7 +12,7 @@ public interface IOHandler {
 
     void showBoardTiles(BoardTiles boardTiles);
 
-    void askRollDiceConfirmation(String playerName);
+    void askRollDiceConfirmation(Player playerName);
 
     void showRolledDice(Dice dice);
 
