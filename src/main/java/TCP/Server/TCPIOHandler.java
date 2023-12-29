@@ -63,7 +63,7 @@ public class TCPIOHandler implements IOHandler {
         informPlayer(
                 currentPlayer,
                 Message.generateMessage().
-                        setOperation(Message.Action.ASK_CONFIRM).
+                        setOperation(Message.Action.BEGIN_TURN).
                         setText("Press enter to start your turn").
                         setActualPlayer(currentPlayer)
         );
@@ -97,14 +97,18 @@ public class TCPIOHandler implements IOHandler {
         );
     }
     @Override
-    public void askRollDiceConfirmation(String playerName) {
-
+    public void askRollDiceConfirmation(Player currentPlayer) {
+        informEveryOtherClient(currentPlayer);
     }
 
     @Override
     public void showRolledDice(Dice dice) {
 
-
+        sendBroadCast(
+                Message.generateMessage().
+                        setOperation(Message.Action.UPDATE_DICE).
+                        setDice(dice)
+        );
     }
 
     // TODO: move method to the new signature
