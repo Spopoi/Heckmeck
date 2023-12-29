@@ -150,8 +150,8 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public void askRollDiceConfirmation(String playerName) {
-        String mainMessage = "# " + playerName + ": hit enter to roll dice #";
+    public void askRollDiceConfirmation(Player player) {
+        String mainMessage = "# " + player.getName() + ": hit enter to roll dice #";
         String separator = "#".repeat(mainMessage.length());
         printMessage(newLine + separator + newLine +
                 mainMessage + newLine +
