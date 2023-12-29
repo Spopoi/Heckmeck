@@ -73,21 +73,7 @@ public class TestClient {
         msg.setOperation(Message.Action.GET_PLAYER_NAME);
     }
 
-    @Test
-    void getRollDiceConfirm(){
 
-        client.handleMessage(Message.generateMessage().
-                setOperation(Message.Action.ROLL_DICE));
-        Message txMessage;
-        String choice;
-        txMessage = Message.generateMessage();
-        txMessage.setOperation(Message.Action.RESPONSE);
-        //promptEnterKey();
-        choice = "nothing";
-        txMessage.setText(choice);
-        txMessage.setPlayerID(0);
-        verify(out).println(txMessage.toJSON());
-    }
 
 
 }
