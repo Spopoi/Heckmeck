@@ -6,8 +6,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static GUI.GUIIOHandler.textFont;
-import static GUI.GUIIOHandler.titleFont;
+import static Utils.GUI.LabelHandler.textFont;
+import static Utils.GUI.LabelHandler.titleFont;
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
 import static Utils.FileReader.getTileIcon;
 

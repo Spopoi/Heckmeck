@@ -24,10 +24,6 @@ public class GUIIOHandler implements IOHandler {
     private JPanel tilesPanel;
     private int tilesPanelHeight;
     private int lateralPanelWidth;
-
-    //TODO: move it in HECKMECKGUI?
-    public static Font titleFont = new Font("Serif", Font.BOLD, 30);
-    public static Font textFont = new Font("Serif", Font.PLAIN, 25);
     private static double panelToFrameRatio = 0.25;
     private static double boardTileToFrameRatio = 0.8;
     private static double tileToBoardRatio = 0.7;

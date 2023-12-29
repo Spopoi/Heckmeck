@@ -7,20 +7,20 @@ import Heckmeck.Components.Player;
 import javax.swing.*;
 import java.awt.*;
 
-import static GUI.GUIIOHandler.textFont;
-import static GUI.GUIIOHandler.titleFont;
-import static Utils.FileReader.getDieIcon;
 import static Utils.FileReader.getTileIcon;
+import static Utils.GUI.LabelHandler.*;
 
 
 public class PlayerDataPanel extends RoundedPanel{
 
+    public static final int CHOSEN_DICE_SIZE = 55;
     private JLabel playerName;
     private JPanel playerDicePanel;
     private JLabel score;
     private JPanel playerTilePanel;
     private JLabel playerWormScore;
     public static final Component verticalSpace = Box.createVerticalStrut(10);
+    private static final int LABEL_HEIGHT = 45;
 
     public PlayerDataPanel(String imagePath) {
         super(imagePath);
@@ -49,9 +49,7 @@ public class PlayerDataPanel extends RoundedPanel{
     }
 
     private void initPlayerWormScore() {
-        playerWormScore = new JLabel();
-        playerWormScore.setPreferredSize(getDimensions(45));
-        playerWormScore.setFont(textFont);
+        playerWormScore = getLabel(0 , LABEL_HEIGHT);
         playerWormScore.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(playerWormScore);
     }
@@ -65,9 +63,7 @@ public class PlayerDataPanel extends RoundedPanel{
     }
 
     private void initScoreLabel() {
-        score = new JLabel();
-        score.setPreferredSize(getDimensions(45));
-        score.setFont(titleFont);
+        score = getTitleLabel(0, LABEL_HEIGHT);
         score.setForeground(Color.red);
         score.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(score);
@@ -100,9 +96,7 @@ public class PlayerDataPanel extends RoundedPanel{
     }
 
     private void initPlayerNameLabel() {
-        playerName = new JLabel();
-        playerName.setPreferredSize(getDimensions(50));
-        playerName.setFont(titleFont);
+        playerName = getTitleLabel(0,LABEL_HEIGHT);
         playerName.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(playerName);
     }
@@ -136,8 +130,7 @@ public class PlayerDataPanel extends RoundedPanel{
     private void updateDicePanel(Dice dice) {
         playerDicePanel.removeAll();
         for(Die die : dice.getChosenDice()){
-            JLabel dieIconLabel = new JLabel(getDieIcon(die.getDieFace(),55));
-            dieIconLabel.setPreferredSize(new Dimension(60,55));
+            JLabel dieIconLabel = getDieIconLabel(die.getDieFace(), CHOSEN_DICE_SIZE);
             playerDicePanel.add(dieIconLabel);
         }
     }
