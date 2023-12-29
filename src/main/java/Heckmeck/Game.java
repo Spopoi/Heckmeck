@@ -4,7 +4,6 @@ import Heckmeck.Components.*;
 
 import java.util.*;
 import static Heckmeck.Components.Die.Face;
-
 public class Game {
     private Player[] players;
     private Dice dice;
@@ -13,7 +12,7 @@ public class Game {
     private Player actualPlayer;
 
     public Game(IOHandler io) {
-       this.io = io;
+        this.io = io;
     }
 
     public void init(){
@@ -39,25 +38,30 @@ public class Game {
         if(io.wantToPlayAgain()) restartGame();
     }
 
-    private void playerTurn(){
+    private void playerTurn() {
         io.showTurnBeginConfirm(actualPlayer);
-
         boolean isOnRun;
-        do{
+        do {
             io.showBoardTiles(boardTiles);
             io.showPlayerData(actualPlayer, dice, players);
-            if (dice.isFaceChosen(Face.WORM)){
-                if (steal() || pick()) {
-                    isOnRun = false;
-                } else isOnRun = roll();
+            if (dice.isFaceChosen(Face.WORM)) {
+                if (playerAction()) isOnRun = false;
+                else isOnRun = roll();
             } else isOnRun = roll();
         } while (isOnRun);
         dice.resetDice();
     }
 
+    private boolean playerAction(){
+        if (canSteal()){
+            return steal();
+        } else if (canPick()) return pick();
+        else return false;
+    }
+
     private boolean pick(){
-        //assume worm chosen
-        if(canPick() &&  (dice.getChosenDice().size() >= Dice.initialNumOfDice || wantToPick())) {
+        //assume worm chosen and can pick
+        if(dice.getChosenDice().size() >= Dice.initialNumOfDice || wantToPick()) {
             pickTile();
             return true;
         }
@@ -83,10 +87,19 @@ public class Game {
         io.printMessage("You got tile number " + availableTile.getNumber() +"!");
     }
 
-    private boolean steal(){
-        //assume worm chosen
+    private boolean canSteal(){
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;
+        for(Player robbedPlayer : players){
+            if(!robbedPlayer.equals(actualPlayer) && actualPlayer.canStealFrom(robbedPlayer,playerScore)) return true;
+        }
+        return false;
+    }
+
+    //todo: estrarre getscore e metterlo come azione dopo chooseface in roll()
+    private boolean steal(){
+        //assume worm chosen and can steal
+        int playerScore = dice.getScore();
         for(Player robbedPlayer : players){
             if(!robbedPlayer.equals(actualPlayer) && actualPlayer.canStealFrom(robbedPlayer,playerScore)){
                 if(io.wantToSteal(actualPlayer, robbedPlayer)){
@@ -172,6 +185,3 @@ public class Game {
         return actualPlayer;
     }
 }
-
-
-
