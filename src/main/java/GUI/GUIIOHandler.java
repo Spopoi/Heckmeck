@@ -9,6 +9,7 @@ import Heckmeck.*;
 import javax.swing.*;
 import java.awt.*;
 
+import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
 import static Heckmeck.FileReader.getDieIcon;
 import static Heckmeck.FileReader.getTileIcon;
 import static javax.swing.JOptionPane.*;
@@ -29,7 +30,6 @@ public class GUIIOHandler implements IOHandler {
     private static double panelToFrameRatio = 0.25;
     private static double boardTileToFrameRatio = 0.8;
     private static double tileToBoardRatio = 0.7;
-
     private int boardTileWidth;
 
     public GUIIOHandler(JFrame frame){
@@ -38,7 +38,7 @@ public class GUIIOHandler implements IOHandler {
         tilesPanel = new JPanel();
         tilesPanelHeight = (int)(frame.getHeight() * panelToFrameRatio);
         lateralPanelWidth = (int)(frame.getWidth() * panelToFrameRatio);
-        playerPane = new PlayerDataPanel("src/main/resources/Icons/table.jpg");
+        playerPane = new PlayerDataPanel(BACKGROUND_IMAGE_PATH);
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
         //int spaceBetweenTiles = 13 * BoardTiles.numberOfTiles;
         boardTileWidth = (int)((frame.getWidth() * boardTileToFrameRatio )/BoardTiles.numberOfTiles);
@@ -73,17 +73,12 @@ public class GUIIOHandler implements IOHandler {
         return false;
     }
 
-
-
     @Override
     public void showTurnBeginConfirm(Player player) {
         frame.getContentPane().removeAll();
         frame.repaint();
         printMessage(player.getName() + " turn, press ok for starting: ");
     }
-
-    // TODO: REMOVE BEFORE COMMIT!!
-
 
     public boolean wantToHost(){
         int result = JOptionPane.showOptionDialog(
