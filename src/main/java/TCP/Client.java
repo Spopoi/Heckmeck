@@ -1,18 +1,11 @@
 package TCP;
 
-import CLI.CliIOHandler;
 import CLI.HeckmeckCLI;
 import Heckmeck.IOHandler;
-import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 
 public class Client implements Runnable{
@@ -142,7 +135,7 @@ public class Client implements Runnable{
                 io.printMessage("You chose " + playerName + ", wait for other players!");
                 break;
 
-            case ASK_CONFIRM:
+            case BEGIN_TURN:
                 io.showTurnBeginConfirm(rxMessage.actualPlayer);
                 perform_ask_confirm();
                 break;
@@ -161,9 +154,13 @@ public class Client implements Runnable{
                 sendAck();
                 break;
 
+            case UPDATE_DICE:
+                io.showRolledDice(rxMessage.dice);
+                sendAck();
+                break;
+
             case UPDATE_PLAYER:
                 io.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
-                io.showRolledDice(rxMessage.dice);
                 sendAck();
                 break;
 
@@ -179,11 +176,10 @@ public class Client implements Runnable{
                 break;
 
             default:
-                //io.printError("Unexpected problem, do you want to run the game again?");
-                //if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
-                //else System.exit(0);
+                io.printError("Unexpected problem");
+                if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
+                else System.exit(0);
                 break;
-            //TODO mettere un default
         }
     }
 
