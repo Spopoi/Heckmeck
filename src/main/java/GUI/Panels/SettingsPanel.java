@@ -5,11 +5,11 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 
+import static GUI.GUIIOHandler.textFont;
+import static GUI.GUIIOHandler.titleFont;
 import static GUI.HeckmeckGUI.switchToMenuPanel;
 
 public class SettingsPanel extends JPanel {
-    //private static final Color ORANGE_COLOR = new Color(255, 226, 201);
-
     private JTextField heightTextField;
     private JTextField widthTextField;
     private final Frame frame;
@@ -23,14 +23,13 @@ public class SettingsPanel extends JPanel {
 
         add(createButtonPanel(), BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
-
-        //setBackground(ORANGE_COLOR);
     }
 
     private JPanel createButtonPanel() {
-        JButton backButton = new JButton("Torna al Menu");
+        JButton backButton = new JButton("Back to menu");
         backButton.addActionListener(e -> switchToMenuPanel());
         backButton.setBackground(Color.ORANGE);
+        backButton.setFont(textFont);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(backButton);
@@ -42,9 +41,9 @@ public class SettingsPanel extends JPanel {
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBorder(new EmptyBorder(0, 150, 50, 150));
 
-        JLabel titleLabel = new JLabel("Impostazioni");
+        JLabel titleLabel = new JLabel("Settings");
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(titleFont);
         int titleSpacing = 30;
         titleLabel.setBorder(new EmptyBorder(20, 0, titleSpacing, 0));
 
@@ -56,8 +55,6 @@ public class SettingsPanel extends JPanel {
         JButton applyButton = createApplyButton();
         centerPanel.add(applyButton, BorderLayout.SOUTH);
 
-        //centerPanel.setBackground(ORANGE_COLOR);
-
         return centerPanel;
     }
 
@@ -65,11 +62,11 @@ public class SettingsPanel extends JPanel {
         JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 50));
         inputPanel.setBorder(new EmptyBorder(70, 50, 100, 50));
 
-        JLabel heightLabel = new JLabel("Altezza frame:");
-        heightLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel heightLabel = new JLabel("Frame height:");
+        heightLabel.setFont(titleFont);
         heightTextField = new JTextField();
-        JLabel widthLabel = new JLabel("Larghezza frame:");
-        widthLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel widthLabel = new JLabel("Frame width:");
+        widthLabel.setFont(titleFont);
         widthTextField = new JTextField();
 
         inputPanel.add(heightLabel);
@@ -77,15 +74,13 @@ public class SettingsPanel extends JPanel {
         inputPanel.add(widthLabel);
         inputPanel.add(widthTextField);
 
-        //inputPanel.setBackground(ORANGE_COLOR);
-
         return inputPanel;
     }
 
     private JButton createApplyButton() {
-        JButton applyButton = new JButton("Applica");
+        JButton applyButton = new JButton("Apply");
         applyButton.addActionListener(e -> applySettings());
-
+        applyButton.setFont(textFont);
         applyButton.setBackground(Color.ORANGE);
 
         return applyButton;
@@ -99,7 +94,7 @@ public class SettingsPanel extends JPanel {
             frame.revalidate();
             frame.repaint();
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Inserisci numeri validi per altezza e larghezza.");
+            JOptionPane.showMessageDialog(null, "Insert valid numbers for height and width");
         }
     }
 }
