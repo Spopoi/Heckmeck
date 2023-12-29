@@ -2,12 +2,10 @@ package GUI.Panels;
 
 import Heckmeck.Dice;
 import Heckmeck.Die;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import static Heckmeck.FileReader.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;
 
@@ -16,6 +14,12 @@ public class DicePanel extends JPanel {
     private final static int topEmptyBorder = 0;
     private final static int sideEmptyBorder = 5;
     private final static int bottomEmptyBorder = 50;
+    private final static int gbcInsets = 20;
+    private final static int maxDicePerRow = 3;
+    private final static int rollingAnimationDuration = 100;
+    private final static int rollingAnimationNumberOfChangingIcons = 10;
+    private final static int diceSize = 65;
+
 
     public DicePanel(){
         super();
@@ -37,7 +41,7 @@ public class DicePanel extends JPanel {
 
     private void updateGridBagConstraints(GridBagConstraints gbc) {
         gbc.gridx++;
-        if (gbc.gridx > 3) {
+        if (gbc.gridx > maxDicePerRow) {
             gbc.gridx = 0;
             gbc.gridy++;
         }
@@ -47,7 +51,7 @@ public class DicePanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(20, 20, 30, 20);
+        gbc.insets = new Insets(gbcInsets, gbcInsets, gbcInsets, gbcInsets);
         gbc.anchor = NORTH;
         gbc.fill = GridBagConstraints.NONE;
         return gbc;
@@ -56,7 +60,7 @@ public class DicePanel extends JPanel {
     private JToggleButton makeDiceButton(Die die) {
         JToggleButton dieButton = new JToggleButton();
         Die.Face dieFace = die.getDieFace();
-        dieButton.setIcon(getDieIcon(dieFace, 65));
+        dieButton.setIcon(getDieIcon(dieFace, diceSize));
         dieButton.setBorder(null);
         dieButton.putClientProperty("originalFace", dieFace);
         dieButton.addActionListener(e -> chosenFace = dieFace);
@@ -64,15 +68,15 @@ public class DicePanel extends JPanel {
     }
 
     public void rollDiceAnimation(){
-        Timer timer = new Timer(100, new ActionListener() {
+        Timer timer = new Timer(rollingAnimationDuration, new ActionListener() {
             private int rollCount = 0;
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (rollCount < 10) {
+                if (rollCount < rollingAnimationNumberOfChangingIcons) {
                     for (Component component : getComponents()) {
                         if (component instanceof JToggleButton dieButton) {
                             Die.Face randomFace = Die.generateDie().getDieFace();
-                            dieButton.setIcon(getDieIcon(randomFace, 65));
+                            dieButton.setIcon(getDieIcon(randomFace, diceSize));
                         }
                     }
                     repaint();
@@ -82,7 +86,7 @@ public class DicePanel extends JPanel {
                     for (Component component : getComponents()) {
                         if (component instanceof JToggleButton dieButton) {
                             Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
-                            dieButton.setIcon(getDieIcon(originalFace, 65));
+                            dieButton.setIcon(getDieIcon(originalFace, diceSize));
                         }
                     }
                     repaint();
