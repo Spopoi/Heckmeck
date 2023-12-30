@@ -16,7 +16,7 @@ public class MenuPanel extends ImagePanel {
     private static final Dimension BUTTON_PANEL_DIMENSIONS = new Dimension(350, 250);
     private static final int NUMBER_OF_BUTTONS = 4;
     private static final int VERTICAL_BUTTONS_GAP = 10;
-    private static final Color BUTTON_COLOR = Color.ORANGE;
+    public static final Color BUTTON_COLOR = Color.ORANGE;
 
     public MenuPanel() {
         super(HECKMECK_BACKGROUND_PATH);
@@ -46,7 +46,7 @@ public class MenuPanel extends ImagePanel {
         return buttonsPanel;
     }
 
-    private JButton createButton(String text, ActionListener actionListener) {
+    public static JButton createButton(String text, ActionListener actionListener) {
         JButton button = new JButton(text);
         button.setFocusPainted(false);
         button.addActionListener(actionListener);
