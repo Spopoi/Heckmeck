@@ -67,16 +67,19 @@ public class DicePanel extends JPanel {
         return dieButton;
     }
 
-    public void rollDiceAnimation(){
+    public void rollDiceAnimation() {
         Timer timer = new Timer(rollingAnimationDuration, new ActionListener() {
             private int rollCount = 0;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (rollCount < rollingAnimationNumberOfChangingIcons) {
                     for (Component component : getComponents()) {
                         if (component instanceof JToggleButton dieButton) {
+                            dieButton.setEnabled(false);
                             Die.Face randomFace = Die.generateDie().getDieFace();
                             dieButton.setIcon(getDieIcon(randomFace, diceSize));
+                            dieButton.setDisabledIcon(getDieIcon(randomFace, diceSize));
                         }
                     }
                     repaint();
@@ -87,6 +90,7 @@ public class DicePanel extends JPanel {
                         if (component instanceof JToggleButton dieButton) {
                             Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
                             dieButton.setIcon(getDieIcon(originalFace, diceSize));
+                            dieButton.setEnabled(true);
                         }
                     }
                     repaint();
@@ -95,7 +99,6 @@ public class DicePanel extends JPanel {
         });
         timer.start();
     }
-
     public Die.Face getChosenFace(){
         return chosenFace;
     }

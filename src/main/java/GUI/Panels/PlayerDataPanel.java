@@ -101,7 +101,6 @@ public class PlayerDataPanel extends RoundedPanel{
         add(playerName);
     }
 
-    //TODO: refactoring tileNumber = -1
     private void initTilePanel(int tileNumber) {
         playerTilePanel.removeAll();
         JLabel lastTileLabel = new JLabel("Top tile: ");
@@ -110,6 +109,7 @@ public class PlayerDataPanel extends RoundedPanel{
 
         playerTilePanel.add(Box.createRigidArea(new Dimension(60,0)));
 
+        //TODO: refactoring
         JLabel lastPlayerTile = new JLabel();
         if(tileNumber != -1) lastPlayerTile.setIcon(getTileIcon(tileNumber, 60, 50));
         playerTilePanel.add(lastPlayerTile);
