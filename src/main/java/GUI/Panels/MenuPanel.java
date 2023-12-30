@@ -9,37 +9,38 @@ import static GUI.HeckmeckGUI.*;
 
 public class MenuPanel extends ImagePanel {
 
-    private final Font buttonFont = new Font(UIManager.getFont("Button.font").getName(), Font.BOLD, 14);
+    //TODO: manage path
+    private static final String HECKMECK_BACKGROUND_PATH = "src/main/resources/GUI/heckmeckBackground.jpg";
+    private static final Font buttonFont = new Font(UIManager.getFont("Button.font").getName(), Font.BOLD, 14);
+    private static final int BUTTON_PANEL_TOP_INSET = 180;
+    private static final Dimension BUTTON_PANEL_DIMENSIONS = new Dimension(350, 250);
+    private static final int NUMBER_OF_BUTTONS = 4;
+    private static final int VERTICAL_BUTTONS_GAP = 10;
+    private static final Color BUTTON_COLOR = Color.ORANGE;
 
     public MenuPanel() {
-
-        super("src/main/resources/GUI/heckmeckBackground.jpg");
+        super(HECKMECK_BACKGROUND_PATH);
         setLayout(new GridBagLayout());
-
         JPanel buttonsPanel = createButtonsPanel();
         add(buttonsPanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,
-                GridBagConstraints.BOTH, new Insets(180, 0, 0, 0), 0, 0));
+                GridBagConstraints.BOTH, new Insets(BUTTON_PANEL_TOP_INSET, 0, 0, 0), 0, 0));
     }
 
     private JPanel createButtonsPanel() {
-        JPanel buttonsPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        buttonsPanel.setPreferredSize(new Dimension(350, 250));
+        JPanel buttonsPanel = new JPanel(new GridLayout(NUMBER_OF_BUTTONS, 1, 0, VERTICAL_BUTTONS_GAP));
+        buttonsPanel.setPreferredSize(BUTTON_PANEL_DIMENSIONS);
         buttonsPanel.setOpaque(false);
 
         JButton playButton = createButton("PLAY", e -> switchToGamePanel());
-        playButton.setFont(buttonFont);
         buttonsPanel.add(playButton);
 
         JButton multiplayerButton = createButton("MULTIPLAYER", e -> switchToMultiplayerPanel());
-        multiplayerButton.setFont(buttonFont);
         buttonsPanel.add(multiplayerButton);
 
         JButton rulesButton = createButton("RULES", e -> switchToRulesPanel());
-        rulesButton.setFont(buttonFont);
         buttonsPanel.add(rulesButton);
 
         JButton settingsButton = createButton("SETTINGS", e -> switchToSettingsPanel());
-        settingsButton.setFont(buttonFont);
         buttonsPanel.add(settingsButton);
 
         return buttonsPanel;
@@ -49,7 +50,8 @@ public class MenuPanel extends ImagePanel {
         JButton button = new JButton(text);
         button.setFocusPainted(false);
         button.addActionListener(actionListener);
-        button.setBackground(Color.ORANGE);
+        button.setBackground(BUTTON_COLOR);
+        button.setFont(buttonFont);
         return button;
     }
 }
