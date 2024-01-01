@@ -9,6 +9,8 @@ import Heckmeck.Components.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.InputStream;
+import java.util.Properties;
 
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
 import static Utils.FileReader.getDieIcon;
@@ -24,44 +26,60 @@ public class GUIIOHandler implements IOHandler {
     private JPanel tilesPanel;
     private int tilesPanelHeight;
     private int lateralPanelWidth;
-    private static double panelToFrameRatio = 0.25;
-    private static double boardTileToFrameRatio = 0.8;
-    private static double tileToBoardRatio = 0.7;
+    private static final double PANEL_TO_FRAME_RATIO = 0.25;
+    private static final double BOARD_TILE_TO_FRAME_RATIO = 0.8;
+    private static final double TILE_TO_BOARD_RATIO = 0.7;
+    private static final int BUST_DELAY = 2000;
+    private static final String HECKMECK_MESSAGES_FILENAME = "GUI/messages";
     private int boardTileWidth;
+    private Properties messages;
 
     public GUIIOHandler(JFrame frame){
         this.frame = frame;
         dicePanel = new DicePanel();
         tilesPanel = new JPanel();
-        tilesPanelHeight = (int)(frame.getHeight() * panelToFrameRatio);
-        lateralPanelWidth = (int)(frame.getWidth() * panelToFrameRatio);
+        tilesPanelHeight = (int)(frame.getHeight() * PANEL_TO_FRAME_RATIO);
+        lateralPanelWidth = (int)(frame.getWidth() * PANEL_TO_FRAME_RATIO);
         playerPane = new PlayerDataPanel(BACKGROUND_IMAGE_PATH);
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
-        //int spaceBetweenTiles = 13 * BoardTiles.numberOfTiles;
-        boardTileWidth = (int)((frame.getWidth() * boardTileToFrameRatio )/BoardTiles.numberOfTiles);
-        BOARD_TILE_DIMENSIONS = new Dimension(boardTileWidth, (int) (tilesPanelHeight * tileToBoardRatio));
+        boardTileWidth = (int)((frame.getWidth() * BOARD_TILE_TO_FRAME_RATIO)/BoardTiles.numberOfTiles);
+        BOARD_TILE_DIMENSIONS = new Dimension(boardTileWidth, (int) (tilesPanelHeight * TILE_TO_BOARD_RATIO));
+        initHeckmeckMessages();
 
         frame.setVisible(true);
     }
 
+    private void initHeckmeckMessages(){
+        messages = new Properties();
+        try (InputStream input = GUIIOHandler.class.getClassLoader().getResourceAsStream(HECKMECK_MESSAGES_FILENAME)) {
+            if (input == null) {
+                printError("Sorry, unable to find " + HECKMECK_MESSAGES_FILENAME);
+                return;
+            }
+            messages.load(input);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    //Todo: ICON
     @Override
     public void printMessage(String message) {
-        showInternalMessageDialog(null, message, "Heckmeck message", INFORMATION_MESSAGE , getDieIcon(Die.Face.WORM,50));
+        showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , getDieIcon(Die.Face.WORM,50));
     }
 
     @Override
     public void printError(String text) {
-        JOptionPane.showMessageDialog(null, text, "Errore", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, text, messages.getProperty("error"), JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
     public void showWelcomeMessage() {
-        printMessage("WELCOME to Heckmeck, GOOD LUCK!");
+        printMessage(messages.getProperty("welcomeMessage"));
     }
 
     @Override
     public String askIPToConnect() {
-        return null;
+        return JOptionPane.showInputDialog(null, messages.getProperty("askIP"), messages.getProperty("heckmeckMultiplayer"), JOptionPane.QUESTION_MESSAGE);
     }
 
     //TODO: togliere dall'interfaccia?
@@ -74,14 +92,15 @@ public class GUIIOHandler implements IOHandler {
     public void showTurnBeginConfirm(Player player) {
         frame.getContentPane().removeAll();
         frame.repaint();
-        printMessage(player.getName() + " turn, press ok for starting: ");
+        printMessage(player.getName() + messages.getProperty("turnBeginConfirm"));
     }
 
+    //TODO:icon
     public boolean wantToHost(){
         int result = JOptionPane.showOptionDialog(
                 null,
-                "Do you want to host?",
-                "Heckmeck multiplayer",
+                messages.getProperty("wantToHost"),
+                messages.getProperty("heckmeckMultiplayer"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 getDieIcon(Die.Face.WORM,50),
@@ -95,25 +114,24 @@ public class GUIIOHandler implements IOHandler {
     public int chooseNumberOfPlayers() {
         while (true) {
             String[] options = {"2", "3", "4", "5", "6", "7"};
-            String selectedOption = (String) JOptionPane.showInputDialog(null, "Choose number of players:", "Heckmeck", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
+            String selectedOption = (String) JOptionPane.showInputDialog(null, messages.getProperty("chooseNumberPlayer"), messages.getProperty("heckmeckTitle"), JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (selectedOption == null) wantToQuitHeckmeck();
             else if(Rules.validNumberOfPlayer(Integer.parseInt(selectedOption)))
                 return Integer.parseInt(selectedOption);
         }
     }
 
-    private static void wantToQuitHeckmeck() {
-        int wantToQuit = JOptionPane.showConfirmDialog(null, "Do you want to quit from Heckmeck?", "Heckmeck", JOptionPane.YES_NO_OPTION);
+    private void wantToQuitHeckmeck() {
+        int wantToQuit = JOptionPane.showConfirmDialog(null, messages.getProperty("wantToQuit"), messages.getProperty("heckmeckTitle"), JOptionPane.YES_NO_OPTION);
         if(wantToQuit == OK_OPTION) System.exit(0);
     }
 
     @Override
     public String choosePlayerName(Player player) {
         while(true) {
-            String playerName = showInputDialog(null, "Insert player name");
+            String playerName = showInputDialog(null, messages.getProperty("choosePlayerName"));
             if (playerName == null) wantToQuitHeckmeck();
-            else if(playerName.isBlank()) printError("Blank name, choose a valid one");
+            else if(playerName.isBlank()) printError(messages.getProperty("blankName"));
             else return playerName;
         }
     }
@@ -146,7 +164,7 @@ public class GUIIOHandler implements IOHandler {
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
         int result = JOptionPane.showOptionDialog(
                 null,
-                "Actual score: " + actualDiceScore + "\nDo you want to pick tile " + availableTileNumber + "?",
+                messages.getProperty("actualScore") + actualDiceScore + '\n' + messages.getProperty("wantToPick") + availableTileNumber + "?",
                 "Heckmeck",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
@@ -159,7 +177,7 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public boolean wantToSteal(Player player, Player robbedPlayer) {
-        int result = showConfirmDialog(null, "Do you want to steal tile #" + robbedPlayer.getLastPickedTile().getNumber() + " from "+ robbedPlayer.getName()+"?");
+        int result = showConfirmDialog(null, messages.getProperty("wantToSteal") + robbedPlayer.getLastPickedTile().getNumber() + " from "+ robbedPlayer.getName()+"?");
         return result == JOptionPane.OK_OPTION;
     }
 
@@ -214,11 +232,11 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public void showBustMessage() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(BUST_DELAY);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        printMessage("BUUUUUSTTTT!!!!");
+        printMessage(messages.getProperty("bust"));
     }
 
     @Override
