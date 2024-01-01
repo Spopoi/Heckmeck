@@ -33,6 +33,12 @@ public class LabelHandler {
         label.setText(text);
         label.setFont(titleFont);
         return label;
+
+    }public static JLabel getTitleLabel(String text , int alignment){
+        JLabel label = new JLabel(text);
+        label.setFont(titleFont);
+        label.setHorizontalAlignment(alignment);
+        return label;
     }
 
     private static JLabel makeLabel(int width, int height){

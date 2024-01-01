@@ -6,21 +6,20 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static Utils.GUI.LabelHandler.textFont;
-import static Utils.GUI.LabelHandler.titleFont;
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
+import static GUI.Panels.PlayerDataPanel.verticalSpace;
 import static Utils.FileReader.getTileIcon;
+import static Utils.GUI.LabelHandler.*;
 
 public class ScoreboardPanel extends ImagePanel {
+    private static final int SCOREBOARD_WIDTH_PANEL = 220;
     public ScoreboardPanel(Player player, Player[] players){
 
         super(BACKGROUND_IMAGE_PATH);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(new EmptyBorder(new Insets(10,10,10,10)));
 
-        JLabel scoreboardLabel = new JLabel("Scoreboard");
-        scoreboardLabel.setPreferredSize(new Dimension(220, 30));
-        scoreboardLabel.setFont(titleFont);
+        JLabel scoreboardLabel = getTitleLabel("Scoreboard", SCOREBOARD_WIDTH_PANEL, 30);
         scoreboardLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(scoreboardLabel);
         add(Box.createVerticalStrut(10));
@@ -34,7 +33,6 @@ public class ScoreboardPanel extends ImagePanel {
         }
     }
 
-
     //TODO: refactoring Dimensions... estrarre e usare PlayerDataPanel.getDimensions()
     private JPanel makeOtherPlayerPanel(Player otherPlayer) {
         JPanel playerPanel = new JPanel();
@@ -43,12 +41,10 @@ public class ScoreboardPanel extends ImagePanel {
         playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         playerPanel.setOpaque(false);
 
-        JLabel playerName = new JLabel(otherPlayer.getName());
-        playerName.setPreferredSize(new Dimension(220, 30));
-        playerName.setFont(textFont);
+        JLabel playerName = getLabel(otherPlayer.getName(), SCOREBOARD_WIDTH_PANEL, 100);
         playerName.setAlignmentX(CENTER_ALIGNMENT);
         playerPanel.add(playerName);
-        playerPanel.add(Box.createVerticalStrut(8));
+        playerPanel.add(verticalSpace);
 
         JLabel lastPlayerTile = new JLabel();
         lastPlayerTile.setAlignmentX(CENTER_ALIGNMENT);
@@ -56,10 +52,8 @@ public class ScoreboardPanel extends ImagePanel {
             int tileNumber = otherPlayer.getLastPickedTile().getNumber();
             lastPlayerTile.setIcon(getTileIcon(tileNumber, 60, 50));
             playerPanel.add(lastPlayerTile);
-            playerPanel.add(Box.createVerticalStrut(10));
         }
-        JLabel scoreLabel = new JLabel("Worm score: " + otherPlayer.getWormScore());
-        scoreLabel.setFont(textFont);
+        JLabel scoreLabel = getLabel("Worm score: " + otherPlayer.getWormScore(), SCOREBOARD_WIDTH_PANEL, 30);
         scoreLabel.setForeground(Color.RED);
         scoreLabel.setAlignmentX(CENTER_ALIGNMENT);
         playerPanel.add(scoreLabel);
@@ -67,6 +61,7 @@ public class ScoreboardPanel extends ImagePanel {
         return playerPanel;
     }
 
+    //TODO: refactoring horizontal separator
     private static JSeparator makeHorizontalSeparator() {
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
