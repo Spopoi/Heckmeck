@@ -160,11 +160,13 @@ public class GUIIOHandler implements IOHandler {
         frame.add(tilesPanel, BorderLayout.NORTH);
     }
 
+    //todo:icon
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
+        String message = messages.getProperty("actualScore") + " " + actualDiceScore + '\n' + messages.getProperty("wantToPick") + availableTileNumber + "?";
         int result = JOptionPane.showOptionDialog(
                 null,
-                messages.getProperty("actualScore") + actualDiceScore + '\n' + messages.getProperty("wantToPick") + availableTileNumber + "?",
+                message,
                 "Heckmeck",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
