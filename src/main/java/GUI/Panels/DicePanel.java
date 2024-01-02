@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static Utils.FileReader.getDieIcon;
+import static Utils.GUI.IconHandler.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;
 
 public class DicePanel extends JPanel {
@@ -18,8 +18,6 @@ public class DicePanel extends JPanel {
     private final static int maxDicePerRow = 3;
     private final static int rollingAnimationDuration = 100;
     private final static int rollingAnimationNumberOfChangingIcons = 10;
-    private final static int diceSize = 65;
-
 
     public DicePanel(){
         super();
@@ -60,7 +58,7 @@ public class DicePanel extends JPanel {
     private JToggleButton makeDiceButton(Die die) {
         JToggleButton dieButton = new JToggleButton();
         Die.Face dieFace = die.getDieFace();
-        dieButton.setIcon(getDieIcon(dieFace, diceSize));
+        dieButton.setIcon(getDieIcon(dieFace));
         dieButton.setBorder(null);
         dieButton.putClientProperty("originalFace", dieFace);
         dieButton.addActionListener(e -> chosenFace = dieFace);
@@ -78,8 +76,8 @@ public class DicePanel extends JPanel {
                         if (component instanceof JToggleButton dieButton) {
                             dieButton.setEnabled(false);
                             Die.Face randomFace = Die.generateDie().getDieFace();
-                            dieButton.setIcon(getDieIcon(randomFace, diceSize));
-                            dieButton.setDisabledIcon(getDieIcon(randomFace, diceSize));
+                            dieButton.setIcon(getDieIcon(randomFace));
+                            dieButton.setDisabledIcon(getDieIcon(randomFace));
                         }
                     }
                     repaint();
@@ -89,7 +87,7 @@ public class DicePanel extends JPanel {
                     for (Component component : getComponents()) {
                         if (component instanceof JToggleButton dieButton) {
                             Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
-                            dieButton.setIcon(getDieIcon(originalFace, diceSize));
+                            dieButton.setIcon(getDieIcon(originalFace));
                             dieButton.setEnabled(true);
                         }
                     }

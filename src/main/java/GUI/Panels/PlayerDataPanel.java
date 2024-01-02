@@ -7,13 +7,11 @@ import Heckmeck.Components.Player;
 import javax.swing.*;
 import java.awt.*;
 
-import static Utils.FileReader.getTileIcon;
+import static Utils.GUI.IconHandler.getPlayerTileIcon;
 import static Utils.GUI.LabelHandler.*;
 
 
 public class PlayerDataPanel extends RoundedPanel{
-
-    public static final int CHOSEN_DICE_SIZE = 55;
     private JLabel playerName;
     private JPanel playerDicePanel;
     private JLabel score;
@@ -111,7 +109,7 @@ public class PlayerDataPanel extends RoundedPanel{
 
         //TODO: refactoring
         JLabel lastPlayerTile = new JLabel();
-        if(tileNumber != -1) lastPlayerTile.setIcon(getTileIcon(tileNumber, 60, 50));
+        if(tileNumber != -1) lastPlayerTile.setIcon(getPlayerTileIcon(tileNumber));
         playerTilePanel.add(lastPlayerTile);
     }
 
@@ -130,7 +128,7 @@ public class PlayerDataPanel extends RoundedPanel{
     private void updateDicePanel(Dice dice) {
         playerDicePanel.removeAll();
         for(Die die : dice.getChosenDice()){
-            JLabel dieIconLabel = getDieIconLabel(die.getDieFace(), CHOSEN_DICE_SIZE);
+            JLabel dieIconLabel = getChosenDieLabel(die.getDieFace());
             playerDicePanel.add(dieIconLabel);
         }
     }

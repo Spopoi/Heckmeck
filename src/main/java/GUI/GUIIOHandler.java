@@ -13,8 +13,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
-import static Utils.FileReader.getDieIcon;
-import static Utils.FileReader.getTileIcon;
+import static Utils.GUI.IconHandler.getDieIcon;
+import static Utils.GUI.IconHandler.getTileIcon;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
@@ -103,7 +103,7 @@ public class GUIIOHandler implements IOHandler {
                 messages.getProperty("heckmeckMultiplayer"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
-                getDieIcon(Die.Face.WORM,50),
+                getDieIcon(Die.Face.WORM),
                 null,
                 null
         );
@@ -167,10 +167,10 @@ public class GUIIOHandler implements IOHandler {
         int result = JOptionPane.showOptionDialog(
                 null,
                 message,
-                "Heckmeck",
+                messages.getProperty("heckmeckTitle"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
-                getDieIcon(Die.Face.WORM,50),
+                getDieIcon(Die.Face.WORM),
                 null,
                 null
         );

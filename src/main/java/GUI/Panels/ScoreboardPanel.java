@@ -8,7 +8,7 @@ import java.awt.*;
 
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
 import static GUI.Panels.PlayerDataPanel.verticalSpace;
-import static Utils.FileReader.getTileIcon;
+import static Utils.GUI.IconHandler.getPlayerTileIcon;
 import static Utils.GUI.LabelHandler.*;
 
 public class ScoreboardPanel extends ImagePanel {
@@ -50,7 +50,7 @@ public class ScoreboardPanel extends ImagePanel {
         lastPlayerTile.setAlignmentX(CENTER_ALIGNMENT);
         if(otherPlayer.hasTile()){
             int tileNumber = otherPlayer.getLastPickedTile().getNumber();
-            lastPlayerTile.setIcon(getTileIcon(tileNumber, 60, 50));
+            lastPlayerTile.setIcon(getPlayerTileIcon(tileNumber));
             playerPanel.add(lastPlayerTile);
         }
         JLabel scoreLabel = getLabel("Worm score: " + otherPlayer.getWormScore(), SCOREBOARD_WIDTH_PANEL, 30);

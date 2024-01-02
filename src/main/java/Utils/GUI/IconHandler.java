@@ -1,20 +1,18 @@
-package Utils;
+package Utils.GUI;
 
 import Heckmeck.Components.Die;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-public class FileReader {
+public class IconHandler {
+    private final static int DICE_SIZE = 65;
+    public final static int CHOSEN_DICE_SIZE = 55;
+    private static final int PLAYER_TILE_ICON_WIDTH = 50;
+    private static final int PLAYER_TILE_ICON_HEIGHT = 60 ;
+    //TODO: pathHandler
     private static final Map<Die.Face, String> faceToIconPath =
             Collections.unmodifiableMap(new HashMap<>() {{
                 put(Die.Face.ONE, "src/main/resources/GUI/Dice/one.png");
@@ -45,44 +43,23 @@ public class FileReader {
 
             }});
 
-    public static final String newLine = System.lineSeparator();
 
-    public static Map<Integer, String> readTilesFromSingleJson(Path filePath) {
-        Gson gson = new Gson();
-        JsonReader reader = null;
-        try {
-            reader = new JsonReader(new java.io.FileReader(filePath.toString()));
-        } catch (FileNotFoundException ex) {
-            System.err.println(ex);
-        }
-        TypeToken<Map<Integer, String>> returnType = new TypeToken<>() {};
-        return gson.fromJson(reader, returnType);
+    public static ImageIcon getPlayerTileIcon(int tileNumber){
+        return getTileIcon(tileNumber, PLAYER_TILE_ICON_HEIGHT, PLAYER_TILE_ICON_WIDTH);
     }
-
-    public static String readTextFile(Path filePath) {
-        StringBuilder res = new StringBuilder();
-        try (InputStream in = Files.newInputStream(filePath);
-             BufferedReader reader =
-                     new BufferedReader(new InputStreamReader(in))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                res.append(line).append(newLine);  // Notice that will add a newline at the end
-            }
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
-        return res.toString();
+    public static ImageIcon getTileIcon(int tileNumber, int height, int width){
+        ImageIcon icon = new ImageIcon(tileNumberToIconPath.get(tileNumber));
+        Image img = icon.getImage() ;
+        Image newimg = img.getScaledInstance(width , height,  java.awt.Image.SCALE_SMOOTH ) ;
+        return new ImageIcon( newimg );
     }
-
-    public static Map<Die.Face, String> readDieFacesFromSingleJson(Path filePath) {
-        Gson gson = new Gson();
-        JsonReader reader = null;
-        try {
-            reader = new JsonReader(new java.io.FileReader(filePath.toString()));
-        } catch (FileNotFoundException ex) {
-            System.err.println(ex);
-        }
-        TypeToken<Map<Die.Face, String>> returnType = new TypeToken<>() {};
-        return gson.fromJson(reader, returnType);
+    public static ImageIcon getDieIcon(Die.Face face, int size){
+        ImageIcon icon = new ImageIcon(faceToIconPath.get(face));
+        Image img = icon.getImage() ;
+        Image newimg = img.getScaledInstance(size , size,  java.awt.Image.SCALE_SMOOTH ) ;
+        return new ImageIcon( newimg );
+    }
+    public static ImageIcon getDieIcon(Die.Face face){
+        return getDieIcon(face, DICE_SIZE);
     }
 }

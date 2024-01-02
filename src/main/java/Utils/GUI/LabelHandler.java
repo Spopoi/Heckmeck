@@ -5,7 +5,8 @@ import Heckmeck.Components.Die;
 import javax.swing.*;
 import java.awt.*;
 
-import static Utils.FileReader.getDieIcon;
+import static Utils.GUI.IconHandler.CHOSEN_DICE_SIZE;
+import static Utils.GUI.IconHandler.getDieIcon;
 
 public class LabelHandler {
     public static final Font titleFont = new Font("Serif", Font.BOLD, 30);
@@ -47,9 +48,9 @@ public class LabelHandler {
         return label;
     }
 
-    public static JLabel getDieIconLabel(Die.Face face, int size){
+    public static JLabel getChosenDieLabel(Die.Face face){
         JLabel label = new JLabel();
-        label.setIcon(getDieIcon(face, size));
+        label.setIcon(getDieIcon(face, CHOSEN_DICE_SIZE));
         return label;
     }
 
