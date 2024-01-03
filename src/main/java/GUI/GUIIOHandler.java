@@ -23,6 +23,7 @@ public class GUIIOHandler implements IOHandler {
     private PlayerDataPanel playerPane;
     private DicePanel dicePanel;
     private ScoreboardPanel scoreboardPanel;
+    private JScrollPane otherPlayerPane;
     private JPanel tilesPanel;
     private int tilesPanelHeight;
     private int lateralPanelWidth;
@@ -193,14 +194,14 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
-        if(scoreboardPanel != null) frame.remove(scoreboardPanel);
+        if(otherPlayerPane != null) frame.remove(otherPlayerPane);
+
         scoreboardPanel = new ScoreboardPanel(player,players);
+        otherPlayerPane = new JScrollPane(scoreboardPanel);
+        otherPlayerPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        otherPlayerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
 
-        JScrollPane scrollPane = new JScrollPane(scoreboardPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
-
-        frame.add(scrollPane, BorderLayout.EAST);
+        frame.add(otherPlayerPane, BorderLayout.EAST);
         frame.revalidate();
         frame.repaint();
     }

@@ -22,6 +22,7 @@ public class HeckmeckGUI {
         frame = new JFrame("HECKMECK");
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(800, 500));
         switchToMenuPanel();
         frame.setVisible(true);
     }
