@@ -14,10 +14,10 @@ public class DicePanel extends JPanel {
     private final static int topEmptyBorder = 0;
     private final static int sideEmptyBorder = 5;
     private final static int bottomEmptyBorder = 50;
-    private final static int gbcInsets = 20;
+    private final static int gbcInsets = 15;
     private final static int maxDicePerRow = 3;
-    private final static int rollingAnimationDuration = 100;
-    private final static int rollingAnimationNumberOfChangingIcons = 10;
+    private final static int rollingAnimationDuration = 120;
+    private final static int rollingAnimationNumberOfChangingIcons = 15;
 
     public DicePanel(){
         super();
@@ -28,13 +28,18 @@ public class DicePanel extends JPanel {
 
     public void updateDice(Dice dice){
         this.removeAll();
-        chosenFace = null;
+        reset();
         GridBagConstraints gbc = initGridBagConstraints();
         for (Die die : dice.getDiceList()) {
+            RoundedPanel roundedDie = new RoundedPanel(null);
             JToggleButton dieButton = makeDiceButton(die);
-            add(dieButton, gbc);
+            roundedDie.add(dieButton);
+            add(roundedDie, gbc);
             updateGridBagConstraints(gbc);
         }
+    }
+    public void reset(){
+        chosenFace = null;
     }
 
     private void updateGridBagConstraints(GridBagConstraints gbc) {
@@ -73,7 +78,8 @@ public class DicePanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (rollCount < rollingAnimationNumberOfChangingIcons) {
                     for (Component component : getComponents()) {
-                        if (component instanceof JToggleButton dieButton) {
+                        if (component instanceof RoundedPanel roundedPanel) {
+                            JToggleButton dieButton = (JToggleButton) roundedPanel.getComponent(0);
                             dieButton.setEnabled(false);
                             Die.Face randomFace = Die.generateDie().getDieFace();
                             dieButton.setIcon(getDieIcon(randomFace));
@@ -85,7 +91,8 @@ public class DicePanel extends JPanel {
                 } else {
                     ((Timer) e.getSource()).stop();
                     for (Component component : getComponents()) {
-                        if (component instanceof JToggleButton dieButton) {
+                        if (component instanceof RoundedPanel roundedPanel) {
+                            JToggleButton dieButton = (JToggleButton) roundedPanel.getComponent(0);
                             Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
                             dieButton.setIcon(getDieIcon(originalFace));
                             dieButton.setEnabled(true);
