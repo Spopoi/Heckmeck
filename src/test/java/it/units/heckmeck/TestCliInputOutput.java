@@ -6,6 +6,7 @@ import Heckmeck.Components.Dice;
 import Heckmeck.Components.Die;
 import Heckmeck.Components.Player;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -108,7 +109,6 @@ public class TestCliInputOutput {
                 """;
 
         testInputOutput.showBoardTiles(boardTiles);
-
         Assertions.assertEquals(expectedPrintedBoard, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
 
@@ -136,14 +136,12 @@ public class TestCliInputOutput {
     @MethodSource("userInputForSelectingDiceProvider")
     void rejectWrongInputsWhenUserChooseDie(String userInput) {
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
-        Dice dice = Dice.init();
         String expectedResponse = """
                     Pick one unselected face:
                     Incorrect input, choose between {1, 2, 3, 4, 5, w}:
                     """;
-
         try {
-            testInputOutput.chooseDie(fakePlayer, dice);
+            testInputOutput.chooseDie(fakePlayer);
         } catch (java.util.NoSuchElementException ex) {
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
@@ -154,27 +152,24 @@ public class TestCliInputOutput {
     @MethodSource("blankUserInputForSelectingDiceProvider")
     void skipBlankInputsWhenUserChooseDie(String userInput) {
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
-        Dice dice = Dice.init();
         String expectedResponse = """
                     Pick one unselected face:
                     """;
-
         try {
-            testInputOutput.chooseDie(fakePlayer, dice);
+            testInputOutput.chooseDie(fakePlayer);
         } catch (java.util.NoSuchElementException ex) {
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
         }
     }
 
+
     @ParameterizedTest
     @MethodSource("correctUserInputForSelectingDiceProvider")
     void readDieFaceFromValidUserInput(String userInput, String faceAsString) {
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
-
         Die.Face expectedFace = Die.getFaceByString(faceAsString);
-        Die.Face obtainedFace = testInputOutput.chooseDie(fakePlayer, null);
-
+        Die.Face obtainedFace = testInputOutput.chooseDie(fakePlayer);
         Assertions.assertEquals(expectedFace, obtainedFace);
     }
 
@@ -188,7 +183,6 @@ public class TestCliInputOutput {
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice
                     """;
-
         try {
             testInputOutput.wantToPick(fakePlayer, 1, 1);
         } catch (java.util.NoSuchElementException ex) {
@@ -206,7 +200,6 @@ public class TestCliInputOutput {
                     Do you want to pick tile number 1 from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     """;
-
         try {
             testInputOutput.wantToPick(fakePlayer, 1, 1);
         } catch (java.util.NoSuchElementException ex) {
@@ -218,7 +211,7 @@ public class TestCliInputOutput {
     @Test
     void printInitialPlayerStatus() {
         Dice dice = Dice.init();
-        Player[] listOfAllPlayers = initialiazeMaxNumberOfPlayer();
+        Player[] listOfAllPlayers = initializeMaxNumberOfPlayers();
         String expectedPrintedPlayerStatus = """
                 Luigi's tiles:                    Player  | Top tile | Worms\s
                                                  ----------------------------
@@ -234,24 +227,20 @@ public class TestCliInputOutput {
 
         Assertions.assertEquals(expectedPrintedPlayerStatus, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
-
-    private Player[] initialiazeMaxNumberOfPlayer() {
+    private Player[] initializeMaxNumberOfPlayers() {
+        int maxPlayers = 7;
+        Player[] players = new Player[maxPlayers];
         Player player1 = Player.generatePlayer(0);
         player1.setPlayerName(PLAYER_NAME);
-        Player player2 = Player.generatePlayer(1);
-        player2.setPlayerName("player2");
-        Player player3 = Player.generatePlayer(2);
-        player3.setPlayerName("player3");
-        Player player4 = Player.generatePlayer(3);
-        player4.setPlayerName("player4");
-        Player player5 = Player.generatePlayer(4);
-        player5.setPlayerName("player5");
-        Player player6 = Player.generatePlayer(5);
-        player6.setPlayerName("player6");
-        Player player7 = Player.generatePlayer(6);
-        player7.setPlayerName("player7");
-        return new Player[]{player1, player2, player3, player4, player5, player6, player7};
+        players[0] = player1;
+        for (int i = 1; i < maxPlayers; i++) {
+            Player player = Player.generatePlayer(i);
+            player.setPlayerName("player" + (i + 1));
+            players[i] = player;
+        }
+        return players;
     }
+
 
     private static String standardizeLineSeparator(String actualResponse) {
         return actualResponse.replaceAll("\\r\\n?", "\n");
