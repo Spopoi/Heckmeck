@@ -12,6 +12,7 @@ import static CLI.HeckmeckCLI.startLocalClient;
 public class HeckmeckGUI {
     private static JFrame frame;
     public static final String BACKGROUND_IMAGE_PATH = "src/main/resources/GUI/yellowBackground.png";
+    private static final Dimension minimumFrameDimension = new Dimension(1100, 600);
 
     public static void main(String[] args) throws UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(new FlatIntelliJLaf());
@@ -20,9 +21,10 @@ public class HeckmeckGUI {
 
     private static void initGUI() {
         frame = new JFrame("HECKMECK");
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(800, 500));
+        frame.setMinimumSize(minimumFrameDimension);
+        frame.setLocationRelativeTo(null);
         switchToMenuPanel();
         frame.setVisible(true);
     }

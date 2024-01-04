@@ -146,7 +146,6 @@ public class GUIIOHandler implements IOHandler {
 
         int MAX_PANEL_WIDTH = boardTiles.getTiles().size() * BOARD_TILE_DIMENSIONS.width;
         tilesPanel.setPreferredSize(new Dimension(MAX_PANEL_WIDTH, tilesPanelHeight));
-
         tilesPanel.setOpaque(false);
 
         for (Tile tile : boardTiles.getTiles()) {
@@ -195,12 +194,10 @@ public class GUIIOHandler implements IOHandler {
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
         if(otherPlayerPane != null) frame.remove(otherPlayerPane);
-
         scoreboardPanel = new ScoreboardPanel(player,players);
         otherPlayerPane = new JScrollPane(scoreboardPanel);
         otherPlayerPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         otherPlayerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
-
         frame.add(otherPlayerPane, BorderLayout.EAST);
         frame.revalidate();
         frame.repaint();
