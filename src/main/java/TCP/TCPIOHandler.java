@@ -134,7 +134,7 @@ public class TCPIOHandler implements IOHandler {
         );
     }
     @Override
-    public Die.Face chooseDie(Player currentPlayer, Dice dice) {
+    public Die.Face chooseDie(Player currentPlayer) {
         informEveryOtherClient(currentPlayer);
         Message msg = informPlayer(
                 currentPlayer,

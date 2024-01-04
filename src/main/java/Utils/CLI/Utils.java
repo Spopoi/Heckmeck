@@ -17,7 +17,6 @@ public class Utils {
 
 
     private static final String ACTUAL_PLAYER_INFO_TEMPLATE_FILE = "CLI/PLAYER_INFO_TEMPLATE";
-//TODO togliere costruttore non usato?
     private Utils() {
     }
 //Todo: refactoring?

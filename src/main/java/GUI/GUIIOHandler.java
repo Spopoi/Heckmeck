@@ -204,8 +204,8 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public Die.Face chooseDie(Player player, Dice dice) {
-        updateDicePanel(dice);
+    public Die.Face chooseDie(Player player) {
+        //updateDicePanel(dice);
         while (dicePanel.getChosenFace() == null) {
             Thread.onSpinWait();
         }

@@ -4,8 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ImagePanel extends JPanel {
-    //TODO: Default constructor?
-    private Image backgroundImage;
+    private final Image backgroundImage;
 
     public ImagePanel(String imagePath) {
         this.backgroundImage = new ImageIcon(imagePath).getImage();

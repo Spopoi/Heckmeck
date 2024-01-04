@@ -18,7 +18,7 @@ public class CliIOHandler implements IOHandler {
     private static final String newLine = System.lineSeparator();
     private Scanner scan;
     private PrintStream outputWhereToPrint;
-
+    //todo: unificare
     public CliIOHandler() {
         this(System.in, System.out);
     }
@@ -171,7 +171,7 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public Die.Face chooseDie(Player currentPlayer, Dice dice) {
+    public Die.Face chooseDie(Player currentPlayer) {
         // TODO: bug input infinite loop
         printMessage("Pick one unselected face:");
         while (true) {
@@ -216,7 +216,7 @@ public class CliIOHandler implements IOHandler {
         }
     }
 
-
+//TODO: refactoring with stream
     public String getInitialChoice(){
         while (true) {
             String decision = getInputString();

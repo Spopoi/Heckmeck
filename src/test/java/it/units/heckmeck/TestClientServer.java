@@ -394,7 +394,6 @@ public class TestClientServer {
         assertEquals(gameServer.game.getBoardTiles().getClass(), receivedTiles.getClass());
         //cli1.readIncomingMessage();
         io.showPlayerData(gameServer.game.getActualPlayer(), gameServer.game.getDice(), gameServer.game.getPlayers());
-        // TODO fare un confronto tra stringhe, non tra oggetti
 
         gameServer.close();
 

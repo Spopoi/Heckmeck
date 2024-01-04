@@ -132,14 +132,13 @@ public class Game {
 
     private Die.Face pickDieFace() {
         while(true){
-            Die.Face chosenDieFace = io.chooseDie(actualPlayer, dice);
+            Die.Face chosenDieFace = io.chooseDie(actualPlayer);
             if(!dice.isFacePresent(chosenDieFace)) io.printError("This face is not present.. Pick another one!");
             else if(dice.isFaceChosen(chosenDieFace)) io.printError("You have already chose this face, pick another one!");
             else return chosenDieFace;
         }
     }
 
-    //TODO: Rimettere in gioco tessere persa dal giocatore
     private void bust(){
         io.showBustMessage();
         if(actualPlayer.hasTile()){
@@ -172,7 +171,7 @@ public class Game {
     }
 
     public void restartGame(){
-        Arrays.stream(players).sequential().forEach(player -> player.clearPlayer());
+        Arrays.stream(players).sequential().forEach(Player::clearPlayer);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
         this.actualPlayer = this.players[0];

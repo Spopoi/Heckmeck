@@ -65,7 +65,7 @@ public class Tile implements Comparable<Tile> {
     }
 
     public String getWormString() {
-        return "~".repeat(this.getWorms()); // TODO spostare sopra
+        return "~".repeat(this.getWorms());
     }
 
     public static Tile generateTile(int number) {

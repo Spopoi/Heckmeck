@@ -58,5 +58,3 @@ public class ClientHandler implements Runnable{
     }
 
 }
-
-//TODO Via Lorenzo Butti 3

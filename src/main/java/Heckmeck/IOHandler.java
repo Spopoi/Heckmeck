@@ -17,7 +17,7 @@ public interface IOHandler {
     boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber);
     boolean wantToSteal(Player currentPlayer, Player robbedPlayer);
     void showPlayerData(Player currentPlayer, Dice dice, Player[] players);
-    Die.Face chooseDie(Player currentPlayer, Dice dice);
+    Die.Face chooseDie(Player currentPlayer);
     void showBustMessage();
     String getInputString();
     void printError(String text);
