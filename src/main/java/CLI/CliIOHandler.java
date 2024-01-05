@@ -131,7 +131,7 @@ public class CliIOHandler implements IOHandler {
         String choseDiceString = dice.getChosenDice().stream().map(e -> e.getDieFace().toString()).toList().toString();
 
         return actualPlayerInfoTemplate.replace("$ACTUAL_PLAYER", actualPlayer.getName())
-                .replace("$CURRENT_TILES", Utils.collectionToString(actualPlayer.getPlayerTiles()))
+                .replace("$CURRENT_TILES", actualPlayer.hasTile() ? actualPlayer.getLastPickedTile().toString() : "")
                 .replace("$CHOSEN_DICE", choseDiceString)
                 .replace("$CURRENT_DICE_SCORE", String.valueOf(dice.getScore()))
                 .replace("$IS_WARM_SELECTED", String.valueOf(dice.isFaceChosen(Die.Face.WORM)));
