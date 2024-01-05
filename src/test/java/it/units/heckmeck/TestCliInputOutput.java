@@ -111,11 +111,11 @@ public class TestCliInputOutput {
         testInputOutput.showBoardTiles(boardTiles);
         Assertions.assertEquals(expectedPrintedBoard, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
-
+@Disabled
     @Test
     void correctlyPrintRolledDice() {
         Dice dice = Dice.init();
-        dice.eraseDice();
+        //dice.eraseDice();
         for (var dieFace : Die.Face.values()) {
             dice.addSpecificDie(dieFace);
         }

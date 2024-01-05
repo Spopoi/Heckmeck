@@ -53,7 +53,7 @@ public class TestDice {
         Die die = Die.generateDie();
         die.rollDie();
         Die.Face result = die.getDieFace();
-        Assertions.assertTrue(Stream.of(Die.Face.values()).anyMatch(e -> e.equals(result)));
+        Assertions.assertTrue(Arrays.asList(values()).contains(result));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class TestDice {
         Assertions.assertEquals(8, size);
         for (Die d : diceList){
             Die.Face result = d.getDieFace();
-            Assertions.assertTrue(Stream.of(Die.Face.values()).anyMatch(e -> e.equals(result)));
+            Assertions.assertTrue(Arrays.asList(values()).contains(result));
         }
     }
 
@@ -201,7 +201,7 @@ public class TestDice {
         dice.chooseDice(getRandomChoosableDice(dice).getDieFace());
         Assertions.assertTrue(dice.isFaceChosen(face1));
         Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
-        while(dice.getDiceList().size() != 0){
+        while(!dice.getDiceList().isEmpty()){
             dice.rollDice();
             List <Die> availableDice = dice.getDiceList();
             Die.Face face = dice.getDiceList().get(0).getDieFace();

@@ -39,7 +39,7 @@ public class Message implements Serializable {
         GET_PLAYER_NAME,
         ERROR,
         CHOOSE_DICE,
-        BEGIN_TURN;
+        BEGIN_TURN
     }
     public Message setPlayerID(int pId) {
         playerID = pId;
