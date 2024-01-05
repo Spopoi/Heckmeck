@@ -13,7 +13,6 @@ public class GameServer implements Runnable {
     public ServerSocket ss;
     public List<ClientHandler> clients = new ArrayList<>();
     private boolean hostClosedRoom = false;
-    private Thread t1;
     private final int numOfPlayers;
     public Game game;
 
