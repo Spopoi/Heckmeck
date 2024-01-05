@@ -31,7 +31,7 @@ public class GUIIOHandler implements IOHandler {
     private static final double BOARD_TILE_TO_FRAME_RATIO = 0.8;
     private static final double TILE_TO_BOARD_RATIO = 0.7;
     private static final int BUST_DELAY = 2000;
-    private static final String HECKMECK_MESSAGES_FILENAME = "GUI/messages";
+    private static final String HECKMECK_MESSAGES_FILENAME = "messages";
     private int boardTileWidth;
     private Properties messages;
 
@@ -244,5 +244,7 @@ public class GUIIOHandler implements IOHandler {
     public String getInputString() {
         return null;
     }
+
+
 
 }
