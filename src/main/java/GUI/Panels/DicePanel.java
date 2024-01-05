@@ -81,7 +81,9 @@ public class DicePanel extends JPanel {
                         if (component instanceof RoundedPanel roundedPanel) {
                             JToggleButton dieButton = (JToggleButton) roundedPanel.getComponent(0);
                             dieButton.setEnabled(false);
-                            Die.Face randomFace = Die.generateDie().getDieFace();
+                            Die randomDie = Die.generateDie();
+                            randomDie.rollDie();
+                            Die.Face randomFace = randomDie.getDieFace();
                             dieButton.setIcon(getDieIcon(randomFace));
                             dieButton.setDisabledIcon(getDieIcon(randomFace));
                         }
