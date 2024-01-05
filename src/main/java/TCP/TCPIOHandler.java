@@ -88,7 +88,7 @@ public class TCPIOHandler implements IOHandler {
                         Message.generateMessage().
                                 setOperation(Message.Action.GET_PLAYER_NAME).
                                 setText("Choose player name").
-                                setPlayerID(player.getPlayerID())
+                                setActualPlayer(player)
                 );
         return resp.text;
     }
@@ -139,11 +139,11 @@ public class TCPIOHandler implements IOHandler {
         Message msg = informPlayer(
                 currentPlayer,
                 Message.generateMessage().
-                        setOperation(Message.Action.GET_INPUT).
+                        setOperation(Message.Action.CHOOSE_DICE).
                         setText("Choose a die face").
                         setActualPlayer(currentPlayer)
         );
-        return Die.getFaceByString(msg.text);
+        return Die.Face.valueOf(msg.text);
     }
     private void informEveryOtherClient(Player currentPlayer){
         getOtherPlayersSockets(currentPlayer).
