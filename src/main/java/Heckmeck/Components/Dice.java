@@ -1,14 +1,20 @@
 package Heckmeck.Components;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Dice {
     public final static int  initialNumOfDice = 8;
-    private List<Die> diceList;
-    private List<Die> chosenDiceList;
+    private final List<Die> diceList;
+    private final List<Die> chosenDiceList;
+    private int score;
+
 
     private Dice(){
-        resetDice();
+        diceList = new ArrayList<>(initialNumOfDice);
+        chosenDiceList = new ArrayList<>();
+        IntStream.range(0, initialNumOfDice)
+                .forEach(i -> diceList.add(Die.generateDie()));
     }
 
     public static Dice init(){
@@ -25,18 +31,12 @@ public class Dice {
         return diceList;
     }
 
-    //TODO: mainly used in tests, should we remove it?
-    public void eraseDice(){
-        diceList = new ArrayList<>(initialNumOfDice);
-        chosenDiceList = new ArrayList<>();
-    }
 
     public void resetDice(){
-        eraseDice();
-        for (int i = 0; i< initialNumOfDice; i++){
-            Die die = Die.generateDie();
-            diceList.add(die);
-        }
+        diceList.clear();
+        chosenDiceList.clear();
+        IntStream.range(0, initialNumOfDice)
+                .forEach(i -> diceList.add(Die.generateDie()));
     }
     public int getNumOfDice(){
         return diceList.size();
@@ -49,17 +49,13 @@ public class Dice {
     public void chooseDice(Die.Face face) {
         chosenDiceList.addAll(diceList.stream().filter(e -> e.getDieFace().equals(face)).toList());
         diceList.removeIf(e -> e.getDieFace().equals(face));
+        score = chosenDiceList.stream().mapToInt(Die::getScore).sum();
     }
 
     public List <Die> getChosenDice(){
         return chosenDiceList;
     }
 
-    //TODO: move it?
-    public String getChosenDiceString(){
-        return chosenDiceList.stream().map(e -> e.getDieFace().toString()).toList().toString();
-
-    }
 
     public boolean isFaceChosen(Die.Face face) {
         return chosenDiceList.stream().anyMatch(e -> e.getDieFace().equals(face));
@@ -70,7 +66,7 @@ public class Dice {
     }
 
     public int getScore() {
-        return chosenDiceList.stream().mapToInt(Die::getDieScore).sum();
+        return score;
     }
 
     public boolean canPickAFace(){

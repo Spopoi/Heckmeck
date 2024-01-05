@@ -58,9 +58,7 @@ public class Die {
     }
 
 
-    //TODO: come inizializzare die
     private Die(){
-        rollDie();
     }
     public static Die generateDie(Face face){
         Die die = generateDie();
@@ -82,7 +80,7 @@ public class Die {
         return stringToFaceMap.get(text);
     }
 
-    public int getDieScore(){
+    public int getScore(){
         return faceToIntMap.get(dieFace);
     }
 
