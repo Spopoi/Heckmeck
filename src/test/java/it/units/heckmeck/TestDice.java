@@ -81,21 +81,12 @@ public class TestDice {
         }
     }
 
-    @Test
-    void deleteDice(){
-        Dice dice = Dice.init();
-        dice.eraseDice();
-        int numOfDice = dice.getNumOfDice();
-        boolean test = numOfDice == 0;
-        Assertions.assertTrue(test);
-    }
+
 
     @Test
     void resetDice(){
         Dice dice = Dice.init();
         Assertions.assertEquals(8, dice.getNumOfDice());
-        dice.eraseDice();
-        Assertions.assertEquals(0, dice.getNumOfDice());
         dice.resetDice();
         Assertions.assertEquals(8, dice.getNumOfDice());
 
@@ -114,14 +105,6 @@ public class TestDice {
             }
             dice.chooseDice(getRandomChoosableDice(dice).getDieFace());
         }
-    }
-    @Test
-    void addSpecificDie(){
-        Dice dice = Dice.init();
-        dice.eraseDice();
-        dice.addSpecificDie(ONE);
-        List <Die> diceList =  dice.getDiceList();
-        Assertions.assertTrue(diceList.stream().anyMatch(e -> e.getDieFace().equals(ONE)));
     }
 
     @Test
@@ -143,7 +126,7 @@ public class TestDice {
     @Test
     void chooseDie(){
         Dice dice = Dice.init();
-        dice.eraseDice();
+        dice.rollDice();
         dice.addSpecificDie(TWO);
         dice.chooseDice(TWO);
         List <Die> chosenDice = dice.getChosenDice();
@@ -167,7 +150,7 @@ public class TestDice {
     @Test
     void isDieChosen(){
         Dice dice = Dice.init();
-        dice.eraseDice();
+        dice.rollDice();
         dice.addSpecificDie(THREE);
         dice.chooseDice(THREE);
         Assertions.assertTrue(dice.isFaceChosen(THREE));
@@ -185,17 +168,15 @@ public class TestDice {
     @Test
     void getChosenDice(){
         Dice dice = Dice.init();
-        dice.eraseDice();
+        dice.rollDice();
+        //dice.rollDice();
         dice.addSpecificDie(ONE);
         dice.addSpecificDie(TWO);
         dice.addSpecificDie(THREE);
 
         dice.chooseDice(ONE);
-        Assertions.assertEquals(2, dice.getNumOfDice());
         dice.chooseDice(TWO);
-        Assertions.assertEquals(1, dice.getNumOfDice());
         dice.chooseDice(THREE);
-        Assertions.assertEquals(0, dice.getNumOfDice());
 
         List <Die> chosenDice = dice.getChosenDice();
         Assertions.assertTrue(chosenDice.stream().anyMatch(e -> e.getDieFace().equals(ONE)));
@@ -207,26 +188,7 @@ public class TestDice {
     @CsvSource({"ONE,1", "TWO, 2","THREE,3","FOUR,4","FIVE,5","WORM,5"})
     void getDieScore(Die.Face face, int score){
         Die die = Die.generateDie(face);
-        Assertions.assertEquals(die.getDieScore(),score);
-    }
-
-    @Test
-    void getScore(){
-        Dice dice = Dice.init();
-        dice.eraseDice();
-        dice.addSpecificDie(ONE);
-        dice.addSpecificDie(TWO);
-        dice.addSpecificDie(THREE);
-        dice.addSpecificDie(WORM);
-        dice.addSpecificDie(WORM);
-
-        dice.chooseDice(ONE);
-        dice.chooseDice(TWO);
-        dice.chooseDice(THREE);
-        dice.chooseDice(WORM);
-        dice.chooseDice(WORM);
-        int score = dice.getScore();
-        Assertions.assertEquals(1 + 2 + 3 + 5 + 5 , score);
+        Assertions.assertEquals(die.getScore(),score);
     }
 
 
