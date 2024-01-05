@@ -29,18 +29,14 @@ public class GameServer implements Runnable {
     }
     public void run() {
         try {
-            //TODO spostare messaggi in un writer
-            System.out.println("You are now hosting on this machine: tell your IP address to your friends!");
-            System.out.println(getIPAddress());
             acceptConnections();
-            //initClients();
 
         } catch (IOException e) {
             System.out.println("Error in acceptConnections()");
         }
 
         TCPIOHandler io = new TCPIOHandler(clients);
-        io.showWelcomeMessage();
+        //io.showWelcomeMessage();
 
         game = new Game(io);
         game.init();
@@ -55,9 +51,7 @@ public class GameServer implements Runnable {
             Socket clientSocket;
             clientSocket = ss.accept();
             System.out.println("Accepted incoming connection #: " + playerID);
-
             if (clientSocket.isConnected()) {
-
                 this.clients.add(ConnectionHandler.startClientHandler(playerID, clientSocket));
                 playerID++;
             }
@@ -83,7 +77,4 @@ public class GameServer implements Runnable {
         }
     }
 
-    private static String getIPAddress() {
-        return ConnectionHandler.getLanIpAddress();
-    }
 }
