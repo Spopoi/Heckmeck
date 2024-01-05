@@ -3,6 +3,7 @@ package Utils.TCP;
 import Heckmeck.IOHandler;
 import TCP.Client;
 import TCP.Server.ClientHandler;
+import TCP.Server.GameServer;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -71,4 +72,19 @@ public class ConnectionHandler {
         return new Client(false, io, in, out);
     }
 
+    //TODO: Move methods?
+    public static void startLocalClient(String IP, IOHandler io){
+        Client cli = startClient(IP, io);
+        io.printMessage("Local client started, waiting for your turn to begin");
+        cli.commandInterpreter(false);
+    }
+
+    public static void startLocalClient(IOHandler io){
+        startLocalClient("127.0.0.1", io);
+    }
+
+    public static void startGameServer(int  numOfPlayers){
+        GameServer gameServer = new GameServer(numOfPlayers);
+        new Thread(gameServer).start();
+    }
 }
