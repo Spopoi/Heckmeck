@@ -4,9 +4,6 @@ import Utils.CLI.Utils;
 import Utils.TCP.ConnectionHandler;
 
 import Heckmeck.Game;
-import Heckmeck.IOHandler;
-import TCP.Client;
-import TCP.Server.GameServer;
 
 public class HeckmeckCLI {
     public static void main(String[] args) {
@@ -30,11 +27,13 @@ public class HeckmeckCLI {
                 case "2":
                     if (io.wantToHost()) {
                         int numOfPlayers = io.chooseNumberOfPlayers();
-                        startGameServer(numOfPlayers);
-                        startLocalClient(io);
+                        ConnectionHandler.startGameServer(numOfPlayers);
+                        io.printMessage("You are now hosting on this machine: tell your IP address to your friends!");
+                        io.printMessage(ConnectionHandler.getLanIpAddress());
+                        ConnectionHandler.startLocalClient(io);
 
                     } else {
-                        startLocalClient(io.askIPToConnect(), io);
+                        ConnectionHandler.startLocalClient(io.askIPToConnect(), io);
                     }
                     break;
                 case "3":
@@ -48,24 +47,5 @@ public class HeckmeckCLI {
                     break;
             }
         } while (true);
-    }
-    //TODO: Move methods?
-    public static void startLocalClient(String IP, IOHandler io){
-        Client cli = ConnectionHandler.startClient(IP, io);
-        Thread cliThread = new Thread(cli);
-        cliThread.start();
-        io.printMessage("Local client started, waiting for your turn to begin");
-        try {
-            cliThread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public static void startLocalClient(IOHandler io){
-        startLocalClient("127.0.0.1", io);
-    }
-    public static void startGameServer(int  numOfPlayers){
-        GameServer gameServer = new GameServer(numOfPlayers);
-        new Thread(gameServer).start();
     }
 }
