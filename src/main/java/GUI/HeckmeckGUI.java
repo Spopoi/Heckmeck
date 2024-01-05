@@ -2,12 +2,13 @@ package GUI;
 
 import GUI.Panels.*;
 import Heckmeck.*;
+import TCP.Client;
+import Utils.TCP.ConnectionHandler;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import javax.swing.*;
 import java.awt.*;
 
-import static CLI.HeckmeckCLI.startGameServer;
-import static CLI.HeckmeckCLI.startLocalClient;
+import static Utils.TCP.ConnectionHandler.startGameServer;
 
 public class HeckmeckGUI {
     private static JFrame frame;
@@ -55,6 +56,7 @@ public class HeckmeckGUI {
         if(io.wantToHost()){
             int numOfPlayers = io.chooseNumberOfPlayers();
             startGameServer(numOfPlayers);
+
             startLocalClient(io);
         }
         else{
@@ -62,7 +64,16 @@ public class HeckmeckGUI {
         }
     }
 
-    public static void switchToGamePanel() {
+    public static void startLocalClient(String IP, IOHandler io){
+        Client cli = ConnectionHandler.startClient(IP, io);
+        io.printMessage("Connected");
+        cli.commandInterpreter(false);
+    }
+    public static void startLocalClient(IOHandler io) {
+        startLocalClient("127.0.0.1", io);
+    }
+
+        public static void switchToGamePanel() {
         ImagePanel imagePanel = new ImagePanel(BACKGROUND_IMAGE_PATH);
 
         frame.getContentPane().removeAll();
