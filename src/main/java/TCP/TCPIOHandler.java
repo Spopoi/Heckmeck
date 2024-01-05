@@ -69,7 +69,7 @@ public class TCPIOHandler implements IOHandler {
                 Message.generateMessage().
                         setOperation(Message.Action.BEGIN_TURN).
                         setText("Press enter to start your turn").
-                        setActualPlayer(currentPlayer)
+                        setCurrentPlayer(currentPlayer)
         );
     }
     @Override
@@ -88,7 +88,7 @@ public class TCPIOHandler implements IOHandler {
                         Message.generateMessage().
                                 setOperation(Message.Action.GET_PLAYER_NAME).
                                 setText("Choose player name").
-                                setActualPlayer(player)
+                                setCurrentPlayer(player)
                 );
         return resp.text;
     }
@@ -130,7 +130,7 @@ public class TCPIOHandler implements IOHandler {
                         setOperation(Message.Action.UPDATE_PLAYER).
                         setDice(dice).
                         setPlayers(players).
-                        setActualPlayer(currentPlayer)
+                        setCurrentPlayer(currentPlayer)
         );
     }
     @Override
@@ -141,7 +141,7 @@ public class TCPIOHandler implements IOHandler {
                 Message.generateMessage().
                         setOperation(Message.Action.CHOOSE_DICE).
                         setText("Choose a die face").
-                        setActualPlayer(currentPlayer)
+                        setCurrentPlayer(currentPlayer)
         );
         return Die.Face.valueOf(msg.text);
     }
@@ -151,7 +151,7 @@ public class TCPIOHandler implements IOHandler {
                                 Message.generateMessage().
                                         setOperation(Message.Action.INFO).
                                         setText("This is not your turn, please wait").
-                                        setActualPlayer(currentPlayer)
+                                        setCurrentPlayer(currentPlayer)
                         )
                 );
     }

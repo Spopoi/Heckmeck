@@ -61,7 +61,7 @@ public class Message implements Serializable {
         this.boardTiles = (boardTiles);
         return this;
     }
-    public Message setActualPlayer(Player actualPlayer) {
+    public Message setCurrentPlayer(Player actualPlayer) {
         this.actualPlayer = (actualPlayer);
         return this;
     }
