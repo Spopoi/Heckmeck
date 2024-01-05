@@ -18,10 +18,6 @@ public class CliIOHandler implements IOHandler {
     private static final String newLine = System.lineSeparator();
     private Scanner scan;
     private PrintStream outputWhereToPrint;
-    //todo: unificare
-    public CliIOHandler() {
-        this(System.in, System.out);
-    }
 
     public CliIOHandler(InputStream inputStream, PrintStream printStream) {
         setOutput(printStream);

@@ -57,7 +57,7 @@ public class TestCliInputOutput {
         System.setIn(fakeStandardInput);
         ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
         System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
+        CliIOHandler inputOutputHandler = new CliIOHandler(System.in, System.out);
         Player player = Player.generatePlayer(1);
 
         try {
@@ -91,7 +91,7 @@ public class TestCliInputOutput {
         System.setIn(fakeStandardInput);
         ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
         System.setOut(new PrintStream(fakeStandardOutput));
-        CliIOHandler inputOutputHandler = new CliIOHandler();
+        CliIOHandler inputOutputHandler = new CliIOHandler(System.in, System.out);
 
         Assertions.assertEquals(expectedReadPlayerName, inputOutputHandler.choosePlayerName(Player.generatePlayer(0)));
     }
