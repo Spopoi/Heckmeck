@@ -38,6 +38,7 @@ public class Message implements Serializable {
         ACK,
         GET_PLAYER_NAME,
         ERROR,
+        CHOOSE_DICE,
         BEGIN_TURN;
     }
     public Message setPlayerID(int pId) {
