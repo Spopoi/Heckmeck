@@ -1,6 +1,8 @@
 package TCP;
 
 import CLI.HeckmeckCLI;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Player;
 import Heckmeck.IOHandler;
 
 import java.io.BufferedReader;
@@ -36,7 +38,7 @@ public class Client implements Runnable{
             resp = in.readLine();
 
         } catch (IOException e) {
-            System.out.println("Error in receiving data. Stopping client");
+            io.printError("Error in receiving data. Stopping client");
             if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
             else System.exit(0);
         }
@@ -71,18 +73,18 @@ public class Client implements Runnable{
     public void commandInterpreter(boolean botMode){
         int i = 0;
         while (true){
-            try{
-                if(connected) {
+            if(connected) {
+                try {
                     rxMessage = readIncomingMessage();
-                    if (rxMessage != null) {
-                        handleMessage(rxMessage);
-                    }
+
+                } catch (NullPointerException e) {
+                    io.printError("Error! Message was " + rxMessage.toJSON() );
+                    if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
+                    else System.exit(0);
                 }
-            }
-            catch (NullPointerException e){
-                System.out.println(e);
-                //if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
-                //else System.exit(0);
+                if (rxMessage != null) {
+                    handleMessage(rxMessage);
+                }
             }
         }
     }
@@ -97,26 +99,35 @@ public class Client implements Runnable{
         txMessage.setPlayerID(playerID);
         sendMessage(txMessage.toJSON());
     }
+    public void perform_choose_dice(Player player) {
+        String choice;
+        Message txMessage;
+        txMessage = Message.generateMessage();
+        txMessage.setOperation(Message.Action.RESPONSE);
+        choice = io.chooseDie(player).toString();
+        txMessage.setText(choice);
+        txMessage.setPlayerID(playerID);
+        sendMessage(txMessage.toJSON());
+    }
 
     private void perform_ask_confirm() {
         Message txMessage;
         String choice;
         txMessage = Message.generateMessage();
         txMessage.setOperation(Message.Action.RESPONSE);
-        //promptEnterKey();
         choice = "nothing";
         txMessage.setText(choice);
         txMessage.setPlayerID(playerID);
         sendMessage(txMessage.toJSON());
     }
 
-    public String perform_get_player_name(boolean botMode) {
+    public String perform_get_player_name(boolean botMode, Player player) {
         Message txMessage;
         txMessage = Message.generateMessage();
         txMessage.setOperation(Message.Action.RESPONSE);
         txMessage.setPlayerID(playerID);
         if(botMode) txMessage.setText("Player"+ playerID);
-        else txMessage.setText(io.getInputString());
+        else txMessage.setText(io.choosePlayerName(player));
         sendMessage(txMessage.toJSON());
         return txMessage.text;
     }
@@ -130,8 +141,7 @@ public class Client implements Runnable{
                 break;
 
             case GET_PLAYER_NAME:
-                io.printMessage(rxMessage.text);
-                String playerName = perform_get_player_name(botMode);
+                String playerName = perform_get_player_name(botMode, rxMessage.actualPlayer);
                 io.printMessage("You chose " + playerName + ", wait for other players!");
                 break;
 
@@ -171,25 +181,21 @@ public class Client implements Runnable{
                 break;
 
             case INFO:
-                io.printMessage(rxMessage.text);
                 sendAck();
+                io.printMessage(rxMessage.text);
                 break;
 
+            case CHOOSE_DICE:
+                perform_choose_dice(rxMessage.actualPlayer);
+                break;
+
+
             default:
-                io.printError("Unexpected problem");
+                io.printError("Unexpected problem, operation was " + rxMessage.operation.toString());
                 if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
                 else System.exit(0);
                 break;
         }
     }
 
-
-    public static void promptEnterKey(){
-        System.out.println("Press \"ENTER\" to continue...");
-        try {
-            int read = System.in.read(new byte[2]);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
