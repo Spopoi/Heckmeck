@@ -124,7 +124,7 @@ public class CliIOHandler implements IOHandler {
         String actualPlayerInfo = fillActualPlayerInfoTemplate(Utils.getActualPlayerInfoTemplate(), actualPlayer, dice);
 
         TextBlock playerData = new TextBlock(actualPlayerInfo).concatenateWith(new TextBlock(summaryTable.toString()), 12);
-        printMessage(playerData.toString());
+        printMessage(playerData.toString() + newLine);
     }
 
     private String fillActualPlayerInfoTemplate(String actualPlayerInfoTemplate, Player actualPlayer, Dice dice) {
