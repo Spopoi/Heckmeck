@@ -151,16 +151,12 @@ public class GUIIOHandler implements IOHandler {
         tilesPanel.setOpaque(false);
 
         for (Tile tile : boardTiles.getTiles()) {
-            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber()));
-            tileIcon.setPreferredSize(BOARD_TILE_DIMENSIONS);
-
-            RoundedPanel roundedTilePanel = new RoundedPanel( null);
-            roundedTilePanel.setLayout(new BorderLayout());
-            roundedTilePanel.add(tileIcon, BorderLayout.CENTER);
-            tilesPanel.add(roundedTilePanel);
+            tilesPanel.add(getTileIcon(tile.getNumber()));
         }
         frame.add(tilesPanel, BorderLayout.NORTH);
     }
+
+
 
     //todo:icon
     @Override

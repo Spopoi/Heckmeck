@@ -24,7 +24,7 @@ public class Utils {
     public static String getLogo() {
         return getFileString(getPath(LOGO_FILE));
     }
-    public static String getMultyplayerPath(){
+    public static String getMultiplayerPath(){
         return getFileString(getPath(MULTIPLAYER));
     }
 

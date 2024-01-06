@@ -106,13 +106,9 @@ public class PlayerDataPanel extends RoundedPanel{
         JLabel lastTileLabel = new JLabel("Top tile: ");
         lastTileLabel.setFont(textFont);
         playerTilePanel.add(lastTileLabel);
-
-        playerTilePanel.add(Box.createRigidArea(new Dimension(20,0)));
-
+        playerTilePanel.add(Box.createRigidArea(new Dimension(80,0)));
         //TODO: refactoring
-        JLabel lastPlayerTile = new JLabel();
-        if(tileNumber != -1) lastPlayerTile.setIcon(getPlayerTileIcon(tileNumber));
-        playerTilePanel.add(lastPlayerTile);
+        if(tileNumber != -1) playerTilePanel.add(getPlayerTileIcon(tileNumber));
     }
 
     public void update(Player player, Dice dice){

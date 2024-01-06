@@ -46,20 +46,23 @@ public class ScoreboardPanel extends ImagePanel {
         playerPanel.add(playerName);
         playerPanel.add(verticalSpace);
 
-        JLabel lastPlayerTile = new JLabel();
-        lastPlayerTile.setAlignmentX(CENTER_ALIGNMENT);
         if(otherPlayer.hasTile()){
             int tileNumber = otherPlayer.getLastPickedTile().getNumber();
-            lastPlayerTile.setIcon(getPlayerTileIcon(tileNumber));
-            playerPanel.add(lastPlayerTile);
+            playerPanel.add(getPlayerTileIcon(tileNumber));
         }
-        JLabel scoreLabel = getLabel("Worm score: " + otherPlayer.getWormScore(), SCOREBOARD_WIDTH_PANEL, 30);
-        scoreLabel.setForeground(Color.RED);
-        scoreLabel.setAlignmentX(CENTER_ALIGNMENT);
+        JLabel scoreLabel = getScoreLabel(otherPlayer);
         playerPanel.add(scoreLabel);
 
         return playerPanel;
     }
+
+    private JLabel getScoreLabel(Player otherPlayer) {
+        JLabel scoreLabel = getLabel("Worm score: " + otherPlayer.getWormScore(), SCOREBOARD_WIDTH_PANEL, 30);
+        scoreLabel.setForeground(Color.RED);
+        scoreLabel.setAlignmentX(CENTER_ALIGNMENT);
+        return scoreLabel;
+    }
+
 
     //TODO: refactoring horizontal separator
     private static JSeparator makeHorizontalSeparator() {
