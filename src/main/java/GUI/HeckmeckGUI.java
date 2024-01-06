@@ -66,8 +66,18 @@ public class HeckmeckGUI {
 
     public static void startLocalClient(String IP, IOHandler io){
         Client cli = ConnectionHandler.startClient(IP, io);
-        io.printMessage("Connected");
-        cli.commandInterpreter(false);
+        io.printMessage("Connected, waiting for other players to begin");
+        final var worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                cli.commandInterpreter(false);
+                return null;
+            }
+        };
+        worker.execute();
+        frame.revalidate();
+        frame.repaint();
+
     }
     public static void startLocalClient(IOHandler io) {
         startLocalClient("127.0.0.1", io);
