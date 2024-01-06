@@ -73,7 +73,7 @@ public class PlayerDataPanel extends RoundedPanel{
         chosenDiceLabel.setFont(textFont);
         add(chosenDiceLabel);
 
-        add(Box.createRigidArea(getDimensions(10)));
+        add(Box.createRigidArea(getDimensions(5)));
 
         playerDicePanel = new JPanel();
         playerDicePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -81,6 +81,7 @@ public class PlayerDataPanel extends RoundedPanel{
         playerDicePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         playerDicePanel.setOpaque(false);
         add(playerDicePanel);
+        add(Box.createRigidArea(getDimensions(5)));
     }
 
     private void initPlayerTilePanel() {
@@ -91,6 +92,7 @@ public class PlayerDataPanel extends RoundedPanel{
         playerTilePanel.setOpaque(false);
         initTilePanel(-1);
         add(playerTilePanel);
+        add(Box.createRigidArea(getDimensions(5)));
     }
 
     private void initPlayerNameLabel() {
@@ -105,7 +107,7 @@ public class PlayerDataPanel extends RoundedPanel{
         lastTileLabel.setFont(textFont);
         playerTilePanel.add(lastTileLabel);
 
-        playerTilePanel.add(Box.createRigidArea(new Dimension(60,0)));
+        playerTilePanel.add(Box.createRigidArea(new Dimension(20,0)));
 
         //TODO: refactoring
         JLabel lastPlayerTile = new JLabel();

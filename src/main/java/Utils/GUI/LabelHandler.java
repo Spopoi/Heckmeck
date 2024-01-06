@@ -9,7 +9,7 @@ import static Utils.GUI.IconHandler.*;
 
 public class LabelHandler {
     public static final Font titleFont = new Font("Serif", Font.BOLD, 30);
-    public static final Font textFont = new Font("Serif", Font.PLAIN, 25);
+    public static final Font textFont = new Font("Serif", Font.PLAIN, 22);
 
     public static JLabel getLabel(int width, int height){
         JLabel label = makeLabel(width, height);

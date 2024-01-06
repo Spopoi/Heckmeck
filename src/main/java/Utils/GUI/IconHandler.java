@@ -10,13 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class IconHandler {
-    private static final int DICE_SIZE = 65;
-    public static final int CHOSEN_DICE_SIZE = 55;
+    private static final int DICE_SIZE = 60;
+    public static final int CHOSEN_DICE_SIZE = 50;
     private static final int PLAYER_TILE_ICON_WIDTH = 50;
     private static final int PLAYER_TILE_ICON_HEIGHT = 60;
-    private static final int TILE_HEIGHT = 50;
-    private static final int TILE_WIDTH = 40;
-
+    private static final int TILE_HEIGHT = 70;
+    private static final int TILE_WIDTH = 50;
+    //Todo: pathhandler
     private static final Map<Die.Face, String> faceToIconPath =
             Collections.unmodifiableMap(new HashMap<>() {{
                 put(Die.Face.ONE, "src/main/resources/GUI/Dice/one.png");
