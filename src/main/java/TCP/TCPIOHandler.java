@@ -42,7 +42,7 @@ public class TCPIOHandler implements IOHandler {
         );
     }
     @Override
-    public void printError(String text){
+    public void printError(String text){ //TODO aggiungere player anche ad error
         sendBroadCast(
                 Message.generateMessage().
                         setOperation(Message.Action.ERROR).
@@ -57,7 +57,7 @@ public class TCPIOHandler implements IOHandler {
     @Override
     public boolean wantToPlayAgain() {
         return getYesOrNoAnswer(
-                getHostClient().playerId,
+                Player.generatePlayer(0),
                 "Do you want to play again? (y/n)"
                 );
     }
@@ -68,13 +68,12 @@ public class TCPIOHandler implements IOHandler {
                 currentPlayer,
                 Message.generateMessage().
                         setOperation(Message.Action.BEGIN_TURN).
-                        setText("Press enter to start your turn").
-                        setCurrentPlayer(currentPlayer)
+                        setText("Press enter to start your turn")
         );
     }
     @Override
     public void showWelcomeMessage() {
-        printMessage(Utils.getMultyplayerPath());
+        printMessage(Utils.getMultiplayerPath());
     }
     @Override
     public int chooseNumberOfPlayers() {
@@ -102,7 +101,7 @@ public class TCPIOHandler implements IOHandler {
     }
     @Override
     public void askRollDiceConfirmation(Player currentPlayer) {
-        informEveryOtherClient(currentPlayer);
+        //informEveryOtherClient(currentPlayer);
     }
 
     @Override
@@ -116,11 +115,24 @@ public class TCPIOHandler implements IOHandler {
 
     @Override
     public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
-        return getYesOrNoAnswer(currentPlayer.getPlayerID(), "Do you want to pick tile n. " + availableTileNumber + "?");
+        return informPlayer(currentPlayer,
+                    Message.generateMessage().
+                    setOperation(Message.Action.WANT_PICK).
+                    setCurrentPlayer(currentPlayer).
+                    setScore(actualDiceScore).
+                    setAvailableTileNumber(availableTileNumber)
+                ).decision;
+
+        //return getYesOrNoAnswer(currentPlayer, "Do you want to pick tile n. " + availableTileNumber + "?");
     }
     @Override
     public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
-        return getYesOrNoAnswer(currentPlayer.getPlayerID(), "Do you want to steal " + robbedPlayer.getName() + "' s tile?");
+        return informPlayer(currentPlayer,
+                    Message.generateMessage().
+                        setOperation(Message.Action.WANT_STEAL).
+                        setCurrentPlayer(currentPlayer).
+                        setRobbedPlayer(robbedPlayer)
+                ).decision;
     }
 
     @Override
@@ -135,7 +147,6 @@ public class TCPIOHandler implements IOHandler {
     }
     @Override
     public Die.Face chooseDie(Player currentPlayer) {
-        informEveryOtherClient(currentPlayer);
         Message msg = informPlayer(
                 currentPlayer,
                 Message.generateMessage().
@@ -168,26 +179,25 @@ public class TCPIOHandler implements IOHandler {
     public List<ClientHandler> getOtherPlayersSockets(Player currentPlayer){
         return sockets.stream().filter(p -> p.getPlayerID() != currentPlayer.getPlayerID()).toList();
     }
-    private Message informPlayer(Player player, Message msg) {
-        return informPlayer(player.getPlayerID(), msg);
-    }
-    private Message informPlayer(int playerID, Message msg){
+
+    private Message informPlayer(Player player, Message msg){
+        int playerID = player.getPlayerID();
         try {
             threads.get(playerID).join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return sockets.get(playerID).writeMessage(msg.setPlayerID(playerID));
+        return sockets.get(playerID).writeMessage(msg.setCurrentPlayer(player));
     }
 
     private ClientHandler getHostClient(){
         return sockets.get(0);
     }
-    public boolean getYesOrNoAnswer(int playerID, String textToDisplay){
+    public boolean getYesOrNoAnswer(Player  player, String textToDisplay){
         while(true){
-            String decision = informPlayer(playerID,
+            String decision = informPlayer(player,
                     Message.generateMessage().
-                            setOperation(Message.Action.GET_INPUT).
+                            setOperation(Message.Action.PLAY_AGAIN).
                             setText(textToDisplay)
             ).text;
 
