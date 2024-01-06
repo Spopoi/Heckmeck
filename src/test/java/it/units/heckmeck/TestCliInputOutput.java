@@ -221,6 +221,7 @@ public class TestCliInputOutput {
                 WORM is chosen: false             player5 | No tiles |   0  \s
                                                   player6 | No tiles |   0  \s
                                                   player7 | No tiles |   0  \s
+                                                  
                 """;
 
         testInputOutput.showPlayerData(listOfAllPlayers[0], dice, listOfAllPlayers);

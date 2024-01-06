@@ -32,7 +32,6 @@ public class TestGameServer {
 
     @Test
     void init_server_socket() {
-
         assertFalse(gameServer.ss == (null));
         gameServer.close();
     }
