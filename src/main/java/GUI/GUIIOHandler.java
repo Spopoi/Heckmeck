@@ -6,6 +6,7 @@ import GUI.Panels.RoundedPanel;
 import GUI.Panels.ScoreboardPanel;
 import Heckmeck.*;
 import Heckmeck.Components.*;
+import Utils.GUI.IconHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
+
 import static Utils.GUI.IconHandler.getDieIcon;
 import static Utils.GUI.IconHandler.getTileIcon;
 import static javax.swing.JOptionPane.*;
@@ -65,7 +67,7 @@ public class GUIIOHandler implements IOHandler {
     //Todo: ICON
     @Override
     public void printMessage(String message) {
-        showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , getDieIcon(Die.Face.WORM,50));
+        showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , getDieIcon(Die.Face.WORM));
     }
 
     @Override
@@ -149,7 +151,7 @@ public class GUIIOHandler implements IOHandler {
         tilesPanel.setOpaque(false);
 
         for (Tile tile : boardTiles.getTiles()) {
-            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber(), BOARD_TILE_DIMENSIONS.height * 8/10 , BOARD_TILE_DIMENSIONS.width * 9/10));
+            JLabel tileIcon = new JLabel(getTileIcon(tile.getNumber()));
             tileIcon.setPreferredSize(BOARD_TILE_DIMENSIONS);
 
             RoundedPanel roundedTilePanel = new RoundedPanel( null);
