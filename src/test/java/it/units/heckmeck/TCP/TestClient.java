@@ -3,6 +3,7 @@ package it.units.heckmeck.TCP;
 import Heckmeck.IOHandler;
 import TCP.Client;
 import TCP.Message;
+import TCP.MessageHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

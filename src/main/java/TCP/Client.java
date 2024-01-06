@@ -19,66 +19,58 @@ public class Client implements Runnable{
     private BufferedReader in;
 
     private boolean connected = false;
-    IOHandler io;
+    private IOHandler io;
     private boolean botMode = false;
     private int playerID;
+    private MessageHandler msgHandler;
     private Map<Message.Action, MessageHandlerFunction> operationHandlers;
-    public Client(IOHandler io, BufferedReader in, PrintWriter out){
-        this.io = io;
+    private interface MessageHandlerFunction {
+        Message handleMessage(Message rxMessage);
+    }
+    public Client(IOHandler io,  BufferedReader in, PrintWriter out){
+
+        msgHandler = new MessageHandler(io);
         this.in = in;
         this.out = out;
         this.connected = true;
+        initCommands();
+    }
 
+    private void initCommands(){
         operationHandlers = new HashMap<>();
-        operationHandlers.put(INIT              , this::performInit);
-        operationHandlers.put(GET_PLAYER_NAME   , this::perform_get_player_name);
-        operationHandlers.put(BEGIN_TURN        , this::perform_ask_confirm);
-        operationHandlers.put(PLAY_AGAIN        , this::perform_play_again);
-        operationHandlers.put(UPDATE_TILES      , this::perform_update_tiles);
-        operationHandlers.put(UPDATE_DICE       , this::perform_update_dice);
-        operationHandlers.put(UPDATE_PLAYER     , this::perform_update_player);
-        operationHandlers.put(ERROR             , this::perform_error);
-        operationHandlers.put(INFO              , this::perform_info);
-        operationHandlers.put(CHOOSE_DICE       , this::perform_choose_dice);
-        operationHandlers.put(WANT_PICK         , this::performWantPick);
-        operationHandlers.put(WANT_STEAL        , this::performWantSteal);
-
+        operationHandlers.put(INIT              , msgHandler::performInit);
+        operationHandlers.put(GET_PLAYER_NAME   , msgHandler::perform_get_player_name);
+        operationHandlers.put(BEGIN_TURN        , msgHandler::perform_ask_confirm);
+        operationHandlers.put(PLAY_AGAIN        , msgHandler::perform_play_again);
+        operationHandlers.put(UPDATE_TILES      , msgHandler::perform_update_tiles);
+        operationHandlers.put(UPDATE_DICE       , msgHandler::perform_update_dice);
+        operationHandlers.put(UPDATE_PLAYER     , msgHandler::perform_update_player);
+        operationHandlers.put(ERROR             , msgHandler::perform_error);
+        operationHandlers.put(INFO              , msgHandler::perform_info);
+        operationHandlers.put(CHOOSE_DICE       , msgHandler::perform_choose_dice);
+        operationHandlers.put(WANT_PICK         , msgHandler::performWantPick);
+        operationHandlers.put(WANT_STEAL        , msgHandler::performWantSteal);
     }
 
 
-
-
-    private interface MessageHandlerFunction {
-        void handleMessage(Message rxMessage);
-    }
     public void handleMessage(Message rxMessage) {
         MessageHandlerFunction handler = (MessageHandlerFunction) operationHandlers.get(rxMessage.operation);
         if (handler != null) {
-            handler.handleMessage(rxMessage);
+            sendMessage(handler.handleMessage(rxMessage));
         } else {
-            handleDefault(rxMessage);
+            msgHandler.handleDefault(rxMessage);
         }
     }
 
-    private void handleDefault(Message rxMessage) {
-        io.printError("Unexpected problem, operation was " + rxMessage.operation.toString());
-        if (io.wantToPlayAgain()) HeckmeckCLI.startMenu();
-        else System.exit(0);
-    }
-    public String sendLine(String line) {
+    public void sendLine(String line) {
         out.println(line);
-        String resp = "";
-        return resp;
     }
     public String readRxBuffer(){
         String resp = null;
         try {
             resp = in.readLine();
-
         } catch (IOException e) {
-            io.printError("Error in receiving data. Stopping client");
-            if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
-            else System.exit(0);
+            msgHandler.stopClient();
         }
         return resp;
     }
@@ -88,11 +80,8 @@ public class Client implements Runnable{
         return Message.fromJSON(serialized);
     }
 
-    public void sendAck(){
-        sendMessage(
-                Message.generateMessage().
-                        setOperation(Message.Action.ACK)
-        );
+    private void sendMessage(Message msg){
+        sendLine(msg.toJSON());
     }
 
     @Override
@@ -123,87 +112,6 @@ public class Client implements Runnable{
         }
     }
 
-    private void sendMessage(Message msg){
-        sendLine(msg.toJSON());
-    }
 
 
-    private void performInit(Message rxMessage) {
-        this.playerID = rxMessage.id;
-        sendMessage(
-                Message.generateMessage().
-                        setOperation(Message.Action.RESPONSE).
-                        setPlayerID(playerID)
-        );
-    }
-
-    public void perform_play_again(Message rxMessage) {
-        sendMessage(
-                Message.generateMessage().
-                        setOperation(Message.Action.RESPONSE).
-                        setDecision(io.wantToPlayAgain())
-        );
-    }
-    public void perform_choose_dice(Message rxMessage) {
-        sendMessage(
-                Message.generateMessage().
-                        setOperation(Message.Action.RESPONSE).
-                        setText(io.chooseDie(rxMessage.currentPlayer).toString())
-        );
-    }
-    private void perform_ask_confirm(Message rxMessage) {
-        io.showTurnBeginConfirm(rxMessage.currentPlayer);
-        sendMessage(
-                Message.generateMessage().
-                        setOperation(Message.Action.RESPONSE).
-                        setText("nothing")
-        );
-    }
-
-    public void perform_get_player_name(Message rxMessage) {
-        String playerName = io.choosePlayerName(rxMessage.currentPlayer);
-        sendMessage(
-                Message.generateMessage().
-                        setOperation(Message.Action.RESPONSE).
-                        setText(playerName)
-        );
-        io.printMessage("You chose " + playerName + ", wait for other players!");
-    }
-
-    public void performWantPick(Message rxMessage){
-        sendMessage(
-                Message.generateMessage().
-                        setOperation(Message.Action.RESPONSE).
-                        setDecision(io.wantToPick(rxMessage.currentPlayer, rxMessage.diceScore, rxMessage.availableTileNumber))
-        );
-
-    }
-    public void performWantSteal(Message rxMessage){
-        sendMessage(
-                Message.generateMessage().
-                        setOperation(Message.Action.RESPONSE).
-                        setDecision(io.wantToSteal(rxMessage.currentPlayer, rxMessage.robbedPlayer))
-        );
-    }
-    private void perform_info(Message rxMessage) {
-        io.printMessage(rxMessage.text);
-        sendAck();
-    }
-    private void perform_error(Message rxMessage) {
-        sendAck();
-        io.printError(rxMessage.text);
-    }
-    private void perform_update_player(Message rxMessage) {
-        sendAck();
-        io.showPlayerData(rxMessage.currentPlayer, rxMessage.dice, rxMessage.players);
-    }
-    private void perform_update_tiles(Message rxMessage) {
-        sendAck();
-        io.showBoardTiles(rxMessage.boardTiles);
-    }
-
-    private void perform_update_dice(Message rxMessage) {
-        sendAck();
-        io.showRolledDice(rxMessage.dice);
-    }
 }
