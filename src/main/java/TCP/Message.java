@@ -11,13 +11,16 @@ public class Message implements Serializable {
 
     static Gson gson = new Gson();
     public Dice dice;
+    public int id;
+    public boolean decision;
+    public int diceScore;
+    public int availableTileNumber;
     public BoardTiles boardTiles;
-    public Player actualPlayer;
+    public Player currentPlayer;
     public  Player[] players;
     public  Action operation;
     public  String text;
-    public int playerID;
-
+    public Player robbedPlayer;
 
     private Message(){
 
@@ -30,19 +33,21 @@ public class Message implements Serializable {
     public  enum Action {
         INIT,
         INFO,
-        GET_INPUT,
+        PLAY_AGAIN,
         UPDATE_DICE,
         UPDATE_TILES,
         UPDATE_PLAYER,
         RESPONSE,
         ACK,
         GET_PLAYER_NAME,
+        WANT_PICK,
+        WANT_STEAL,
         ERROR,
         CHOOSE_DICE,
         BEGIN_TURN
     }
     public Message setPlayerID(int pId) {
-        playerID = pId;
+        this.id = pId;
         return this;
     }
     public Message setOperation(Action operation) {
@@ -62,13 +67,33 @@ public class Message implements Serializable {
         return this;
     }
     public Message setCurrentPlayer(Player actualPlayer) {
-        this.actualPlayer = (actualPlayer);
+        this.currentPlayer = (actualPlayer);
         return this;
     }
     public Message setPlayers(Player[] players) {
         this.players = (players);
         return this;
     }
+
+    public Message setScore(int score){
+        this.diceScore = score;
+        return this;
+    }
+
+
+    public Message setDecision(boolean decision){
+        this.decision = decision;
+        return this;
+    }
+    public Message setAvailableTileNumber(int tileNumber){
+        this.availableTileNumber = tileNumber;
+        return this;
+    }
+    public Message setRobbedPlayer(Player player){
+        this.robbedPlayer = player;
+        return this;
+    }
+
     public String toJSON(){
         return gson.toJson(this, Message.class);
     }
