@@ -69,7 +69,7 @@ public class ConnectionHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return new Client(false, io, in, out);
+        return new Client(io, in, out);
     }
 
     //TODO: Move methods?

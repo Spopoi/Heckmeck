@@ -1,33 +1,71 @@
 package TCP;
 
 import CLI.HeckmeckCLI;
-import Heckmeck.Components.Dice;
 import Heckmeck.Components.Player;
 import Heckmeck.IOHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+
+import static TCP.Message.Action.*;
 
 
 public class Client implements Runnable{
 
     private PrintWriter out;
     private BufferedReader in;
-    public Message rxMessage;
+
     private boolean connected = false;
     IOHandler io;
     private boolean botMode = false;
     private int playerID;
-
-    public Client(boolean botMode, IOHandler io, BufferedReader in, PrintWriter out){
-        this.botMode = botMode;
+    private Map<Message.Action, MessageHandlerFunction> operationHandlers;
+    public Client(IOHandler io, BufferedReader in, PrintWriter out){
         this.io = io;
         this.in = in;
         this.out = out;
-        connected = true;
+        this.connected = true;
+
+        operationHandlers = new HashMap<>();
+        operationHandlers.put(INIT              , this::performInit);
+        operationHandlers.put(GET_PLAYER_NAME   , this::perform_get_player_name);
+        operationHandlers.put(BEGIN_TURN        , this::perform_ask_confirm);
+        operationHandlers.put(PLAY_AGAIN        , this::perform_play_again);
+        operationHandlers.put(UPDATE_TILES      , this::perform_update_tiles);
+        operationHandlers.put(UPDATE_DICE       , this::perform_update_dice);
+        operationHandlers.put(UPDATE_PLAYER     , this::perform_update_player);
+        operationHandlers.put(ERROR             , this::perform_error);
+        operationHandlers.put(INFO              , this::perform_info);
+        operationHandlers.put(CHOOSE_DICE       , this::perform_choose_dice);
+        operationHandlers.put(WANT_PICK         , this::performWantPick);
+        operationHandlers.put(WANT_STEAL        , this::performWantSteal);
+
     }
-    public String sendMessage(String line) {
+
+
+
+
+    private interface MessageHandlerFunction {
+        void handleMessage(Message rxMessage);
+    }
+    public void handleMessage(Message rxMessage) {
+        MessageHandlerFunction handler = (MessageHandlerFunction) operationHandlers.get(rxMessage.operation);
+        if (handler != null) {
+            handler.handleMessage(rxMessage);
+        } else {
+            handleDefault(rxMessage);
+        }
+    }
+
+    private void handleDefault(Message rxMessage) {
+        io.printError("Unexpected problem, operation was " + rxMessage.operation.toString());
+        if (io.wantToPlayAgain()) HeckmeckCLI.startMenu();
+        else System.exit(0);
+    }
+    public String sendLine(String line) {
         out.println(line);
         String resp = "";
         return resp;
@@ -51,18 +89,15 @@ public class Client implements Runnable{
     }
 
     public void sendAck(){
-        Message ack = Message.generateMessage();
-        ack.setOperation(Message.Action.ACK);
-        ack.setPlayerID(playerID);
-        sendMessage(ack.toJSON());
-    }
-
-    public boolean isYourTurn(Message msg){
-        return msg.playerID == playerID;
+        sendMessage(
+                Message.generateMessage().
+                        setOperation(Message.Action.ACK)
+        );
     }
 
     @Override
     public void run() {
+
         commandInterpreter(botMode);
     }
 
@@ -71,15 +106,14 @@ public class Client implements Runnable{
     }
 
     public void commandInterpreter(boolean botMode){
-        int i = 0;
+        Message rxMessage = null;
         while (true){
-            if(connected) {
+            if(connected) { //TODO rimuovere questo if siccome se parte l'interpreter client sicuramente connesso?
                 try {
                     rxMessage = readIncomingMessage();
-
                 } catch (NullPointerException e) {
-                    io.printError("Error! Message was " + rxMessage.toJSON() );
-                    if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
+                    io.printError("Error reading incoming message" );
+                    if(io.wantToPlayAgain()) HeckmeckCLI.startMenu(); //TODO lanciamo WantToPlayAgain? Però lasciamo che puoi tornare al menu?
                     else System.exit(0);
                 }
                 if (rxMessage != null) {
@@ -89,113 +123,87 @@ public class Client implements Runnable{
         }
     }
 
-    public void perform_get_input() {
-        String choice;
-        Message txMessage;
-        txMessage = Message.generateMessage();
-        txMessage.setOperation(Message.Action.RESPONSE);
-        choice = io.getInputString();
-        txMessage.setText(choice);
-        txMessage.setPlayerID(playerID);
-        sendMessage(txMessage.toJSON());
-    }
-    public void perform_choose_dice(Player player) {
-        String choice;
-        Message txMessage;
-        txMessage = Message.generateMessage();
-        txMessage.setOperation(Message.Action.RESPONSE);
-        choice = io.chooseDie(player).toString();
-        txMessage.setText(choice);
-        txMessage.setPlayerID(playerID);
-        sendMessage(txMessage.toJSON());
+    private void sendMessage(Message msg){
+        sendLine(msg.toJSON());
     }
 
-    private void perform_ask_confirm() {
-        Message txMessage;
-        String choice;
-        txMessage = Message.generateMessage();
-        txMessage.setOperation(Message.Action.RESPONSE);
-        choice = "nothing";
-        txMessage.setText(choice);
-        txMessage.setPlayerID(playerID);
-        sendMessage(txMessage.toJSON());
+
+    private void performInit(Message rxMessage) {
+        this.playerID = rxMessage.id;
+        sendMessage(
+                Message.generateMessage().
+                        setOperation(Message.Action.RESPONSE).
+                        setPlayerID(playerID)
+        );
     }
 
-    public String perform_get_player_name(boolean botMode, Player player) {
-        Message txMessage;
-        txMessage = Message.generateMessage();
-        txMessage.setOperation(Message.Action.RESPONSE);
-        txMessage.setPlayerID(playerID);
-        if(botMode) txMessage.setText("Player"+ playerID);
-        else txMessage.setText(io.choosePlayerName(player));
-        sendMessage(txMessage.toJSON());
-        return txMessage.text;
+    public void perform_play_again(Message rxMessage) {
+        sendMessage(
+                Message.generateMessage().
+                        setOperation(Message.Action.RESPONSE).
+                        setDecision(io.wantToPlayAgain())
+        );
+    }
+    public void perform_choose_dice(Message rxMessage) {
+        sendMessage(
+                Message.generateMessage().
+                        setOperation(Message.Action.RESPONSE).
+                        setText(io.chooseDie(rxMessage.currentPlayer).toString())
+        );
+    }
+    private void perform_ask_confirm(Message rxMessage) {
+        io.showTurnBeginConfirm(rxMessage.currentPlayer);
+        sendMessage(
+                Message.generateMessage().
+                        setOperation(Message.Action.RESPONSE).
+                        setText("nothing")
+        );
     }
 
-    public void handleMessage(Message rxMessage){
-
-        switch (rxMessage.operation) {
-            case INIT:
-                playerID = rxMessage.playerID;
-                sendAck();
-                break;
-
-            case GET_PLAYER_NAME:
-                String playerName = perform_get_player_name(botMode, rxMessage.actualPlayer);
-                io.printMessage("You chose " + playerName + ", wait for other players!");
-                break;
-
-            case BEGIN_TURN:
-                io.showTurnBeginConfirm(rxMessage.actualPlayer);
-                perform_ask_confirm();
-                break;
-
-            case GET_INPUT:
-                io.printMessage(rxMessage.text);
-                if (!isYourTurn(rxMessage)) {
-                    sendAck();
-                    break;
-                }
-                perform_get_input();
-                break;
-
-            case UPDATE_TILES:
-                io.showBoardTiles(rxMessage.boardTiles);
-                sendAck();
-                break;
-
-            case UPDATE_DICE:
-                io.showRolledDice(rxMessage.dice);
-                sendAck();
-                break;
-
-            case UPDATE_PLAYER:
-                io.showPlayerData(rxMessage.actualPlayer, rxMessage.dice, rxMessage.players);
-                sendAck();
-                break;
-
-            case ERROR:
-                if (isYourTurn(rxMessage))
-                    io.printError(rxMessage.text);
-                sendAck();
-                break;
-
-            case INFO:
-                sendAck();
-                io.printMessage(rxMessage.text);
-                break;
-
-            case CHOOSE_DICE:
-                perform_choose_dice(rxMessage.actualPlayer);
-                break;
-
-
-            default:
-                io.printError("Unexpected problem, operation was " + rxMessage.operation.toString());
-                if(io.wantToPlayAgain()) HeckmeckCLI.startMenu();
-                else System.exit(0);
-                break;
-        }
+    public void perform_get_player_name(Message rxMessage) {
+        String playerName = io.choosePlayerName(rxMessage.currentPlayer);
+        sendMessage(
+                Message.generateMessage().
+                        setOperation(Message.Action.RESPONSE).
+                        setText(playerName)
+        );
+        io.printMessage("You chose " + playerName + ", wait for other players!");
     }
 
+    public void performWantPick(Message rxMessage){
+        sendMessage(
+                Message.generateMessage().
+                        setOperation(Message.Action.RESPONSE).
+                        setDecision(io.wantToPick(rxMessage.currentPlayer, rxMessage.diceScore, rxMessage.availableTileNumber))
+        );
+
+    }
+    public void performWantSteal(Message rxMessage){
+        sendMessage(
+                Message.generateMessage().
+                        setOperation(Message.Action.RESPONSE).
+                        setDecision(io.wantToSteal(rxMessage.currentPlayer, rxMessage.robbedPlayer))
+        );
+    }
+    private void perform_info(Message rxMessage) {
+        io.printMessage(rxMessage.text);
+        sendAck();
+    }
+    private void perform_error(Message rxMessage) {
+        sendAck();
+        io.printError(rxMessage.text);
+    }
+    private void perform_update_player(Message rxMessage) {
+        sendAck();
+        io.showPlayerData(rxMessage.currentPlayer, rxMessage.dice, rxMessage.players);
+    }
+    private void perform_update_tiles(Message rxMessage) {
+        sendAck();
+        io.showBoardTiles(rxMessage.boardTiles);
+    }
+
+    private void perform_update_dice(Message rxMessage) {
+        sendAck();
+        io.showRolledDice(rxMessage.dice);
+    }
 }

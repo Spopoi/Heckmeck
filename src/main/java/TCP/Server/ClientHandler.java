@@ -39,9 +39,6 @@ public class ClientHandler implements Runnable{
         return rxString;
     }
 
-    //public Message readReceivedMessage(){
-    //    return Message.fromJSON(rxString);
-    //}
 
     public Message writeMessage(Message message){
         return Message.fromJSON(writeLine(message.toJSON()));
@@ -49,12 +46,11 @@ public class ClientHandler implements Runnable{
 
     public boolean initClient(){
         Message msg = Message.generateMessage();
-        System.out.println("Player " + playerId + " initialised");
+        System.out.println("Player " + playerId + " initialised"); //TODO stringhe presenti nel clientHandler?
         msg.setPlayerID(playerId);
         msg.setOperation(Message.Action.INIT);
-        msg.setText("Hello");
         Message respMsg = writeMessage(msg);
-        return respMsg.playerID==playerId;
+        return respMsg.id==playerId;
     }
 
 }
