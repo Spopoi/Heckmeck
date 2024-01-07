@@ -12,42 +12,38 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
-
 import static Utils.GUI.IconHandler.getDieIcon;
 import static Utils.GUI.IconHandler.getTileIcon;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
-    public static Dimension BOARD_TILE_DIMENSIONS;
     private final JFrame frame;
     private PlayerDataPanel playerPane;
     private DicePanel dicePanel;
-    private ScoreboardPanel scoreboardPanel;
     private JScrollPane otherPlayerPane;
     private JPanel tilesPanel;
-    private int tilesPanelHeight;
     private int lateralPanelWidth;
     private static final double PANEL_TO_FRAME_RATIO = 0.25;
-    private static final double BOARD_TILE_TO_FRAME_RATIO = 0.8;
-    private static final double TILE_TO_BOARD_RATIO = 0.7;
     private static final int BUST_DELAY = 2000;
+    private static final int TILES_GAP = 10;
+    private static final int TOP_BORDER = 20;
+    private static final int BOARDTILES_BOTTOM_BORDER = 40;
     private static final String HECKMECK_MESSAGES_FILENAME = "messages";
-    private int boardTileWidth;
     private Properties messages;
 
     public GUIIOHandler(JFrame frame){
         this.frame = frame;
-        dicePanel = new DicePanel();
-        tilesPanel = new JPanel();
-        tilesPanelHeight = (int)(frame.getHeight() * PANEL_TO_FRAME_RATIO);
+        initPanels();
+        initHeckmeckMessages();
+    }
+
+    private void initPanels(){
         lateralPanelWidth = (int)(frame.getWidth() * PANEL_TO_FRAME_RATIO);
         playerPane = new PlayerDataPanel(BACKGROUND_IMAGE_PATH);
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
-        boardTileWidth = (int)((frame.getWidth() * BOARD_TILE_TO_FRAME_RATIO)/BoardTiles.numberOfTiles);
-        BOARD_TILE_DIMENSIONS = new Dimension(boardTileWidth, (int) (tilesPanelHeight * TILE_TO_BOARD_RATIO));
-        initHeckmeckMessages();
 
-        frame.setVisible(true);
+        dicePanel = new DicePanel();
+        tilesPanel = new JPanel();
     }
 
     private void initHeckmeckMessages(){
@@ -146,15 +142,11 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-        if (tilesPanel != null) frame.remove(tilesPanel);
+        frame.remove(tilesPanel);
         tilesPanel = new JPanel();
-        tilesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        tilesPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
-
-        int MAX_PANEL_WIDTH = boardTiles.getTiles().size() * BOARD_TILE_DIMENSIONS.width;
-        tilesPanel.setPreferredSize(new Dimension(MAX_PANEL_WIDTH, tilesPanelHeight));
+        tilesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, TILES_GAP, 0));
+        tilesPanel.setBorder(BorderFactory.createEmptyBorder(TOP_BORDER, 0, BOARDTILES_BOTTOM_BORDER, 0));
         tilesPanel.setOpaque(false);
-
         for (Tile tile : boardTiles.getTiles()) {
             tilesPanel.add(getTileIcon(tile.getNumber()));
         }
@@ -163,7 +155,7 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
-        String message = messages.getProperty("actualScore") + " " + actualDiceScore + '\n' + messages.getProperty("wantToPick") + availableTileNumber + "?";
+        String message = messages.getProperty("actualScore") + " " + actualDiceScore + '\n' + messages.getProperty("wantToPick") + " " + availableTileNumber + "?";
         int result = JOptionPane.showOptionDialog(
                 null,
                 message,
@@ -194,7 +186,7 @@ public class GUIIOHandler implements IOHandler {
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
         if(otherPlayerPane != null) frame.remove(otherPlayerPane);
-        scoreboardPanel = new ScoreboardPanel(player,players);
+        ScoreboardPanel scoreboardPanel = new ScoreboardPanel(player, players);
         otherPlayerPane = new JScrollPane(scoreboardPanel);
         otherPlayerPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         otherPlayerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));

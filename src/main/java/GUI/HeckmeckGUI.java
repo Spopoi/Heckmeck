@@ -57,7 +57,7 @@ public class HeckmeckGUI {
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);
-        frame.getContentPane().setLayout(new BorderLayout(50, 30));
+        frame.getContentPane().setLayout(new BorderLayout());
 
         GUIIOHandler io = new GUIIOHandler(frame);
         if(io.wantToHost()){
@@ -95,7 +95,7 @@ public class HeckmeckGUI {
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);
-        frame.getContentPane().setLayout(new BorderLayout(50, 30));
+        frame.getContentPane().setLayout(new BorderLayout());
 
         GUIIOHandler io = new GUIIOHandler(frame);
         Game game = new Game(io);
