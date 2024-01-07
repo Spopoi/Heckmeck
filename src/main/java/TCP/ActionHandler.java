@@ -73,8 +73,9 @@ public class ActionHandler {
     }
 
     void perform_info(Message rxMessage) {
-        client.getIo().printMessage(rxMessage.text);
         sendAck();
+        client.getIo().printMessage(rxMessage.text);
+
     }
 
     void perform_error(Message rxMessage) {
