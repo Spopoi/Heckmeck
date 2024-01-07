@@ -77,7 +77,7 @@ public class HeckmeckGUI {
         final var worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
-                cli.commandInterpreter(false);
+                cli.commandInterpreter();
                 return null;
             }
         };
