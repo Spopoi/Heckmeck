@@ -11,9 +11,11 @@ import java.awt.*;
 import java.io.InputStream;
 import java.util.Properties;
 
-import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
+import static GUI.HeckmeckGUI.*;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static Utils.GUI.IconHandler.getTileIcon;
+import static Utils.GUI.SoundHandler.PICK_SOUND_PATH;
+import static Utils.GUI.SoundHandler.playSound;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
@@ -23,7 +25,7 @@ public class GUIIOHandler implements IOHandler {
     private JScrollPane otherPlayerPane;
     private JPanel tilesPanel;
     private int lateralPanelWidth;
-    private static final double PANEL_TO_FRAME_RATIO = 0.25;
+    private static final double PANEL_WIDTH_TO_FRAME_RATIO = 0.25;
     private static final int BUST_DELAY = 2000;
     private static final int TILES_GAP = 10;
     private static final int TOP_BORDER = 20;
@@ -38,7 +40,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void initPanels(){
-        lateralPanelWidth = (int)(frame.getWidth() * PANEL_TO_FRAME_RATIO);
+        lateralPanelWidth = (int)(frame.getWidth() * PANEL_WIDTH_TO_FRAME_RATIO);
         playerPane = new PlayerDataPanel(BACKGROUND_IMAGE_PATH);
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
 
@@ -166,7 +168,10 @@ public class GUIIOHandler implements IOHandler {
                 null,
                 null
         );
-        return result == JOptionPane.YES_OPTION;
+        if(result == JOptionPane.YES_OPTION){
+            playSound(PICK_SOUND_PATH);
+            return true;
+        }else return false;
     }
 
     @Override
@@ -201,6 +206,7 @@ public class GUIIOHandler implements IOHandler {
         while (dicePanel.getChosenFace() == null) {
             Thread.onSpinWait();
         }
+        playSound(PICK_SOUND_PATH);
         return dicePanel.getChosenFace();
     }
 
