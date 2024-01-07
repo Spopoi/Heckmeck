@@ -90,7 +90,7 @@ public class HeckmeckGUI {
         startLocalClient("127.0.0.1", io);
     }
 
-        public static void switchToGamePanel() {
+    public static void switchToGamePanel() {
         ImagePanel imagePanel = new ImagePanel(BACKGROUND_IMAGE_PATH);
 
         frame.getContentPane().removeAll();

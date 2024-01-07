@@ -2,11 +2,9 @@ package GUI;
 
 import GUI.Panels.DicePanel;
 import GUI.Panels.PlayerDataPanel;
-import GUI.Panels.RoundedPanel;
 import GUI.Panels.ScoreboardPanel;
 import Heckmeck.*;
 import Heckmeck.Components.*;
-import Utils.GUI.IconHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,7 +62,6 @@ public class GUIIOHandler implements IOHandler {
             e.printStackTrace();
         }
     }
-    //Todo: ICON
     @Override
     public void printMessage(String message) {
         showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , getDieIcon(Die.Face.WORM));
@@ -85,10 +82,19 @@ public class GUIIOHandler implements IOHandler {
         return JOptionPane.showInputDialog(null, messages.getProperty("askIP"), messages.getProperty("heckmeckMultiplayer"), JOptionPane.QUESTION_MESSAGE);
     }
 
-    //TODO: togliere dall'interfaccia?
     @Override
     public boolean wantToPlayAgain() {
-        return false;
+        int result = JOptionPane.showOptionDialog(
+                null,
+                messages.getProperty("wantToPlayAgain"),
+                messages.getProperty("heckmeckTitle"),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                getDieIcon(Die.Face.WORM),
+                null,
+                null
+        );
+        return result == JOptionPane.YES_OPTION;
     }
 
     @Override
@@ -98,7 +104,6 @@ public class GUIIOHandler implements IOHandler {
         printMessage(player.getName() + messages.getProperty("turnBeginConfirm"));
     }
 
-    //TODO:icon
     public boolean wantToHost(){
         int result = JOptionPane.showOptionDialog(
                 null,
@@ -156,9 +161,6 @@ public class GUIIOHandler implements IOHandler {
         frame.add(tilesPanel, BorderLayout.NORTH);
     }
 
-
-
-    //todo:icon
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
         String message = messages.getProperty("actualScore") + " " + actualDiceScore + '\n' + messages.getProperty("wantToPick") + availableTileNumber + "?";
@@ -203,7 +205,6 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public Die.Face chooseDie(Player player) {
-        //updateDicePanel(dice);
         dicePanel.reset();
         while (dicePanel.getChosenFace() == null) {
             Thread.onSpinWait();
@@ -225,7 +226,6 @@ public class GUIIOHandler implements IOHandler {
     }
     @Override
     public void askRollDiceConfirmation(Player playerName){
-        return;
     }
 
     @Override
@@ -242,7 +242,5 @@ public class GUIIOHandler implements IOHandler {
     public String getInputString() {
         return null;
     }
-
-
 
 }
