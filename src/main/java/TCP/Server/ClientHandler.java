@@ -32,16 +32,13 @@ public class ClientHandler implements Runnable{
             throw new RuntimeException(e);
         }
     }
-    public String writeLine(String message){
+    public String writeAndRead(String message){
         out.println(message);
-        String rxString = readLine();
-        //rxString =  readLine();
-        return rxString;
+        return readLine();
     }
 
-
     public Message writeMessage(Message message){
-        return Message.fromJSON(writeLine(message.toJSON()));
+        return Message.fromJSON(writeAndRead(message.toJSON()));
     }
 
     public boolean initClient(){

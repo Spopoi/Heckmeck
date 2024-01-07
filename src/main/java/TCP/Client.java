@@ -1,7 +1,6 @@
 package TCP;
 
 import CLI.HeckmeckCLI;
-import Heckmeck.Components.Player;
 import Heckmeck.IOHandler;
 
 import java.io.BufferedReader;
@@ -15,24 +14,21 @@ import static TCP.Message.Action.*;
 
 public class Client implements Runnable{
 
-    private PrintWriter out;
-    private BufferedReader in;
-
-    private boolean connected = false;
+    private final PrintWriter out;
+    private final BufferedReader in;
     private IOHandler io;
-    private boolean botMode = false;
-    private int playerID;
-    private MessageHandler msgHandler;
+    private ActionHandler msgHandler;
     private Map<Message.Action, MessageHandlerFunction> operationHandlers;
     private interface MessageHandlerFunction {
-        Message handleMessage(Message rxMessage);
+        void handleMessage(Message rxMessage);
     }
     public Client(IOHandler io,  BufferedReader in, PrintWriter out){
 
-        msgHandler = new MessageHandler(io);
+
         this.in = in;
         this.out = out;
-        this.connected = true;
+        this.io = io;
+        msgHandler = new ActionHandler(this);
         initCommands();
     }
 
@@ -56,7 +52,7 @@ public class Client implements Runnable{
     public void handleMessage(Message rxMessage) {
         MessageHandlerFunction handler = (MessageHandlerFunction) operationHandlers.get(rxMessage.operation);
         if (handler != null) {
-            sendMessage(handler.handleMessage(rxMessage));
+            handler.handleMessage(rxMessage);
         } else {
             msgHandler.handleDefault(rxMessage);
         }
@@ -80,35 +76,38 @@ public class Client implements Runnable{
         return Message.fromJSON(serialized);
     }
 
-    private void sendMessage(Message msg){
+    public void sendMessage(Message msg){
         sendLine(msg.toJSON());
     }
 
     @Override
     public void run() {
 
-        commandInterpreter(botMode);
+        commandInterpreter();
+    }
+
+    public IOHandler getIo(){
+        return io;
     }
 
     public static void main(String args[]){
         HeckmeckCLI.startMenu();
     }
 
-    public void commandInterpreter(boolean botMode){
+    public void commandInterpreter(){
         Message rxMessage = null;
         while (true){
-            if(connected) { //TODO rimuovere questo if siccome se parte l'interpreter client sicuramente connesso?
-                try {
-                    rxMessage = readIncomingMessage();
-                } catch (NullPointerException e) {
-                    io.printError("Error reading incoming message" );
-                    if(io.wantToPlayAgain()) HeckmeckCLI.startMenu(); //TODO lanciamo WantToPlayAgain? Però lasciamo che puoi tornare al menu?
-                    else System.exit(0);
-                }
-                if (rxMessage != null) {
-                    handleMessage(rxMessage);
-                }
+            try {
+                rxMessage = readIncomingMessage();
+            } catch (NullPointerException e) {
+                io.printError("Error reading incoming message" );
+                if(io.wantToPlayAgain()) HeckmeckCLI.startMenu(); //TODO lanciamo WantToPlayAgain? Però lasciamo che puoi tornare al menu?
+                else System.exit(0);
             }
+            if (rxMessage != null) {
+                handleMessage(rxMessage);
+            }
+
         }
     }
 
