@@ -64,6 +64,7 @@ public class DicePanel extends JPanel {
         JToggleButton dieButton = new JToggleButton();
         Die.Face dieFace = die.getDieFace();
         dieButton.setIcon(getDieIcon(dieFace));
+        dieButton.setFocusPainted(false);
         dieButton.setBorder(null);
         dieButton.putClientProperty("originalFace", dieFace);
         dieButton.addActionListener(e -> chosenFace = dieFace);
