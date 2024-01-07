@@ -2,7 +2,6 @@ package Utils.TCP;
 
 import Heckmeck.IOHandler;
 import TCP.Client;
-import TCP.MessageHandler;
 import TCP.Server.ClientHandler;
 import TCP.Server.GameServer;
 
@@ -77,7 +76,7 @@ public class ConnectionHandler {
     public static void startLocalClient(String IP, IOHandler io){
         Client cli = startClient(IP, io);
         io.printMessage("Local client started, waiting for your turn to begin");
-        cli.commandInterpreter(false);
+        cli.commandInterpreter();
     }
 
     public static void startLocalClient(IOHandler io){
