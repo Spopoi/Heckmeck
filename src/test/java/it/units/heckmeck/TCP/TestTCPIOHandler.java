@@ -110,7 +110,7 @@ public class TestTCPIOHandler {
         respMsg.setText("playerName").
                 setOperation(Message.Action.RESPONSE).
                 setPlayerID(0);
-        when(sockets.get(0).writeLine(Message.generateMessage().
+        when(sockets.get(0).writeAndRead(Message.generateMessage().
                 setOperation(Message.Action.GET_PLAYER_NAME).
                 setText("Choose player name").
                 setPlayerID(0).toJSON())).thenReturn(respMsg.toJSON());

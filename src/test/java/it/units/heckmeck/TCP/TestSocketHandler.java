@@ -40,7 +40,7 @@ class TestSocketHandler {
 
     @Test
     void testWriteLine() throws IOException {
-        clientHandler.writeLine("Test Message");
+        clientHandler.writeAndRead("Test Message");
         verify(out).println("Test Message");
     }
 
@@ -51,7 +51,7 @@ class TestSocketHandler {
         msg.setPlayerID(1);
         msg.setText("Test Line");
         String msgString = gson.toJson(msg);
-        when(clientHandler.writeLine(msgString)).thenReturn(msgString);
+        when(clientHandler.writeAndRead(msgString)).thenReturn(msgString);
         Message message = clientHandler.writeMessage(msg);
         assertEquals(msg.text, message.text);
     }
