@@ -12,7 +12,10 @@ import static Utils.TCP.ConnectionHandler.startGameServer;
 
 public class HeckmeckGUI {
     private static JFrame frame;
-    public static final String BACKGROUND_IMAGE_PATH = "src/main/resources/GUI/yellowBackground.png";
+    public static String YELLOW_BACKGROUND_PATH = "src/main/resources/GUI/yellowBackground.png";
+    public static String BACKGROUND_IMAGE_PATH = YELLOW_BACKGROUND_PATH;
+    public static final String GREEN_BACKGROUND_PATH = "src/main/resources/GUI/green_background.jpg";
+    public static final String BLUE_BACKGROUND_PATH = "src/main/resources/GUI/blue_background.png";
     private static final Dimension minimumFrameDimension = new Dimension(1100, 600);
 
     public static void main(String[] args) throws UnsupportedLookAndFeelException {
@@ -30,6 +33,10 @@ public class HeckmeckGUI {
         frame.setVisible(true);
     }
 
+    public static void setBackgroundImagePath(String path) {
+        BACKGROUND_IMAGE_PATH = path;
+    }
+
     public static void switchToRulesPanel() {
         RulesPanel rulesPanel = new RulesPanel();
         updateFrame(rulesPanel);
@@ -41,7 +48,7 @@ public class HeckmeckGUI {
     }
 
     public static void switchToSettingsPanel() {
-        SettingsPanel settingsPanel = new SettingsPanel(frame);
+        SettingsPanel settingsPanel = new SettingsPanel();
         updateFrame(settingsPanel);
     }
 
