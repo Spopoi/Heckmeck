@@ -8,8 +8,8 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.swing.*;
 import java.awt.*;
-import static Utils.GUI.SoundHandler.BACKGROUND_SOUND_PATH;
-import static Utils.GUI.SoundHandler.playLoopingSound;
+
+import static Utils.GUI.SoundHandler.*;
 import static Utils.TCP.ConnectionHandler.startGameServer;
 
 public class HeckmeckGUI {
@@ -32,7 +32,7 @@ public class HeckmeckGUI {
         frame.setMinimumSize(minimumFrameDimension);
         frame.setLocationRelativeTo(null);
         switchToMenuPanel();
-        playLoopingSound(BACKGROUND_SOUND_PATH);
+        playLoopingSound(BACKGROUND_SOUND_PATH, BACKGROUND_MUSIC_VOLUME);
         frame.setVisible(true);
     }
 

@@ -14,8 +14,7 @@ import java.util.Properties;
 import static GUI.HeckmeckGUI.*;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static Utils.GUI.IconHandler.getTileIcon;
-import static Utils.GUI.SoundHandler.PICK_SOUND_PATH;
-import static Utils.GUI.SoundHandler.playSound;
+import static Utils.GUI.SoundHandler.*;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
@@ -169,7 +168,7 @@ public class GUIIOHandler implements IOHandler {
                 null
         );
         if(result == JOptionPane.YES_OPTION){
-            playSound(PICK_SOUND_PATH);
+            playSound(PICK_SOUND_PATH, ACTIONS_MUSIC_VOLUME);
             return true;
         }else return false;
     }
@@ -206,7 +205,7 @@ public class GUIIOHandler implements IOHandler {
         while (dicePanel.getChosenFace() == null) {
             Thread.onSpinWait();
         }
-        playSound(PICK_SOUND_PATH);
+        playSound(PICK_SOUND_PATH, ACTIONS_MUSIC_VOLUME);
         return dicePanel.getChosenFace();
     }
 
@@ -214,6 +213,7 @@ public class GUIIOHandler implements IOHandler {
     public void showRolledDice(Dice dice) {
         updateDicePanel(dice);
         dicePanel.rollDiceAnimation();
+        playSound(ROLLING_SOUND_PATH, ACTIONS_MUSIC_VOLUME);
     }
 
     private void updateDicePanel(Dice dice){
