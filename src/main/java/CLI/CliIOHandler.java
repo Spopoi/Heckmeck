@@ -12,6 +12,7 @@ import Heckmeck.Components.Player;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class CliIOHandler implements IOHandler {
 
@@ -214,19 +215,15 @@ public class CliIOHandler implements IOHandler {
         }
     }
 
-//TODO: refactoring with stream
     public String getInitialChoice(){
         while (true) {
-            String decision = getInputString();
-            if (Objects.equals(decision, "1")) {
-                return decision;
-            } else if (Objects.equals(decision, "2")) {
-                return decision;
-            } else if (Objects.equals(decision, "3")) {
-                return decision;
-            } else if (Objects.equals(decision, "4")) {
-                return decision;
-            } else if (decision.isBlank()) {
+            String userChoice = getInputString();
+            Optional<String> checkedUserChoice = Stream.of("1", "2", "3", "4")
+                    .filter(x -> Objects.equals(x, userChoice))
+                    .findFirst();
+            if (checkedUserChoice.isPresent()) {
+                return checkedUserChoice.get();
+            } else if (userChoice.isBlank()) {
                 continue;
             } else {
                 printMessage("Incorrect input, insert one possible choice (1, 2, 3, 4)");
