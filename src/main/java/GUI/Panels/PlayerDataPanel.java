@@ -10,7 +10,6 @@ import java.awt.*;
 import static Utils.GUI.IconHandler.getPlayerTileIcon;
 import static Utils.GUI.LabelHandler.*;
 
-
 public class PlayerDataPanel extends RoundedPanel{
     private JLabel playerName;
     private JPanel playerDicePanel;

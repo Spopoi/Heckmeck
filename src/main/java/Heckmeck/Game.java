@@ -26,7 +26,7 @@ public class Game {
     public void play(){
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
-        while(!boardTiles.isEmpty()){
+        while(boardTiles.hasElement()){
 
             playerTurn();
             playerNumber++;

@@ -25,7 +25,7 @@ public class Player {
     }
 
     public boolean hasTile() {
-        return !playerTiles.isEmpty();
+        return playerTiles.hasElement();
     }
 
      public void pickTile(Tile desiredTile) {

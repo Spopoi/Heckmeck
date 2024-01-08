@@ -21,13 +21,8 @@ public class BoardTiles implements TilesCollection {
     }
 
     @Override
-    public boolean isEmpty() {
-        return tiles.isEmpty();
-    }
-
-    @Override
-    public boolean hasTile(Tile tile) {
-        return tiles.contains(tile);
+    public boolean hasElement() {
+        return !tiles.isEmpty();
     }
 
     public Tile nearestTile(int score){

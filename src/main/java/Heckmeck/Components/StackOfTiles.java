@@ -17,8 +17,8 @@ public class StackOfTiles implements TilesCollection {
     }
 
     @Override
-    public boolean isEmpty(){
-        return stackOfTiles.isEmpty();
+    public boolean hasElement(){
+        return !stackOfTiles.isEmpty();
     }
 
     public Tile getLastTile(){
@@ -28,11 +28,6 @@ public class StackOfTiles implements TilesCollection {
     @Override
     public void add(Tile newTile) {
         stackOfTiles.add(newTile);
-    }
-
-    @Override
-    public boolean hasTile(Tile tile) {
-        return stackOfTiles.contains(tile);
     }
 
     @Override
