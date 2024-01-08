@@ -47,7 +47,7 @@ public class ScoreboardPanel extends ImagePanel {
         playerPanel.add(verticalSpace);
 
         if(otherPlayer.hasTile()){
-            int tileNumber = otherPlayer.getLastPickedTile().getNumber();
+            int tileNumber = otherPlayer.getLastPickedTile().number();
             playerPanel.add(getPlayerTileIcon(tileNumber));
         }
         JLabel scoreLabel = getScoreLabel(otherPlayer);

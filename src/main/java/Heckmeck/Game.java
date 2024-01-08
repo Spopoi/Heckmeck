@@ -70,21 +70,21 @@ public class Game {
 
     private boolean canPick(){
         Tile minValueTile = boardTiles.getTiles().first();
-        return dice.getScore() >= minValueTile.getNumber();
+        return dice.getScore() >= minValueTile.number();
     }
 
     private boolean wantToPick() {
         // Assume canPick()
         int diceScore = dice.getScore();
         Tile availableTile = boardTiles.nearestTile(diceScore);
-        return io.wantToPick(actualPlayer, diceScore, availableTile.getNumber());
+        return io.wantToPick(actualPlayer, diceScore, availableTile.number());
     }
 
     private void pickTile(){
         Tile availableTile = boardTiles.nearestTile(dice.getScore());
         boardTiles.remove(availableTile);
         actualPlayer.pickTile(availableTile);
-        io.printMessage("You got tile number " + availableTile.getNumber() +"!");
+        io.printMessage("You got tile number " + availableTile.number() +"!");
     }
 
     private boolean canSteal(){

@@ -117,7 +117,7 @@ public class PlayerDataPanel extends RoundedPanel{
         updateDicePanel(dice);
         score.setText("Current score: " + dice.getScore());
         if(player.hasTile()){
-            initTilePanel(player.getLastPickedTile().getNumber());
+            initTilePanel(player.getLastPickedTile().number());
         }else{
             initTilePanel(-1);
         }

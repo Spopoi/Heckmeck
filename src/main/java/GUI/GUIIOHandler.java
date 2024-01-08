@@ -149,7 +149,7 @@ public class GUIIOHandler implements IOHandler {
         tilesPanel.setBorder(BorderFactory.createEmptyBorder(TOP_BORDER, 0, BOARDTILES_BOTTOM_BORDER, 0));
         tilesPanel.setOpaque(false);
         for (Tile tile : boardTiles.getTiles()) {
-            tilesPanel.add(getTileIcon(tile.getNumber()));
+            tilesPanel.add(getTileIcon(tile.number()));
         }
         frame.add(tilesPanel, BorderLayout.NORTH);
     }
@@ -175,7 +175,7 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public boolean wantToSteal(Player player, Player robbedPlayer) {
-        int result = showConfirmDialog(null, messages.getProperty("wantToSteal") + robbedPlayer.getLastPickedTile().getNumber() + " from "+ robbedPlayer.getName()+"?");
+        int result = showConfirmDialog(null, messages.getProperty("wantToSteal") + robbedPlayer.getLastPickedTile().number() + " from "+ robbedPlayer.getName()+"?");
         return result == JOptionPane.OK_OPTION;
     }
 

@@ -39,7 +39,7 @@ public class Player {
     public String getTopTileInfo() {
         if (hasTile()) {
             Tile topTile = getLastPickedTile();
-            return topTile.getNumber() + " " + topTile.getWormString();
+            return topTile.number() + " " + topTile.getWormString();
         } else {
             return "No tiles";
         }
@@ -47,7 +47,7 @@ public class Player {
 
     public boolean canStealFrom(Player robbedPlayer, int playerScore){
         if(!robbedPlayer.hasTile()) return false;
-        else return robbedPlayer.getLastPickedTile().getNumber() == playerScore;
+        else return robbedPlayer.getLastPickedTile().number() == playerScore;
     }
 
     public void stealTileFromPlayer(Player robbedPlayer) {

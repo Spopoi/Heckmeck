@@ -16,7 +16,7 @@ public class TestBoardTiles {
     void init_tile_number_21_with_2_worms(){
         Tile tile = new Tile(21);
         assertAll(
-                () -> Assertions.assertEquals(21, tile.getNumber()),
+                () -> Assertions.assertEquals(21, tile.number()),
                 () -> Assertions.assertEquals(1, tile.getWorms())
         );
     }
@@ -76,7 +76,7 @@ public class TestBoardTiles {
         List<Tile> listTiles = boardTiles.getTiles().stream().toList();
         boolean correctAscendantOrder = true;
         for (int i = 0; i < BoardTiles.numberOfTiles - 1; i++) {
-            if (listTiles.get(i).getNumber() > listTiles.get(i + 1).getNumber()) {
+            if (listTiles.get(i).number() > listTiles.get(i + 1).number()) {
                 correctAscendantOrder = false;
                 break;
             }
@@ -94,7 +94,7 @@ public class TestBoardTiles {
         List<Tile> listTiles = boardTiles.getTiles().stream().toList();
         boolean correctAscendantOrder = true;
         for (int i = 0; i < BoardTiles.numberOfTiles - 1; i++) {
-            if (listTiles.get(i).getNumber() > listTiles.get(i + 1).getNumber()) {
+            if (listTiles.get(i).number() > listTiles.get(i + 1).number()) {
                 correctAscendantOrder = false;
                 break;
             }

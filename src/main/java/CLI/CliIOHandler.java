@@ -147,7 +147,7 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
-        printMessage("Do you want to steal tile number " + robbedPlayer.getLastPickedTile().getNumber() +
+        printMessage("Do you want to steal tile number " + robbedPlayer.getLastPickedTile().number() +
                 " from " + robbedPlayer.getName() +
                 "? Press 'y' for stealing or 'n' for continuing your turn:");
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to steal or 'n' to continue your turn");

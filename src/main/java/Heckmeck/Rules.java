@@ -43,6 +43,6 @@ public class Rules {
 
     private static int getHighestTileNumber(Player player){ // TODO gestire altezza 0
         List<Tile> sortedList = player.getPlayerTiles().stream().sorted().toList();
-        return sortedList.get(sortedList.size()-1).getNumber();
+        return sortedList.get(sortedList.size()-1).number();
     }
 }
