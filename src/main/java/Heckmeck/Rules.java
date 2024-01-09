@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Rules {
+    public static final int MIN_NUM_OF_PLAYERS=2;
+    public static final int MAX_NUM_OF_PLAYERS=7;
 
     public static boolean validNumberOfPlayer(int numberOfPlayer){
-        return (numberOfPlayer >= 2 && numberOfPlayer <= 7);
+        return (numberOfPlayer >= MIN_NUM_OF_PLAYERS && numberOfPlayer <= MAX_NUM_OF_PLAYERS);
     }
 
     public static Player whoIsTheWinner(Player[] players){

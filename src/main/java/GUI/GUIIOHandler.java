@@ -10,8 +10,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.stream.IntStream;
 
 import static GUI.HeckmeckGUI.*;
+import static Heckmeck.Rules.MAX_NUM_OF_PLAYERS;
+import static Heckmeck.Rules.MIN_NUM_OF_PLAYERS;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static Utils.GUI.IconHandler.getTileIcon;
 import static Utils.GUI.SoundHandler.*;
@@ -29,6 +32,7 @@ public class GUIIOHandler implements IOHandler {
     private static final int TILES_GAP = 10;
     private static final int TOP_BORDER = 20;
     private static final int BOARDTILES_BOTTOM_BORDER = 40;
+    JPanel messagePanel;
     private static final String HECKMECK_MESSAGES_FILENAME = "messages";
     private Properties messages;
 
@@ -42,6 +46,10 @@ public class GUIIOHandler implements IOHandler {
         lateralPanelWidth = (int)(frame.getWidth() * PANEL_WIDTH_TO_FRAME_RATIO);
         playerPane = new PlayerDataPanel(BACKGROUND_IMAGE_PATH);
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
+
+        messagePanel = new JPanel();
+        messagePanel.setPreferredSize(new Dimension(0,50));
+        frame.add(messagePanel, BorderLayout.SOUTH);
 
         dicePanel = new DicePanel();
         tilesPanel = new JPanel();
@@ -97,8 +105,10 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public void showTurnBeginConfirm(Player player) {
         frame.getContentPane().removeAll();
+        frame.add(messagePanel, BorderLayout.SOUTH);
         frame.repaint();
         printMessage(player.getName() + messages.getProperty("turnBeginConfirm"));
+
     }
 
     public boolean wantToHost(){
@@ -117,8 +127,10 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public int chooseNumberOfPlayers() {
+        String[] options = IntStream.rangeClosed(MIN_NUM_OF_PLAYERS, MAX_NUM_OF_PLAYERS)
+                .mapToObj(Integer::toString)
+                .toArray(String[]::new);
         while (true) {
-            String[] options = {"2", "3", "4", "5", "6", "7"};
             String selectedOption = (String) JOptionPane.showInputDialog(null, messages.getProperty("chooseNumberPlayer"), messages.getProperty("heckmeckTitle"), JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (selectedOption == null) wantToQuitHeckmeck();
             else if(Rules.validNumberOfPlayer(Integer.parseInt(selectedOption)))
@@ -181,12 +193,14 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showPlayerData(Player player, Dice dice, Player[] players) {
-        showOthersPlayerPanel(player, players);
         playerPane.update(player, dice);
+        showOthersPlayerPanel(player, players);
         frame.add(playerPane, BorderLayout.WEST);
         frame.revalidate();
         frame.repaint();
     }
+
+    //TODO: extract frame.revalidate and repaint
 
     private void showOthersPlayerPanel(Player player, Player[] players) {
         if(otherPlayerPane != null) frame.remove(otherPlayerPane);

@@ -36,6 +36,7 @@ public class Player {
         return playerTiles.getLastTile();
     }
 
+    //TODO: usato solo per la CLI una volta
     public String getTopTileInfo() {
         if (hasTile()) {
             Tile topTile = getLastPickedTile();

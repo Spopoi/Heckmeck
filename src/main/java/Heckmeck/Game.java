@@ -15,6 +15,8 @@ public class Game {
         this.io = io;
     }
 
+    //TODO: add property
+
     public void init(){
         int numberOfPlayers = io.chooseNumberOfPlayers();
         this.players = setupPlayers(numberOfPlayers);
@@ -118,7 +120,6 @@ public class Game {
         }
         io.askRollDiceConfirmation(actualPlayer);
         dice.rollDice();
-        //io.showPlayerData(actualPlayer, dice, players);
         io.showRolledDice(dice);
         if(dice.canPickAFace()){
             Die.Face chosenDieFace = pickDieFace();

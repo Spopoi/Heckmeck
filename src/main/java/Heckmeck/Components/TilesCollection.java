@@ -1,6 +1,5 @@
 package Heckmeck.Components;
 
-
 public interface TilesCollection {
     boolean hasElement();
     void add(Tile newTile);
