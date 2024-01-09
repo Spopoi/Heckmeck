@@ -27,28 +27,24 @@ public class GameServer implements Runnable {
 
     }
     public void run() {
-        try {
-            acceptConnections();
-
-        } catch (IOException e) {
-            System.out.println("Error in acceptConnections()");
-        }
-
+        acceptConnections();
         TCPIOHandler io = new TCPIOHandler(clients);
-        //io.showWelcomeMessage();
-
-        game = new Game(io);
+        game = new Game(io); //TODO queste 3 righe vengono chiamate in almeno 3 punti, possiamo 'centralizzarre'?
         game.init();
         game.play();
     }
 
 
-    public void acceptConnections() throws IOException {
+    public void acceptConnections(){
         System.out.println("Room open");
         int playerID = 0;
         while (!isRoomClosed()) {
             Socket clientSocket;
-            clientSocket = ss.accept();
+            try {
+                clientSocket = ss.accept();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             System.out.println("Accepted incoming connection #: " + playerID);
             if (clientSocket.isConnected()) {
                 this.clients.add(ConnectionHandler.startClientHandler(playerID, clientSocket));
