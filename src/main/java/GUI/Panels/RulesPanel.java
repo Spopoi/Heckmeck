@@ -12,17 +12,22 @@ public class RulesPanel extends JPanel {
     public RulesPanel() {
         setLayout(new GridBagLayout());
 
-        JPanel imagesPanel = createImagesPanel();
-        JScrollPane scrollPane = new JScrollPane(imagesPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(SCROLLING_UNIT_INCREMENT);
-
+        JScrollPane scrollPane = getRulesScrollPane();
         JButton backToMenuButton = createButton("Back to Menu", e -> switchToMenuPanel());
+
         add(backToMenuButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
                 GridBagConstraints.NONE, new Insets(5, 5, 5, 0), 0, 0));
 
         add(scrollPane, new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER,
                 GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+    }
+
+    private JScrollPane getRulesScrollPane() {
+        JPanel imagesPanel = createImagesPanel();
+        JScrollPane scrollPane = new JScrollPane(imagesPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(SCROLLING_UNIT_INCREMENT);
+        return scrollPane;
     }
 
     private JPanel createImagesPanel() {

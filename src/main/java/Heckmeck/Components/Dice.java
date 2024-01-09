@@ -37,6 +37,7 @@ public class Dice {
         chosenDiceList.clear();
         IntStream.range(0, initialNumOfDice)
                 .forEach(i -> diceList.add(Die.generateDie()));
+        score = 0;
     }
     public int getNumOfDice(){
         return diceList.size();
