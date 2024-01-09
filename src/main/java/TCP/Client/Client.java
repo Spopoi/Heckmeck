@@ -1,7 +1,8 @@
-package TCP;
+package TCP.Client;
 
 import CLI.HeckmeckCLI;
 import Heckmeck.IOHandler;
+import TCP.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class Client implements Runnable{
     }
 
 
-    public void handleMessage(Message rxMessage) {
+    private void handleMessage(Message rxMessage) {
         MessageHandlerFunction handler = (MessageHandlerFunction) operationHandlers.get(rxMessage.operation);
         if (handler != null) {
             handler.handleMessage(rxMessage);

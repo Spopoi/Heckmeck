@@ -1,7 +1,7 @@
 package it.units.heckmeck.TCP;
 
 import Heckmeck.IOHandler;
-import TCP.Client;
+import TCP.Client.Client;
 import TCP.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

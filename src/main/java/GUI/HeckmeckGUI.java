@@ -2,7 +2,7 @@ package GUI;
 
 import GUI.Panels.*;
 import Heckmeck.*;
-import TCP.Client;
+import TCP.Client.Client;
 import Utils.TCP.ConnectionHandler;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 

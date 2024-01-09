@@ -1,6 +1,7 @@
-package TCP;
+package TCP.Client;
 
 import Heckmeck.IOHandler;
+import TCP.Message;
 
 public class ActionHandler {
     private final Client client;

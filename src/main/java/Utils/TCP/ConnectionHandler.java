@@ -1,7 +1,7 @@
 package Utils.TCP;
 
 import Heckmeck.IOHandler;
-import TCP.Client;
+import TCP.Client.Client;
 import TCP.Server.ClientHandler;
 import TCP.Server.GameServer;
 
