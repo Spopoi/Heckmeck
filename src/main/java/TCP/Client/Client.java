@@ -17,11 +17,11 @@ public class Client implements Runnable{
 
     private final PrintWriter out;
     private final BufferedReader in;
-    private IOHandler io;
-    private ActionHandler msgHandler;
+    private final IOHandler io;
+    private final MessageHandler messageHandler;
     private Map<Message.Action, MessageHandlerFunction> operationHandlers;
     private interface MessageHandlerFunction {
-        void handleMessage(Message rxMessage);
+        Message handleMessage(Message rxMessage);
     }
     public Client(IOHandler io,  BufferedReader in, PrintWriter out){
 
@@ -29,33 +29,41 @@ public class Client implements Runnable{
         this.in = in;
         this.out = out;
         this.io = io;
-        msgHandler = new ActionHandler(this);
+        messageHandler = new MessageHandler(io);
         initCommands();
     }
 
     private void initCommands(){
         operationHandlers = new HashMap<>();
-        operationHandlers.put(INIT              , msgHandler::performInit);
-        operationHandlers.put(GET_PLAYER_NAME   , msgHandler::perform_get_player_name);
-        operationHandlers.put(BEGIN_TURN        , msgHandler::perform_ask_confirm);
-        operationHandlers.put(PLAY_AGAIN        , msgHandler::perform_play_again);
-        operationHandlers.put(UPDATE_TILES      , msgHandler::perform_update_tiles);
-        operationHandlers.put(UPDATE_DICE       , msgHandler::perform_update_dice);
-        operationHandlers.put(UPDATE_PLAYER     , msgHandler::perform_update_player);
-        operationHandlers.put(ERROR             , msgHandler::perform_error);
-        operationHandlers.put(INFO              , msgHandler::perform_info);
-        operationHandlers.put(CHOOSE_DICE       , msgHandler::perform_choose_dice);
-        operationHandlers.put(WANT_PICK         , msgHandler::performWantPick);
-        operationHandlers.put(WANT_STEAL        , msgHandler::performWantSteal);
+        operationHandlers.put(INIT              , messageHandler::performInit);
+        operationHandlers.put(GET_PLAYER_NAME   , messageHandler::perform_get_player_name);
+        operationHandlers.put(BEGIN_TURN        , messageHandler::perform_ask_confirm);
+        operationHandlers.put(PLAY_AGAIN        , messageHandler::perform_play_again);
+        operationHandlers.put(UPDATE_TILES      , messageHandler::perform_update_tiles);
+        operationHandlers.put(UPDATE_DICE       , messageHandler::perform_update_dice);
+        operationHandlers.put(UPDATE_PLAYER     , messageHandler::perform_update_player);
+        operationHandlers.put(ERROR             , messageHandler::perform_error);
+        operationHandlers.put(INFO              , messageHandler::perform_info);
+        operationHandlers.put(CHOOSE_DICE       , messageHandler::perform_choose_dice);
+        operationHandlers.put(WANT_PICK         , messageHandler::performWantPick);
+        operationHandlers.put(WANT_STEAL        , messageHandler::performWantSteal);
     }
 
 
     private void handleMessage(Message rxMessage) {
-        MessageHandlerFunction handler = (MessageHandlerFunction) operationHandlers.get(rxMessage.operation);
+        MessageHandlerFunction handler = operationHandlers.get(rxMessage.operation);
         if (handler != null) {
-            handler.handleMessage(rxMessage);
+           /* if (rxMessage.isBroadCast) {
+                sendMessage(actionHandler.ack());
+                handler.handleMessage(rxMessage);
+            }
+            else{
+            }*/
+            Message replyMessage = handler.handleMessage(rxMessage);
+            sendMessage(replyMessage);
+
         } else {
-            msgHandler.handleDefault(rxMessage);
+            messageHandler.handleDefault();
         }
     }
 
@@ -67,7 +75,7 @@ public class Client implements Runnable{
         try {
             resp = in.readLine();
         } catch (IOException e) {
-            msgHandler.stopClient();
+            messageHandler.stopClient();
         }
         return resp;
     }
@@ -83,12 +91,7 @@ public class Client implements Runnable{
 
     @Override
     public void run() {
-
         commandInterpreter();
-    }
-
-    public IOHandler getIo(){
-        return io;
     }
 
     public static void main(String args[]){
