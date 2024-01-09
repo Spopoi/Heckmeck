@@ -15,19 +15,19 @@ import java.util.Objects;
 public class TCPIOHandler implements IOHandler {
 
 
-    private final List<ClientHandler> sockets;
+    private final List<ClientHandler> clients;
     private final List<Thread> threads;
 
-    public TCPIOHandler(List<ClientHandler> sockets){
-        this.sockets = sockets;
-        threads = new ArrayList<>(sockets.size());
+    public TCPIOHandler(List<ClientHandler> clients){
+        this.clients = clients;
+        threads = new ArrayList<>(clients.size());
         initClients();
     }
     private void sendBroadCast(Message msg){
-        sockets.forEach(client -> client.writeMessage(msg));
+        clients.forEach(client -> client.writeMessage(msg));
     }
     public void initClients() {
-        sockets.forEach(socket -> {
+        clients.forEach(socket -> {
             Thread t = new Thread(socket);
             threads.add(t);
             t.start();
@@ -77,7 +77,7 @@ public class TCPIOHandler implements IOHandler {
     }
     @Override
     public int chooseNumberOfPlayers() {
-        return sockets.size();
+        return clients.size();
     }
     @Override
     public String choosePlayerName(Player player) {
@@ -177,7 +177,7 @@ public class TCPIOHandler implements IOHandler {
     }
 
     public List<ClientHandler> getOtherPlayersSockets(Player currentPlayer){
-        return sockets.stream().filter(p -> p.getPlayerID() != currentPlayer.getPlayerID()).toList();
+        return clients.stream().filter(p -> p.getPlayerID() != currentPlayer.getPlayerID()).toList();
     }
 
     private Message informPlayer(Player player, Message msg){
@@ -187,11 +187,11 @@ public class TCPIOHandler implements IOHandler {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return sockets.get(playerID).writeMessage(msg.setCurrentPlayer(player));
+        return clients.get(playerID).writeMessage(msg.setCurrentPlayer(player));
     }
 
     private ClientHandler getHostClient(){
-        return sockets.get(0);
+        return clients.get(0);
     }
     public boolean getYesOrNoAnswer(Player  player, String textToDisplay){
         while(true){
