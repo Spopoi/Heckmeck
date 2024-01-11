@@ -175,7 +175,7 @@ public class Game {
         });
     }
 
-    public void restartGame(){
+    private void restartGame(){
         Arrays.stream(players).sequential().forEach(Player::clearPlayer);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
@@ -184,8 +184,7 @@ public class Game {
         play();
     }
 
-
     public Player getActualPlayer(){
         return actualPlayer;
-    }
+    }  // Used in tests only
 }

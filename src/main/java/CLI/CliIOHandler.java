@@ -45,8 +45,7 @@ public class CliIOHandler implements IOHandler {
         printMessage("                      Welcome in Heckmeck");
     }
 
-
-    public boolean wantToHost() {
+    boolean wantToHost() {
         printMessage("Do you want to host the game? Press 'y' or 'n' to select:");
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
     }
@@ -215,7 +214,7 @@ public class CliIOHandler implements IOHandler {
         }
     }
 
-    public String getInitialChoice(){
+    String getInitialChoice(){
         while (true) {
             String userChoice = getInputString();
             Optional<String> checkedUserChoice = Stream.of("1", "2", "3", "4")

@@ -10,7 +10,7 @@ public class HeckmeckCLI {
         startMenu();
     }
 
-    public static void startMenu(){
+    private static void startMenu(){
         CliIOHandler io = new CliIOHandler(System.in, System.out);
         io.showWelcomeMessage();
 

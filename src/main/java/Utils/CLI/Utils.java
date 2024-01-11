@@ -36,7 +36,7 @@ public class Utils {
         return getFileString(getPath(RULES));
     }
 
-    public static Path getPath(String fileName) {
+    private static Path getPath(String fileName) {
         URL tilesResource = CliIOHandler.class.getClassLoader().getResource(fileName);
         Path resourcePath = null;
         try {
@@ -51,7 +51,7 @@ public class Utils {
         return getFileString(getPath(ACTUAL_PLAYER_INFO_TEMPLATE_FILE));
     }
 
-    public static String getFileString(Path filepath){
+    private static String getFileString(Path filepath){
         return FileReader.readTextFile(filepath);
     }
 
