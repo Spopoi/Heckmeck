@@ -1,6 +1,5 @@
 package Heckmeck.Components;
 
-import java.util.LinkedList;
 
 public class Player {
 
@@ -8,12 +7,9 @@ public class Player {
     private StackOfTiles playerTiles;
     private final int playerID;
 
-    private Player(int playerID){
+    private Player(int playerID) {
         this.playerID = playerID;
         this.playerTiles = StackOfTiles.generate();
-    }
-    public LinkedList<Tile> getPlayerTiles(){
-        return playerTiles.getTileList();
     }
 
     public static Player generatePlayer(int playerID) {
@@ -28,9 +24,9 @@ public class Player {
         return playerTiles.hasElement();
     }
 
-     public void pickTile(Tile desiredTile) {
+    public void pickTile(Tile desiredTile) {
         playerTiles.add(desiredTile);
-     }
+    }
 
     public Tile getLastPickedTile() {
         return playerTiles.getLastTile();
@@ -46,8 +42,8 @@ public class Player {
         }
     }
 
-    public boolean canStealFrom(Player robbedPlayer, int playerScore){
-        if(!robbedPlayer.hasTile()) return false;
+    public boolean canStealFrom(Player robbedPlayer, int playerScore) {
+        if (!robbedPlayer.hasTile()) return false;
         else return robbedPlayer.getLastPickedTile().number() == playerScore;
     }
 
@@ -60,7 +56,7 @@ public class Player {
         playerTiles.removeLastTile();
     }
 
-    public int getPlayerID(){
+    public int getPlayerID() {
         return playerID;
     }
 
@@ -76,9 +72,14 @@ public class Player {
         return playerTiles.getTotalNumberOfWorms();
     }
 
-    public void clearPlayer(){
+    public int getHighestTileNumber() {
+        return playerTiles.getTheOneWithTheHighestNumber().number();
+    }
+
+    public void clearPlayer() {
         this.playerTiles = null;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

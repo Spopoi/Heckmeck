@@ -36,7 +36,11 @@ public class Game {
             actualPlayer = players[playerNumber];
         }
         Player winnerPlayer = Rules.whoIsTheWinner(players);
-        io.printMessage("Congratulation to "+winnerPlayer.getName() + ", you are the WINNER!!");
+        if (winnerPlayer == null) {
+            io.printMessage("This is a draw!!");
+        } else {
+            io.printMessage("Congratulation to "+winnerPlayer.getName() + ", you are the WINNER!!");
+        }
         if(io.wantToPlayAgain()) restartGame();
     }
 

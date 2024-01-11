@@ -1,6 +1,7 @@
 package Heckmeck.Components;
 
 
+import java.util.Comparator;
 import java.util.LinkedList;
 
 
@@ -40,14 +41,16 @@ public class StackOfTiles implements TilesCollection {
         stackOfTiles.pollLast();
     }
 
-    public LinkedList<Tile> getTileList(){
-        return stackOfTiles;
-    }
-
     int getTotalNumberOfWorms() {
         return stackOfTiles.stream()
                 .mapToInt(Tile::getWorms)
                 .sum();
+    }
+
+    public Tile getTheOneWithTheHighestNumber() {
+        return stackOfTiles.stream()
+                .max(Comparator.comparingInt(Tile::number))
+                .orElse(null);
     }
 
 }

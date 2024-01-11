@@ -1,7 +1,6 @@
 package Heckmeck;
 
 import Heckmeck.Components.Player;
-import Heckmeck.Components.Tile;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -16,35 +15,32 @@ public class Rules {
         return (numberOfPlayer >= MIN_NUM_OF_PLAYERS && numberOfPlayer <= MAX_NUM_OF_PLAYERS);
     }
 
-    public static Player whoIsTheWinner(Player[] players){
-        List<Player> winners = Arrays.stream(players).sorted(Comparator.comparingInt(Rules::computeScore)).toList();
-        int highestWormScore = computeScore(winners.get(winners.size()-1));
-        winners = winners.stream().filter(e -> computeScore(e) >= highestWormScore).collect(Collectors.toList());
-        if(winners.size() == 1) return winners.get(0);
-        else {
-            winners.sort(Comparator.comparingInt(Rules::numberOfPlayerTile));
-            int lowerNumberOfTiles = numberOfPlayerTile(winners.get(0));
-            winners = winners.stream().filter(p -> numberOfPlayerTile(p) <= lowerNumberOfTiles).collect(Collectors.toList());
-            if(winners.size() == 1) return winners.get(0);
-            else{
-                winners.sort(Comparator.comparingInt(Rules::getHighestTileNumber));
-                return winners.get(winners.size()-1);
+    public static Player whoIsTheWinner(Player[] players) {
+        int highestWormScore = Arrays.stream(players).mapToInt(Player::getWormScore).max().orElse(0);
+        List<Player> playersWithHighestWormScore = Arrays.stream(players).filter(p -> p.getWormScore() == highestWormScore).collect(Collectors.toList());
+        if (moreThanOne(playersWithHighestWormScore)) {
+            if (allPlayersHaveTiles(playersWithHighestWormScore)) {
+                return playerWithHighestTile(playersWithHighestWormScore);
+            } else {
+                return null;
             }
         }
+        return playersWithHighestWormScore.get(0);
     }
 
-    private static int numberOfPlayerTile(Player player){
-        return player.getPlayerTiles().size();
+    private static boolean allPlayersHaveTiles(List<Player> playersWithHighestWormScore) {
+        return playersWithHighestWormScore.stream()
+                .allMatch(Player::hasTile);
     }
 
-    private static int computeScore(Player player) {
-        return player.getPlayerTiles().stream()
-                .mapToInt(Tile::getWorms)
-                .sum();
+    private static boolean moreThanOne(List<Player> playersWithHighestWormScore) {
+        return playersWithHighestWormScore.size() > 1;
     }
 
-    private static int getHighestTileNumber(Player player){ // TODO gestire altezza 0
-        List<Tile> sortedList = player.getPlayerTiles().stream().sorted().toList();
-        return sortedList.get(sortedList.size()-1).number();
+    private static Player playerWithHighestTile(List<Player> playersWithHighestWormScore) {
+        return playersWithHighestWormScore.stream()
+                .max(Comparator.comparingInt(Player::getHighestTileNumber))
+                .orElse(null);
     }
+
 }
