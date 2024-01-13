@@ -27,7 +27,7 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = "UTF-8"
 
 application {
-    mainClass = 'Heckmeck.HeckmeckCLI'
+    mainClass = 'CLI.HeckmeckCLI'
 }
 
 test {
@@ -43,4 +43,4 @@ run.configure {
     allJvmArgs = ['-Dsun.stdout.encoding=cp437']
 }
 
-//mainClassName = 'GUI.Main'
+mainClassName = 'CLI.Main'
