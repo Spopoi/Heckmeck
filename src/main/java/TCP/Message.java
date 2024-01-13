@@ -79,8 +79,6 @@ public class Message implements Serializable {
         this.diceScore = score;
         return this;
     }
-
-
     public Message setDecision(boolean decision){
         this.decision = decision;
         return this;

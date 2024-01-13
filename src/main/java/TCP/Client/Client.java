@@ -36,7 +36,6 @@ public class Client{
         operationHandlers.put(INIT              , messageHandler::performInit);
         operationHandlers.put(GET_PLAYER_NAME   , messageHandler::perform_get_player_name);
         operationHandlers.put(BEGIN_TURN        , messageHandler::perform_ask_confirm);
-        operationHandlers.put(BACK_TO_MENU      , messageHandler::perform_play_again);
         operationHandlers.put(UPDATE_TILES      , messageHandler::perform_update_tiles);
         operationHandlers.put(UPDATE_DICE       , messageHandler::perform_update_dice);
         operationHandlers.put(UPDATE_PLAYER     , messageHandler::perform_update_player);

@@ -17,10 +17,6 @@ public class MessageHandler {
                 .setPlayerID(playerID);
     }
 
-    public Message perform_play_again(Message rxMessage) {
-        return ack();
-    }
-
     public Message perform_choose_dice(Message rxMessage) {
         return Message.generateMessage()
                 .setOperation(Message.Action.RESPONSE)
@@ -83,9 +79,4 @@ public class MessageHandler {
         return Message.generateMessage().setOperation(Message.Action.ACK);
     }
 
-    public void handleDefault() {
-    }
-
-    public void stopClient() {
-    }
 }

@@ -190,7 +190,7 @@ public class CliIOHandler implements IOHandler {
         printMessage("#####################" + newLine + "# BUUUUUSSSTTTTTT!! #" + newLine + "#####################");
     }
 
-    @Override // todo: togliere da interfaccia
+    @Override
     public void printError(String text) {
         printMessage(text);
     }

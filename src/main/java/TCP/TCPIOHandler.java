@@ -52,9 +52,7 @@ public class TCPIOHandler implements IOHandler {
 
     @Override
     public void backToMenu() {
-        Message resp =  informPlayer(
-                Player.generatePlayer(0),
-                Message.generateMessage().
+        sendBroadCast(  Message.generateMessage().
                         setOperation(Message.Action.BACK_TO_MENU)
         );
         //return resp.decision;
