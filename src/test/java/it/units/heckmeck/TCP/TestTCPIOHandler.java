@@ -41,9 +41,6 @@ public class TestTCPIOHandler {
         Player pl2 = Player.generatePlayer(1);
         pl2.setPlayerName("1");
 
-        Player[] players = {pl1, pl2};
-
-        when(game.getActualPlayer()).thenReturn(pl1);
 
         //when(game.getActualPlayer().getPlayerID()).thenReturn(0);
 
@@ -52,7 +49,7 @@ public class TestTCPIOHandler {
 
     @Test
     public void testGetOtherPlayers(){
-        List<ClientHandler> others = io.getOtherPlayersSockets(game.getActualPlayer());
+        List<ClientHandler> others = io.getOtherPlayersSockets(Player.generatePlayer(0));
         ClientHandler cl1 = sockets.get(1);
         ClientHandler cl2 = others.get(0);
         Assertions.assertEquals(cl1, cl2);

@@ -25,7 +25,6 @@ public class Die {
 
     }
 
-    // TODO scegliere che mappa usare
     private static final Map<Face,Integer> faceToIntMap = Map.ofEntries(
             entry(Face.ONE, 1),
             entry(Face.TWO, 2),
