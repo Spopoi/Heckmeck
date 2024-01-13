@@ -72,11 +72,14 @@ public class ConnectionHandler {
         return new Client(io, in, out);
     }
 
-    //TODO: Move methods?
     public static void startLocalClient(String IP, IOHandler io){
         Client cli = startClient(IP, io);
         io.printMessage("Local client started, waiting for your turn to begin");
-        cli.commandInterpreter();
+        try {
+            cli.commandInterpreter(); //TODO è corretto gestie così eccezione?
+        } catch (IOException e) {
+            io.printError("Something went wrong, back to main menu");
+        }
     }
 
     public static void startLocalClient(IOHandler io){

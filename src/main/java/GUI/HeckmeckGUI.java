@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 import static Utils.GUI.SoundHandler.*;
 import static Utils.TCP.ConnectionHandler.startGameServer;
@@ -80,7 +81,12 @@ public class HeckmeckGUI {
         final var worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
-                cli.commandInterpreter();
+                try {
+                    cli.commandInterpreter();
+                } catch (IOException e) {
+                    io.printError("Something went wrong, back to main menu");
+                    // TODO gestire errore e ritorno al main menu
+                }
                 return null;
             }
         };

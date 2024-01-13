@@ -36,7 +36,7 @@ public class Client{
         operationHandlers.put(INIT              , messageHandler::performInit);
         operationHandlers.put(GET_PLAYER_NAME   , messageHandler::perform_get_player_name);
         operationHandlers.put(BEGIN_TURN        , messageHandler::perform_ask_confirm);
-        operationHandlers.put(BACK_TO_MENU, messageHandler::perform_play_again);
+        operationHandlers.put(BACK_TO_MENU      , messageHandler::perform_play_again);
         operationHandlers.put(UPDATE_TILES      , messageHandler::perform_update_tiles);
         operationHandlers.put(UPDATE_DICE       , messageHandler::perform_update_dice);
         operationHandlers.put(UPDATE_PLAYER     , messageHandler::perform_update_player);
@@ -47,32 +47,16 @@ public class Client{
         operationHandlers.put(WANT_STEAL        , messageHandler::performWantSteal);
     }
 
-
-    private void handleMessage(Message rxMessage) {
-        MessageHandlerFunction handler = operationHandlers.get(rxMessage.operation);
-        if (handler != null) {
-            Message replyMessage = handler.handleMessage(rxMessage);
-            sendMessage(replyMessage);
-
-        } else {
-            messageHandler.handleDefault();
-        }
-    }
-
     public void sendLine(String line) {
         out.println(line);
     }
-    public String readRxBuffer(){
+    public String readRxBuffer() throws IOException {
         String resp = null;
-        try {
-            resp = in.readLine();
-        } catch (IOException e) {
-            messageHandler.stopClient();
-        }
+        resp = in.readLine();
         return resp;
     }
 
-    public Message readIncomingMessage(){
+    public Message readIncomingMessage() throws IOException {
         String serialized = readRxBuffer();
         return Message.fromJSON(serialized);
     }
@@ -86,19 +70,17 @@ public class Client{
         HeckmeckCLI.startMenu();
     }
 
-    public void commandInterpreter(){
+    public void commandInterpreter() throws IOException {
         Message rxMessage;
         while (true){
-            try {
-                rxMessage = readIncomingMessage();
-            } catch (NullPointerException e) {
-                io.printError("Error reading incoming message" );
-                break;
-            }
+            rxMessage = readIncomingMessage();
             if (rxMessage != null) {
-                handleMessage(rxMessage);
+                Message.Action operation = rxMessage.operation;
+                if(operation.equals(BACK_TO_MENU)) break; // TODO è corretto sto break?
+                MessageHandlerFunction handler = operationHandlers.get(operation);
+                Message replyMessage = handler.handleMessage(rxMessage);
+                sendMessage(replyMessage);
             }
-
         }
     }
 
