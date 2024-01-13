@@ -50,9 +50,9 @@ public class CliIOHandler implements IOHandler {
         return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
     }
 
-    public boolean wantToPlayAgain() {
-        printMessage("Do you want to play again (y) or go back to main Menu (n)?");
-        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play again 'n' to return to menu");
+    public void backToMenu() {
+        printMessage("Press ENTER to go back to main menu");
+        getInputString();
     }
 
     public String askIPToConnect() {
@@ -190,11 +190,10 @@ public class CliIOHandler implements IOHandler {
         printMessage("#####################" + newLine + "# BUUUUUSSSTTTTTT!! #" + newLine + "#####################");
     }
 
-    @Override
+    @Override // todo: togliere da interfaccia
     public void printError(String text) {
         printMessage(text);
     }
-
     public String getInputString() {
         return scan.nextLine();
     }

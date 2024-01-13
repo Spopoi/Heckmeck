@@ -41,7 +41,7 @@ public class Game {
         } else {
             io.printMessage("Congratulation to "+winnerPlayer.getName() + ", you are the WINNER!!");
         }
-        if(io.wantToPlayAgain()) restartGame();
+        io.backToMenu();
     }
 
     private void playerTurn() {
@@ -74,7 +74,7 @@ public class Game {
         return false;
     }
 
-    private boolean canPick(){
+    private boolean canPick(){ // TODO Can Pick metterlo nelle rules???
         Tile minValueTile = boardTiles.getTiles().first();
         return dice.getScore() >= minValueTile.number();
     }
@@ -93,7 +93,7 @@ public class Game {
         io.printMessage("You got tile number " + availableTile.number() +"!");
     }
 
-    private boolean canSteal(){
+    private boolean canSteal(){ // TODO Can Steal metterlo nelle rules???
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;
         for(Player robbedPlayer : players){
@@ -183,8 +183,4 @@ public class Game {
         io.printMessage("OK, let's begin!");
         play();
     }
-
-    public Player getActualPlayer(){
-        return actualPlayer;
-    }  // Used in tests only
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 import static TCP.Message.Action.*;
 
 
-public class Client implements Runnable{
+public class Client{
 
     private final PrintWriter out;
     private final BufferedReader in;
@@ -24,8 +24,6 @@ public class Client implements Runnable{
         Message handleMessage(Message rxMessage);
     }
     public Client(IOHandler io,  BufferedReader in, PrintWriter out){
-
-
         this.in = in;
         this.out = out;
         this.io = io;
@@ -38,7 +36,7 @@ public class Client implements Runnable{
         operationHandlers.put(INIT              , messageHandler::performInit);
         operationHandlers.put(GET_PLAYER_NAME   , messageHandler::perform_get_player_name);
         operationHandlers.put(BEGIN_TURN        , messageHandler::perform_ask_confirm);
-        operationHandlers.put(PLAY_AGAIN        , messageHandler::perform_play_again);
+        operationHandlers.put(BACK_TO_MENU, messageHandler::perform_play_again);
         operationHandlers.put(UPDATE_TILES      , messageHandler::perform_update_tiles);
         operationHandlers.put(UPDATE_DICE       , messageHandler::perform_update_dice);
         operationHandlers.put(UPDATE_PLAYER     , messageHandler::perform_update_player);
@@ -53,12 +51,6 @@ public class Client implements Runnable{
     private void handleMessage(Message rxMessage) {
         MessageHandlerFunction handler = operationHandlers.get(rxMessage.operation);
         if (handler != null) {
-           /* if (rxMessage.isBroadCast) {
-                sendMessage(actionHandler.ack());
-                handler.handleMessage(rxMessage);
-            }
-            else{
-            }*/
             Message replyMessage = handler.handleMessage(rxMessage);
             sendMessage(replyMessage);
 
@@ -89,24 +81,19 @@ public class Client implements Runnable{
         sendLine(msg.toJSON());
     }
 
-    @Override
-    public void run() {
-        commandInterpreter();
-    }
 
     public static void main(String args[]){
         HeckmeckCLI.startMenu();
     }
 
     public void commandInterpreter(){
-        Message rxMessage = null;
+        Message rxMessage;
         while (true){
             try {
                 rxMessage = readIncomingMessage();
             } catch (NullPointerException e) {
                 io.printError("Error reading incoming message" );
-                if(io.wantToPlayAgain()) HeckmeckCLI.startMenu(); //TODO lanciamo WantToPlayAgain? Però lasciamo che puoi tornare al menu?
-                else System.exit(0);
+                break;
             }
             if (rxMessage != null) {
                 handleMessage(rxMessage);

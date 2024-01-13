@@ -88,7 +88,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public boolean wantToPlayAgain() {
+    public void backToMenu() {     // TODO farlo diventare solo un "Press ok to continue" (non più y/n)
         int result = JOptionPane.showOptionDialog(
                 null,
                 messages.getProperty("wantToPlayAgain"),
@@ -99,7 +99,7 @@ public class GUIIOHandler implements IOHandler {
                 null,
                 null
         );
-        return result == JOptionPane.YES_OPTION;
+        //return result == JOptionPane.YES_OPTION;
     }
 
     @Override
@@ -250,9 +250,5 @@ public class GUIIOHandler implements IOHandler {
         printMessage(messages.getProperty("bust"));
     }
 
-    @Override
-    public String getInputString() {
-        return null;
-    }
 
 }

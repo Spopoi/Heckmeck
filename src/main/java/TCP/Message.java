@@ -33,7 +33,7 @@ public class Message implements Serializable {
     public  enum Action {
         INIT,
         INFO,
-        PLAY_AGAIN,
+        BACK_TO_MENU,
         UPDATE_DICE,
         UPDATE_TILES,
         UPDATE_PLAYER,

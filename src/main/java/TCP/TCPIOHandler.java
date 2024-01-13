@@ -10,14 +10,10 @@ import TCP.Server.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TCPIOHandler implements IOHandler {
-
-
     private final List<ClientHandler> clients;
     private final List<Thread> threads;
-
     public TCPIOHandler(List<ClientHandler> clients){
         this.clients = clients;
         threads = new ArrayList<>(clients.size());
@@ -55,11 +51,13 @@ public class TCPIOHandler implements IOHandler {
     }
 
     @Override
-    public boolean wantToPlayAgain() {
-        return getYesOrNoAnswer(
+    public void backToMenu() {
+        Message resp =  informPlayer(
                 Player.generatePlayer(0),
-                "Do you want to play again? (y/n)"
-                );
+                Message.generateMessage().
+                        setOperation(Message.Action.BACK_TO_MENU)
+        );
+        //return resp.decision;
     }
     @Override
     public void showTurnBeginConfirm(Player currentPlayer) {
@@ -68,7 +66,7 @@ public class TCPIOHandler implements IOHandler {
                 currentPlayer,
                 Message.generateMessage().
                         setOperation(Message.Action.BEGIN_TURN).
-                        setText("Press enter to start your turn")
+                        setText("Press ENTER to start your turn")
         );
     }
     @Override
@@ -101,9 +99,7 @@ public class TCPIOHandler implements IOHandler {
     }
     @Override
     public void askRollDiceConfirmation(Player currentPlayer) {
-        //informEveryOtherClient(currentPlayer);
     }
-
     @Override
     public void showRolledDice(Dice dice) {
         sendBroadCast(
@@ -112,7 +108,6 @@ public class TCPIOHandler implements IOHandler {
                         setDice(dice)
         );
     }
-
     @Override
     public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
         return informPlayer(currentPlayer,
@@ -122,8 +117,6 @@ public class TCPIOHandler implements IOHandler {
                     setScore(actualDiceScore).
                     setAvailableTileNumber(availableTileNumber)
                 ).decision;
-
-        //return getYesOrNoAnswer(currentPlayer, "Do you want to pick tile n. " + availableTileNumber + "?");
     }
     @Override
     public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
@@ -134,7 +127,6 @@ public class TCPIOHandler implements IOHandler {
                         setRobbedPlayer(robbedPlayer)
                 ).decision;
     }
-
     @Override
     public void showPlayerData(Player currentPlayer, Dice dice, Player[] players) {
         sendBroadCast(
@@ -170,16 +162,9 @@ public class TCPIOHandler implements IOHandler {
     public void showBustMessage() {
         printMessage("## BUST! ##");
     }
-
-    @Override
-    public String getInputString() {
-        return null;
-    }
-
     public List<ClientHandler> getOtherPlayersSockets(Player currentPlayer){
         return clients.stream().filter(p -> p.getPlayerID() != currentPlayer.getPlayerID()).toList();
     }
-
     private Message informPlayer(Player player, Message msg){
         int playerID = player.getPlayerID();
         try {
@@ -188,28 +173,5 @@ public class TCPIOHandler implements IOHandler {
             throw new RuntimeException(e);
         }
         return clients.get(playerID).writeMessage(msg.setCurrentPlayer(player));
-    }
-
-    private ClientHandler getHostClient(){
-        return clients.get(0);
-    }
-    public boolean getYesOrNoAnswer(Player  player, String textToDisplay){
-        while(true){
-            String decision = informPlayer(player,
-                    Message.generateMessage().
-                            setOperation(Message.Action.PLAY_AGAIN).
-                            setText(textToDisplay)
-            ).text;
-
-            if (Objects.equals(decision, "y")) {
-                return true;
-            } else if (Objects.equals(decision, "n")) {
-                return false;
-            } else if (decision.isBlank()) {
-                continue;
-            } else {
-                printError("Invalid input, choose between y or n");
-            }
-        }
     }
 }

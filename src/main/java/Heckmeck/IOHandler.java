@@ -19,8 +19,7 @@ public interface IOHandler {
     void showPlayerData(Player currentPlayer, Dice dice, Player[] players);
     Die.Face chooseDie(Player currentPlayer);
     void showBustMessage();
-    String getInputString();
     void printError(String text);
     String askIPToConnect();
-    boolean wantToPlayAgain();
+    void backToMenu();
 }

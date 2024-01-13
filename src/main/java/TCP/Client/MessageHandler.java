@@ -18,9 +18,7 @@ public class MessageHandler {
     }
 
     public Message perform_play_again(Message rxMessage) {
-        return Message.generateMessage()
-                .setOperation(Message.Action.RESPONSE)
-                .setDecision(io.wantToPlayAgain());
+        return ack();
     }
 
     public Message perform_choose_dice(Message rxMessage) {
