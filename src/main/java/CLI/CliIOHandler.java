@@ -1,5 +1,6 @@
 package CLI;
 
+import Utils.MessageManager;
 import Utils.CLI.SummaryTable;
 import Utils.CLI.TextBlock;
 import Utils.CLI.Utils;
@@ -9,6 +10,7 @@ import Heckmeck.Components.Dice;
 import Heckmeck.Components.Die;
 import Heckmeck.Components.Player;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
@@ -20,9 +22,12 @@ public class CliIOHandler implements IOHandler { //TODO interfaccia troppo grand
     private Scanner scan;
     private PrintStream outputWhereToPrint;
 
-    public CliIOHandler(InputStream inputStream, PrintStream printStream) {
+    private final MessageManager messageManager;
+
+    public CliIOHandler(InputStream inputStream, PrintStream printStream) throws IOException {
         setOutput(printStream);
         scan = new Scanner(inputStream);
+        messageManager = new MessageManager();
     }
 
     public void setInput(InputStream inputStream) {
@@ -42,7 +47,7 @@ public class CliIOHandler implements IOHandler { //TODO interfaccia troppo grand
     @Override
     public void showWelcomeMessage() {
         printMessage(Utils.getLogo());
-        printMessage("                      Welcome in Heckmeck");
+        printMessage(messageManager.getMessage("welcomeMsg"));
     }
 
     boolean wantToHost() {

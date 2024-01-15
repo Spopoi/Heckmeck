@@ -12,10 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
@@ -31,6 +28,9 @@ public class TestCliInputOutput {
     private final PrintStream fakeOutputStream = new PrintStream(fakeStandardOutput);
 
     private final CliIOHandler testInputOutput = new CliIOHandler(System.in, fakeOutputStream);
+
+    public TestCliInputOutput() throws IOException {
+    }
 
     // TODO: chooseDie does not need dice
     @ParameterizedTest
@@ -52,7 +52,7 @@ public class TestCliInputOutput {
 
     @ParameterizedTest
     @MethodSource("blankUserInputForPlayerNameProvider")
-    void blankPlayerNameNotAccepted(String userInput) {
+    void blankPlayerNameNotAccepted(String userInput) throws IOException {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
         ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
@@ -86,7 +86,7 @@ public class TestCliInputOutput {
 
     @ParameterizedTest
     @MethodSource("correctUserInputForPlayerNameProvider")
-    void correctPlayerNameAreAccepted(String userInput, String expectedReadPlayerName) {
+    void correctPlayerNameAreAccepted(String userInput, String expectedReadPlayerName) throws IOException {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
         ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();

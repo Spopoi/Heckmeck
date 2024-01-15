@@ -5,12 +5,18 @@ import Utils.TCP.ConnectionHandler;
 
 import Heckmeck.Game;
 
+import java.io.IOException;
+
 public class HeckmeckCLI {
     public static void main(String[] args) {
-        startMenu();
+        try {
+            startMenu();
+        } catch (IOException ex) {
+            System.out.println("Error loading the file containing the messages of the game");
+        }
     }
 
-    public static void startMenu(){
+    public static void startMenu() throws IOException {
         CliIOHandler io = new CliIOHandler(System.in, System.out);
         io.showWelcomeMessage();
 
