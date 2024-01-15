@@ -1,6 +1,7 @@
 package GUI;
 
 import GUI.Panels.DicePanel;
+import GUI.Panels.MessagePanel;
 import GUI.Panels.PlayerDataPanel;
 import GUI.Panels.ScoreboardPanel;
 import Heckmeck.*;
@@ -28,11 +29,13 @@ public class GUIIOHandler implements IOHandler {
     private JPanel tilesPanel;
     private int lateralPanelWidth;
     private static final double PANEL_WIDTH_TO_FRAME_RATIO = 0.25;
+    private static final double LOG_HEIGHT_TO_FRAME_RATIO = 0.15;
+    private static final Icon WORM_ICON = getDieIcon(Die.Face.WORM);
     private static final int BUST_DELAY = 2000;
     private static final int TILES_GAP = 10;
     private static final int TOP_BORDER = 20;
     private static final int BOARDTILES_BOTTOM_BORDER = 40;
-    JPanel messagePanel;
+    private MessagePanel messagePanel;
     private static final String HECKMECK_MESSAGES_FILENAME = "messages";
     private Properties messages;
 
@@ -47,8 +50,8 @@ public class GUIIOHandler implements IOHandler {
         playerPane = new PlayerDataPanel(BACKGROUND_IMAGE_PATH);
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
 
-        messagePanel = new JPanel();
-        messagePanel.setPreferredSize(new Dimension(0,50));
+        messagePanel = new MessagePanel();
+        messagePanel.setPreferredSize(new Dimension(0, (int) (frame.getHeight()*LOG_HEIGHT_TO_FRAME_RATIO)));
         frame.add(messagePanel, BorderLayout.SOUTH);
 
         dicePanel = new DicePanel();
@@ -69,37 +72,29 @@ public class GUIIOHandler implements IOHandler {
     }
     @Override
     public void printMessage(String message) {
-        showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , getDieIcon(Die.Face.WORM));
+        messagePanel.showLogMessage(message);
     }
 
+    //TODO: error sound
     @Override
     public void printError(String text) {
-        JOptionPane.showMessageDialog(null, text, messages.getProperty("error"), JOptionPane.ERROR_MESSAGE);
+        messagePanel.showLogMessage(text);
     }
 
     @Override
     public void showWelcomeMessage() {
-        printMessage(messages.getProperty("welcomeMessage"));
+        String message = messages.getProperty("welcomeMessage");
+        showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
     }
 
     @Override
     public String askIPToConnect() {
-        return JOptionPane.showInputDialog(null, messages.getProperty("askIP"), messages.getProperty("heckmeckMultiplayer"), JOptionPane.QUESTION_MESSAGE);
+        return MessagePanel.showInputDialog(messages.getProperty("askIP"));
     }
 
     @Override
-    public void backToMenu() {     // TODO farlo diventare solo un "Press ok to continue" (non più y/n)
-        int result = JOptionPane.showOptionDialog(
-                null,
-                messages.getProperty("wantToPlayAgain"),
-                messages.getProperty("heckmeckTitle"),
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                getDieIcon(Die.Face.WORM),
-                null,
-                null
-        );
-        //return result == JOptionPane.YES_OPTION;
+    public void backToMenu() {  // TODO farlo diventare solo un "Press ok to continue" (non più y/n)
+        messagePanel.showYesNoPanel(messages.getProperty("wantToPlayAgain"));
     }
 
     @Override
@@ -107,8 +102,8 @@ public class GUIIOHandler implements IOHandler {
         frame.getContentPane().removeAll();
         frame.add(messagePanel, BorderLayout.SOUTH);
         frame.repaint();
-        printMessage(player.getName() + messages.getProperty("turnBeginConfirm"));
-
+        String message = player.getName() + messages.getProperty("turnBeginConfirm");
+        showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
     }
 
     public boolean wantToHost(){
@@ -118,7 +113,7 @@ public class GUIIOHandler implements IOHandler {
                 messages.getProperty("heckmeckMultiplayer"),
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
-                getDieIcon(Die.Face.WORM),
+                WORM_ICON,
                 null,
                 null
         );
@@ -139,14 +134,13 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void wantToQuitHeckmeck() {
-        int wantToQuit = JOptionPane.showConfirmDialog(null, messages.getProperty("wantToQuit"), messages.getProperty("heckmeckTitle"), JOptionPane.YES_NO_OPTION);
-        if(wantToQuit == OK_OPTION) System.exit(0);
+        if(messagePanel.showYesNoPanel(messages.getProperty("wantToQuit"))) System.exit(0);
     }
 
     @Override
     public String choosePlayerName(Player player) {
         while(true) {
-            String playerName = showInputDialog(null, messages.getProperty("choosePlayerName"));
+            String playerName = MessagePanel.showInputDialog(messages.getProperty("choosePlayerName"));
             if (playerName == null) wantToQuitHeckmeck();
             else if(playerName.isBlank()) printError(messages.getProperty("blankName"));
             else return playerName;
@@ -169,17 +163,7 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
         String message = messages.getProperty("actualScore") + " " + actualDiceScore + '\n' + messages.getProperty("wantToPick") + " " + availableTileNumber + "?";
-        int result = JOptionPane.showOptionDialog(
-                null,
-                message,
-                messages.getProperty("heckmeckTitle"),
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                getDieIcon(Die.Face.WORM),
-                null,
-                null
-        );
-        if(result == JOptionPane.YES_OPTION){
+        if(messagePanel.showYesNoPanel(message)){
             playSound(PICK_SOUND_PATH, ACTIONS_MUSIC_VOLUME);
             return true;
         }else return false;
@@ -187,8 +171,8 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public boolean wantToSteal(Player player, Player robbedPlayer) {
-        int result = showConfirmDialog(null, messages.getProperty("wantToSteal") + robbedPlayer.getLastPickedTile().number() + " from "+ robbedPlayer.getName()+"?");
-        return result == JOptionPane.OK_OPTION;
+        String message = messages.getProperty("wantToSteal") + robbedPlayer.getLastPickedTile().number() + " from "+ robbedPlayer.getName()+"?";
+        return messagePanel.showYesNoPanel(message);
     }
 
     @Override
@@ -249,6 +233,4 @@ public class GUIIOHandler implements IOHandler {
         }
         printMessage(messages.getProperty("bust"));
     }
-
-
 }

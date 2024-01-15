@@ -8,8 +8,9 @@ import java.awt.*;
 import static Utils.GUI.IconHandler.*;
 
 public class LabelHandler {
+    //TODO: getter
     public static final Font titleFont = new Font("Serif", Font.BOLD, 30);
-    public static final Font textFont = new Font("Serif", Font.PLAIN, 22);
+    public static final Font textFont = new Font("Serif", Font.PLAIN, 20);
 
     public static JLabel getLabel(int width, int height){
         JLabel label = makeLabel(width, height);
