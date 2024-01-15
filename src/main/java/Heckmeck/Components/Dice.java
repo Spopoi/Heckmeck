@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class Dice {
-    public final static int  initialNumOfDice = 8;
+    public final static int  initialNumOfDice = 8; //TODO private?
     private final List<Die> diceList;
     private final List<Die> chosenDiceList;
     private int score;

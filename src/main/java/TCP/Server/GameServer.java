@@ -18,7 +18,7 @@ public class GameServer implements Runnable {
 
     public GameServer(int numOfPlayers) {
         try {
-            ss = new ServerSocket(51734);
+            ss = new ServerSocket(51734); //TODO magic number.. facciamo un file di configurazione?
             this.numOfPlayers = numOfPlayers;
 
         } catch (IOException e) {
@@ -50,7 +50,7 @@ public class GameServer implements Runnable {
                 this.clients.add(ConnectionHandler.startClientHandler(playerID, clientSocket));
                 playerID++;
             }
-            if (playerID == 7 || playerID == numOfPlayers) {
+            if (playerID == 7 || playerID == numOfPlayers) { //TODO metetre anche magicNumber 7 dentro a delle rules?
                 closeRoom();
             }
         }

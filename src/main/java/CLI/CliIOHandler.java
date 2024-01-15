@@ -14,7 +14,7 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class CliIOHandler implements IOHandler {
+public class CliIOHandler implements IOHandler { //TODO interfaccia troppo grande? (22 methods, ma ormai..)
 
     private static final String newLine = System.lineSeparator();
     private Scanner scan;

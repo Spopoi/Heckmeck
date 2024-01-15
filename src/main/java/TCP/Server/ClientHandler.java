@@ -5,7 +5,7 @@ import TCP.Message;
 import java.io.*;
 
 public class ClientHandler implements Runnable{
-    public final int playerId;
+    private final int playerId;
     //private final IOBufferInterface ioBuffer;
     private final BufferedReader in;
     private final PrintWriter out;

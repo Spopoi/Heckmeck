@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Rules {
-    public static final int MIN_NUM_OF_PLAYERS=2;
+    public static final int MIN_NUM_OF_PLAYERS=2; //TODO mettere in file esterno?
     public static final int MAX_NUM_OF_PLAYERS=7;
 
     public static boolean validNumberOfPlayer(int numberOfPlayer){
