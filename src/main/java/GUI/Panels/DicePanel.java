@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;
 
+//TODO: refactoring, adding an init method and modify updateDice()
 public class DicePanel extends JPanel {
     private Die.Face chosenFace;
     private final static int topEmptyBorder = 0;

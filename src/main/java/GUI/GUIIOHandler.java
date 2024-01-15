@@ -101,7 +101,7 @@ public class GUIIOHandler implements IOHandler {
     public void showTurnBeginConfirm(Player player) {
         frame.getContentPane().removeAll();
         frame.add(messagePanel, BorderLayout.SOUTH);
-        frame.repaint();
+        updateFrame();
         String message = player.getName() + messages.getProperty("turnBeginConfirm");
         showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
     }
@@ -128,8 +128,7 @@ public class GUIIOHandler implements IOHandler {
         while (true) {
             String selectedOption = (String) JOptionPane.showInputDialog(null, messages.getProperty("chooseNumberPlayer"), messages.getProperty("heckmeckTitle"), JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
             if (selectedOption == null) wantToQuitHeckmeck();
-            else if(Rules.validNumberOfPlayer(Integer.parseInt(selectedOption)))
-                return Integer.parseInt(selectedOption);
+            else return Integer.parseInt(selectedOption);
         }
     }
 
@@ -147,6 +146,7 @@ public class GUIIOHandler implements IOHandler {
         }
     }
 
+    //TODO: estrarre senza ricreare ogni volta
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         frame.remove(tilesPanel);
@@ -179,22 +179,24 @@ public class GUIIOHandler implements IOHandler {
     public void showPlayerData(Player player, Dice dice, Player[] players) {
         playerPane.update(player, dice);
         showOthersPlayerPanel(player, players);
+        frame.remove(playerPane);
         frame.add(playerPane, BorderLayout.WEST);
+        updateFrame();
+    }
+
+    private void updateFrame(){
         frame.revalidate();
         frame.repaint();
     }
 
-    //TODO: extract frame.revalidate and repaint
-
+    //TODO: Make it static or make it reusable
     private void showOthersPlayerPanel(Player player, Player[] players) {
         if(otherPlayerPane != null) frame.remove(otherPlayerPane);
         ScoreboardPanel scoreboardPanel = new ScoreboardPanel(player, players);
-        otherPlayerPane = new JScrollPane(scoreboardPanel);
-        otherPlayerPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        otherPlayerPane = scoreboardPanel.getScrollableScoreboard();
         otherPlayerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
         frame.add(otherPlayerPane, BorderLayout.EAST);
-        frame.revalidate();
-        frame.repaint();
+        updateFrame();
     }
 
     @Override
@@ -207,19 +209,17 @@ public class GUIIOHandler implements IOHandler {
         return dicePanel.getChosenFace();
     }
 
+    //TODO: update dicePanel instead of remove it
     @Override
     public void showRolledDice(Dice dice) {
-        updateDicePanel(dice);
+        frame.getContentPane().remove(dicePanel);
+        dicePanel.updateDice(dice);
+        frame.getContentPane().add(dicePanel, BorderLayout.CENTER);
+        updateFrame();
         dicePanel.rollDiceAnimation();
         playSound(ROLLING_SOUND_PATH, ACTIONS_MUSIC_VOLUME);
     }
 
-    private void updateDicePanel(Dice dice){
-        frame.getContentPane().remove(dicePanel);
-        dicePanel.updateDice(dice);
-        frame.getContentPane().add(dicePanel, BorderLayout.CENTER);
-        frame.revalidate();
-    }
     @Override
     public void askRollDiceConfirmation(Player playerName){
     }

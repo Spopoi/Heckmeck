@@ -13,7 +13,7 @@ public class MessagePanel extends JPanel {
     private final JTextPane logTextPane;
     private JPanel buttonPanel;
     private boolean dialogResult;
-    private Semaphore semaphore = new Semaphore(0);
+    private final Semaphore semaphore = new Semaphore(0);
 
     public MessagePanel() {
         setLayout(new BorderLayout());

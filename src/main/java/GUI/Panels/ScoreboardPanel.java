@@ -63,6 +63,12 @@ public class ScoreboardPanel extends ImagePanel {
         return scoreLabel;
     }
 
+    public JScrollPane getScrollableScoreboard(){
+        JScrollPane scrollableScoreboard = new JScrollPane(this);
+        scrollableScoreboard.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        return scrollableScoreboard;
+    }
+
 
     //TODO: refactoring horizontal separator
     private static JSeparator makeHorizontalSeparator() {
