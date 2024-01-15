@@ -23,9 +23,7 @@ public class Message implements Serializable {
     public Player robbedPlayer;
 
     private Message(){
-
     }
-
     public static Message generateMessage(){
         return new Message();
     }

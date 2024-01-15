@@ -59,7 +59,11 @@ Multiplayer (HECKMECK.TCP)
       - Client          # Client that reads incoming message and interprets commands from Server
       - MessageHandler  # Handler that uses User Interface to perform the action required by the server
     - Server
-      - GameServer      # Where the game actually is hosted
+      - GameServer      # Where the game actually is hosted andTCPIO is generated
       - ClientHandler   # For each connected client, an handler for managing communication between client and server
     - TCPIOHandler      # Interface
-    - HeckmeckGUI       # Launcher that manages menu and runs Game and IOHandler
+    - Message           # Object to inject game data within, passed as json string trough TCP channel from server to client
+
+HOW to run:
+Command Line Interface:
+just run in gradle:
