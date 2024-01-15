@@ -18,6 +18,13 @@ public class LabelHandler {
         return label;
     }
 
+    public static JLabel getLabel(String text, int alignment){
+        JLabel label = new JLabel(text);
+        label.setFont(textFont);
+        label.setHorizontalAlignment(alignment);
+        return label;
+    }
+
     public static JLabel getLabel(String text, int width, int height){
         JLabel label = makeLabel(width, height);
         label.setText(text);
@@ -35,7 +42,9 @@ public class LabelHandler {
         label.setFont(titleFont);
         return label;
 
-    }public static JLabel getTitleLabel(String text , int alignment){
+    }
+
+    public static JLabel getTitleLabel(String text , int alignment){
         JLabel label = new JLabel(text);
         label.setFont(titleFont);
         label.setHorizontalAlignment(alignment);

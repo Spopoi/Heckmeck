@@ -21,6 +21,7 @@ public class HeckmeckGUI {
     public static final String BLUE_BACKGROUND_PATH = "src/main/resources/GUI/blue_background.png";
     private static final Dimension minimumFrameDimension = new Dimension(1100, 600);
 
+    //TODO: catch ex
     public static void main(String[] args) throws UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(new FlatIntelliJLaf());
         SwingUtilities.invokeLater(HeckmeckGUI::initGUI);

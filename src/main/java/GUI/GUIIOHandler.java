@@ -94,7 +94,7 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void backToMenu() {  // TODO farlo diventare solo un "Press ok to continue" (non più y/n)
-        messagePanel.showYesNoPanel(messages.getProperty("wantToPlayAgain"));
+        switchToMenuPanel();
     }
 
     @Override

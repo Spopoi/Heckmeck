@@ -95,8 +95,10 @@ public class PlayerDataPanel extends RoundedPanel{
     }
 
     private void initPlayerNameLabel() {
-        playerName = getTitleLabel(0,LABEL_HEIGHT);
-        playerName.setAlignmentX(Component.LEFT_ALIGNMENT);
+//        playerName = getTitleLabel(0,LABEL_HEIGHT);
+//        playerName.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        playerName = getTitleLabel("", JLabel.LEFT);
         add(playerName);
     }
 

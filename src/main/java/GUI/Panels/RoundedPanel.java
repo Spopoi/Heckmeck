@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 public class RoundedPanel extends JPanel {
     private Image backgroundImage;
+    private static final int ARC_DIM = 20;
 
     public RoundedPanel(String imagePath) {
         if (imagePath != null) {
@@ -29,7 +30,7 @@ public class RoundedPanel extends JPanel {
         int width = getWidth();
         int height = getHeight();
 
-        RoundRectangle2D roundedRect = new RoundRectangle2D.Float(0, 0, width, height, 20, 20);
+        RoundRectangle2D roundedRect = new RoundRectangle2D.Float(0, 0, width, height, ARC_DIM, ARC_DIM);
         g2d.clip(roundedRect);
 
         if (backgroundImage != null) {
@@ -38,7 +39,7 @@ public class RoundedPanel extends JPanel {
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         } else {
             g2d.setColor(Color.WHITE);
-            g2d.fillRoundRect(0, 0, width, height, 20, 20);
+            g2d.fillRoundRect(0, 0, width, height, ARC_DIM, ARC_DIM);
         }
 
         g2d.dispose();

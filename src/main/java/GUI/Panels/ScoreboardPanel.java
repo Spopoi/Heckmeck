@@ -13,13 +13,14 @@ import static Utils.GUI.LabelHandler.*;
 
 public class ScoreboardPanel extends ImagePanel {
     private static final int SCOREBOARD_WIDTH_PANEL = 220;
+    private static final int SCOREBOARD_LABEL_HEIGHT = 30;
+    private static final int PLAYERPANE_VERTICAL_SPACE = 10;
     public ScoreboardPanel(Player player, Player[] players){
 
         super(BACKGROUND_IMAGE_PATH);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(new EmptyBorder(new Insets(10,10,10,10)));
 
-        JLabel scoreboardLabel = getTitleLabel("Scoreboard", SCOREBOARD_WIDTH_PANEL, 30);
+        JLabel scoreboardLabel = getTitleLabel("Scoreboard", SCOREBOARD_WIDTH_PANEL, SCOREBOARD_LABEL_HEIGHT );
         scoreboardLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(scoreboardLabel);
         add(Box.createVerticalStrut(10));
@@ -38,7 +39,7 @@ public class ScoreboardPanel extends ImagePanel {
         JPanel playerPanel = new JPanel();
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
         playerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, PLAYERPANE_VERTICAL_SPACE, 0));
         playerPanel.setOpaque(false);
 
         JLabel playerName = getLabel(otherPlayer.getName(), SCOREBOARD_WIDTH_PANEL, 100);
@@ -68,7 +69,6 @@ public class ScoreboardPanel extends ImagePanel {
         scrollableScoreboard.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         return scrollableScoreboard;
     }
-
 
     //TODO: refactoring horizontal separator
     private static JSeparator makeHorizontalSeparator() {
