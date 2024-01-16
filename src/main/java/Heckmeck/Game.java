@@ -66,7 +66,7 @@ public class Game {
 
     private boolean pick(){
         //assume worm chosen and can pick
-        if(dice.getChosenDice().size() >= Dice.initialNumOfDice || wantToPick()) {
+        if(dice.getChosenDice().size() >= Rules.INITIAL_NUMBER_OF_DICE || wantToPick()) {
             pickTile();
             return true;
         }

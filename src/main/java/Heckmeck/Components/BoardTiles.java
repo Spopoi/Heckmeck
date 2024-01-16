@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class BoardTiles implements TilesCollection {
-    public static final int numberOfTiles = 16; //TODO da mettere private?
     private final TreeSet<Tile> tiles;
 
     public BoardTiles(TreeSet<Tile> tiles) {

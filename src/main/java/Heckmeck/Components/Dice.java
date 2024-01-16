@@ -1,19 +1,20 @@
 package Heckmeck.Components;
+import Heckmeck.Rules;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class Dice {
-    public final static int  initialNumOfDice = 8; //TODO private?
     private final List<Die> diceList;
     private final List<Die> chosenDiceList;
     private int score;
 
 
     private Dice(){
-        diceList = new ArrayList<>(initialNumOfDice);
+        diceList = new ArrayList<>(Rules.INITIAL_NUMBER_OF_DICE);
         chosenDiceList = new ArrayList<>();
-        IntStream.range(0, initialNumOfDice)
+        IntStream.range(0, Rules.INITIAL_NUMBER_OF_DICE)
                 .forEach(i -> diceList.add(Die.generateDie()));
     }
 
@@ -35,7 +36,7 @@ public class Dice {
     public void resetDice(){
         diceList.clear();
         chosenDiceList.clear();
-        IntStream.range(0, initialNumOfDice)
+        IntStream.range(0, Rules.INITIAL_NUMBER_OF_DICE)
                 .forEach(i -> diceList.add(Die.generateDie()));
         score = 0;
     }
