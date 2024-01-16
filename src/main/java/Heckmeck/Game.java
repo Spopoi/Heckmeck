@@ -29,7 +29,6 @@ public class Game {
         int playerNumber = 0;
         actualPlayer = players[playerNumber];
         while(boardTiles.hasElement()){
-
             playerTurn();
             playerNumber++;
             if(playerNumber >= players.length) playerNumber = 0;
@@ -74,7 +73,7 @@ public class Game {
         return false;
     }
 
-    private boolean canPick(){ // TODO Can Pick metterlo nelle rules???
+    private boolean canPick(){
         Tile minValueTile = boardTiles.getTiles().first();
         return dice.getScore() >= minValueTile.number();
     }
@@ -93,7 +92,7 @@ public class Game {
         io.printMessage("You got tile number " + availableTile.number() +"!");
     }
 
-    private boolean canSteal(){ // TODO Can Steal metterlo nelle rules???
+    private boolean canSteal(){
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;
         for(Player robbedPlayer : players){
@@ -102,7 +101,6 @@ public class Game {
         return false;
     }
 
-    //todo: estrarre getscore e metterlo come azione dopo chooseface in roll()
     private boolean steal(){
         //assume worm chosen and can steal
         int playerScore = dice.getScore();
@@ -117,8 +115,9 @@ public class Game {
         return false;
     }
 
+    //TODO: unire i due bust
     private boolean roll(){
-        if(dice.getNumOfDice() == 0) {
+        if(dice.getNumOfDice() <= 0) {
             bust();
             return false;
         }
@@ -173,14 +172,5 @@ public class Game {
             String playerName = player.getName();
             return playerName != null && playerName.equals(name);
         });
-    }
-
-    private void restartGame(){
-        Arrays.stream(players).sequential().forEach(Player::clearPlayer);
-        this.dice = Dice.init();
-        this.boardTiles = BoardTiles.init();
-        this.actualPlayer = this.players[0];
-        io.printMessage("OK, let's begin!");
-        play();
     }
 }
