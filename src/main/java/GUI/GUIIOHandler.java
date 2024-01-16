@@ -97,7 +97,7 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public void showTurnBeginConfirm(Player player) {
         String message = player.getName() + messages.getProperty("turnBeginConfirm");
-        showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
+        showMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
     }
 
     public boolean wantToHost(){

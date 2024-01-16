@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import static Utils.GUI.ButtonHandler.makeDiceButton;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;
 
@@ -33,7 +34,7 @@ public class DicePanel extends JPanel {
         GridBagConstraints gbc = initGridBagConstraints();
         for (Die die : dice.getDiceList()) {
             RoundedPanel roundedDie = new RoundedPanel(null);
-            JToggleButton dieButton = makeDiceButton(die);
+            JToggleButton dieButton = setDiceButton(die);
             roundedDie.add(dieButton);
             add(roundedDie, gbc);
             updateGridBagConstraints(gbc);
@@ -61,14 +62,9 @@ public class DicePanel extends JPanel {
         return gbc;
     }
 
-    private JToggleButton makeDiceButton(Die die) {
-        JToggleButton dieButton = new JToggleButton();
-        Die.Face dieFace = die.getDieFace();
-        dieButton.setIcon(getDieIcon(dieFace));
-        dieButton.setFocusPainted(false);
-        dieButton.setBorder(null);
-        dieButton.putClientProperty("originalFace", dieFace);
-        dieButton.addActionListener(e -> chosenFace = dieFace);
+    private JToggleButton setDiceButton(Die die) {
+        JToggleButton dieButton = makeDiceButton(die);
+        dieButton.addActionListener(e -> chosenFace = die.getDieFace());
         return dieButton;
     }
 

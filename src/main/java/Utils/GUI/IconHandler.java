@@ -53,7 +53,6 @@ public class IconHandler {
     private static final Map<Die.Face, ImageIcon> chosenDieIcons = initChosenDieIcons();
     private static final Map<Integer, RoundedPanel> tileIcons = initTileIcons();
     private static final Map<Integer, RoundedPanel> playerTileIcons = initPlayerTileIcons();
-
     private static Map<Die.Face, ImageIcon> initDieIcons() {
         Map<Die.Face, ImageIcon> faceToIconMap = new HashMap<>();
         for (Die.Face face : Die.Face.values()) {

@@ -5,7 +5,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static GUI.HeckmeckGUI.*;
-import static GUI.Panels.MenuPanel.createButton;
+import static Utils.GUI.ButtonHandler.createBackgroundButton;
+import static Utils.GUI.ButtonHandler.createButton;
 import static Utils.GUI.LabelHandler.*;
 
 public class SettingsPanel extends JPanel {
@@ -48,14 +49,14 @@ public class SettingsPanel extends JPanel {
         JPanel inputPanel = new JPanel(new GridLayout(1, BACKGROUND_NUMBER, HORIZONTAL_BUTTONS_GAP, 0));
         inputPanel.setBorder(new EmptyBorder(INPUT_PANEL_TOP_SPACING, INPUT_PANEL_SIDE_SPACING, INPUT_PANEL_BOTTOM_SPACING, INPUT_PANEL_SIDE_SPACING));
 
-        inputPanel.add(createBackgroundButton(YELLOW_BACKGROUND_PATH));
-        inputPanel.add(createBackgroundButton(GREEN_BACKGROUND_PATH));
-        inputPanel.add(createBackgroundButton(BLUE_BACKGROUND_PATH));
+        inputPanel.add(getBackgroundButton(YELLOW_BACKGROUND_PATH));
+        inputPanel.add(getBackgroundButton(GREEN_BACKGROUND_PATH));
+        inputPanel.add(getBackgroundButton(BLUE_BACKGROUND_PATH));
         return inputPanel;
     }
 
-    private JButton createBackgroundButton(String imagePath) {
-        JButton button = new JButton(new ImageIcon(imagePath));
+    private JButton getBackgroundButton(String imagePath) {
+        JButton button = createBackgroundButton(imagePath);
         button.addActionListener(e -> background_path = imagePath);
         return button;
     }

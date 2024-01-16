@@ -3,7 +3,7 @@ package GUI.Panels;
 import javax.swing.*;
 import java.awt.*;
 import static GUI.HeckmeckGUI.switchToMenuPanel;
-import static GUI.Panels.MenuPanel.createButton;
+import static Utils.GUI.ButtonHandler.createButton;
 
 public class RulesPanel extends JPanel {
     private static final String RULES_IMAGE_PATH_1 = "src/main/resources/GUI/Rules1.jpg";

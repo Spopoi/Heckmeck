@@ -1,23 +1,17 @@
 package GUI.Panels;
-
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 import static GUI.HeckmeckGUI.*;
+import static Utils.GUI.ButtonHandler.createButton;
 
 public class MenuPanel extends ImagePanel {
-
     //TODO: manage path
     private static final String HECKMECK_BACKGROUND_PATH = "src/main/resources/GUI/heckmeckBackground.jpg";
-    //TODO: move it and createButton
-    public static final Font buttonFont = new Font(UIManager.getFont("Button.font").getName(), Font.BOLD, 14);
     private static final int BUTTON_PANEL_TOP_INSET = 180;
     private static final Dimension BUTTON_PANEL_DIMENSIONS = new Dimension(350, 250);
     private static final int NUMBER_OF_BUTTONS = 4;
     private static final int VERTICAL_BUTTONS_GAP = 10;
-    public static final Color BUTTON_COLOR = Color.ORANGE;
 
     public MenuPanel() {
         super(HECKMECK_BACKGROUND_PATH);
@@ -47,12 +41,4 @@ public class MenuPanel extends ImagePanel {
         return buttonsPanel;
     }
 
-    public static JButton createButton(String text, ActionListener actionListener) {
-        JButton button = new JButton(text);
-        button.setFocusPainted(false);
-        button.addActionListener(actionListener);
-        button.setBackground(BUTTON_COLOR);
-        button.setFont(buttonFont);
-        return button;
-    }
 }

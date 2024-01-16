@@ -7,6 +7,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.util.concurrent.Semaphore;
 
+import static Utils.GUI.ButtonHandler.createYesNoButton;
 import static Utils.GUI.LabelHandler.textFont;
 
 public class MessagePanel extends JPanel {
@@ -47,30 +48,21 @@ public class MessagePanel extends JPanel {
     }
 
     private void initYesNoPanel() {
-        JButton yesButton = new JButton("Yes");
-        yesButton.setVisible(false);
-        JButton noButton = new JButton("No");
-        noButton.setVisible(false);
+        JButton yesButton = createYesNoButton("Yes", this::handleButtonClick);
+        JButton noButton = createYesNoButton("No", this::handleButtonClick);
 
         buttonPanel = new JPanel();
         buttonPanel.add(yesButton);
         buttonPanel.add(noButton);
 
-        yesButton.addActionListener(e -> {
-            dialogResult = true;
-            hideButtonPanel();
-            showLogMessage("Yes");
-            semaphore.release();
-        });
-
-        noButton.addActionListener(e -> {
-            dialogResult = false;
-            hideButtonPanel();
-            showLogMessage("No");
-            semaphore.release();
-        });
-
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void handleButtonClick(String buttonText) {
+        dialogResult = buttonText.equals("Yes");
+        hideButtonPanel();
+        showLogMessage(buttonText);
+        semaphore.release();
     }
 
     public void showLogMessage(String message) {
