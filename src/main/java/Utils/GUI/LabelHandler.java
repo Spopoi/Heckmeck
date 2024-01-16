@@ -36,6 +36,7 @@ public class LabelHandler {
         label.setFont(titleFont);
         return label;
     }
+    //TODO: usati solo in PlayerDataPanel
     public static JLabel getTitleLabel(String text , int width, int height){
         JLabel label = makeLabel(width, height);
         label.setText(text);

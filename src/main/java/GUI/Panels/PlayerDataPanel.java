@@ -19,6 +19,8 @@ public class PlayerDataPanel extends RoundedPanel{
     public static final Component verticalSpace = Box.createVerticalStrut(10);
     private static final int LABEL_HEIGHT = 45;
     private static final int PLAYERTILE_GAP = 80;
+    private static final int TILEPANEL_HEIGHT = 90;
+    private RoundedPanel playerTile;
 
     public PlayerDataPanel(String imagePath) {
         super(imagePath);
@@ -68,12 +70,10 @@ public class PlayerDataPanel extends RoundedPanel{
         add(score);
     }
 
+    //TODO: Prop
     private void initPlayerDicePanel() {
-        JLabel chosenDiceLabel = new JLabel("Chosen dice:");
-        chosenDiceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        chosenDiceLabel.setFont(textFont);
+        JLabel chosenDiceLabel = getLabel("Chosen dice:", JLabel.LEFT);
         add(chosenDiceLabel);
-
         add(Box.createRigidArea(getDimensions(5)));
 
         playerDicePanel = new JPanel();
@@ -88,23 +88,16 @@ public class PlayerDataPanel extends RoundedPanel{
     private void initPlayerTilePanel() {
         playerTilePanel = new JPanel();
         playerTilePanel.setLayout(new BoxLayout(playerTilePanel, BoxLayout.X_AXIS));
-        playerTilePanel.setPreferredSize(getDimensions(90));
+        playerTilePanel.setPreferredSize(getDimensions(TILEPANEL_HEIGHT));
         playerTilePanel.setAlignmentX(LEFT_ALIGNMENT);
         playerTilePanel.setOpaque(false);
-        initTilePanel(null);
-        add(playerTilePanel);
-        add(Box.createRigidArea(getDimensions(5)));
-    }
 
-    private void initTilePanel(Player player) {
-        playerTilePanel.removeAll();
-        JLabel lastTileLabel = new JLabel("Top tile: ");
-        lastTileLabel.setFont(textFont);
+        JLabel lastTileLabel = getLabel("Top tile: ", JLabel.LEFT);
         playerTilePanel.add(lastTileLabel);
         playerTilePanel.add(Box.createRigidArea(new Dimension(PLAYERTILE_GAP, 0)));
-        if (player != null && player.hasTile()) {
-            playerTilePanel.add(getPlayerTileIcon(player.getLastPickedTile().number()));
-        }
+
+        add(playerTilePanel);
+        add(Box.createRigidArea(getDimensions(5)));
     }
 
     public void update(Player player, Dice dice) {
@@ -112,7 +105,18 @@ public class PlayerDataPanel extends RoundedPanel{
         playerWormScore.setText("Worm score: " + player.getWormScore());
         updateDicePanel(dice);
         score.setText("Current score: " + dice.getScore());
-        initTilePanel(player);
+        updateTilePanel(player);
+
+        revalidate();
+        repaint();
+    }
+
+    private void updateTilePanel(Player player){
+        if(playerTile != null) playerTilePanel.remove(playerTile);
+        if(player.hasTile()){
+            playerTile = getPlayerTileIcon(player.getLastPickedTile().number());
+            playerTilePanel.add(playerTile);
+        }
     }
 
     private void updateDicePanel(Dice dice) {
@@ -123,6 +127,7 @@ public class PlayerDataPanel extends RoundedPanel{
         }
     }
 
+    //TODO: extract this and horizontalSeparator
     private Dimension getDimensions(int height){
         return new Dimension(0,height);
     }
