@@ -219,7 +219,7 @@ public class TestCliInputOutput {
                 Chosen dice: []                   player3 | No tiles |   0  \s
                 Current dice score: 0             player4 | No tiles |   0  \s
                 WORM is chosen: false             player5 | No tiles |   0  \s
-                                                  player6 | No tiles |   0  \s
+                Total WORMs collected: 0          player6 | No tiles |   0  \s
                                                   player7 | No tiles |   0  \s
                                                   
                 """;

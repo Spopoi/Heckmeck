@@ -1,6 +1,7 @@
 $ACTUAL_PLAYER's tiles:
-$CURRENT_TILES
+$TOP_TILE
 
 Chosen dice: $CHOSEN_DICE
 Current dice score: $CURRENT_DICE_SCORE
 WORM is chosen: $IS_WARM_SELECTED
+Total WORMs collected: $TOTAL_WORMS

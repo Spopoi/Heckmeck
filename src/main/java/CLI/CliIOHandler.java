@@ -128,7 +128,7 @@ public class CliIOHandler implements IOHandler { //TODO interfaccia troppo grand
 
         String actualPlayerInfo = fillActualPlayerInfoTemplate(Utils.getActualPlayerInfoTemplate(), actualPlayer, dice);
 
-        TextBlock playerData = new TextBlock(actualPlayerInfo).concatenateWith(new TextBlock(summaryTable.toString()), 12);
+        TextBlock playerData = new TextBlock(actualPlayerInfo).concatenateWith(new TextBlock(summaryTable.toString()), 9);
         printMessage(playerData.toString() + newLine);
     }
 
@@ -136,10 +136,11 @@ public class CliIOHandler implements IOHandler { //TODO interfaccia troppo grand
         String choseDiceString = dice.getChosenDice().stream().map(e -> e.getDieFace().toString()).toList().toString();
 
         return actualPlayerInfoTemplate.replace("$ACTUAL_PLAYER", actualPlayer.getName())
-                .replace("$CURRENT_TILES", actualPlayer.hasTile() ? actualPlayer.getLastPickedTile().toString() : "")
+                .replace("$TOP_TILE", actualPlayer.hasTile() ? actualPlayer.getLastPickedTile().toString() : "")
                 .replace("$CHOSEN_DICE", choseDiceString)
                 .replace("$CURRENT_DICE_SCORE", String.valueOf(dice.getScore()))
-                .replace("$IS_WARM_SELECTED", String.valueOf(dice.isFaceChosen(Die.Face.WORM)));
+                .replace("$IS_WARM_SELECTED", String.valueOf(dice.isFaceChosen(Die.Face.WORM)))
+                .replace("$TOTAL_WORMS", String.valueOf(actualPlayer.getWormScore()));
     }
 
     @Override
