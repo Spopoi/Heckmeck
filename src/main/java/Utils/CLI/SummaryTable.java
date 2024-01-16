@@ -81,7 +81,6 @@ public class SummaryTable {
         return this;
     }
 
-    //TODO Aggiungere punteggio vermi del giocatore corrente nella tabella
     private String getPlayerInfoRow(Player player) {
         return alignToColumn(player.getName(), column.PLAYER_NAME) + COLUMN_SEPARATOR +
                 alignToColumn(player.getTopTileInfo(), column.LAST_PICKED_TILE) + COLUMN_SEPARATOR +

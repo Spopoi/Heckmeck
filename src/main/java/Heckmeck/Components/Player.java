@@ -31,11 +31,9 @@ public class Player {
         return playerTiles.getLastTile();
     }
 
-    //TODO: usato solo per la CLI una volta
     public String getTopTileInfo() {
         if (hasTile()) {
-            Tile topTile = getLastPickedTile();
-            return topTile.number() + " " + topTile.getWormString();
+            return getLastPickedTile().asShortSingleRowString();
         } else {
             return "No tiles";
         }
@@ -73,10 +71,6 @@ public class Player {
 
     public int getHighestTileNumber() {
         return playerTiles.getTheOneWithTheHighestNumber().number();
-    }
-
-    public void clearPlayer() {
-        this.playerTiles = null;
     }
 
     @Override

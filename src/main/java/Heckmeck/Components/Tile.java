@@ -52,8 +52,8 @@ public record Tile(int number) implements Comparable<Tile> {
         return numberToWorms.get(number);
     }
 
-    public String getWormString() {
-        return "~".repeat(this.getWorms());
+    public String asShortSingleRowString() {
+        return number() + " " + "~".repeat(this.getWorms());
     }
 
     public static Tile generateTile(int number) {
