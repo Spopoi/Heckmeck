@@ -17,7 +17,6 @@ public class Client{
 
     private final PrintWriter out;
     private final BufferedReader in;
-    private final IOHandler io;
     private final MessageHandler messageHandler;
     private Map<Message.Action, MessageHandlerFunction> operationHandlers;
     private interface MessageHandlerFunction {
@@ -26,7 +25,6 @@ public class Client{
     public Client(IOHandler io,  BufferedReader in, PrintWriter out){
         this.in = in;
         this.out = out;
-        this.io = io;
         messageHandler = new MessageHandler(io);
         initCommands();
     }

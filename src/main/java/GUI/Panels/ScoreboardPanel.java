@@ -70,7 +70,6 @@ public class ScoreboardPanel extends ImagePanel {
         return scrollableScoreboard;
     }
 
-    //TODO: refactoring horizontal separator
     private static JSeparator makeHorizontalSeparator() {
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));

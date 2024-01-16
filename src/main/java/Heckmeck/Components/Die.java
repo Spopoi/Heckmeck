@@ -73,9 +73,8 @@ public class Die {
     }
     public Face getDieFace(){ return dieFace; }
 
-    // TODO: What if text is not present in the Map (just null or excep?)
     // TODO: Mark private stringToFaceMap?
-    public static Face getFaceByString(String text) {
+    public static Face getFaceByString(String text) { // TODO da eliminare
         return stringToFaceMap.get(text);
     }
 

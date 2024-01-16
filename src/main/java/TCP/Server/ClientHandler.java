@@ -43,7 +43,6 @@ public class ClientHandler implements Runnable{
 
     public boolean initClient(){
         Message msg = Message.generateMessage();
-        System.out.println("Player " + playerId + " initialised"); //TODO stringhe presenti nel clientHandler?
         msg.setPlayerID(playerId);
         msg.setOperation(Message.Action.INIT);
         Message respMsg = writeMessage(msg);

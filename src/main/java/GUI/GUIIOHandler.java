@@ -75,7 +75,6 @@ public class GUIIOHandler implements IOHandler {
         messagePanel.showLogMessage(text);
     }
 
-    @Override
     public void showWelcomeMessage() {
         String message = messages.getProperty("welcomeMessage");
         showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
@@ -87,7 +86,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public void backToMenu() {  // TODO farlo diventare solo un "Press ok to continue" (non più y/n)
+    public void backToMenu() {
         switchToMenuPanel();
     }
 
@@ -173,8 +172,6 @@ public class GUIIOHandler implements IOHandler {
         frame.revalidate();
         frame.repaint();
     }
-
-    //TODO: Make it static or make it reusable
     private void showOthersPlayerPanel(Player player, Player[] players) {
         if(otherPlayerPane != null) frame.remove(otherPlayerPane);
         ScoreboardPanel scoreboardPanel = new ScoreboardPanel(player, players);
@@ -206,7 +203,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public void askRollDiceConfirmation(Player playerName){
+    public void askRollDiceConfirmation(Player player){
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class CliIOHandler implements IOHandler { //TODO interfaccia troppo grande? (22 methods, ma ormai..)
+public class CliIOHandler implements IOHandler {
 
     private static final String newLine = System.lineSeparator();
     private Scanner scan;
@@ -44,7 +44,7 @@ public class CliIOHandler implements IOHandler { //TODO interfaccia troppo grand
         outputWhereToPrint.println(message);
     }
 
-    @Override
+
     public void showWelcomeMessage() {
         printMessage(Utils.getLogo());
         printMessage(messageManager.getMessage("welcomeMsg"));
@@ -176,7 +176,6 @@ public class CliIOHandler implements IOHandler { //TODO interfaccia troppo grand
 
     @Override
     public Die.Face chooseDie(Player currentPlayer) {
-        // TODO: bug input infinite loop
         printMessage("Pick one unselected face:");
         while (true) {
             String chosenDice = getInputString();

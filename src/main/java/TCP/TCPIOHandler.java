@@ -38,7 +38,7 @@ public class TCPIOHandler implements IOHandler {
         );
     }
     @Override
-    public void printError(String text){ //TODO aggiungere player anche ad error
+    public void printError(String text){
         sendBroadCast(
                 Message.generateMessage().
                         setOperation(Message.Action.ERROR).
@@ -67,7 +67,7 @@ public class TCPIOHandler implements IOHandler {
                         setText("Press ENTER to start your turn")
         );
     }
-    @Override
+
     public void showWelcomeMessage() {
         printMessage(Utils.getMultiplayerPath());
     }
@@ -96,7 +96,7 @@ public class TCPIOHandler implements IOHandler {
         );
     }
     @Override
-    public void askRollDiceConfirmation(Player currentPlayer) {
+    public void askRollDiceConfirmation(Player player) {
     }
     @Override
     public void showRolledDice(Dice dice) {

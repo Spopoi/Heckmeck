@@ -32,7 +32,7 @@ public class TestCliInputOutput {
     public TestCliInputOutput() throws IOException {
     }
 
-    // TODO: chooseDie does not need dice
+
     @ParameterizedTest
     @MethodSource("wrongUserInputForNumberOfPlayersProvider")
     void wrongNumberOfPlayersAreNotAccepted(String userInput) {
@@ -275,7 +275,6 @@ public class TestCliInputOutput {
     }
 
     static Stream<String> blankUserInputForPlayerNameProvider() {
-        // TODO: should we make it work also with newLine?
         return Stream.of("", "\t", "  ")
                 .map(TestCliInputOutput::stringToUserInput);
     }

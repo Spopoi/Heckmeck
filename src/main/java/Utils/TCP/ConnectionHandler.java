@@ -76,7 +76,7 @@ public class ConnectionHandler {
         Client cli = startClient(IP, io);
         io.printMessage("Local client started, waiting for your turn to begin");
         try {
-            cli.commandInterpreter(); //TODO è corretto gestie così eccezione?
+            cli.commandInterpreter(); 
         } catch (IOException e) {
             io.printError("Something went wrong, back to main menu");
         }

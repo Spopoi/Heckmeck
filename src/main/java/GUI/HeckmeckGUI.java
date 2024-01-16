@@ -86,7 +86,7 @@ public class HeckmeckGUI extends Launcher{
                     cli.commandInterpreter();
                 } catch (IOException e) {
                     io.printError("Something went wrong, back to main menu");
-                    // TODO gestire errore e ritorno al main menu
+                    switchToMenuPanel();
                 }
                 return null;
             }
