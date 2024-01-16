@@ -1,4 +1,7 @@
-package Heckmeck.Components;
+package GUI.Panels;
+
+import Heckmeck.Components.BoardTiles;
+import Heckmeck.Components.Tile;
 
 import javax.swing.*;
 import java.awt.*;

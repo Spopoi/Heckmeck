@@ -1,7 +1,7 @@
 package Heckmeck;
 
 public abstract class Launcher {
-    public void Launcher(){
+    public Launcher(){
     }
 
     public static void startGame(IOHandler io){

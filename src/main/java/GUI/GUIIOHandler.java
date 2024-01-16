@@ -1,9 +1,6 @@
 package GUI;
 
-import GUI.Panels.DicePanel;
-import GUI.Panels.MessagePanel;
-import GUI.Panels.PlayerDataPanel;
-import GUI.Panels.ScoreboardPanel;
+import GUI.Panels.*;
 import Heckmeck.*;
 import Heckmeck.Components.*;
 
