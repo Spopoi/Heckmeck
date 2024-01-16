@@ -18,6 +18,7 @@ public class PlayerDataPanel extends RoundedPanel{
     private JLabel playerWormScore;
     public static final Component verticalSpace = Box.createVerticalStrut(10);
     private static final int LABEL_HEIGHT = 45;
+    private static final int PLAYERTILE_GAP = 80;
 
     public PlayerDataPanel(String imagePath) {
         super(imagePath);
@@ -28,7 +29,8 @@ public class PlayerDataPanel extends RoundedPanel{
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
 
-        initPlayerNameLabel();
+        playerName = getTitleLabel("", JLabel.LEFT);
+        add(playerName);
         add(verticalSpace);
         addHorizontalSeparator();
 
@@ -89,39 +91,28 @@ public class PlayerDataPanel extends RoundedPanel{
         playerTilePanel.setPreferredSize(getDimensions(90));
         playerTilePanel.setAlignmentX(LEFT_ALIGNMENT);
         playerTilePanel.setOpaque(false);
-        initTilePanel(-1);
+        initTilePanel(null);
         add(playerTilePanel);
         add(Box.createRigidArea(getDimensions(5)));
     }
 
-    private void initPlayerNameLabel() {
-//        playerName = getTitleLabel(0,LABEL_HEIGHT);
-//        playerName.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        playerName = getTitleLabel("", JLabel.LEFT);
-        add(playerName);
-    }
-
-    private void initTilePanel(int tileNumber) {
+    private void initTilePanel(Player player) {
         playerTilePanel.removeAll();
         JLabel lastTileLabel = new JLabel("Top tile: ");
         lastTileLabel.setFont(textFont);
         playerTilePanel.add(lastTileLabel);
-        playerTilePanel.add(Box.createRigidArea(new Dimension(80,0)));
-        //TODO: refactoring
-        if(tileNumber != -1) playerTilePanel.add(getPlayerTileIcon(tileNumber));
+        playerTilePanel.add(Box.createRigidArea(new Dimension(PLAYERTILE_GAP, 0)));
+        if (player != null && player.hasTile()) {
+            playerTilePanel.add(getPlayerTileIcon(player.getLastPickedTile().number()));
+        }
     }
 
-    public void update(Player player, Dice dice){
+    public void update(Player player, Dice dice) {
         playerName.setText("Player " + player.getName());
         playerWormScore.setText("Worm score: " + player.getWormScore());
         updateDicePanel(dice);
         score.setText("Current score: " + dice.getScore());
-        if(player.hasTile()){
-            initTilePanel(player.getLastPickedTile().number());
-        }else{
-            initTilePanel(-1);
-        }
+        initTilePanel(player);
     }
 
     private void updateDicePanel(Dice dice) {
@@ -136,5 +127,3 @@ public class PlayerDataPanel extends RoundedPanel{
         return new Dimension(0,height);
     }
 }
-
-
