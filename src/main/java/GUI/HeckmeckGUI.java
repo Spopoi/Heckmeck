@@ -13,7 +13,7 @@ import java.io.IOException;
 import static Utils.GUI.SoundHandler.*;
 import static Utils.TCP.ConnectionHandler.startGameServer;
 
-public class HeckmeckGUI {
+public class HeckmeckGUI extends Launcher{
     private static JFrame frame;
     public static String YELLOW_BACKGROUND_PATH = "src/main/resources/GUI/yellowBackground.png";
     public static String BACKGROUND_IMAGE_PATH = YELLOW_BACKGROUND_PATH;
@@ -108,12 +108,10 @@ public class HeckmeckGUI {
         frame.getContentPane().setLayout(new BorderLayout());
 
         GUIIOHandler io = new GUIIOHandler(frame);
-        Game game = new Game(io);
         final var worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
-                game.init();
-                game.play();
+                startGame(io);
                 return null;
             }
         };

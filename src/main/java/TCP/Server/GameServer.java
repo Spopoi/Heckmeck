@@ -1,5 +1,6 @@
 package TCP.Server;
 
+import Heckmeck.Launcher;
 import Utils.TCP.ConnectionHandler;
 import Heckmeck.Game;
 import TCP.TCPIOHandler;
@@ -9,7 +10,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameServer implements Runnable {
+public class GameServer extends Launcher implements Runnable {
     public ServerSocket ss;
     public List<ClientHandler> clients = new ArrayList<>();
     private boolean hostClosedRoom = false;
@@ -29,9 +30,7 @@ public class GameServer implements Runnable {
     public void run() {
         acceptConnections();
         TCPIOHandler io = new TCPIOHandler(clients);
-        game = new Game(io); //TODO queste 3 righe vengono chiamate in almeno 3 punti, possiamo 'centralizzarre'?
-        game.init();
-        game.play();
+        startGame(io);
     }
 
 

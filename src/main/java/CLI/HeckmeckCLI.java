@@ -1,5 +1,6 @@
 package CLI;
 
+import Heckmeck.Launcher;
 import Utils.CLI.Utils;
 import Utils.TCP.ConnectionHandler;
 
@@ -7,7 +8,7 @@ import Heckmeck.Game;
 
 import java.io.IOException;
 
-public class HeckmeckCLI {
+public class HeckmeckCLI extends Launcher {
     public static void main(String[] args) {
         try {
             startMenu();
@@ -19,16 +20,13 @@ public class HeckmeckCLI {
     public static void startMenu() throws IOException {
         CliIOHandler io = new CliIOHandler(System.in, System.out);
         io.showWelcomeMessage();
-
         do {
             io.printMessage(Utils.getMenu());
             String choice = io.getInitialChoice();
 
             switch (choice) {
                 case "1":
-                    Game game = new Game(io);
-                    game.init();
-                    game.play();
+                    startGame(io);
                     break;
                 case "2":
                     if (io.wantToHost()) {
