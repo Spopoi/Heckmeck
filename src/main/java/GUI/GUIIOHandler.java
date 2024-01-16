@@ -17,7 +17,6 @@ import static GUI.HeckmeckGUI.*;
 import static Heckmeck.Rules.MAX_NUM_OF_PLAYERS;
 import static Heckmeck.Rules.MIN_NUM_OF_PLAYERS;
 import static Utils.GUI.IconHandler.getDieIcon;
-import static Utils.GUI.IconHandler.getTileIcon;
 import static Utils.GUI.SoundHandler.*;
 import static javax.swing.JOptionPane.*;
 
@@ -26,15 +25,13 @@ public class GUIIOHandler implements IOHandler {
     private PlayerDataPanel playerPane;
     private DicePanel dicePanel;
     private JScrollPane otherPlayerPane;
-    private JPanel tilesPanel;
+    private BoardtilesPanel tilesPanel;
     private int lateralPanelWidth;
     private static final double PANEL_WIDTH_TO_FRAME_RATIO = 0.25;
     private static final double LOG_HEIGHT_TO_FRAME_RATIO = 0.15;
     private static final Icon WORM_ICON = getDieIcon(Die.Face.WORM);
     private static final int BUST_DELAY = 2000;
-    private static final int TILES_GAP = 10;
-    private static final int TOP_BORDER = 20;
-    private static final int BOARDTILES_BOTTOM_BORDER = 40;
+
     private MessagePanel messagePanel;
     private static final String HECKMECK_MESSAGES_FILENAME = "messages";
     private Properties messages;
@@ -55,7 +52,7 @@ public class GUIIOHandler implements IOHandler {
         frame.add(messagePanel, BorderLayout.SOUTH);
 
         dicePanel = new DicePanel();
-        tilesPanel = new JPanel();
+        tilesPanel = new BoardtilesPanel();
     }
 
     private void initHeckmeckMessages(){
@@ -146,18 +143,12 @@ public class GUIIOHandler implements IOHandler {
         }
     }
 
-    //TODO: estrarre senza ricreare ogni volta
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         frame.remove(tilesPanel);
-        tilesPanel = new JPanel();
-        tilesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, TILES_GAP, 0));
-        tilesPanel.setBorder(BorderFactory.createEmptyBorder(TOP_BORDER, 0, BOARDTILES_BOTTOM_BORDER, 0));
-        tilesPanel.setOpaque(false);
-        for (Tile tile : boardTiles.getTiles()) {
-            tilesPanel.add(getTileIcon(tile.number()));
-        }
+        tilesPanel.update(boardTiles);
         frame.add(tilesPanel, BorderLayout.NORTH);
+        updateFrame();
     }
 
     @Override
