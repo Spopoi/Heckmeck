@@ -2,6 +2,7 @@ package GUI;
 
 import GUI.Panels.*;
 import Heckmeck.*;
+import Utils.PropertiesManager;
 import Utils.TCP.ConnectionHandler;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 
@@ -11,17 +12,20 @@ import java.io.IOException;
 
 import static Utils.GUI.SoundHandler.*;
 import static Utils.TCP.ConnectionHandler.startGameServer;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class HeckmeckGUI extends Launcher{
     private static JFrame frame;
-    public static String YELLOW_BACKGROUND_PATH = "src/main/resources/GUI/yellowBackground.png";
-    public static String BACKGROUND_IMAGE_PATH = YELLOW_BACKGROUND_PATH;
-    public static final String GREEN_BACKGROUND_PATH = "src/main/resources/GUI/green_background.jpg";
-    public static final String BLUE_BACKGROUND_PATH = "src/main/resources/GUI/blue_background.png";
+    //public static String YELLOW_BACKGROUND_PATH = "src/main/resources/GUI/yellowBackground.png";
+    //public static String BACKGROUND_IMAGE_PATH = YELLOW_BACKGROUND_PATH;
+    public static String BACKGROUND_IMAGE_PATH;
+    //public static final String GREEN_BACKGROUND_PATH = "src/main/resources/GUI/green_background.jpg";
+    //public static final String BLUE_BACKGROUND_PATH = "src/main/resources/GUI/blue_background.png";
     private static final Dimension minimumFrameDimension = new Dimension(1100, 600);
+    private static PropertiesManager pathManager;
 
-    public static void main(String[] args) throws UnsupportedLookAndFeelException{
+    public static void main(String[] args){
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (UnsupportedLookAndFeelException e) {
@@ -37,10 +41,24 @@ public class HeckmeckGUI extends Launcher{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(minimumFrameDimension);
         frame.setLocationRelativeTo(null);
+        initPathManager();
+        setBackgroundImagePath(pathManager.getMessage("YELLOW_BACKGROUND_PATH"));
         switchToMenuPanel();
         playLoopingSound(BACKGROUND_SOUND_PATH, BACKGROUND_MUSIC_VOLUME);
         frame.setVisible(true);
     }
+
+    private static void initPathManager(){
+        try {
+            pathManager = new PropertiesManager(PropertiesManager.getPathPropertiesPath());
+        } catch (IOException e) {
+            showMessageDialog(null, "Error loading the file containing the messages of the game", "ERROR", ERROR_MESSAGE);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static PropertiesManager getPathManager(){return pathManager;}
+
 
     public static void setBackgroundImagePath(String path) {
         BACKGROUND_IMAGE_PATH = path;

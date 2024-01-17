@@ -15,12 +15,11 @@ import static Heckmeck.Rules.MAX_NUM_OF_PLAYERS;
 import static Heckmeck.Rules.MIN_NUM_OF_PLAYERS;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static Utils.GUI.SoundHandler.*;
-import static Utils.PropertiesManager.getIOHandlerPropertiesPath;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
     private final JFrame frame;
-    private PropertiesManager propertiesManager;
+    private final PropertiesManager propertiesManager;
     private PlayerDataPanel playerPane;
     private DicePanel dicePanel;
     private JScrollPane otherPlayerPane;
@@ -190,6 +189,5 @@ public class GUIIOHandler implements IOHandler {
             e.printStackTrace();
         }
         showMessageDialog(null, propertiesManager.getMessage("bust") ,  propertiesManager.getMessage("heckmeckTitle"), JOptionPane.ERROR_MESSAGE);
-
     }
 }
