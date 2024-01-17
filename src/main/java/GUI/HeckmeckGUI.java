@@ -17,11 +17,8 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class HeckmeckGUI extends Launcher{
     private static JFrame frame;
-    //public static String YELLOW_BACKGROUND_PATH = "src/main/resources/GUI/yellowBackground.png";
-    //public static String BACKGROUND_IMAGE_PATH = YELLOW_BACKGROUND_PATH;
-    public static String BACKGROUND_IMAGE_PATH;
-    //public static final String GREEN_BACKGROUND_PATH = "src/main/resources/GUI/green_background.jpg";
-    //public static final String BLUE_BACKGROUND_PATH = "src/main/resources/GUI/blue_background.png";
+    public static String GAME_BACKGROUND_PATH;
+    public static String BACKGROUND_PATH;
     private static final Dimension minimumFrameDimension = new Dimension(1100, 600);
     private static PropertiesManager pathManager;
 
@@ -34,7 +31,6 @@ public class HeckmeckGUI extends Launcher{
         SwingUtilities.invokeLater(HeckmeckGUI::initGUI);
     }
 
-    //TODO: PROP
     private static void initGUI() {
         frame = new JFrame("HECKMECK");
         frame.setResizable(false);
@@ -42,7 +38,7 @@ public class HeckmeckGUI extends Launcher{
         frame.setMinimumSize(minimumFrameDimension);
         frame.setLocationRelativeTo(null);
         initPathManager();
-        setBackgroundImagePath(pathManager.getMessage("YELLOW_BACKGROUND_PATH"));
+        initBackgrounds();
         switchToMenuPanel();
         playLoopingSound(BACKGROUND_SOUND_PATH, BACKGROUND_MUSIC_VOLUME);
         frame.setVisible(true);
@@ -59,9 +55,12 @@ public class HeckmeckGUI extends Launcher{
 
     public static PropertiesManager getPathManager(){return pathManager;}
 
-
-    public static void setBackgroundImagePath(String path) {
-        BACKGROUND_IMAGE_PATH = path;
+    private static void initBackgrounds(){
+        setGameBackgroundPath(pathManager.getMessage("YELLOW_BACKGROUND_PATH"));
+        BACKGROUND_PATH = pathManager.getMessage("BACKGROUND_PATH");
+    }
+    public static void setGameBackgroundPath(String path) {
+        GAME_BACKGROUND_PATH = path;
     }
 
     public static void switchToRulesPanel() {
@@ -70,7 +69,7 @@ public class HeckmeckGUI extends Launcher{
     }
 
     public static void switchToMenuPanel(){
-        MenuPanel menuPanel = new MenuPanel();
+        MenuPanel menuPanel = new MenuPanel(BACKGROUND_PATH);
         updateFrame(menuPanel);
     }
 
@@ -80,7 +79,7 @@ public class HeckmeckGUI extends Launcher{
     }
 
     public static void switchToMultiplayerPanel() {
-        ImagePanel imagePanel = new ImagePanel(BACKGROUND_IMAGE_PATH);
+        ImagePanel imagePanel = new ImagePanel(GAME_BACKGROUND_PATH);
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);
@@ -116,7 +115,7 @@ public class HeckmeckGUI extends Launcher{
     }
 
     public static void switchToGamePanel() {
-        ImagePanel imagePanel = new ImagePanel(BACKGROUND_IMAGE_PATH);
+        ImagePanel imagePanel = new ImagePanel(GAME_BACKGROUND_PATH);
 
         frame.getContentPane().removeAll();
         frame.setContentPane(imagePanel);
@@ -129,7 +128,6 @@ public class HeckmeckGUI extends Launcher{
                 try {
                     startGame(io);
                 } catch (IOException e) {
-                    //TODO: PROP
                     showMessageDialog(null, "Error loading the file containing the messages of the game" , "Heckmeck ERROR", JOptionPane.ERROR_MESSAGE);
                     exit();
                 }

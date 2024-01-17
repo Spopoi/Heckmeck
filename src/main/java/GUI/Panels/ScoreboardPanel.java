@@ -5,7 +5,7 @@ import Heckmeck.Components.Player;
 import javax.swing.*;
 import java.awt.*;
 
-import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
+import static GUI.HeckmeckGUI.GAME_BACKGROUND_PATH;
 //import static GUI.Panels.PlayerDataPanel.verticalSpace;
 import static Utils.GUI.IconHandler.getPlayerTileIcon;
 import static Utils.GUI.LabelHandler.*;
@@ -16,7 +16,7 @@ public class ScoreboardPanel extends ImagePanel {
     private static final int PLAYERPANE_VERTICAL_SPACE = 10;
     public ScoreboardPanel(Player player, Player[] players){
 
-        super(BACKGROUND_IMAGE_PATH);
+        super(GAME_BACKGROUND_PATH);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel scoreboardLabel = getTitleLabel("Scoreboard", SCOREBOARD_WIDTH_PANEL, SCOREBOARD_LABEL_HEIGHT );

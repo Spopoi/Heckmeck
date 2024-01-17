@@ -7,7 +7,6 @@ import Utils.PropertiesManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.stream.IntStream;
 
 import static GUI.HeckmeckGUI.*;
@@ -39,7 +38,7 @@ public class GUIIOHandler implements IOHandler {
 
     private void initPanels(){
         lateralPanelWidth = (int)(frame.getWidth() * PANEL_WIDTH_TO_FRAME_RATIO);
-        playerPane = new PlayerDataPanel(BACKGROUND_IMAGE_PATH);
+        playerPane = new PlayerDataPanel(GAME_BACKGROUND_PATH);
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
 
         messagePanel = new MessagePanel();

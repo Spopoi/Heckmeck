@@ -19,7 +19,7 @@ public class SettingsPanel extends JPanel {
     private static final int INPUT_PANEL_SIDE_SPACING = 50;
     private static final int HORIZONTAL_BUTTONS_GAP = 50;
     private static final int NUM_OF_BACKGROUNDS = 3;
-    private String background_path = BACKGROUND_IMAGE_PATH;
+    private String background_path = GAME_BACKGROUND_PATH;
     private final PropertiesManager propertiesManager;
     private final PropertiesManager pathManager;
 
@@ -75,6 +75,6 @@ public class SettingsPanel extends JPanel {
     }
 
     public void applySettings() {
-       setBackgroundImagePath(background_path);
+       setGameBackgroundPath(background_path);
     }
 }
