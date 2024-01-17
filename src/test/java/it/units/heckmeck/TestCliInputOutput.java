@@ -183,7 +183,7 @@ public class TestCliInputOutput {
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         String expectedResponse = """
                     Actual score: 1
-                    Do you want to pick tile number 1  from board?
+                    Do you want to pick tile number 1 from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     Incorrect decision, please enter 'y' or 'n'
                     """;
@@ -201,7 +201,7 @@ public class TestCliInputOutput {
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         String expectedResponse = """
                     Actual score: 1
-                    Do you want to pick tile number 1  from board?
+                    Do you want to pick tile number 1 from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     """;
         try {

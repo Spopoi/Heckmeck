@@ -40,9 +40,9 @@ public class Game {
         }
         Player winnerPlayer = Rules.whoIsTheWinner(players);
         if (winnerPlayer == null) {
-            io.printMessage("This is a draw!!");
+            io.printMessage(propertiesManager.getMessage("draw"));
         } else {
-            io.printMessage("Congratulation to "+winnerPlayer.getName() + ", you are the WINNER!!");
+            io.printMessage(propertiesManager.getMessage("winner").replace("$PLAYER_NAME", winnerPlayer.getName()));
         }
         io.backToMenu();
     }
@@ -93,7 +93,7 @@ public class Game {
         Tile availableTile = boardTiles.nearestTile(dice.getScore());
         boardTiles.remove(availableTile);
         actualPlayer.pickTile(availableTile);
-        io.printMessage("You got tile number " + availableTile.number() +"!");
+        io.printMessage(propertiesManager.getMessage("gotTile").replace("$TILE_NUMBER", Integer.toString(availableTile.number())));
     }
 
     private boolean canSteal(){
@@ -139,8 +139,8 @@ public class Game {
     private Die.Face pickDieFace() {
         while(true){
             Die.Face chosenDieFace = io.chooseDie(actualPlayer);
-            if(!dice.isFacePresent(chosenDieFace)) io.printError("This face is not present.. Pick another one!");
-            else if(dice.isFaceChosen(chosenDieFace)) io.printError("You have already chose this face, pick another one!");
+            if(!dice.isFacePresent(chosenDieFace)) io.printError(propertiesManager.getMessage("faceNotPresent"));
+            else if(dice.isFaceChosen(chosenDieFace)) io.printError(propertiesManager.getMessage("faceAlreadyChosen"));
             else return chosenDieFace;
         }
     }
@@ -161,7 +161,7 @@ public class Game {
             this.actualPlayer = playersList[i];
             String playerName = io.choosePlayerName(playersList[i]);
             while(isNameAlreadyPicked(playerName,playersList)){
-                io.printError(playerName + " Already picked name.. Please choose another one");
+                io.printError(propertiesManager.getMessage("nameAlreadyPicked").replace("$PLAYER_NAME", playerName));
                 playerName = io.choosePlayerName(playersList[i]);
             }
             playersList[i].setPlayerName(playerName);

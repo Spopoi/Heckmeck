@@ -16,10 +16,11 @@ public class GameServer extends Launcher implements Runnable {
     public List<ClientHandler> clients = new ArrayList<>();
     private boolean hostClosedRoom = false;
     private final int numOfPlayers;
+    public Game game;
 
     public GameServer(int numOfPlayers) {
         try {
-            ss = new ServerSocket(51734); //TODO magic number.. facciamo un file di configurazione?
+            ss = new ServerSocket(51734);
             this.numOfPlayers = numOfPlayers;
 
         } catch (IOException e) {
@@ -42,9 +43,7 @@ public class GameServer extends Launcher implements Runnable {
         int playerID = 0;
         while (!isRoomClosed()) {
             Socket clientSocket;
-
             clientSocket = ss.accept();
-            System.out.println("Accepted incoming connection #: " + playerID);  // TODO: Properties (?)
             if (clientSocket.isConnected()) {
                 this.clients.add(ConnectionHandler.startClientHandler(playerID, clientSocket));
                 playerID++;

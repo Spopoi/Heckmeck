@@ -70,7 +70,7 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public void showTurnBeginConfirm(Player player) {
-        String message = player.getName() + propertiesManager.getMessage("turnBeginConfirm");
+        String message = propertiesManager.getMessage("turnBeginConfirm").replace("$PLAYER_NAME", player.getName());
         showMessageDialog(null, message, propertiesManager.getMessage("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
     }
 
@@ -107,7 +107,7 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public String choosePlayerName(Player player) {
         while(true) {
-            String playerName = MessagePanel.showInputDialog(propertiesManager.getMessage("choosePlayerName"));
+            String playerName = MessagePanel.showInputDialog(propertiesManager.getMessage("choosePlayerName").replace("$PLAYER_ID", Integer.toString(player.getPlayerID())));
             if (playerName == null) wantToQuitHeckmeck();
             else if(playerName.isBlank()) printError(propertiesManager.getMessage("blankName"));
             else return playerName;
@@ -124,7 +124,8 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public boolean wantToPick(Player player, int actualDiceScore, int availableTileNumber) {
-        String message = propertiesManager.getMessage("actualScore") + " " + actualDiceScore + '\n' + propertiesManager.getMessage("wantToPick") + " " + availableTileNumber + "?";
+        String message = propertiesManager.getMessage("actualScore").replace("$DICE_SCORE", Integer.toString(actualDiceScore)) +
+                '\n' + propertiesManager.getMessage("wantToPick").replace("$TILE_NUMBER", Integer.toString(availableTileNumber));
         if(messagePanel.showYesNoPanel(message)){
             playSound(PICK_SOUND_PATH, ACTIONS_MUSIC_VOLUME);
             return true;
@@ -133,7 +134,9 @@ public class GUIIOHandler implements IOHandler {
 
     @Override
     public boolean wantToSteal(Player player, Player robbedPlayer) {
-        String message = propertiesManager.getMessage("wantToSteal") + robbedPlayer.getLastPickedTile().number() + " from "+ robbedPlayer.getName()+"?";
+        String message = propertiesManager.getMessage("wantToSteal").
+                replace("$TILE_NUMBER", Integer.toString(robbedPlayer.getLastPickedTile().number())).
+                replace("$ROBBED", robbedPlayer.getName());
         return messagePanel.showYesNoPanel(message);
     }
 
