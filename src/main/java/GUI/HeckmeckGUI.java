@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import static Utils.GUI.SoundHandler.*;
 import static Utils.TCP.ConnectionHandler.startGameServer;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class HeckmeckGUI extends Launcher{
     private static JFrame frame;
@@ -20,12 +21,16 @@ public class HeckmeckGUI extends Launcher{
     public static final String BLUE_BACKGROUND_PATH = "src/main/resources/GUI/blue_background.png";
     private static final Dimension minimumFrameDimension = new Dimension(1100, 600);
 
-    //TODO: catch ex
-    public static void main(String[] args) throws UnsupportedLookAndFeelException {
-        UIManager.setLookAndFeel(new FlatIntelliJLaf());
+    public static void main(String[] args) throws UnsupportedLookAndFeelException{
+        try {
+            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         SwingUtilities.invokeLater(HeckmeckGUI::initGUI);
     }
 
+    //TODO: PROP
     private static void initGUI() {
         frame = new JFrame("HECKMECK");
         frame.setResizable(false);
@@ -106,8 +111,9 @@ public class HeckmeckGUI extends Launcher{
                 try {
                     startGame(io);
                 } catch (IOException e) {
-                    // TODO: Show a Panel with the error message and exit(?)
-                    throw new RuntimeException(e);
+                    //TODO: PROP
+                    showMessageDialog(null, "Error loading the file containing the messages of the game" , "Heckmeck ERROR", JOptionPane.ERROR_MESSAGE);
+                    exit();
                 }
                 return null;
             }

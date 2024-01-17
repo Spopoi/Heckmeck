@@ -185,12 +185,11 @@ public class GUIIOHandler implements IOHandler {
         return dicePanel.getChosenFace();
     }
 
-    //TODO: update dicePanel instead of remove it
     @Override
     public void showRolledDice(Dice dice) {
-        frame.getContentPane().remove(dicePanel);
+        frame.remove(dicePanel);
         dicePanel.updateDice(dice);
-        frame.getContentPane().add(dicePanel, BorderLayout.CENTER);
+        frame.add(dicePanel, BorderLayout.CENTER);
         updateFrame();
         dicePanel.rollDiceAnimation();
         playSound(ROLLING_SOUND_PATH, ACTIONS_MUSIC_VOLUME);
