@@ -16,7 +16,7 @@ Project strucure is defined like this:
     - Utils
     
   
----
+***
 # Features:
 - Command Line Interface
 - Graphical User Interface (with Swing)
@@ -37,12 +37,17 @@ Project strucure is defined like this:
 ```
 ## Docker container (CLI version):
 If you have docker installed, just run this command:
+
 ```
-docker run -it --rm dew54/Heckmeck:cli
+docker run -it --rm dew54/heckmeck:cli
 ```
+For containerized GUI version please contact the authors.
+
 ---
 # Authors
 - Kevin Marzio
 - Davide Pannarella
 - Davide Vidmar
 
+## Repo Url
+https://github.com/Spopoi/Heckmeck.git
