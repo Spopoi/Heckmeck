@@ -36,7 +36,6 @@ public record Tile(int number) implements Comparable<Tile> {
             getResourcePath()
     );
 
-    //TODO: move it and fix it
     private static Path getResourcePath() {
         URL tilesResource = Tile.class.getClassLoader().getResource(RESOURCE_FILE);
         Path resourcePath = null;

@@ -8,7 +8,6 @@ import java.awt.*;
 import static Utils.GUI.IconHandler.*;
 
 public class LabelHandler {
-    //TODO: getter
     public static final Font TITLE_FONT = new Font("Serif", Font.BOLD, 26);
     public static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 20);
 
@@ -26,7 +25,6 @@ public class LabelHandler {
         return label;
     }
 
-    //TODO: usati solo in PlayerDataPanel
     public static JLabel getTitleLabel(String text , int width, int height){
         JLabel label = makeLabel(width, height);
         label.setText(text);

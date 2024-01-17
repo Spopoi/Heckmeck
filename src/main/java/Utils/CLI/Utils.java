@@ -19,7 +19,6 @@ public class Utils {
     private static final String ACTUAL_PLAYER_INFO_TEMPLATE_FILE = "CLI/PLAYER_INFO_TEMPLATE";
     private Utils() {
     }
-//Todo: refactoring?
 
     public static String getLogo() {
         return getFileString(getPath(LOGO_FILE));

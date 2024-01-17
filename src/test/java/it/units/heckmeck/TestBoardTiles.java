@@ -60,7 +60,6 @@ public class TestBoardTiles {
         Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
     }
 
-    // TODO: to refactor
     private TreeSet<Tile> setupTiles() {
         TreeSet<Tile> expected = new TreeSet<>();
         for (int tileNumber = 21; tileNumber < 21 + Rules.NUMBER_OF_TILES; tileNumber++) {
@@ -105,7 +104,6 @@ public class TestBoardTiles {
     }
 
 
-    // TODO: getter ultimo elemento e check non ci sia piu'
     @Test
     void check_bust(){
         BoardTiles boardTiles = BoardTiles.init();

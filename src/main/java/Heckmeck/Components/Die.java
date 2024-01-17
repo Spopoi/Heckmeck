@@ -71,8 +71,7 @@ public class Die {
     }
     public Face getDieFace(){ return dieFace; }
 
-    // TODO: Mark private stringToFaceMap?
-    public static Face getFaceByString(String text) { // TODO da eliminare
+    public static Face getFaceByString(String text) {
         return stringToFaceMap.get(text);
     }
 

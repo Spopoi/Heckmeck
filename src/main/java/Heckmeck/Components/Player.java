@@ -63,7 +63,7 @@ public class Player {
 
     private static String fixWhiteCharacter(String playerName) {
         return playerName.strip().replace("\t", "    ");
-    } // TODO è giusto che stia qui manipolare una stringa?
+    }
 
     public int getWormScore() {
         return playerTiles.getTotalNumberOfWorms();

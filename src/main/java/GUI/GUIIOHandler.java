@@ -183,7 +183,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     @Override
-    public void showBustMessage() {  // todo: sta roba senza il delay non funzia più??
+    public void showBustMessage() {
         try {
             Thread.sleep(BUST_DELAY);
         } catch (InterruptedException e) {
