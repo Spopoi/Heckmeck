@@ -24,7 +24,7 @@ public class TestCliInputOutput {
 
     private final Player fakePlayer = mock(Player.class);
 
-    ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
+    final ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
 
     private final PrintStream fakeOutputStream = new PrintStream(fakeStandardOutput);
 

@@ -22,7 +22,7 @@ class TestSocketHandler {
     PrintWriter out;
     BufferedReader in;
     ClientHandler clientHandler;
-    Gson gson = new Gson();
+    final Gson gson = new Gson();
     @BeforeEach
     void setUp(){
         out = mock(PrintWriter.class);

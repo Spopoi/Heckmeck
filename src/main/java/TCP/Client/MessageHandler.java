@@ -4,7 +4,7 @@ import Heckmeck.IOHandler;
 import TCP.Message;
 
 public class MessageHandler {
-    IOHandler io;
+    final IOHandler io;
 
     public MessageHandler(IOHandler io) {
         this.io = io;

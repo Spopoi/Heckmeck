@@ -3,7 +3,7 @@ package Heckmeck.Components;
 
 public class Player {
     private String playerName;
-    private StackOfTiles playerTiles;
+    private final StackOfTiles playerTiles;
     private final int playerID;
 
     private Player(int playerID) {

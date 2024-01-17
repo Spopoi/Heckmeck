@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GameServer extends Launcher implements Runnable {
     public ServerSocket ss;
-    public List<ClientHandler> clients = new ArrayList<>();
+    public final List<ClientHandler> clients = new ArrayList<>();
     private boolean hostClosedRoom = false;
     private final int numOfPlayers;
     public Game game;

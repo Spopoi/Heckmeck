@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class Message implements Serializable {
 
-    static Gson gson = new Gson();
+    static final Gson gson = new Gson();
     public Dice dice;
     public int id;
     public boolean decision;
