@@ -1,12 +1,13 @@
 package GUI.Panels;
 
 import Heckmeck.Components.Player;
+import Utils.PropertiesManager;
 
 import javax.swing.*;
 import java.awt.*;
 
 import static GUI.HeckmeckGUI.GAME_BACKGROUND_PATH;
-//import static GUI.Panels.PlayerDataPanel.verticalSpace;
+import static Heckmeck.Launcher.getPropertiesManager;
 import static Utils.GUI.IconHandler.getPlayerTileIcon;
 import static Utils.GUI.LabelHandler.*;
 
@@ -14,12 +15,15 @@ public class ScoreboardPanel extends ImagePanel {
     private static final int SCOREBOARD_WIDTH_PANEL = 220;
     private static final int SCOREBOARD_LABEL_HEIGHT = 30;
     private static final int PLAYERPANE_VERTICAL_SPACE = 10;
+    private final PropertiesManager propertiesManager;
     public ScoreboardPanel(Player player, Player[] players){
 
         super(GAME_BACKGROUND_PATH);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        propertiesManager = getPropertiesManager();
 
-        JLabel scoreboardLabel = getTitleLabel("Scoreboard", SCOREBOARD_WIDTH_PANEL, SCOREBOARD_LABEL_HEIGHT );
+        String scoreboard = propertiesManager.getMessage("scoreboard");
+        JLabel scoreboardLabel = getTitleLabel(scoreboard, SCOREBOARD_WIDTH_PANEL, SCOREBOARD_LABEL_HEIGHT );
         scoreboardLabel.setAlignmentX(CENTER_ALIGNMENT);
         add(scoreboardLabel);
         add(Box.createVerticalStrut(10));
@@ -33,7 +37,6 @@ public class ScoreboardPanel extends ImagePanel {
         }
     }
 
-    //TODO: refactoring Dimensions... estrarre e usare PlayerDataPanel.getDimensions()
     private JPanel makeOtherPlayerPanel(Player otherPlayer) {
         JPanel playerPanel = new JPanel();
         playerPanel.setLayout(new BoxLayout(playerPanel, BoxLayout.Y_AXIS));
@@ -57,7 +60,8 @@ public class ScoreboardPanel extends ImagePanel {
     }
 
     private JLabel getScoreLabel(Player otherPlayer) {
-        JLabel scoreLabel = getLabel("Worm score: " + otherPlayer.getWormScore(), SCOREBOARD_WIDTH_PANEL, 30);
+        String score = propertiesManager.getMessage("wormScore");
+        JLabel scoreLabel = getLabel(score + otherPlayer.getWormScore(), SCOREBOARD_WIDTH_PANEL, 30);
         scoreLabel.setForeground(Color.RED);
         scoreLabel.setAlignmentX(CENTER_ALIGNMENT);
         return scoreLabel;
