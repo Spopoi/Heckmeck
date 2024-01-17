@@ -45,7 +45,7 @@ public class HeckmeckCLI extends Launcher {
                     break;
                 case "4":
                     io.printMessage("Exiting Heckmeck. Goodbye!");
-                    System.exit(0);
+                    exit();
                     return; // Exit the program
                 default:
                     break;

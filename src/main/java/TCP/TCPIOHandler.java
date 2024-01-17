@@ -45,10 +45,6 @@ public class TCPIOHandler implements IOHandler {
                         setText(text)
         );
     }
-    @Override
-    public String askIPToConnect() {
-        return null;
-    }
 
     @Override
     public void backToMenu() {

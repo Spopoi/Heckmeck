@@ -9,4 +9,8 @@ public abstract class Launcher {
         game.init();
         game.play();
     }
+
+    public static void exit(){
+        System.exit(0);
+    }
 }

@@ -19,6 +19,5 @@ public interface IOHandler {
     Die.Face chooseDie(Player currentPlayer);
     void showBustMessage(); // TODO non serve, inglobare in un "print Message"
     void printError(String text);
-    String askIPToConnect(); // TODO da spostare via da IOHandler
     void backToMenu(); // TODO @spopoi vedi se funzia
 }

@@ -80,7 +80,7 @@ public class GUIIOHandler implements IOHandler {
         showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
     }
 
-    @Override
+
     public String askIPToConnect() {
         return MessagePanel.showInputDialog(messages.getProperty("askIP"));
     }
@@ -123,7 +123,7 @@ public class GUIIOHandler implements IOHandler {
     }
 
     private void wantToQuitHeckmeck() {
-        if(messagePanel.showYesNoPanel(messages.getProperty("wantToQuit"))) System.exit(0);
+        if(messagePanel.showYesNoPanel(messages.getProperty("wantToQuit"))) Launcher.exit();
     }
 
     @Override
@@ -205,9 +205,8 @@ public class GUIIOHandler implements IOHandler {
     @Override
     public void askRollDiceConfirmation(Player player){
     }
-
     @Override
-    public void showBustMessage() {
+    public void showBustMessage() {  // todo: sta roba senza il delay non funzia più??
         try {
             Thread.sleep(BUST_DELAY);
         } catch (InterruptedException e) {
