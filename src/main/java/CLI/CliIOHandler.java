@@ -1,6 +1,5 @@
 package CLI;
 
-import TCP.Client.MessageHandler;
 import Utils.PropertiesManager;
 import Utils.CLI.SummaryTable;
 import Utils.CLI.TextBlock;
