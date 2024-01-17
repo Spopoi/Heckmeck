@@ -6,17 +6,19 @@ import Utils.MessageManager;
 import java.io.IOException;
 import java.util.*;
 import static Heckmeck.Components.Die.Face;
+import static Utils.MessageManager.getGameMessagePropertiesPath;
+
 public class Game {
     private Player[] players;
     private Dice dice;
     private BoardTiles boardTiles;
     private final IOHandler io;
     private Player actualPlayer;
-    private MessageManager messageManager;
+    private final MessageManager messageManager;
 
     public Game(IOHandler io) throws IOException {
         this.io = io;
-        messageManager = new MessageManager(MessageManager.PropertiesFileIdentifier.GAME_MESSAGES);
+        messageManager = new MessageManager(getGameMessagePropertiesPath());
     }
 
     public void init(){

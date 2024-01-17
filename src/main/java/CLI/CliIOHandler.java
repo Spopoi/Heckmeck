@@ -16,6 +16,8 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static Utils.MessageManager.getIOHandlerPropertiesPath;
+
 public class CliIOHandler implements IOHandler {
 
     private static final String newLine = System.lineSeparator();
@@ -27,7 +29,7 @@ public class CliIOHandler implements IOHandler {
     public CliIOHandler(InputStream inputStream, PrintStream printStream) throws IOException {
         setOutput(printStream);
         scan = new Scanner(inputStream);
-        messageManager = new MessageManager(MessageManager.PropertiesFileIdentifier.IOHANDLER_MESSAGES);
+        messageManager = new MessageManager(getIOHandlerPropertiesPath());
     }
 
     public void setInput(InputStream inputStream) {
