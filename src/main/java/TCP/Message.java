@@ -42,7 +42,8 @@ public class Message implements Serializable {
         WANT_STEAL,
         ERROR,
         CHOOSE_DICE,
-        BEGIN_TURN
+        BEGIN_TURN,
+        WAIT, BUST
     }
     public Message setPlayerID(int pId) {
         this.id = pId;

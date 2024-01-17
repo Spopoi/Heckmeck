@@ -18,6 +18,7 @@ public class MessageHandler {
     }
 
     public Message perform_choose_dice(Message rxMessage) {
+        io.chooseDie(rxMessage.currentPlayer);
         return Message.generateMessage()
                 .setOperation(Message.Action.RESPONSE)
                 .setText(io.chooseDie(rxMessage.currentPlayer).toString());
@@ -79,4 +80,13 @@ public class MessageHandler {
         return Message.generateMessage().setOperation(Message.Action.ACK);
     }
 
+    public Message performBust(Message rxMessage) {
+        io.showBustMessage();
+        return ack();
+    }
+
+    public Message performWaitYourTurn(Message rxMessage) {
+        io.printMessage("This is " + rxMessage.currentPlayer.getName() + "'s Turn, please wait");
+        return ack();
+    }
 }

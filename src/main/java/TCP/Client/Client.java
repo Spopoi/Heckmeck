@@ -42,6 +42,8 @@ public class Client{
         operationHandlers.put(CHOOSE_DICE       , messageHandler::perform_choose_dice);
         operationHandlers.put(WANT_PICK         , messageHandler::performWantPick);
         operationHandlers.put(WANT_STEAL        , messageHandler::performWantSteal);
+        operationHandlers.put(BUST              , messageHandler::performBust);
+        operationHandlers.put(WAIT              , messageHandler::performWaitYourTurn);
     }
 
     public void sendLine(String line) {

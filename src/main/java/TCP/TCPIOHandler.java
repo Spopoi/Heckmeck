@@ -1,6 +1,6 @@
 package TCP;
 
-import Utils.CLI.Utils;
+
 import Heckmeck.*;
 import Heckmeck.Components.BoardTiles;
 import Heckmeck.Components.Dice;
@@ -8,8 +8,12 @@ import Heckmeck.Components.Die;
 import Heckmeck.Components.Player;
 import TCP.Server.ClientHandler;
 
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class TCPIOHandler implements IOHandler {
     private final List<ClientHandler> clients;
@@ -53,8 +57,6 @@ public class TCPIOHandler implements IOHandler {
 
         );
 
-
-        //return resp.decision;
     }
     @Override
     public void showTurnBeginConfirm(Player currentPlayer) {
@@ -62,13 +64,8 @@ public class TCPIOHandler implements IOHandler {
         informPlayer(
                 currentPlayer,
                 Message.generateMessage().
-                        setOperation(Message.Action.BEGIN_TURN).
-                        setText("Press ENTER to start your turn")
+                        setOperation(Message.Action.BEGIN_TURN)
         );
-    }
-
-    public void showWelcomeMessage() {
-        printMessage(Utils.getMultiplayerPath());
     }
     @Override
     public int chooseNumberOfPlayers() {
@@ -81,7 +78,6 @@ public class TCPIOHandler implements IOHandler {
                         player,
                         Message.generateMessage().
                                 setOperation(Message.Action.GET_PLAYER_NAME).
-                                setText("Choose player name").
                                 setCurrentPlayer(player)
                 );
         return resp.text;
@@ -137,7 +133,6 @@ public class TCPIOHandler implements IOHandler {
                 currentPlayer,
                 Message.generateMessage().
                         setOperation(Message.Action.CHOOSE_DICE).
-                        setText("Choose a die face").
                         setCurrentPlayer(currentPlayer)
         );
         return Die.Face.valueOf(msg.text);
@@ -146,15 +141,17 @@ public class TCPIOHandler implements IOHandler {
         getOtherPlayersSockets(currentPlayer).
                 forEach(s -> s.writeMessage(
                                 Message.generateMessage().
-                                        setOperation(Message.Action.INFO).
-                                        setText("This is not your turn, please wait").
+                                        setOperation(Message.Action.WAIT).
                                         setCurrentPlayer(currentPlayer)
                         )
                 );
     }
     @Override
     public void showBustMessage() {
-        printMessage("## BUST! ##");
+        sendBroadCast(
+                Message.generateMessage().
+                        setOperation(Message.Action.BUST)
+        );
     }
     public List<ClientHandler> getOtherPlayersSockets(Player currentPlayer){
         return clients.stream().filter(p -> p.getPlayerID() != currentPlayer.getPlayerID()).toList();
