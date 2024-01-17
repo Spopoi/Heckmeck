@@ -12,7 +12,7 @@ public abstract class Launcher {
             propertiesManager = new PropertiesManager(PropertiesManager.getIOHandlerPropertiesPath());
         } catch (IOException e) {
             e.printStackTrace();
-            //TODO: CHECK
+            System.out.println("Error loading the file containing the messages of the game");
             throw new RuntimeException(e);
         }
     }

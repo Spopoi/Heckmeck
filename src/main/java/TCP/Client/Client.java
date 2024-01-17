@@ -66,11 +66,7 @@ public class Client{
 
 
     public static void main(String args[]){
-        try {
-            HeckmeckCLI.startMenu();
-        } catch (IOException ex) {
-            System.out.println("Error loading the file containing the messages of the game");
-        }
+        HeckmeckCLI.startMenu();
     }
 
     public void commandInterpreter() throws IOException {

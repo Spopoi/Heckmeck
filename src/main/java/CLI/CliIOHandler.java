@@ -16,6 +16,7 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static Heckmeck.Launcher.getPropertiesManager;
 import static Utils.PropertiesManager.getIOHandlerPropertiesPath;
 
 public class CliIOHandler implements IOHandler {
@@ -26,10 +27,10 @@ public class CliIOHandler implements IOHandler {
 
     private final PropertiesManager propertiesManager;
 
-    public CliIOHandler(InputStream inputStream, PrintStream printStream) throws IOException {
+    public CliIOHandler(InputStream inputStream, PrintStream printStream) {
         setOutput(printStream);
         scan = new Scanner(inputStream);
-        propertiesManager = new PropertiesManager(getIOHandlerPropertiesPath());
+        propertiesManager = getPropertiesManager();
     }
 
     public void setInput(InputStream inputStream) {

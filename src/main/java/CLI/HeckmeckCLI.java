@@ -10,14 +10,10 @@ import java.io.IOException;
 
 public class HeckmeckCLI extends Launcher {
     public static void main(String[] args) {
-        try {
-            startMenu();
-        } catch (IOException ex) {
-            System.out.println("Error loading the file containing the messages of the game");
-        }
+        startMenu();
     }
 
-    public static void startMenu() throws IOException {
+    public static void startMenu() {
         CliIOHandler io = new CliIOHandler(System.in, System.out);
         io.showWelcomeMessage();
         do {
@@ -26,7 +22,12 @@ public class HeckmeckCLI extends Launcher {
 
             switch (choice) {
                 case "1":
-                    startGame(io);
+                    try {
+                        startGame(io);
+                    } catch (IOException e) {
+                        io.printError("Error loading the file containing the messages of the game");
+                        exit();
+                    }
                     break;
                 case "2":
                     if (io.wantToHost()) {
