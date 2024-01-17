@@ -78,7 +78,7 @@ public class ConnectionHandler {
         try {
             cli.commandInterpreter(); 
         } catch (IOException e) {
-            io.printError("Something went wrong, back to main menu");
+            io.printError("Server has been disconnected, back to main menu");
         }
     }
 

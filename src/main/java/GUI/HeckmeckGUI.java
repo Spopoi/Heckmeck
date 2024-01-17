@@ -77,24 +77,17 @@ public class HeckmeckGUI extends Launcher{
     }
 
     public static void startLocalClient(String IP, IOHandler io){
-        Client cli = ConnectionHandler.startClient(IP, io);
-        io.printMessage("Connected, waiting for other players to begin");
         final var worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
-                try {
-                    cli.commandInterpreter();
-                } catch (IOException e) {
-                    io.printError("Something went wrong, back to main menu");
-                    switchToMenuPanel();
-                }
+                ConnectionHandler.startLocalClient(IP, io);
+                switchToMenuPanel();
                 return null;
             }
         };
         worker.execute();
         frame.revalidate();
         frame.repaint();
-
     }
     public static void startLocalClient(IOHandler io) {
         startLocalClient("127.0.0.1", io);
