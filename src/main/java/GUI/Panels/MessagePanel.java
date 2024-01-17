@@ -110,7 +110,6 @@ public class MessagePanel extends JPanel {
         repaint();
     }
 
-    // TODO: Prop
     public static String showInputDialog(String message) {
         return JOptionPane.showInputDialog(null, message, "Heckmeck", JOptionPane.QUESTION_MESSAGE);
     }

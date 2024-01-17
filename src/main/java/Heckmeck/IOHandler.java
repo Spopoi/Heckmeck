@@ -16,7 +16,7 @@ public interface IOHandler {
     boolean wantToSteal(Player currentPlayer, Player robbedPlayer);
     void showPlayerData(Player currentPlayer, Dice dice, Player[] players);
     Die.Face chooseDie(Player currentPlayer);
-    void showBustMessage(); // TODO non serve, inglobare in un "print Message"
+    void showBustMessage();
     void printError(String text);
-    void backToMenu(); // TODO @spopoi vedi se funzia
+    void backToMenu();
 }

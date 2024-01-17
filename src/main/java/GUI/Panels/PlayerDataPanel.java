@@ -59,7 +59,6 @@ public class PlayerDataPanel extends RoundedPanel{
         add(score);
     }
 
-    //TODO: Prop
     private void initPlayerDicePanel() {
         JLabel chosenDiceLabel = getLabel("Chosen dice:", JLabel.LEFT);
         add(chosenDiceLabel);

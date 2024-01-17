@@ -54,7 +54,6 @@ public class GUIIOHandler implements IOHandler {
         messagePanel.showLogMessage(message);
     }
 
-    //TODO: error sound
     @Override
     public void printError(String text) {
         messagePanel.showLogMessage(text);
