@@ -3,11 +3,10 @@ package GUI.Panels;
 import Heckmeck.Components.Player;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static GUI.HeckmeckGUI.BACKGROUND_IMAGE_PATH;
-import static GUI.Panels.PlayerDataPanel.verticalSpace;
+//import static GUI.Panels.PlayerDataPanel.verticalSpace;
 import static Utils.GUI.IconHandler.getPlayerTileIcon;
 import static Utils.GUI.LabelHandler.*;
 
@@ -45,7 +44,7 @@ public class ScoreboardPanel extends ImagePanel {
         JLabel playerName = getLabel(otherPlayer.getName(), SCOREBOARD_WIDTH_PANEL, 100);
         playerName.setAlignmentX(CENTER_ALIGNMENT);
         playerPanel.add(playerName);
-        playerPanel.add(verticalSpace);
+        playerPanel.add(Box.createVerticalStrut(10));
 
         if(otherPlayer.hasTile()){
             int tileNumber = otherPlayer.getLastPickedTile().number();

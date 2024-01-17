@@ -16,10 +16,11 @@ public class PlayerDataPanel extends RoundedPanel{
     private JLabel score;
     private JPanel playerTilePanel;
     private JLabel playerWormScore;
-    public static final Component verticalSpace = Box.createVerticalStrut(10);
-    private static final int LABEL_HEIGHT = 45;
     private static final int PLAYERTILE_GAP = 80;
-    private static final int TILEPANEL_HEIGHT = 90;
+    private static final int TILEPANEL_HEIGHT = 70;
+    private static final int SIDE_BORDER = 20;
+    private static final int BOTTOM_BORDER = 10;
+    private static final int DICE_PANEL_HEIGHT = 120;
     private RoundedPanel playerTile;
 
     public PlayerDataPanel(String imagePath) {
@@ -29,30 +30,19 @@ public class PlayerDataPanel extends RoundedPanel{
 
     private void init() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
+        setBorder(BorderFactory.createEmptyBorder(0, SIDE_BORDER, BOTTOM_BORDER, SIDE_BORDER));
 
         playerName = getTitleLabel("", JLabel.LEFT);
         add(playerName);
-        add(verticalSpace);
         addHorizontalSeparator();
 
-        initPlayerWormScore();
-        add(verticalSpace);
+        playerWormScore = getLabel("",JLabel.LEFT);
+        add(playerWormScore);
 
         initPlayerTilePanel();
-        add(verticalSpace);
-
         initPlayerDicePanel();
-        add(verticalSpace);
-
         addHorizontalSeparator();
         initScoreLabel();
-    }
-
-    private void initPlayerWormScore() {
-        playerWormScore = getLabel(0 , LABEL_HEIGHT);
-        playerWormScore.setAlignmentX(Component.LEFT_ALIGNMENT);
-        add(playerWormScore);
     }
 
     private void addHorizontalSeparator() {
@@ -64,9 +54,8 @@ public class PlayerDataPanel extends RoundedPanel{
     }
 
     private void initScoreLabel() {
-        score = getTitleLabel(0, LABEL_HEIGHT);
+        score = getTitleLabel("", JLabel.LEFT);
         score.setForeground(Color.red);
-        score.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(score);
     }
 
@@ -74,15 +63,13 @@ public class PlayerDataPanel extends RoundedPanel{
     private void initPlayerDicePanel() {
         JLabel chosenDiceLabel = getLabel("Chosen dice:", JLabel.LEFT);
         add(chosenDiceLabel);
-        add(Box.createRigidArea(getDimensions(5)));
 
         playerDicePanel = new JPanel();
         playerDicePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        playerDicePanel.setPreferredSize(getDimensions(120));
+        playerDicePanel.setPreferredSize(getDimensions(DICE_PANEL_HEIGHT));
         playerDicePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         playerDicePanel.setOpaque(false);
         add(playerDicePanel);
-        add(Box.createRigidArea(getDimensions(5)));
     }
 
     private void initPlayerTilePanel() {
@@ -95,16 +82,14 @@ public class PlayerDataPanel extends RoundedPanel{
         JLabel lastTileLabel = getLabel("Top tile: ", JLabel.LEFT);
         playerTilePanel.add(lastTileLabel);
         playerTilePanel.add(Box.createRigidArea(new Dimension(PLAYERTILE_GAP, 0)));
-
         add(playerTilePanel);
-        add(Box.createRigidArea(getDimensions(5)));
     }
 
     public void update(Player player, Dice dice) {
         playerName.setText("Player " + player.getName());
         playerWormScore.setText("Worm score: " + player.getWormScore());
-        updateDicePanel(dice);
         score.setText("Current score: " + dice.getScore());
+        updateDicePanel(dice);
         updateTilePanel(player);
 
         revalidate();

@@ -9,18 +9,12 @@ import static Utils.GUI.IconHandler.*;
 
 public class LabelHandler {
     //TODO: getter
-    public static final Font titleFont = new Font("Serif", Font.BOLD, 30);
-    public static final Font textFont = new Font("Serif", Font.PLAIN, 20);
-
-    public static JLabel getLabel(int width, int height){
-        JLabel label = makeLabel(width, height);
-        label.setFont(textFont);
-        return label;
-    }
+    public static final Font TITLE_FONT = new Font("Serif", Font.BOLD, 26);
+    public static final Font TEXT_FONT = new Font("Serif", Font.PLAIN, 20);
 
     public static JLabel getLabel(String text, int alignment){
         JLabel label = new JLabel(text);
-        label.setFont(textFont);
+        label.setFont(TEXT_FONT);
         label.setHorizontalAlignment(alignment);
         return label;
     }
@@ -28,26 +22,21 @@ public class LabelHandler {
     public static JLabel getLabel(String text, int width, int height){
         JLabel label = makeLabel(width, height);
         label.setText(text);
-        label.setFont(textFont);
+        label.setFont(TEXT_FONT);
         return label;
     }
-    public static JLabel getTitleLabel(int width, int height){
-        JLabel label = makeLabel(width, height);
-        label.setFont(titleFont);
-        return label;
-    }
+
     //TODO: usati solo in PlayerDataPanel
     public static JLabel getTitleLabel(String text , int width, int height){
         JLabel label = makeLabel(width, height);
         label.setText(text);
-        label.setFont(titleFont);
+        label.setFont(TITLE_FONT);
         return label;
-
     }
 
     public static JLabel getTitleLabel(String text , int alignment){
         JLabel label = new JLabel(text);
-        label.setFont(titleFont);
+        label.setFont(TITLE_FONT);
         label.setHorizontalAlignment(alignment);
         return label;
     }

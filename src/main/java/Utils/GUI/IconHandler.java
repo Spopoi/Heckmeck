@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class IconHandler {
     private static final int DICE_SIZE = 60;
-    public static final int CHOSEN_DICE_SIZE = 50;
+    public static final int CHOSEN_DICE_SIZE = 45;
     private static final int PLAYER_TILE_ICON_WIDTH = 40;
     private static final int PLAYER_TILE_ICON_HEIGHT = 50;
     private static final int TILE_ROUNDED_WIDTH = 6;
