@@ -42,7 +42,7 @@ public record Tile(int number) implements Comparable<Tile> {
         try {
             resourcePath = Path.of(tilesResource.toURI());
         } catch (URISyntaxException ex) {
-            System.out.println(ex);
+            ex.printStackTrace();
         }
         return resourcePath;
     }

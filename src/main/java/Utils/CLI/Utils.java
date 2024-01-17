@@ -41,7 +41,7 @@ public class Utils {
         try {
             resourcePath = Path.of(tilesResource.toURI());
         } catch (URISyntaxException ex) {
-            System.out.println(ex);
+            ex.printStackTrace();
         }
         return resourcePath;
     }

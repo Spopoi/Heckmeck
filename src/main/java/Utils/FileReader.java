@@ -19,7 +19,7 @@ public class FileReader {
         try {
             reader = new JsonReader(new java.io.FileReader(filePath.toString()));
         } catch (FileNotFoundException ex) {
-            System.err.println(ex);
+            ex.printStackTrace();
         }
         TypeToken<Map<Integer, String>> returnType = new TypeToken<>() {};
         return gson.fromJson(reader, returnType);
@@ -35,7 +35,7 @@ public class FileReader {
                 res.append(line).append(newLine);  // Notice that will add a newline at the end
             }
         } catch (IOException ex) {
-            System.err.println(ex);
+            ex.printStackTrace();
         }
         return res.toString();
     }
@@ -46,7 +46,7 @@ public class FileReader {
         try {
             reader = new JsonReader(new java.io.FileReader(filePath.toString()));
         } catch (FileNotFoundException ex) {
-            System.err.println(ex);
+            ex.printStackTrace();
         }
         TypeToken<Map<Die.Face, String>> returnType = new TypeToken<>() {};
         return gson.fromJson(reader, returnType);

@@ -51,7 +51,7 @@ public class Die {
         try {
             resourcePath = Path.of(dieFacesResource.toURI());
         } catch (URISyntaxException ex) {
-            System.out.println(ex);
+            ex.printStackTrace();
         }
         return resourcePath;
     }
