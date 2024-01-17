@@ -3,7 +3,7 @@ package Utils.GUI;
 import GUI.Panels.RoundedPanel;
 import Heckmeck.Components.Die;
 import Heckmeck.Components.Tile;
-import Utils.MessageManager;
+import Utils.PropertiesManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Utils.MessageManager.getPathPropertiesPath;
+import static Utils.PropertiesManager.getPathPropertiesPath;
 
 public class IconHandler {
     private static final int DICE_SIZE = 60;
@@ -23,11 +23,11 @@ public class IconHandler {
     private static final int TILE_ROUNDED_HEIGHT = 25;
     private static final int TILE_HEIGHT = 70;
     private static final int TILE_WIDTH = 50;
-    private static final MessageManager path_manager;
+    private static final PropertiesManager path_manager;
 
     static {
         try {
-            path_manager = new MessageManager(getPathPropertiesPath());
+            path_manager = new PropertiesManager(getPathPropertiesPath());
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

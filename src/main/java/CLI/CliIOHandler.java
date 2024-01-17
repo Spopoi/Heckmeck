@@ -1,6 +1,6 @@
 package CLI;
 
-import Utils.MessageManager;
+import Utils.PropertiesManager;
 import Utils.CLI.SummaryTable;
 import Utils.CLI.TextBlock;
 import Utils.CLI.Utils;
@@ -16,7 +16,7 @@ import java.io.PrintStream;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static Utils.MessageManager.getIOHandlerPropertiesPath;
+import static Utils.PropertiesManager.getIOHandlerPropertiesPath;
 
 public class CliIOHandler implements IOHandler {
 
@@ -24,12 +24,12 @@ public class CliIOHandler implements IOHandler {
     private Scanner scan;
     private PrintStream outputWhereToPrint;
 
-    private final MessageManager messageManager;
+    private final PropertiesManager propertiesManager;
 
     public CliIOHandler(InputStream inputStream, PrintStream printStream) throws IOException {
         setOutput(printStream);
         scan = new Scanner(inputStream);
-        messageManager = new MessageManager(getIOHandlerPropertiesPath());
+        propertiesManager = new PropertiesManager(getIOHandlerPropertiesPath());
     }
 
     public void setInput(InputStream inputStream) {
@@ -49,7 +49,7 @@ public class CliIOHandler implements IOHandler {
 
     public void showWelcomeMessage() {
         printMessage(Utils.getLogo());
-        printMessage(messageManager.getMessage("welcomeMsg"));
+        printMessage(propertiesManager.getMessage("welcomeMsg"));
     }
 
     boolean wantToHost() {

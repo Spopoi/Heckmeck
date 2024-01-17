@@ -1,12 +1,12 @@
 package Heckmeck;
 
 import Heckmeck.Components.*;
-import Utils.MessageManager;
+import Utils.PropertiesManager;
 
 import java.io.IOException;
 import java.util.*;
 import static Heckmeck.Components.Die.Face;
-import static Utils.MessageManager.getGameMessagePropertiesPath;
+import static Utils.PropertiesManager.getGameMessagePropertiesPath;
 
 public class Game {
     private Player[] players;
@@ -14,11 +14,11 @@ public class Game {
     private BoardTiles boardTiles;
     private final IOHandler io;
     private Player actualPlayer;
-    private final MessageManager messageManager;
+    private final PropertiesManager propertiesManager;
 
     public Game(IOHandler io) throws IOException {
         this.io = io;
-        messageManager = new MessageManager(getGameMessagePropertiesPath());
+        propertiesManager = new PropertiesManager(getGameMessagePropertiesPath());
     }
 
     public void init(){
@@ -27,7 +27,7 @@ public class Game {
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
         this.actualPlayer = this.players[0];
-        io.printMessage(messageManager.getMessage("gameStartMessage"));
+        io.printMessage(propertiesManager.getMessage("gameStartMessage"));
     }
     public void play(){
         int playerNumber = 0;
