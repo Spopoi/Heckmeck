@@ -114,7 +114,6 @@ public class Game {
         return false;
     }
 
-    //TODO: unire i due bust
     private boolean roll(){
         if(dice.getNumOfDice() <= 0) {
             bust();

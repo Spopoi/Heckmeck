@@ -35,13 +35,10 @@ public class ButtonHandler {
         return new JButton(new ImageIcon(imagePath));
     }
 
-    public static JToggleButton makeDiceButton(Die die) {
+    public static JToggleButton makeDieButton() {
         JToggleButton dieButton = new JToggleButton();
-        Die.Face dieFace = die.getDieFace();
-        dieButton.setIcon(getDieIcon(dieFace));
         dieButton.setFocusPainted(false);
         dieButton.setBorder(null);
-        dieButton.putClientProperty("originalFace", dieFace);
         return dieButton;
     }
 }

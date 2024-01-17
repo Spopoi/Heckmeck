@@ -2,15 +2,18 @@ package GUI.Panels;
 
 import Heckmeck.Components.Dice;
 import Heckmeck.Components.Die;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static Utils.GUI.ButtonHandler.makeDiceButton;
+import java.util.ArrayList;
+
+import static Heckmeck.Rules.INITIAL_NUMBER_OF_DICE;
+import static Utils.GUI.ButtonHandler.makeDieButton;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;
 
-//TODO: refactoring, adding an init method and modify updateDice()
 public class DicePanel extends JPanel {
     private Die.Face chosenFace;
     private final static int topEmptyBorder = 0;
@@ -20,28 +23,59 @@ public class DicePanel extends JPanel {
     private final static int maxDicePerRow = 3;
     private final static int rollingAnimationDuration = 130;
     private final static int rollingAnimationNumberOfChangingIcons = 15;
+    private ArrayList<RoundedPanel> diceList;
 
     public DicePanel(){
         super();
         setLayout(new GridBagLayout());
         setBorder(BorderFactory.createEmptyBorder(topEmptyBorder, sideEmptyBorder, bottomEmptyBorder, sideEmptyBorder));
         setOpaque(false);
+        init();
     }
 
-    public void updateDice(Dice dice){
-        this.removeAll();
-        reset();
+    private void init(){
         GridBagConstraints gbc = initGridBagConstraints();
-        for (Die die : dice.getDiceList()) {
+        diceList = new ArrayList<>();
+        for (int i = 0; i < INITIAL_NUMBER_OF_DICE ; i++){
             RoundedPanel roundedDie = new RoundedPanel(null);
-            JToggleButton dieButton = setDiceButton(die);
+            JToggleButton dieButton = makeDieButton();
             roundedDie.add(dieButton);
             add(roundedDie, gbc);
+            diceList.add(roundedDie);
             updateGridBagConstraints(gbc);
         }
     }
+
+    public void updateDice(Dice dice){
+        reset();
+        int i = 0;
+        for(Die die : dice.getDiceList()){
+            RoundedPanel diePanel = diceList.get(i);
+            diePanel.setVisible(true);
+            JToggleButton button = (JToggleButton) diePanel.getComponent(0);
+            updateDieButton(button, die.getDieFace());
+            i++;
+        }
+        while(i < INITIAL_NUMBER_OF_DICE){
+            RoundedPanel diePanel = diceList.get(i);
+            diePanel.setVisible(false);
+            i++;
+        }
+    }
+
+    private void updateDieButton(JToggleButton button, Die.Face face){
+        button.setIcon(getDieIcon(face));
+        button.setActionCommand(face.toString());
+        button.addActionListener(e -> chosenFace = Die.Face.valueOf(button.getActionCommand()));
+        button.setSelected(false);
+    }
+
     public void reset(){
         chosenFace = null;
+    }
+
+    public Die.Face getChosenFace(){
+        return chosenFace;
     }
 
     private void updateGridBagConstraints(GridBagConstraints gbc) {
@@ -60,12 +94,6 @@ public class DicePanel extends JPanel {
         gbc.anchor = NORTH;
         gbc.fill = GridBagConstraints.NONE;
         return gbc;
-    }
-
-    private JToggleButton setDiceButton(Die die) {
-        JToggleButton dieButton = makeDiceButton(die);
-        dieButton.addActionListener(e -> chosenFace = die.getDieFace());
-        return dieButton;
     }
 
     public void rollDiceAnimation() {
@@ -93,7 +121,7 @@ public class DicePanel extends JPanel {
                     for (Component component : getComponents()) {
                         if (component instanceof RoundedPanel roundedPanel) {
                             JToggleButton dieButton = (JToggleButton) roundedPanel.getComponent(0);
-                            Die.Face originalFace = (Die.Face) dieButton.getClientProperty("originalFace");
+                            Die.Face originalFace = Die.Face.valueOf(dieButton.getActionCommand());
                             dieButton.setIcon(getDieIcon(originalFace));
                             dieButton.setEnabled(true);
                         }
@@ -103,8 +131,5 @@ public class DicePanel extends JPanel {
             }
         });
         timer.start();
-    }
-    public Die.Face getChosenFace(){
-        return chosenFace;
     }
 }
