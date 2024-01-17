@@ -75,12 +75,6 @@ public class GUIIOHandler implements IOHandler {
         messagePanel.showLogMessage(text);
     }
 
-    public void showWelcomeMessage() {
-        String message = messages.getProperty("welcomeMessage");
-        showInternalMessageDialog(null, message, messages.getProperty("heckmeckMessage"), INFORMATION_MESSAGE , WORM_ICON);
-    }
-
-
     public String askIPToConnect() {
         return MessagePanel.showInputDialog(messages.getProperty("askIP"));
     }
@@ -202,9 +196,6 @@ public class GUIIOHandler implements IOHandler {
         playSound(ROLLING_SOUND_PATH, ACTIONS_MUSIC_VOLUME);
     }
 
-    @Override
-    public void askRollDiceConfirmation(Player player){
-    }
     @Override
     public void showBustMessage() {  // todo: sta roba senza il delay non funzia più??
         try {

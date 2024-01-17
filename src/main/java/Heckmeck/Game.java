@@ -16,7 +16,6 @@ public class Game {
     }
 
     //TODO: add property
-
     public void init(){
         int numberOfPlayers = io.chooseNumberOfPlayers();
         this.players = setupPlayers(numberOfPlayers);
@@ -121,7 +120,6 @@ public class Game {
             bust();
             return false;
         }
-        io.askRollDiceConfirmation(actualPlayer);
         dice.rollDice();
         io.showRolledDice(dice);
         if(dice.canPickAFace()){

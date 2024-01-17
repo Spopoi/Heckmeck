@@ -160,17 +160,13 @@ public class CliIOHandler implements IOHandler {
     }
 
     @Override
-    public void askRollDiceConfirmation(Player player) {
-        String mainMessage = "# " + player.getName() + ": hit enter to roll dice #";
+    public void showRolledDice(Dice dice) {
+        String mainMessage = "# hit enter to roll dice #";
         String separator = "#".repeat(mainMessage.length());
         printMessage(newLine + separator + newLine +
                 mainMessage + newLine +
                 separator);
         getInputString();
-    }
-
-    @Override
-    public void showRolledDice(Dice dice) {
         printMessage(Utils.collectionToString(dice.getDiceList()));
     }
 

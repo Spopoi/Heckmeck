@@ -93,9 +93,6 @@ public class TCPIOHandler implements IOHandler {
         );
     }
     @Override
-    public void askRollDiceConfirmation(Player player) {
-    }
-    @Override
     public void showRolledDice(Dice dice) {
         sendBroadCast(
                 Message.generateMessage().

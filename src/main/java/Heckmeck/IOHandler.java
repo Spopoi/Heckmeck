@@ -11,7 +11,6 @@ public interface IOHandler {
     int chooseNumberOfPlayers();
     String choosePlayerName(Player player);
     void showBoardTiles(BoardTiles boardTiles);
-    void askRollDiceConfirmation(Player player); // TODO mettere dentro a showRolledDice
     void showRolledDice(Dice dice);
     boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber);
     boolean wantToSteal(Player currentPlayer, Player robbedPlayer);
