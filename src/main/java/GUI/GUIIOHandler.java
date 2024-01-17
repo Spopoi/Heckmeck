@@ -34,12 +34,7 @@ public class GUIIOHandler implements IOHandler {
 
     public GUIIOHandler(JFrame frame){
         this.frame = frame;
-        try {
-            propertiesManager = new PropertiesManager(getIOHandlerPropertiesPath());
-        } catch (IOException e) {
-            showMessageDialog(null, "Error loading the file containing the messages of the game" , "Heckmeck ERROR", JOptionPane.ERROR_MESSAGE);
-            exit();
-        }
+        propertiesManager = getPropertiesManager();
         initPanels();
     }
 
