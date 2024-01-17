@@ -46,7 +46,7 @@ run.configure {
 
 task runGUI(type: JavaExec) {
     group 'org.example'
-    description "Run the main class with JavaExecTask"
+    description "Run the HeckmeckGUI class with JavaExecTask"
     classpath = sourceSets.main.runtimeClasspath
     main = 'GUI.HeckmeckGUI'
 }
