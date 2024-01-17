@@ -6,15 +6,13 @@ import static GUI.HeckmeckGUI.*;
 import static Utils.GUI.ButtonHandler.createButton;
 
 public class MenuPanel extends ImagePanel {
-    //TODO: manage path
-    private static final String HECKMECK_BACKGROUND_PATH = "src/main/resources/GUI/heckmeckBackground.jpg";
     private static final int BUTTON_PANEL_TOP_INSET = 180;
     private static final Dimension BUTTON_PANEL_DIMENSIONS = new Dimension(350, 250);
     private static final int NUMBER_OF_BUTTONS = 4;
     private static final int VERTICAL_BUTTONS_GAP = 10;
 
-    public MenuPanel() {
-        super(HECKMECK_BACKGROUND_PATH);
+    public MenuPanel(String backgroundPath) {
+        super(backgroundPath);
         setLayout(new GridBagLayout());
         JPanel buttonsPanel = createButtonsPanel();
         add(buttonsPanel, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER,

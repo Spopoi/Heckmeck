@@ -7,7 +7,6 @@ import Utils.PropertiesManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.stream.IntStream;
 
 import static GUI.HeckmeckGUI.*;
@@ -15,12 +14,11 @@ import static Heckmeck.Rules.MAX_NUM_OF_PLAYERS;
 import static Heckmeck.Rules.MIN_NUM_OF_PLAYERS;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static Utils.GUI.SoundHandler.*;
-import static Utils.PropertiesManager.getIOHandlerPropertiesPath;
 import static javax.swing.JOptionPane.*;
 
 public class GUIIOHandler implements IOHandler {
     private final JFrame frame;
-    private PropertiesManager propertiesManager;
+    private final PropertiesManager propertiesManager;
     private PlayerDataPanel playerPane;
     private DicePanel dicePanel;
     private JScrollPane otherPlayerPane;
@@ -40,7 +38,7 @@ public class GUIIOHandler implements IOHandler {
 
     private void initPanels(){
         lateralPanelWidth = (int)(frame.getWidth() * PANEL_WIDTH_TO_FRAME_RATIO);
-        playerPane = new PlayerDataPanel(BACKGROUND_IMAGE_PATH);
+        playerPane = new PlayerDataPanel(GAME_BACKGROUND_PATH);
         playerPane.setPreferredSize(new Dimension(lateralPanelWidth,0));
 
         messagePanel = new MessagePanel();
@@ -190,6 +188,5 @@ public class GUIIOHandler implements IOHandler {
             e.printStackTrace();
         }
         showMessageDialog(null, propertiesManager.getMessage("bust") ,  propertiesManager.getMessage("heckmeckTitle"), JOptionPane.ERROR_MESSAGE);
-
     }
 }
