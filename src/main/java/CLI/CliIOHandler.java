@@ -1,5 +1,6 @@
 package CLI;
 
+import TCP.Client.MessageHandler;
 import Utils.PropertiesManager;
 import Utils.CLI.SummaryTable;
 import Utils.CLI.TextBlock;
@@ -52,23 +53,23 @@ public class CliIOHandler implements IOHandler {
     }
 
     boolean wantToHost() {
-        printMessage("Do you want to host the game? Press 'y' or 'n' to select:");
-        return getYesOrNoAnswer("Incorrect decision, please select 'y' to play remotely 'n' to play locally");
+        printMessage(propertiesManager.getMessage("wantToHost") + " (y/n)");
+        return getYesOrNoAnswer(propertiesManager.getMessage("invalidYN"));
     }
 
     public void backToMenu() {
-        printMessage("Press ENTER to go back to main menu");
+        printMessage(propertiesManager.getMessage("backToMenu"));
         getInputString();
     }
 
     public String askIPToConnect() {
-        printMessage("Insert IP address of the host");
+        printMessage(propertiesManager.getMessage("askIP"));
         return getInputString();
     }
 
     @Override
     public int chooseNumberOfPlayers() {
-        printMessage("Choose number of players between 2 and 7:");
+        printMessage(propertiesManager.getMessage("chooseNumberPlayer"));
         while (true) {
             String userInput = getInputString();
             if (userInput.isBlank()) {
@@ -79,10 +80,10 @@ public class CliIOHandler implements IOHandler {
                     if (Rules.validNumberOfPlayer(numberOfPlayer)) {
                         return numberOfPlayer;
                     } else {
-                        printMessage("Input is not correct, choose a number between 2 and 7:");
+                        printMessage(propertiesManager.getMessage("inavlidPlayerNum"));
                     }
                 } catch (NumberFormatException ex) {
-                    printMessage("Input is not correct, choose a number between 2 and 7:");
+                    printMessage(propertiesManager.getMessage("inavlidPlayerNum"));
                 }
             }
         }
@@ -91,7 +92,9 @@ public class CliIOHandler implements IOHandler {
     @Override
     public String choosePlayerName(Player player) {
         while (true) {
-            printMessage("Insert the name for player" + player.getPlayerID() + ":");
+            String message = propertiesManager.getMessage("choosePlayerName").
+                    replace("$PLAYER_ID", Integer.toString(player.getPlayerID()));
+            printMessage(message);
             String playerName = getInputString();
             if (playerName.isBlank()) {
                 printMessage("Name of a player can not be blank.");
@@ -103,7 +106,8 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showTurnBeginConfirm(Player player) {
-        String mainMessage = "# " + player.getName() + ": hit enter to start your turn #";
+        String mainMessage = propertiesManager.getMessage("turnBeginConfirm").
+                replace("$PLAYER_NAME", player.getName());
         String separator = "#".repeat(mainMessage.length());
         printMessage(newLine + separator + newLine +
                 mainMessage + newLine +
@@ -113,7 +117,7 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
-        printMessage("The available tiles on the board now are:");
+        printMessage(propertiesManager.getMessage("availableTiles"));
         printMessage(Utils.collectionToString(boardTiles.getTiles()));
     }
 
@@ -146,23 +150,28 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public boolean wantToPick(Player currentPlayer, int actualDiceScore, int availableTileNumber) {
-        printMessage("Your actual score is: " + actualDiceScore);
-        printMessage("Do you want to pick tile number " + availableTileNumber + " from board?" + newLine +
-                "Press 'y' for picking the tile or 'n' for rolling the remaining dice");
-        return getYesOrNoAnswer("Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice");
+        printMessage(
+                propertiesManager.getMessage("actualScore").
+                        replace("$DICE_SCORE", Integer.toString(actualDiceScore))
+        );
+        printMessage(propertiesManager.getMessage("wantToPick").replace("$TILE_NUMBER", Integer.toString(availableTileNumber)));
+        printMessage(propertiesManager.getMessage("innformHowToPick"));
+        return getYesOrNoAnswer(propertiesManager.getMessage("invalidYN"));
     }
 
     @Override
     public boolean wantToSteal(Player currentPlayer, Player robbedPlayer) {
-        printMessage("Do you want to steal tile number " + robbedPlayer.getLastPickedTile().number() +
-                " from " + robbedPlayer.getName() +
-                "? Press 'y' for stealing or 'n' for continuing your turn:");
-        return getYesOrNoAnswer("Incorrect decision, please select 'y' to steal or 'n' to continue your turn");
+        printMessage(propertiesManager.getMessage("wantToSteal").
+                replace("$TILE_NUMBER", Integer.toString(robbedPlayer.getLastPickedTile().number())).
+                replace("$ROBBED", robbedPlayer.getName())
+                );
+        printMessage(propertiesManager.getMessage("informHowToSteal"));
+        return getYesOrNoAnswer(propertiesManager.getMessage("invalidYN"));
     }
 
     @Override
     public void showRolledDice(Dice dice) {
-        String mainMessage = "# hit enter to roll dice #";
+        String mainMessage = propertiesManager.getMessage("promptRollDice");
         String separator = "#".repeat(mainMessage.length());
         printMessage(newLine + separator + newLine +
                 mainMessage + newLine +
@@ -173,23 +182,25 @@ public class CliIOHandler implements IOHandler {
 
     @Override
     public Die.Face chooseDie(Player currentPlayer) {
-        printMessage("Pick one unselected face:");
+        printMessage(
+                propertiesManager.getMessage("choseDice").
+                        replace("$PLAYER_NAME", currentPlayer.getName())
+        );
         while (true) {
             String chosenDice = getInputString();
-            // TODO: refactor Hide-delegate?
-            if (Die.stringToFaceMap.containsKey(chosenDice)) {
-                return Die.stringToFaceMap.get(chosenDice);
+            if (Die.isFaceLegit(chosenDice)) {
+                return Die.getFaceByString(chosenDice);
             } else if (chosenDice.isBlank()) {
                 continue;
             } else {
-                printMessage("Incorrect input, choose between {1, 2, 3, 4, 5, w}:");
+                printMessage(getPropertiesManager().getMessage("choseDieIncorrect"));
             }
         }
     }
 
     @Override
     public void showBustMessage() {
-        printMessage("#####################" + newLine + "# BUUUUUSSSTTTTTT!! #" + newLine + "#####################");
+        printMessage("#####################" + newLine + propertiesManager.getMessage("bust") + newLine + "#####################");
     }
 
     @Override
@@ -226,7 +237,7 @@ public class CliIOHandler implements IOHandler {
             } else if (userChoice.isBlank()) {
                 continue;
             } else {
-                printMessage("Incorrect input, insert one possible choice (1, 2, 3, 4)");
+                printMessage(propertiesManager.getMessage("invalidInitialChoice"));
             }
         }
     }

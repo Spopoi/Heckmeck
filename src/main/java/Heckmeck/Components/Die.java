@@ -55,8 +55,6 @@ public class Die {
         }
         return resourcePath;
     }
-
-
     private Die(){
     }
     public static Die generateDie(Face face){
@@ -76,6 +74,10 @@ public class Die {
     // TODO: Mark private stringToFaceMap?
     public static Face getFaceByString(String text) { // TODO da eliminare
         return stringToFaceMap.get(text);
+    }
+
+    public static boolean isFaceLegit(String face){
+        return stringToFaceMap.containsKey(face);
     }
 
     public int getScore(){

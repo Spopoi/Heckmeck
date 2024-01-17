@@ -16,6 +16,7 @@ import java.io.*;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TestCliInputOutput {
 
@@ -64,9 +65,9 @@ public class TestCliInputOutput {
             inputOutputHandler.choosePlayerName(player);
         } catch (java.util.NoSuchElementException ex){
             String expectedResponse = """
-                    Insert the name for player1:
+                    Insert player name for player 1:
                     Name of a player can not be blank.
-                    Insert the name for player1:
+                    Insert player name for player 1:
                     """;
             String actualResponse = fakeStandardOutput.toString();
             Assertions.assertEquals(expectedResponse, standardizeLineSeparator(actualResponse));
@@ -135,9 +136,10 @@ public class TestCliInputOutput {
     @ParameterizedTest
     @MethodSource("userInputForSelectingDiceProvider")
     void rejectWrongInputsWhenUserChooseDie(String userInput) {
+        when(fakePlayer.getName()).thenReturn("player");
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         String expectedResponse = """
-                    Pick one unselected face:
+                    player, pick one unselected face:
                     Incorrect input, choose between {1, 2, 3, 4, 5, w}:
                     """;
         try {
@@ -151,9 +153,10 @@ public class TestCliInputOutput {
     @ParameterizedTest
     @MethodSource("blankUserInputForSelectingDiceProvider")
     void skipBlankInputsWhenUserChooseDie(String userInput) {
+        when(fakePlayer.getName()).thenReturn("player");
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         String expectedResponse = """
-                    Pick one unselected face:
+                    player, pick one unselected face:
                     """;
         try {
             testInputOutput.chooseDie(fakePlayer);
@@ -167,6 +170,7 @@ public class TestCliInputOutput {
     @ParameterizedTest
     @MethodSource("correctUserInputForSelectingDiceProvider")
     void readDieFaceFromValidUserInput(String userInput, String faceAsString) {
+        when(fakePlayer.getName()).thenReturn("player");
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         Die.Face expectedFace = Die.getFaceByString(faceAsString);
         Die.Face obtainedFace = testInputOutput.chooseDie(fakePlayer);
@@ -178,10 +182,10 @@ public class TestCliInputOutput {
     void printWarningForWrongAnswersWhenPickingTiles(String userInput) {
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         String expectedResponse = """
-                    Your actual score is: 1
-                    Do you want to pick tile number 1 from board?
+                    Actual score: 1
+                    Do you want to pick tile number 1  from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
-                    Incorrect decision, please select 'y' for picking or 'n' for rolling your remaining dice
+                    Incorrect decision, please enter 'y' or 'n'
                     """;
         try {
             testInputOutput.wantToPick(fakePlayer, 1, 1);
@@ -196,8 +200,8 @@ public class TestCliInputOutput {
     void skipBlankAnswersWhenPickingTiles(String userInput) {
         testInputOutput.setInput(new ByteArrayInputStream(userInput.getBytes()));
         String expectedResponse = """
-                    Your actual score is: 1
-                    Do you want to pick tile number 1 from board?
+                    Actual score: 1
+                    Do you want to pick tile number 1  from board?
                     Press 'y' for picking the tile or 'n' for rolling the remaining dice
                     """;
         try {
