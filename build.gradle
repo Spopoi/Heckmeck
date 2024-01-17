@@ -43,4 +43,10 @@ run.configure {
     allJvmArgs = ['-Dsun.stdout.encoding=cp437']
 }
 
-mainClassName = 'CLI.Main'
+
+task runGUI(type: JavaExec) {
+    group 'org.example'
+    description "Run the main class with JavaExecTask"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'GUI.HeckmeckGUI'
+}
