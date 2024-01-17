@@ -9,7 +9,7 @@ Structure:
 Project strucure is defined like this:
 - main
   - java
-    - CLI --> Command Line Interface
+    - CLI 
     - GUI
     - Heckmeck
     - TCP
