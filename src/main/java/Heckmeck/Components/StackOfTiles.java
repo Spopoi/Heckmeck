@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class StackOfTiles implements TilesCollection {
 
-    private LinkedList<Tile> stackOfTiles;
+    private final LinkedList<Tile> stackOfTiles;
 
     private StackOfTiles(){
         this.stackOfTiles = new LinkedList<Tile>();

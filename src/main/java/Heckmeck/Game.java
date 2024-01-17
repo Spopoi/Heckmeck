@@ -78,7 +78,7 @@ public class Game {
     }
 
     private boolean canPick(){
-        Tile minValueTile = boardTiles.getTiles().first();
+        Tile minValueTile = boardTiles.tiles().first();
         return dice.getScore() >= minValueTile.number();
     }
 

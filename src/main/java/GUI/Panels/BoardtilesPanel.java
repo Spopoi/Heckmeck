@@ -20,7 +20,7 @@ public class BoardtilesPanel extends JPanel {
 
     public void update(BoardTiles tiles){
         removeAll();
-        for (Tile tile : tiles.getTiles()) {
+        for (Tile tile : tiles.tiles()) {
             add(getTileIcon(tile.number()));
         }
         revalidate();

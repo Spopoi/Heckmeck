@@ -117,7 +117,7 @@ public class CliIOHandler implements IOHandler {
     @Override
     public void showBoardTiles(BoardTiles boardTiles) {
         printMessage(propertiesManager.getMessage("availableTiles"));
-        printMessage(Utils.collectionToString(boardTiles.getTiles()));
+        printMessage(Utils.collectionToString(boardTiles.tiles()));
     }
 
     @Override

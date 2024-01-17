@@ -50,9 +50,7 @@ public class Client{
         out.println(line);
     }
     public String readRxBuffer() throws IOException {
-        String resp = null;
-        resp = in.readLine();
-        return resp;
+        return in.readLine();
     }
 
     public Message readIncomingMessage() throws IOException {

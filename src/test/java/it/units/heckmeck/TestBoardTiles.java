@@ -32,7 +32,7 @@ public class TestBoardTiles {
     void check_tiles_initialization(){
         BoardTiles boardTiles = BoardTiles.init();
         TreeSet<Tile> expectedTiles = setupTiles();
-        Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(boardTiles.tiles(), expectedTiles);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class TestBoardTiles {
 
         TreeSet<Tile> expectedTiles = setupTiles();
         expectedTiles.add(tileToTest);
-        Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(boardTiles.tiles(), expectedTiles);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class TestBoardTiles {
         TreeSet<Tile> expectedTiles = setupTiles();
         expectedTiles.remove(expectedTiles.first());
 
-        Assertions.assertEquals(boardTiles.getTiles(), expectedTiles);
+        Assertions.assertEquals(boardTiles.tiles(), expectedTiles);
     }
 
     private TreeSet<Tile> setupTiles() {
@@ -73,7 +73,7 @@ public class TestBoardTiles {
     @Test
     void check_order(){
         BoardTiles boardTiles = BoardTiles.init();
-        List<Tile> listTiles = boardTiles.getTiles().stream().toList();
+        List<Tile> listTiles = boardTiles.tiles().stream().toList();
         boolean correctAscendantOrder = true;
         for (int i = 0; i < Rules.NUMBER_OF_TILES - 1; i++) {
             if (listTiles.get(i).number() > listTiles.get(i + 1).number()) {
@@ -91,7 +91,7 @@ public class TestBoardTiles {
 
         boardTiles.remove(tileToTest);
         boardTiles.add(tileToTest);
-        List<Tile> listTiles = boardTiles.getTiles().stream().toList();
+        List<Tile> listTiles = boardTiles.tiles().stream().toList();
         boolean correctAscendantOrder = true;
         for (int i = 0; i < Rules.NUMBER_OF_TILES - 1; i++) {
             if (listTiles.get(i).number() > listTiles.get(i + 1).number()) {
@@ -108,7 +108,7 @@ public class TestBoardTiles {
     void check_bust(){
         BoardTiles boardTiles = BoardTiles.init();
         boardTiles.removeLastTile();
-        TreeSet<Tile> tilesList = boardTiles.getTiles();
+        TreeSet<Tile> tilesList = boardTiles.tiles();
         Tile expectedBustedTile = Tile.generateTile(36);
         assertFalse(tilesList.contains(expectedBustedTile));
     }
