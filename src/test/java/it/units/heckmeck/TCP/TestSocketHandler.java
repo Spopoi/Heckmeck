@@ -39,7 +39,7 @@ class TestSocketHandler {
     }
 
     @Test
-    void testWriteLine() throws IOException {
+    void testWriteLine() {
         clientHandler.writeAndRead("Test Message");
         verify(out).println("Test Message");
     }

@@ -30,9 +30,6 @@ public class TestCliInputOutput {
 
     private final CliIOHandler testInputOutput = new CliIOHandler(System.in, fakeOutputStream);
 
-    public TestCliInputOutput() throws IOException {
-    }
-
 
     @ParameterizedTest
     @MethodSource("wrongUserInputForNumberOfPlayersProvider")
@@ -53,7 +50,7 @@ public class TestCliInputOutput {
 
     @ParameterizedTest
     @MethodSource("blankUserInputForPlayerNameProvider")
-    void blankPlayerNameNotAccepted(String userInput) throws IOException {
+    void blankPlayerNameNotAccepted(String userInput) {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
         ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();
@@ -87,7 +84,7 @@ public class TestCliInputOutput {
 
     @ParameterizedTest
     @MethodSource("correctUserInputForPlayerNameProvider")
-    void correctPlayerNameAreAccepted(String userInput, String expectedReadPlayerName) throws IOException {
+    void correctPlayerNameAreAccepted(String userInput, String expectedReadPlayerName) {
         InputStream fakeStandardInput = new ByteArrayInputStream(userInput.getBytes());
         System.setIn(fakeStandardInput);
         ByteArrayOutputStream fakeStandardOutput = new ByteArrayOutputStream();

@@ -19,13 +19,13 @@ public class TestGameServer {
 
     private GameServer gameServer;
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() {
 
         gameServer = new GameServer(2);
 
     }
     @AfterEach
-    void closeUp() throws IOException {
+    void closeUp() {
         gameServer.close();
     }
 
