@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.concurrent.Semaphore;
 
 import static Utils.GUI.ButtonHandler.createYesNoButton;
-import static Utils.GUI.LabelHandler.textFont;
+import static Utils.GUI.LabelHandler.TEXT_FONT;
 
 public class MessagePanel extends JPanel {
     private final JTextPane logTextPane;
@@ -42,7 +42,7 @@ public class MessagePanel extends JPanel {
         final JTextPane logTextPane;
         logTextPane = new JTextPane();
         logTextPane.setEditable(false);
-        logTextPane.setFont(textFont);
+        logTextPane.setFont(TEXT_FONT);
         logTextPane.setFocusable(false);
         return logTextPane;
     }
