@@ -10,14 +10,12 @@ import Heckmeck.Components.Dice;
 import Heckmeck.Components.Die;
 import Heckmeck.Components.Player;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.stream.Stream;
 
 import static Heckmeck.Launcher.getPropertiesManager;
-import static Utils.PropertiesManager.getIOHandlerPropertiesPath;
 
 public class CliIOHandler implements IOHandler {
 
