@@ -15,13 +15,11 @@ public class ClientHandler implements Runnable{
         this.in = in;
         this.out = out;
         this.playerId = playerId;
-
     }
     public void run(){
         System.out.println("Connection established for player number: " + playerId);
         initClient();
     }
-
     public int getPlayerID(){
         return this.playerId;
     }

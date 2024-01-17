@@ -9,7 +9,7 @@ Heckmeck am bratwurm.
 For more details, see [Official page](https://www.zoch-verlag.com/zoch_en/categories/family-games/heckmeck-am-bratwurmeck-601125200-en.html?wse=1).
 
 
-HeckMeck features 16 tiles numbered 21 to 34, displaying varying worm quantities, and 8 dice with numbers 1-5 and a worm image on the sixth side.
+HeckMeck features 15 tiles numbered 21 to 36, displaying varying worm quantities, and 8 dice with numbers 1-5 and a worm image on the sixth side.
 
 The goal is to accumulate the most worms on tiles by the end of the game.
 Set up by arranging all tiles number/worm side up in the center, ordered by size.
@@ -33,7 +33,7 @@ When no tiles remain in the center, players add up worm counts on their tiles. T
 
 ---
 # Structure:
-Project strucure is defined like this:
+Project structure is defined like this:
 - main
   - java
     - CLI
@@ -42,7 +42,7 @@ Project strucure is defined like this:
     - TCP
     - Utils
 
-| Element  | Description                             |
+| Package  | Description                             |
 |----------|-----------------------------------------|
 | CLI      | Command Line Interface + CLI launcher   |
 | GUI      | Graphical User Interface + GUI launcher |
@@ -52,7 +52,7 @@ Project strucure is defined like this:
 
 
 ---
-# HOW to run:
+# How to run:
 ## Command Line Interface:
 
 ```
