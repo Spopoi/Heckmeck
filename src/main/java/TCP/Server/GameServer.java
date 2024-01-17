@@ -30,7 +30,12 @@ public class GameServer extends Launcher implements Runnable {
     public void run() {
         acceptConnections();
         TCPIOHandler io = new TCPIOHandler(clients);
-        startGame(io);
+        try {
+            startGame(io);
+        } catch (IOException e) {
+            // TODO: should we notify also clients??
+            throw new RuntimeException(e);
+        }
         close();
     }
 

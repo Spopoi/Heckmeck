@@ -8,7 +8,9 @@ public class MessageManager {
 
     public enum PropertiesFileIdentifier {
 
-        IOHANDLER_MESSAGES ("src/main/resources/IOHandlerMessages.properties");
+        IOHANDLER_MESSAGES ("src/main/resources/IOHandlerMessages.properties"),
+
+        GAME_MESSAGES("src/main/resources/GameMessages.properties");
 
         private final String pathAsString;
 

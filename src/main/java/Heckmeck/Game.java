@@ -1,7 +1,9 @@
 package Heckmeck;
 
 import Heckmeck.Components.*;
+import Utils.MessageManager;
 
+import java.io.IOException;
 import java.util.*;
 import static Heckmeck.Components.Die.Face;
 public class Game {
@@ -10,19 +12,20 @@ public class Game {
     private BoardTiles boardTiles;
     private final IOHandler io;
     private Player actualPlayer;
+    private MessageManager messageManager;
 
-    public Game(IOHandler io) {
+    public Game(IOHandler io) throws IOException {
         this.io = io;
+        messageManager = new MessageManager(MessageManager.PropertiesFileIdentifier.GAME_MESSAGES);
     }
 
-    //TODO: add property
     public void init(){
         int numberOfPlayers = io.chooseNumberOfPlayers();
         this.players = setupPlayers(numberOfPlayers);
         this.dice = Dice.init();
         this.boardTiles = BoardTiles.init();
         this.actualPlayer = this.players[0];
-        io.printMessage("OK, let's begin!");
+        io.printMessage(messageManager.getMessage("gameStartMessage"));
     }
     public void play(){
         int playerNumber = 0;

@@ -2,7 +2,6 @@ package GUI;
 
 import GUI.Panels.*;
 import Heckmeck.*;
-import TCP.Client.Client;
 import Utils.TCP.ConnectionHandler;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 
@@ -104,7 +103,12 @@ public class HeckmeckGUI extends Launcher{
         final var worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() {
-                startGame(io);
+                try {
+                    startGame(io);
+                } catch (IOException e) {
+                    // TODO: Show a Panel with the error message and exit(?)
+                    throw new RuntimeException(e);
+                }
                 return null;
             }
         };
