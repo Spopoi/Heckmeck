@@ -22,6 +22,7 @@ public class ConnectionHandler {
             while (networkInterfaces.hasMoreElements()) {
                 NetworkInterface networkInterface = networkInterfaces.nextElement();
 
+                // Check if the interface is not a loopback and is up
                 if (!networkInterface.isLoopback() && networkInterface.isUp()) {
                     Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
 
@@ -56,7 +57,7 @@ public class ConnectionHandler {
         return new ClientHandler(playerID, in, out);
     }
 
-    public static Client createClient(String IP, IOHandler io){
+    public static Client startClient(String IP, IOHandler io){
         Socket clientSocket;
         PrintWriter out;
         BufferedReader in;
@@ -72,9 +73,7 @@ public class ConnectionHandler {
     }
 
     public static void startLocalClient(String IP, IOHandler io){
-        Client cli = createClient(IP, io);
-
-        io.printMessage("Local client started, waiting for your turn to begin");
+        Client cli = startClient(IP, io);
         io.printMessage("Local client started, waiting for your turn to begin");
         try {
             cli.commandInterpreter(); 
@@ -82,16 +81,13 @@ public class ConnectionHandler {
             io.printError("Server has been disconnected, back to main menu");
         }
     }
+
     public static void startLocalClient(IOHandler io){
         startLocalClient("127.0.0.1", io);
     }
 
     public static void startGameServer(int  numOfPlayers){
         GameServer gameServer = new GameServer(numOfPlayers);
-        Thread t = new Thread(gameServer);
-        t.start();
-        while(!t.isAlive()){
-
-        }
+        new Thread(gameServer).start();
     }
 }
