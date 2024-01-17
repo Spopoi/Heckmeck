@@ -33,6 +33,7 @@ application {
 test {
     useJUnitPlatform()
     jvmArgs '--add-opens=java.base/java.lang=ALL-UNNAMED'
+
 }
 
 run {
@@ -42,6 +43,7 @@ run {
 run.configure {
     allJvmArgs = ['-Dsun.stdout.encoding=cp437']
 }
+
 
 
 task runGUI(type: JavaExec) {

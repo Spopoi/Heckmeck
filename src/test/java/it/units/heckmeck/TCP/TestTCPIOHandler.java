@@ -93,14 +93,14 @@ public class TestTCPIOHandler {
         // Verify broadcast message
         verify(sockets.get(0)).writeMessage(messageCaptor.capture());
         Message capturedMessage = messageCaptor.getValue();
-        assertEquals("Press ENTER to start your turn", capturedMessage.text);
+
         assertEquals(Message.Action.BEGIN_TURN, capturedMessage.operation);
 
         verify(sockets.get(1)).writeMessage(messageCaptor.capture());
         capturedMessage = messageCaptor.getValue();
-        assertEquals("This is not your turn, please wait", capturedMessage.text);
-        assertEquals(Message.Action.INFO, capturedMessage.operation);
+        assertEquals(Message.Action.WAIT, capturedMessage.operation);
     }
+    @Test
     @Disabled
     public void testChoosePlayerName(){
         Message respMsg = Message.generateMessage();

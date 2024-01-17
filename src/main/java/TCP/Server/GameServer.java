@@ -29,33 +29,28 @@ public class GameServer extends Launcher implements Runnable {
 
     }
     public void run() {
-        acceptConnections();
-        TCPIOHandler io = new TCPIOHandler(clients);
         try {
+            acceptConnections();
+            TCPIOHandler io = new TCPIOHandler(clients);
             startGame(io);
         } catch (IOException e) {
-            // TODO: should we notify also clients??
             throw new RuntimeException(e);
         }
         close();
     }
 
-    public void acceptConnections(){
-        System.out.println("Room open");
+    public void acceptConnections() throws IOException {
         int playerID = 0;
         while (!isRoomClosed()) {
             Socket clientSocket;
-            try {
-                clientSocket = ss.accept();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+
+            clientSocket = ss.accept();
             System.out.println("Accepted incoming connection #: " + playerID);
             if (clientSocket.isConnected()) {
                 this.clients.add(ConnectionHandler.startClientHandler(playerID, clientSocket));
                 playerID++;
             }
-            if (playerID == Rules.MAX_NUM_OF_PLAYERS || playerID == numOfPlayers) { //TODO metetre anche magicNumber 7 dentro a delle rules?
+            if (playerID == Rules.MAX_NUM_OF_PLAYERS || playerID == numOfPlayers) {
                 closeRoom();
             }
         }

@@ -34,6 +34,7 @@ public class HeckmeckCLI extends Launcher {
                         ConnectionHandler.startGameServer(numOfPlayers);
                         io.printMessage("You are now hosting on this machine: tell your IP address to your friends!");
                         io.printMessage(ConnectionHandler.getLanIpAddress());
+                        io.printMessage("Room opened, waiting for other players");
                         ConnectionHandler.startLocalClient(io);
 
                     } else {
