@@ -77,10 +77,16 @@ public class Client{
             rxMessage = readIncomingMessage();
             if (rxMessage != null) {
                 Message.Action operation = rxMessage.operation;
-                if(operation.equals(BACK_TO_MENU)) break; // TODO è corretto sto break?
+
                 MessageHandlerFunction handler = operationHandlers.get(operation);
-                Message replyMessage = handler.handleMessage(rxMessage);
-                sendMessage(replyMessage);
+                if(handler!= null){
+                    Message replyMessage = handler.handleMessage(rxMessage);
+                    sendMessage(replyMessage);
+                }
+                else{
+                    messageHandler.io.printMessage("Connection with server is closed");
+                    return;
+                };
             }
         }
     }
