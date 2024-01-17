@@ -12,11 +12,7 @@ public class SoundHandler {
     public static final float ACTIONS_MUSIC_VOLUME = 1F;
     public static void playLoopingSound(String soundFilePath, float volume) {
         try {
-            File soundFile = new File(soundFilePath);
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
+            Clip clip = getClip(soundFilePath);
 
             FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             volumeControl.setValue(convertToDecibels(volume));
@@ -30,11 +26,7 @@ public class SoundHandler {
 
     public static void playSound(String soundFilePath, float volume) {
         try {
-            File soundFile = new File(soundFilePath);
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
+            Clip clip = getClip(soundFilePath);
 
             FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             volumeControl.setValue(convertToDecibels(volume));
@@ -44,7 +36,18 @@ public class SoundHandler {
             e.printStackTrace();
         }
     }
+
+    private static Clip getClip(String soundFilePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        File soundFile = new File(soundFilePath);
+        AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioIn);
+        return clip;
+    }
+
     private static float convertToDecibels(float volume) {
         return (float) (Math.log10(volume) * 20);
     }
+
 }
