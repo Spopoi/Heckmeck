@@ -27,7 +27,7 @@ public class CliIOHandler implements IOHandler {
     public CliIOHandler(InputStream inputStream, PrintStream printStream) throws IOException {
         setOutput(printStream);
         scan = new Scanner(inputStream);
-        messageManager = new MessageManager();
+        messageManager = new MessageManager(MessageManager.PropertiesFileIdentifier.IOHANDLER_MESSAGES);
     }
 
     public void setInput(InputStream inputStream) {

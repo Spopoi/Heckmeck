@@ -6,13 +6,27 @@ import java.util.Properties;
 
 public class MessageManager {
 
-    private static final String GAME_MESSAGES_FILE = "src/main/resources/GameMessages.properties";
+    public enum PropertiesFileIdentifier {
+
+        IOHANDLER_MESSAGES ("src/main/resources/IOHandlerMessages.properties");
+
+        private final String pathAsString;
+
+        PropertiesFileIdentifier(String pathAsString) {
+            this.pathAsString = pathAsString;
+        }
+
+        private String getPathAsString() {
+            return pathAsString;
+        }
+
+    }
 
     private final Properties gameMessagesProperties;
 
-    public MessageManager() throws IOException {
+    public MessageManager(PropertiesFileIdentifier fileIdentifier) throws IOException {
         gameMessagesProperties = new Properties();
-        gameMessagesProperties.load(new FileInputStream(GAME_MESSAGES_FILE));
+        gameMessagesProperties.load(new FileInputStream(fileIdentifier.getPathAsString()));
     }
 
     public String getMessage(String key) {

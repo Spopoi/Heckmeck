@@ -11,11 +11,12 @@ public class TestMessageManager {
 
     @Test
     public void correctlyGetMessageFromKey() throws IOException {
-        MessageManager messageManager = new MessageManager();
+        MessageManager messageManager = new MessageManager(MessageManager.PropertiesFileIdentifier.IOHANDLER_MESSAGES);
         String expectedMessage = "                      Welcome in Heckmeck";
 
         String readMessage = messageManager.getMessage("welcomeMsg");
 
         assertEquals(expectedMessage, readMessage);
     }
+
 }
