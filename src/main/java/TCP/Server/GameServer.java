@@ -31,8 +31,8 @@ public class GameServer extends Launcher implements Runnable {
         acceptConnections();
         TCPIOHandler io = new TCPIOHandler(clients);
         startGame(io);
+        close();
     }
-
 
     public void acceptConnections(){
         System.out.println("Room open");

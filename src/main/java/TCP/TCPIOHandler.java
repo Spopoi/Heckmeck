@@ -51,6 +51,7 @@ public class TCPIOHandler implements IOHandler {
         sendBroadCast(  Message.generateMessage().
                         setOperation(Message.Action.BACK_TO_MENU)
         );
+
         //return resp.decision;
     }
     @Override
