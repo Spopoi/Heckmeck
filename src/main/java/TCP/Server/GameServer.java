@@ -1,6 +1,7 @@
 package TCP.Server;
 
 import Heckmeck.Launcher;
+import Heckmeck.Rules;
 import Utils.TCP.ConnectionHandler;
 import Heckmeck.Game;
 import TCP.TCPIOHandler;
@@ -54,7 +55,7 @@ public class GameServer extends Launcher implements Runnable {
                 this.clients.add(ConnectionHandler.startClientHandler(playerID, clientSocket));
                 playerID++;
             }
-            if (playerID == 7 || playerID == numOfPlayers) { //TODO metetre anche magicNumber 7 dentro a delle rules?
+            if (playerID == Rules.MAX_NUM_OF_PLAYERS || playerID == numOfPlayers) { //TODO metetre anche magicNumber 7 dentro a delle rules?
                 closeRoom();
             }
         }
