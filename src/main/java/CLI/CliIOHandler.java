@@ -49,7 +49,7 @@ public class CliIOHandler implements IOHandler {
 
     public void showWelcomeMessage() {
         printMessage(Utils.getLogo());
-        printMessage(propertiesManager.getMessage("welcomeMsg"));
+        printMessage(propertiesManager.getMessage("welcomeMessage"));
     }
 
     boolean wantToHost() {

@@ -13,9 +13,9 @@ public class TestPropertiesManager {
     @Test
     public void correctlyGetMessageFromKey() throws IOException {
         PropertiesManager propertiesManager = new PropertiesManager(getIOHandlerPropertiesPath());
-        String expectedMessage = "                      Welcome in Heckmeck";
+        String expectedMessage = "WELCOME to Heckmeck, GOOD LUCK!";
 
-        String readMessage = propertiesManager.getMessage("welcomeMsg");
+        String readMessage = propertiesManager.getMessage("welcomeMessage");
 
         assertEquals(expectedMessage, readMessage);
     }
