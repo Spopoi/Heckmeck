@@ -58,19 +58,19 @@ public class Message implements Serializable {
         return this;
     }
     public Message setDice(Dice dice) {
-        this.dice = (dice);
+        this.dice = dice;
         return this;
     }
     public Message setBoardTiles(BoardTiles boardTiles) {
-        this.boardTiles = (boardTiles);
+        this.boardTiles = boardTiles;
         return this;
     }
     public Message setCurrentPlayer(Player actualPlayer) {
-        this.currentPlayer = (actualPlayer);
+        this.currentPlayer = actualPlayer;
         return this;
     }
     public Message setPlayers(Player[] players) {
-        this.players = (players);
+        this.players = players;
         return this;
     }
 

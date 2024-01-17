@@ -16,7 +16,6 @@ public class GameServer extends Launcher implements Runnable {
     public final List<ClientHandler> clients = new ArrayList<>();
     private boolean hostClosedRoom = false;
     private final int numOfPlayers;
-    public Game game;
 
     public GameServer(int numOfPlayers) {
         try {
