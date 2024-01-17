@@ -1,19 +1,27 @@
 package GUI.Panels;
 
+import Utils.PropertiesManager;
+
 import javax.swing.*;
 import java.awt.*;
+
+import static GUI.HeckmeckGUI.getPathManager;
 import static GUI.HeckmeckGUI.switchToMenuPanel;
+import static Heckmeck.Launcher.getPropertiesManager;
 import static Utils.GUI.ButtonHandler.createButton;
 
 public class RulesPanel extends JPanel {
-    private static final String RULES_IMAGE_PATH_1 = "src/main/resources/GUI/Rules1.jpg";
-    private static final String RULES_IMAGE_PATH_2 = "src/main/resources/GUI/Rules2.jpg" ;
     private static final int SCROLLING_UNIT_INCREMENT = 16;
+    private final PropertiesManager pathManager;
+
     public RulesPanel() {
         setLayout(new GridBagLayout());
+        pathManager = getPathManager();
+        PropertiesManager propertiesManager = getPropertiesManager();
 
         JScrollPane scrollPane = getRulesScrollPane();
-        JButton backToMenuButton = createButton("Back to Menu", e -> switchToMenuPanel());
+        String backToMenu = propertiesManager.getMessage("backToMenu");
+        JButton backToMenuButton = createButton(backToMenu, e -> switchToMenuPanel());
 
         add(backToMenuButton, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
                 GridBagConstraints.NONE, new Insets(5, 5, 5, 0), 0, 0));
@@ -33,10 +41,12 @@ public class RulesPanel extends JPanel {
     private JPanel createImagesPanel() {
         JPanel imagesPanel = new JPanel(new GridLayout(2, 1));
 
+        String RULES_IMAGE_PATH_1 = pathManager.getMessage("RULES_IMAGE_PATH_1");
         ImageIcon rulesImage1 = new ImageIcon(RULES_IMAGE_PATH_1);
         JLabel rulesLabel1 = new JLabel(rulesImage1);
         imagesPanel.add(rulesLabel1);
 
+        String RULES_IMAGE_PATH_2 = pathManager.getMessage("RULES_IMAGE_PATH_2");
         ImageIcon rulesImage2 = new ImageIcon(RULES_IMAGE_PATH_2);
         JLabel rulesLabel2 = new JLabel(rulesImage2);
         imagesPanel.add(rulesLabel2);
