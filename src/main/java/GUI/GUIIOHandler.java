@@ -27,7 +27,7 @@ public class GUIIOHandler implements IOHandler {
     private static final double PANEL_WIDTH_TO_FRAME_RATIO = 0.25;
     private static final double LOG_HEIGHT_TO_FRAME_RATIO = 0.15;
     private static final Icon WORM_ICON = getDieIcon(Die.Face.WORM);
-    private static final int BUST_DELAY = 2000;
+    private static final int BUST_DELAY = 3000;
 
     private MessagePanel messagePanel;
     private static final String HECKMECK_MESSAGES_FILENAME = "messages";
@@ -202,6 +202,7 @@ public class GUIIOHandler implements IOHandler {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        printMessage(messages.getProperty("bust"));
+        showMessageDialog(null, messages.getProperty("bust") ,  messages.getProperty("heckmeckTitle"), JOptionPane.ERROR_MESSAGE);
+
     }
 }

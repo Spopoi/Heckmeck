@@ -21,7 +21,7 @@ public class DicePanel extends JPanel {
     private final static int bottomEmptyBorder = 50;
     private final static int gbcInsets = 15;
     private final static int maxDicePerRow = 3;
-    private final static int rollingAnimationDuration = 130;
+    private final static int ROLLING_ANIMATION_DURATION = 120;
     private final static int NUM_OF_ROLLING_ICONS = 15;
     private ArrayList<RoundedPanel> diceList;
 
@@ -97,7 +97,7 @@ public class DicePanel extends JPanel {
     }
 
     public void rollDiceAnimation() {
-        Timer timer = new Timer(rollingAnimationDuration, new ActionListener() {
+        Timer timer = new Timer(ROLLING_ANIMATION_DURATION, new ActionListener() {
             private int rollCount = 0;
 
             @Override
