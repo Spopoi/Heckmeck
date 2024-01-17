@@ -16,7 +16,7 @@ public class SettingsPanel extends JPanel {
     private static final int INPUT_PANEL_TOP_SPACING = 70;
     private static final int INPUT_PANEL_SIDE_SPACING = 50;
     private static final int HORIZONTAL_BUTTONS_GAP = 50;
-    private static final int BACKGROUND_NUMBER = 3;
+    private static final int NUM_OF_BACKGROUNDS = 3;
     private String background_path = BACKGROUND_IMAGE_PATH;
 
     public SettingsPanel() {
@@ -34,19 +34,20 @@ public class SettingsPanel extends JPanel {
 
     private JPanel createCenterPanel() {
         JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBorder(new EmptyBorder(0, CENTER_PANEL_SIDE_SPACING, CENTER_PANEL_BOTTOM_SPACING, CENTER_PANEL_SIDE_SPACING));
+        EmptyBorder centerPanelBorder = new EmptyBorder(0, CENTER_PANEL_SIDE_SPACING, CENTER_PANEL_BOTTOM_SPACING, CENTER_PANEL_SIDE_SPACING);
+        centerPanel.setBorder(centerPanelBorder);
 
         JLabel titleLabel = getTitleLabel("Choose background:", JLabel.CENTER);
         centerPanel.add(titleLabel, BorderLayout.NORTH);
-        JPanel inputPanel = createInputPanel();
-        centerPanel.add(inputPanel, BorderLayout.CENTER);
+        centerPanel.add(getBackgroundButtonsPanel(), BorderLayout.CENTER);
+
         JButton applyButton = createButton("Apply", e->applySettings());
         centerPanel.add(applyButton, BorderLayout.SOUTH);
         return centerPanel;
     }
 
-    private JPanel createInputPanel() {
-        JPanel inputPanel = new JPanel(new GridLayout(1, BACKGROUND_NUMBER, HORIZONTAL_BUTTONS_GAP, 0));
+    private JPanel getBackgroundButtonsPanel() {
+        JPanel inputPanel = new JPanel(new GridLayout(1, NUM_OF_BACKGROUNDS, HORIZONTAL_BUTTONS_GAP, 0));
         inputPanel.setBorder(new EmptyBorder(INPUT_PANEL_TOP_SPACING, INPUT_PANEL_SIDE_SPACING, INPUT_PANEL_BOTTOM_SPACING, INPUT_PANEL_SIDE_SPACING));
 
         inputPanel.add(getBackgroundButton(YELLOW_BACKGROUND_PATH));

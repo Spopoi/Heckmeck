@@ -22,7 +22,7 @@ public class DicePanel extends JPanel {
     private final static int gbcInsets = 15;
     private final static int maxDicePerRow = 3;
     private final static int rollingAnimationDuration = 130;
-    private final static int rollingAnimationNumberOfChangingIcons = 15;
+    private final static int NUM_OF_ROLLING_ICONS = 15;
     private ArrayList<RoundedPanel> diceList;
 
     public DicePanel(){
@@ -102,7 +102,7 @@ public class DicePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (rollCount < rollingAnimationNumberOfChangingIcons) {
+                if (rollCount < NUM_OF_ROLLING_ICONS) {
                     for (Component component : getComponents()) {
                         if (component instanceof RoundedPanel roundedPanel) {
                             JToggleButton dieButton = (JToggleButton) roundedPanel.getComponent(0);
