@@ -114,19 +114,5 @@ public class TestTCPIOHandler {
         String response = io.choosePlayerName(Player.generatePlayer(0));
         Assertions.assertEquals("playerName", response);
     }
-/*
-    @Test
-    public void testWantToPick(){
-        Message respMsg = Message.generateMessage();
-        respMsg.setText("y");
-        msg.setActualPlayer(game.getPlayers()[0]);
-        msg.setOperation(Message.Action.GET_INPUT);
-        msg.setText("Do you want to pick tile n. 10 ?");
-        msg.setPlayerID(0);
-        when(sockets.get(0).readReceivedMessage()).thenReturn(respMsg);
 
-        boolean yn = io.wantToPick(game.getActualPlayer(), 10, 10);
-        Assertions.assertEquals(true, yn );
-    }
-*/
 }
