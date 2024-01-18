@@ -71,9 +71,7 @@ public class CliIOHandler implements IOHandler {
         printMessage(propertiesManager.getMessage("chooseNumberPlayer"));
         while (true) {
             String userInput = getInputString();
-            if (userInput.isBlank()) {
-                continue;
-            } else {
+            if (!userInput.isBlank()) {
                 try {
                     int numberOfPlayer = Integer.parseInt(userInput);
                     if (Rules.validNumberOfPlayer(numberOfPlayer)) {
@@ -187,12 +185,12 @@ public class CliIOHandler implements IOHandler {
         );
         while (true) {
             String chosenDice = getInputString();
-            if (Die.isFaceLegit(chosenDice)) {
-                return Die.getFaceByString(chosenDice);
-            } else if (chosenDice.isBlank()) {
-                continue;
-            } else {
-                printMessage(getPropertiesManager().getMessage("choseDieIncorrect"));
+            if (!chosenDice.isBlank()) {
+                if (Die.isFaceLegit(chosenDice)) {
+                    return Die.getFaceByString(chosenDice);
+                } else {
+                    printMessage(getPropertiesManager().getMessage("choseDieIncorrect"));
+                }
             }
         }
     }
@@ -206,6 +204,7 @@ public class CliIOHandler implements IOHandler {
     public void printError(String text) {
         printMessage(text);
     }
+
     public String getInputString() {
         return scan.nextLine();
     }
@@ -213,14 +212,14 @@ public class CliIOHandler implements IOHandler {
     private boolean getYesOrNoAnswer(String invalidInputMessage) {
         while (true) {
             String decision = getInputString();
-            if (Objects.equals(decision, "y")) {
-                return true;
-            } else if (Objects.equals(decision, "n")) {
-                return false;
-            } else if (decision.isBlank()) {
-                continue;
-            } else {
-                printMessage(invalidInputMessage);
+            if (!decision.isBlank()) {
+                if(Objects.equals(decision, "y")) {
+                    return true;
+                } else if (Objects.equals(decision, "n")) {
+                    return false;
+                } else {
+                    printMessage(invalidInputMessage);
+                }
             }
         }
     }
@@ -233,9 +232,7 @@ public class CliIOHandler implements IOHandler {
                     .findFirst();
             if (checkedUserChoice.isPresent()) {
                 return checkedUserChoice.get();
-            } else if (userChoice.isBlank()) {
-                continue;
-            } else {
+            } else if (!userChoice.isBlank()) {
                 printMessage(propertiesManager.getMessage("invalidInitialChoice"));
             }
         }

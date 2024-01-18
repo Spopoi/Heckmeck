@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class TestGameServer {
@@ -31,7 +31,7 @@ public class TestGameServer {
 
     @Test
     void init_server_socket() {
-        assertFalse(gameServer.ss == (null));
+        assertNotNull(gameServer.ss);
         gameServer.close();
     }
 

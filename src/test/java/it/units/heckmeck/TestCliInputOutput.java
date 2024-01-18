@@ -6,7 +6,6 @@ import Heckmeck.Components.Dice;
 import Heckmeck.Components.Die;
 import Heckmeck.Components.Player;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -108,26 +107,6 @@ public class TestCliInputOutput {
 
         testInputOutput.showBoardTiles(boardTiles);
         Assertions.assertEquals(expectedPrintedBoard, standardizeLineSeparator(fakeStandardOutput.toString()));
-    }
-@Disabled
-    @Test
-    void correctlyPrintRolledDice() {
-        Dice dice = Dice.init();
-        //dice.eraseDice();
-        for (var dieFace : Die.Face.values()) {
-            dice.addSpecificDie(dieFace);
-        }
-        String expectedPrintedDice = """
-                 .---------. .---------. .---------. .---------. .---------. .---------.
-                 |         | |      o  | |      o  | |  o   o  | |  o   o  | |   \\=\\   |
-                 |    o    | |         | |    o    | |         | |    o    | |   /=/   |
-                 |         | |  o      | |  o      | |  o   o  | |  o   o  | |   \\=\\   |
-                 '---------' '---------' '---------' '---------' '---------' '---------'
-                """;
-
-        testInputOutput.showRolledDice(dice);
-
-        Assertions.assertEquals(expectedPrintedDice, standardizeLineSeparator(fakeStandardOutput.toString()));
     }
 
     @ParameterizedTest

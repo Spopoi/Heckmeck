@@ -202,7 +202,6 @@ public class TestDice {
         Assertions.assertEquals(8 - dice.getChosenDice().size(), dice.getDiceList().size() );
         while(!dice.getDiceList().isEmpty()){
             dice.rollDice();
-            List <Die> availableDice = dice.getDiceList();
             Die.Face face = dice.getDiceList().get(0).getDieFace();
             dice.chooseDice(getRandomChoosableDice(dice).getDieFace());
             Assertions.assertTrue(dice.isFaceChosen(face));

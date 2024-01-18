@@ -2,7 +2,6 @@ package it.units.heckmeck;
 
 import Heckmeck.Components.Player;
 import Heckmeck.Components.Tile;
-import Heckmeck.Components.BoardTiles;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,7 +56,6 @@ public class TestPlayer {
 
     @Test
     void check_player_pick_one_tile_from_another_player() {
-        BoardTiles board = BoardTiles.init();
         Player robbed = Player.generatePlayer(0);
         Player robber = Player.generatePlayer(1);
         Tile desiredTile = Tile.generateTile(21);

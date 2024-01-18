@@ -10,7 +10,7 @@ public class StackOfTiles implements TilesCollection {
     private final LinkedList<Tile> stackOfTiles;
 
     private StackOfTiles(){
-        this.stackOfTiles = new LinkedList<Tile>();
+        this.stackOfTiles = new LinkedList<>();
     }
 
     static StackOfTiles generate(){

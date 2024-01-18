@@ -3,7 +3,6 @@ package TCP.Server;
 import Heckmeck.Launcher;
 import Heckmeck.Rules;
 import Utils.TCP.ConnectionHandler;
-import Heckmeck.Game;
 import TCP.TCPIOHandler;
 
 import java.io.*;

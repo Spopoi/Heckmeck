@@ -3,7 +3,6 @@ package it.units.heckmeck;
 import Heckmeck.Components.Die;
 import Utils.FileReader;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
@@ -76,14 +75,12 @@ public class TestFileReader {
 
         obtainedMap = FileReader.readTilesFromSingleJson(Path.of(multipleTilesMapResource.toURI()));
 
-        // Not exactly as expected. Can we live well the same or not??
-        // System.out.println(expectedMap.getClass() + " VS " + obtainedMap.getClass());
         Assertions.assertEquals(expectedMap, obtainedMap);
     }
 
     @Test
-    @Disabled
-    void    readLogoAsTextFromFile() throws Exception {
+    // @Disabled
+    void readLogoAsTextFromFile() throws Exception {
         URL LogoResource = TestFileReader.class.getClassLoader().getResource("TEST_LOGO");
 
         String actualLogo = FileReader.readTextFile(Path.of(LogoResource.toURI()));
@@ -142,8 +139,6 @@ public class TestFileReader {
 
         obtainedMap = FileReader.readDieFacesFromSingleJson(Path.of(diceMapResource.toURI()));
 
-        // Not exactly as expected. Can we live well the same or not??
-        // System.out.println(expectedMap.getClass() + " VS " + obtainedMap.getClass());
         Assertions.assertEquals(expectedMap, obtainedMap);
     }
 
@@ -157,8 +152,8 @@ public class TestFileReader {
                     |  .--.  || .-. :| .--'|     / |        || .-. :| .--'|     /       <    >------>   o /|
                     |  |  |  |\\   --.\\ `--.|  \\  \\ |  |  |  |\\   --.\\ `--.|  \\  \\        \\ o/  o   /_____/o|
                     `--'  `--' `----' `---'`--'`--'`--`--`--' `----' `---'`--'`--'        \\/______/     |oo|
-                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<             |   o   |o/
-                                                                                               |_______|/
+                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<              |   o   |o/
+                                                                                                |_______|/
                 """;
     }
 

@@ -6,7 +6,6 @@ import java.io.*;
 
 public class ClientHandler implements Runnable{
     private final int playerId;
-    //private final IOBufferInterface ioBuffer;
     private final BufferedReader in;
     private final PrintWriter out;
 

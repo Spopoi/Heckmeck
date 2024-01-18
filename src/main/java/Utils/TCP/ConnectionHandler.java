@@ -6,10 +6,7 @@ import TCP.Server.ClientHandler;
 import TCP.Server.GameServer;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.Socket;
-import java.net.SocketException;
+import java.net.*;
 import java.util.Enumeration;
 
 public class ConnectionHandler {
@@ -22,7 +19,6 @@ public class ConnectionHandler {
             while (networkInterfaces.hasMoreElements()) {
                 NetworkInterface networkInterface = networkInterfaces.nextElement();
 
-                // Check if the interface is not a loopback and is up
                 if (!networkInterface.isLoopback() && networkInterface.isUp()) {
                     Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
 

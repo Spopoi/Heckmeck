@@ -7,7 +7,6 @@ import TCP.Server.ClientHandler;
 import TCP.TCPIOHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -40,9 +39,6 @@ public class TestTCPIOHandler {
         pl1.setPlayerName("0");
         Player pl2 = Player.generatePlayer(1);
         pl2.setPlayerName("1");
-
-
-        //when(game.getActualPlayer().getPlayerID()).thenReturn(0);
 
         io = new TCPIOHandler(sockets);
     }
@@ -99,20 +95,6 @@ public class TestTCPIOHandler {
         verify(sockets.get(1)).writeMessage(messageCaptor.capture());
         capturedMessage = messageCaptor.getValue();
         assertEquals(Message.Action.WAIT, capturedMessage.operation);
-    }
-    @Test
-    @Disabled
-    public void testChoosePlayerName(){
-        Message respMsg = Message.generateMessage();
-        respMsg.setText("playerName").
-                setOperation(Message.Action.RESPONSE).
-                setPlayerID(0);
-        when(sockets.get(0).writeAndRead(Message.generateMessage().
-                setOperation(Message.Action.GET_PLAYER_NAME).
-                setText("Choose player name").
-                setPlayerID(0).toJSON())).thenReturn(respMsg.toJSON());
-        String response = io.choosePlayerName(Player.generatePlayer(0));
-        Assertions.assertEquals("playerName", response);
     }
 
 }
