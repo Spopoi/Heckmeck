@@ -6,6 +6,7 @@ import Utils.PropertiesManager;
 import java.io.IOException;
 import java.util.*;
 import static Heckmeck.Components.Die.Face;
+import static Heckmeck.Rules.isNameAlreadyPicked;
 import static Utils.PropertiesManager.getGameMessagePropertiesPath;
 
 public class Game {
@@ -167,12 +168,5 @@ public class Game {
             playersList[i].setPlayerName(playerName);
         }
         return playersList;
-    }
-
-    private boolean isNameAlreadyPicked(String name, Player[] playersList){
-        return Arrays.stream(playersList).filter(Objects::nonNull).anyMatch(player -> {
-            String playerName = player.getName();
-            return playerName != null && playerName.equals(name);
-        });
     }
 }

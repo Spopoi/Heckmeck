@@ -5,6 +5,7 @@ import Heckmeck.Components.Player;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Rules {
@@ -45,4 +46,10 @@ public class Rules {
                 .orElse(null);
     }
 
+    public static boolean isNameAlreadyPicked(String name, Player[] playersList){
+        return Arrays.stream(playersList).filter(Objects::nonNull).anyMatch(player -> {
+            String playerName = player.getName();
+            return playerName != null && playerName.equals(name);
+        });
+    }
 }
