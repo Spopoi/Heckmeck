@@ -22,11 +22,12 @@ public class CliIOHandler implements IOHandler {
     private static final String newLine = System.lineSeparator();
     private Scanner scan;
     private PrintStream outputWhereToPrint;
-
+    private final Rules rules;
     private final PropertiesManager propertiesManager;
 
     public CliIOHandler(InputStream inputStream, PrintStream printStream) {
         setOutput(printStream);
+        rules = new HeckmeckRules();
         scan = new Scanner(inputStream);
         propertiesManager = getPropertiesManager();
     }
@@ -74,7 +75,7 @@ public class CliIOHandler implements IOHandler {
             if (!userInput.isBlank()) {
                 try {
                     int numberOfPlayer = Integer.parseInt(userInput);
-                    if (Rules.validNumberOfPlayer(numberOfPlayer)) {
+                    if (rules.validNumberOfPlayer(numberOfPlayer)) {
                         return numberOfPlayer;
                     } else {
                         printMessage(propertiesManager.getMessage("inavlidPlayerNum"));

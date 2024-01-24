@@ -6,7 +6,6 @@ import Utils.PropertiesManager;
 import java.io.IOException;
 
 import static Heckmeck.Components.Die.Face;
-import static Heckmeck.Rules.isNameAlreadyPicked;
 import static Utils.PropertiesManager.getGameMessagePropertiesPath;
 
 public class Game {
@@ -16,9 +15,11 @@ public class Game {
     private final IOHandler io;
     private Player actualPlayer;
     private final PropertiesManager propertiesManager;
+    private final Rules rules;
 
-    public Game(IOHandler io) throws IOException {
+    public Game(IOHandler io, Rules rules) throws IOException {
         this.io = io;
+        this.rules = rules;
         propertiesManager = new PropertiesManager(getGameMessagePropertiesPath());
     }
 
@@ -39,7 +40,7 @@ public class Game {
             if(playerNumber >= players.length) playerNumber = 0;
             actualPlayer = players[playerNumber];
         }
-        Player winnerPlayer = Rules.whoIsTheWinner(players);
+        Player winnerPlayer = rules.whoIsTheWinner(players);
         if (winnerPlayer == null) {
             io.printMessage(propertiesManager.getMessage("draw"));
         } else {
@@ -71,7 +72,7 @@ public class Game {
 
     private boolean pick(){
         //assume worm chosen and can pick
-        if(dice.getChosenDice().size() >= Rules.INITIAL_NUMBER_OF_DICE || wantToPick()) {
+        if(dice.getChosenDice().size() >= HeckmeckRules.INITIAL_NUMBER_OF_DICE || wantToPick()) {
             pickTile();
             return true;
         }
@@ -161,7 +162,7 @@ public class Game {
             playersList[i] = Player.generatePlayer(i);
             this.actualPlayer = playersList[i];
             String playerName = io.choosePlayerName(playersList[i]);
-            while(isNameAlreadyPicked(playerName,playersList)){
+            while(rules.isNameAlreadyPicked(playerName,playersList)){
                 io.printError(propertiesManager.getMessage("nameAlreadyPicked").replace("$PLAYER_NAME", playerName));
                 playerName = io.choosePlayerName(playersList[i]);
             }

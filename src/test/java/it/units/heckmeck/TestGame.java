@@ -1,7 +1,9 @@
 package it.units.heckmeck;
 
 import Heckmeck.Game;
+import Heckmeck.HeckmeckRules;
 import Heckmeck.IOHandler;
+import Heckmeck.Rules;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +17,8 @@ public class TestGame {
     @BeforeEach
     public void setUp() throws IOException {
         io = mock(IOHandler.class);
-        game = new Game(io);
+        Rules rules = new HeckmeckRules();
+        game = new Game(io, rules);
     }
 
     @Test

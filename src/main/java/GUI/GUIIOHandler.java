@@ -10,8 +10,8 @@ import java.awt.*;
 import java.util.stream.IntStream;
 
 import static GUI.HeckmeckGUI.*;
-import static Heckmeck.Rules.MAX_NUM_OF_PLAYERS;
-import static Heckmeck.Rules.MIN_NUM_OF_PLAYERS;
+import static Heckmeck.HeckmeckRules.MAX_NUM_OF_PLAYERS;
+import static Heckmeck.HeckmeckRules.MIN_NUM_OF_PLAYERS;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static Utils.GUI.SoundHandler.*;
 import static javax.swing.JOptionPane.*;

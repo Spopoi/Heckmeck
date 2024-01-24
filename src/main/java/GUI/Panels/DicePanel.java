@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import static Heckmeck.Rules.INITIAL_NUMBER_OF_DICE;
+import static Heckmeck.HeckmeckRules.INITIAL_NUMBER_OF_DICE;
 import static Utils.GUI.ButtonHandler.makeDieButton;
 import static Utils.GUI.IconHandler.getDieIcon;
 import static java.awt.GridBagConstraints.NORTH;

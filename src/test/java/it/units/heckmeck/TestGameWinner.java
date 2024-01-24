@@ -1,15 +1,17 @@
 package it.units.heckmeck;
 
 import Heckmeck.Components.Player;
-import Heckmeck.Rules;
+import Heckmeck.HeckmeckRules;
 import Heckmeck.Components.Tile;
+import Heckmeck.Rules;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class TestGameWinner {
-
+    private final Rules rules = new HeckmeckRules();
     @Test
     public void winnerWithHigherWormNumber(){
+
         Player expectedWinner = Player.generatePlayer(0);
         expectedWinner.setPlayerName("winner");
         Player loser1 = Player.generatePlayer(1);
@@ -22,7 +24,7 @@ public class TestGameWinner {
         loser1.pickTile(Tile.generateTile(23));
         loser2.pickTile(Tile.generateTile(22));
         Player[] players = {loser1, expectedWinner,loser2};
-        Player winner = Rules.whoIsTheWinner(players);
+        Player winner = rules.whoIsTheWinner(players);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expectedWinner, winner),
                 () -> Assertions.assertNotEquals(loser1, winner),
@@ -43,7 +45,7 @@ public class TestGameWinner {
         loser1.pickTile(Tile.generateTile(25));
         loser2.pickTile(Tile.generateTile(22));
         Player[] players = {loser1, expectedWinner,loser2};
-        Player winner = Rules.whoIsTheWinner(players);
+        Player winner = rules.whoIsTheWinner(players);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expectedWinner, winner),
                 () -> Assertions.assertNotEquals(loser1, winner),
@@ -65,7 +67,7 @@ public class TestGameWinner {
         loser1.pickTile(Tile.generateTile(25));
         loser2.pickTile(Tile.generateTile(22));
         Player[] players = {loser1, expectedWinner,loser2};
-        Player winner = Rules.whoIsTheWinner(players);
+        Player winner = rules.whoIsTheWinner(players);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expectedWinner, winner),
                 () -> Assertions.assertNotEquals(loser1, winner),

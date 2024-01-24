@@ -1,5 +1,5 @@
 package Heckmeck.Components;
-import Heckmeck.Rules;
+import Heckmeck.HeckmeckRules;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,9 @@ public class Dice {
 
 
     private Dice(){
-        diceList = new ArrayList<>(Rules.INITIAL_NUMBER_OF_DICE);
+        diceList = new ArrayList<>(HeckmeckRules.INITIAL_NUMBER_OF_DICE);
         chosenDiceList = new ArrayList<>();
-        IntStream.range(0, Rules.INITIAL_NUMBER_OF_DICE)
+        IntStream.range(0, HeckmeckRules.INITIAL_NUMBER_OF_DICE)
                 .forEach(i -> diceList.add(Die.generateDie()));
     }
 
@@ -36,7 +36,7 @@ public class Dice {
     public void resetDice(){
         diceList.clear();
         chosenDiceList.clear();
-        IntStream.range(0, Rules.INITIAL_NUMBER_OF_DICE)
+        IntStream.range(0, HeckmeckRules.INITIAL_NUMBER_OF_DICE)
                 .forEach(i -> diceList.add(Die.generateDie()));
         score = 0;
     }

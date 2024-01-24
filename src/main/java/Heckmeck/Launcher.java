@@ -25,7 +25,8 @@ public abstract class Launcher {
     }
 
     public static void startGame(IOHandler io) throws IOException {
-        Game game = new Game(io);
+        Rules rules = new HeckmeckRules();
+        Game game = new Game(io, rules);
         game.init();
         game.play();
     }

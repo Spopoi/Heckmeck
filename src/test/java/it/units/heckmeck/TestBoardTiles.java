@@ -2,7 +2,7 @@ package it.units.heckmeck;
 
 import Heckmeck.Components.Tile;
 import Heckmeck.Components.BoardTiles;
-import Heckmeck.Rules;
+import Heckmeck.HeckmeckRules;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -62,7 +62,7 @@ public class TestBoardTiles {
 
     private TreeSet<Tile> setupTiles() {
         TreeSet<Tile> expected = new TreeSet<>();
-        for (int tileNumber = 21; tileNumber < 21 + Rules.NUMBER_OF_TILES; tileNumber++) {
+        for (int tileNumber = 21; tileNumber < 21 + HeckmeckRules.NUMBER_OF_TILES; tileNumber++) {
             if(tileNumber < 25) expected.add(Tile.generateTile(tileNumber));
             else if( tileNumber < 29) expected.add(Tile.generateTile(tileNumber));
             else expected.add(Tile.generateTile(tileNumber));
@@ -75,7 +75,7 @@ public class TestBoardTiles {
         BoardTiles boardTiles = BoardTiles.init();
         List<Tile> listTiles = boardTiles.tiles().stream().toList();
         boolean correctAscendantOrder = true;
-        for (int i = 0; i < Rules.NUMBER_OF_TILES - 1; i++) {
+        for (int i = 0; i < HeckmeckRules.NUMBER_OF_TILES - 1; i++) {
             if (listTiles.get(i).number() > listTiles.get(i + 1).number()) {
                 correctAscendantOrder = false;
                 break;
@@ -93,7 +93,7 @@ public class TestBoardTiles {
         boardTiles.add(tileToTest);
         List<Tile> listTiles = boardTiles.tiles().stream().toList();
         boolean correctAscendantOrder = true;
-        for (int i = 0; i < Rules.NUMBER_OF_TILES - 1; i++) {
+        for (int i = 0; i < HeckmeckRules.NUMBER_OF_TILES - 1; i++) {
             if (listTiles.get(i).number() > listTiles.get(i + 1).number()) {
                 correctAscendantOrder = false;
                 break;
