@@ -4,7 +4,7 @@ import Heckmeck.Components.*;
 import Utils.PropertiesManager;
 
 import java.io.IOException;
-import java.util.*;
+
 import static Heckmeck.Components.Die.Face;
 import static Heckmeck.Rules.isNameAlreadyPicked;
 import static Utils.PropertiesManager.getGameMessagePropertiesPath;
@@ -101,7 +101,7 @@ public class Game {
         int playerScore = dice.getScore();
         if(playerScore < Tile.tileMinNumber) return false;
         for(Player robbedPlayer : players){
-            if(!robbedPlayer.equals(actualPlayer) && actualPlayer.canStealFrom(robbedPlayer,playerScore)) return true;
+            if(robbedPlayer.canStealTile(playerScore)) return true;
         }
         return false;
     }
@@ -110,7 +110,7 @@ public class Game {
         //assume worm chosen and can steal
         int playerScore = dice.getScore();
         for(Player robbedPlayer : players){
-            if(!robbedPlayer.equals(actualPlayer) && actualPlayer.canStealFrom(robbedPlayer,playerScore)){
+            if(robbedPlayer.canStealTile(playerScore)){
                 if(io.wantToSteal(actualPlayer, robbedPlayer)){
                     actualPlayer.stealTileFromPlayer(robbedPlayer);
                     return true;

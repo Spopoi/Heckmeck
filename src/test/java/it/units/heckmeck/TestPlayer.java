@@ -68,19 +68,17 @@ public class TestPlayer {
     @Test
     void check_cannot_steal_from_an_empty_player_stack(){
         Player player = Player.generatePlayer(0);
-        Player robbedPlayer = Player.generatePlayer(1);
         int score = 30;
-        Assertions.assertFalse(player.canStealFrom(robbedPlayer, score));
+        Assertions.assertFalse(player.canStealTile(score));
     }
 
 
     @ParameterizedTest
     @ValueSource(ints = {21, 23, 24, 25, 30})
     void check_cannot_steal_tile_with_not_equal_score(int score){
-        Player player = Player.generatePlayer(0);
         Player robbedPlayer = Player.generatePlayer(1);
         robbedPlayer.pickTile(Tile.generateTile(22));
-        Assertions.assertFalse(player.canStealFrom(robbedPlayer, score));
+        Assertions.assertFalse(robbedPlayer.canStealTile(score));
     }
 
     @Test

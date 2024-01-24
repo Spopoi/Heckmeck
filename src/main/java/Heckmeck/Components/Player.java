@@ -39,9 +39,9 @@ public class Player {
         }
     }
 
-    public boolean canStealFrom(Player robbedPlayer, int playerScore) {
-        if (!robbedPlayer.hasTile()) return false;
-        else return robbedPlayer.getLastPickedTile().number() == playerScore;
+    public boolean canStealTile(int playerScore) {
+        if (!hasTile()) return false;
+        else return getLastPickedTile().number() == playerScore;
     }
 
     public void stealTileFromPlayer(Player robbedPlayer) {
