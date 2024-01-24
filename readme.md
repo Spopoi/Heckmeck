@@ -32,6 +32,25 @@ When no tiles remain in the center, players add up worm counts on their tiles. T
 - Game is flexible on User Interface 
 
 ---
+# Prerequisites & Tools
+
+- **Java Version**: 18
+- **IDE**: IntelliJ IDEA 2022.2.5
+- **Build Automation Tool**: Gradle 7.5.1
+- **Version Control System**: Git + GitHub
+- **Continuous Integration**: CircleCI
+- **JSON Management**: gson 2.10
+
+---
+# Testing
+
+The project uses the following testing frameworks:
+
+- **Test Framework**: JUnit 4
+- **Mocking Framework**: Mockito 2.22
+
+
+---
 # Structure:
 Project structure is defined like this:
 - main
