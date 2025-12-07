@@ -199,14 +199,11 @@ public class TestGameAction {
     @Test
     public void testRecordImmutability() {
         GameAction.ChooseDieFace action = new GameAction.ChooseDieFace(Die.Face.WORM);
-        Die.Face face = action.face();
         
         // Non possiamo modificare il campo (è final nel record)
         assertEquals(Die.Face.WORM, action.face());
         
         GameAction.StealTileAction stealAction = new GameAction.StealTileAction(1);
-        int index = stealAction.robbedPlayerIndex();
-        
         assertEquals(1, stealAction.robbedPlayerIndex());
     }
 }
