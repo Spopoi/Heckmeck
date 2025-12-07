@@ -6,6 +6,7 @@ import Heckmeck.Components.Die;
 import Heckmeck.Components.Player;
 import Heckmeck.Components.Tile;
 
+import java.util.List;
 import java.util.Objects;
 
 import static Heckmeck.Components.Die.Face.WORM;
@@ -27,6 +28,33 @@ public final class GameEngine {
         Dice dice = Dice.init();
         BoardTiles boardTiles = BoardTiles.init();
         return GameState.initial(players, dice, boardTiles);
+    }
+
+    /**
+     * Applies a GameAction to the current GameState and returns a GameResult.
+     * This is the main entry point for executing game actions in a type-safe way.
+     * 
+     * @param state The current game state
+     * @param action The action to apply
+     * @return GameResult containing the new state and any errors
+     */
+    public GameResult apply(GameState state, GameAction action) {
+        if (state.isGameEnded()) {
+            return new GameResult(state, List.of("Game is already over"));
+        }
+        
+        try {
+            GameState newState = switch (action) {
+                case GameAction.StartTurn() -> startTurn(state);
+                case GameAction.RollDice() -> roll(state);
+                case GameAction.ChooseDieFace c -> chooseDieFace(state, c.face());
+                case GameAction.PickTileAction() -> pickTileAndEndTurn(state);
+                case GameAction.StealTileAction s -> stealTileAndEndTurn(state, s.robbedPlayerIndex());
+            };
+            return new GameResult(newState);
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            return new GameResult(state, List.of(e.getMessage()));
+        }
     }
 
     public boolean isGameOver(GameState state) {

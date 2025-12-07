@@ -7,6 +7,7 @@ import Heckmeck.Components.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static it.units.heckmeck.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGameState {
@@ -15,24 +16,12 @@ public class TestGameState {
 
     @BeforeEach
     public void setUp() {
-        players = new Player[]{
-                Player.generatePlayer(0),
-                Player.generatePlayer(1),
-                Player.generatePlayer(2)
-        };
-        players[0].setPlayerName("Alice");
-        players[1].setPlayerName("Bob");
-        players[2].setPlayerName("Charlie");
-    }
-
-    // Helper method to create fresh Dice and BoardTiles for each test
-    private GameState createFreshGameState() {
-        return GameState.initial(players, Dice.init(), BoardTiles.init());
+        players = createTestPlayers();
     }
 
     @Test
     public void testInitialStateCreation() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
 
         assertNotNull(state);
         assertEquals(3, state.getNumberOfPlayers());
@@ -70,7 +59,7 @@ public class TestGameState {
 
     @Test
     public void testGetCurrentPlayer() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
 
         Player current = state.getCurrentPlayer();
         assertNotNull(current);
@@ -79,7 +68,7 @@ public class TestGameState {
 
     @Test
     public void testGetPlayersReturnsClone() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
 
         Player[] retrievedPlayers = state.getPlayers();
         retrievedPlayers[0] = null; // modifica la copia
@@ -91,7 +80,7 @@ public class TestGameState {
 
     @Test
     public void testWithPhase() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         assertEquals(GameState.Phase.WAITING_TURN_START, state.getPhase());
 
         GameState newState = state.withPhase(GameState.Phase.ROLL_OR_ACTION);
@@ -104,7 +93,7 @@ public class TestGameState {
 
     @Test
     public void testWithCurrentPlayerIndex() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         assertEquals(0, state.getCurrentPlayerIndex());
         assertEquals("Alice", state.getCurrentPlayer().getName());
 
@@ -117,7 +106,7 @@ public class TestGameState {
 
     @Test
     public void testNextPlayer() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
 
         GameState state1 = state.nextPlayer();
         assertEquals(1, state1.getCurrentPlayerIndex());
@@ -143,7 +132,7 @@ public class TestGameState {
 
     @Test
     public void testWithGameEnded() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         assertFalse(state.isGameEnded());
         assertNull(state.getWinner());
 
@@ -158,7 +147,7 @@ public class TestGameState {
 
     @Test
     public void testWithGameEndedWithoutWinner() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
 
         GameState endedState = state.withGameEnded(true, null);
 
@@ -169,7 +158,7 @@ public class TestGameState {
 
     @Test
     public void testWithPlayers() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
 
         Player[] newPlayers = new Player[]{
                 Player.generatePlayer(0),
@@ -187,7 +176,7 @@ public class TestGameState {
 
     @Test
     public void testWithPlayersAdjustsCurrentPlayerIndex() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         state = state.withCurrentPlayerIndex(2); // Charlie (indice 2)
 
         // Riduci i giocatori a 2
@@ -200,7 +189,7 @@ public class TestGameState {
 
     @Test
     public void testWithDice() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         
         Dice newDice = Dice.init();
         newDice.rollDice();
@@ -213,7 +202,7 @@ public class TestGameState {
 
     @Test
     public void testWithBoardTiles() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         
         BoardTiles newBoardTiles = BoardTiles.init();
         newBoardTiles.remove(newBoardTiles.tiles().first());
@@ -226,7 +215,7 @@ public class TestGameState {
 
     @Test
     public void testImmutability() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
 
         // Modifica vari campi
         GameState state1 = state.withPhase(GameState.Phase.ROLL_OR_ACTION);
@@ -248,7 +237,7 @@ public class TestGameState {
 
     @Test
     public void testToString() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         String str = state.toString();
 
         assertNotNull(str);
@@ -259,7 +248,7 @@ public class TestGameState {
 
     @Test
     public void testGetNumberOfPlayers() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         assertEquals(3, state.getNumberOfPlayers());
         
         Player[] twoPlayers = new Player[]{players[0], players[1]};
@@ -269,7 +258,7 @@ public class TestGameState {
 
     @Test
     public void testGetDiceAndGetBoardTiles() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         
         assertNotNull(state.getDice());
         assertNotNull(state.getBoardTiles());
@@ -277,7 +266,7 @@ public class TestGameState {
 
     @Test
     public void testMultipleWithMethodsChaining() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         
         // Chain multiple with methods
         Dice newDice = Dice.init();
@@ -299,7 +288,7 @@ public class TestGameState {
 
     @Test
     public void testHasWinner() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         
         assertFalse(state.hasWinner());
         
@@ -310,7 +299,7 @@ public class TestGameState {
 
     @Test
     public void testWithCurrentPlayerIndexBounds() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         
         // Test valid indices
         GameState state0 = state.withCurrentPlayerIndex(0);
@@ -324,7 +313,7 @@ public class TestGameState {
 
     @Test
     public void testNextPlayerWrapsAround() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         
         // Start at index 2 (Charlie)
         state = state.withCurrentPlayerIndex(2);
@@ -338,7 +327,7 @@ public class TestGameState {
 
     @Test
     public void testPhaseTransitions() {
-        GameState state = createFreshGameState();
+        GameState state = createFreshGameState(players);
         
         // Test all phase transitions
         GameState s1 = state.withPhase(GameState.Phase.ROLL_OR_ACTION);

@@ -12,6 +12,7 @@ import Heckmeck.Components.Tile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static it.units.heckmeck.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGameEngine {
@@ -24,20 +25,7 @@ public class TestGameEngine {
     public void setUp() {
         rules = new HeckmeckRules();
         engine = new GameEngine(rules);
-
-        players = new Player[]{
-                Player.generatePlayer(0),
-                Player.generatePlayer(1),
-                Player.generatePlayer(2)
-        };
-        players[0].setPlayerName("Alice");
-        players[1].setPlayerName("Bob");
-        players[2].setPlayerName("Charlie");
-    }
-
-    // Helper method to create fresh GameState for each test
-    private GameState createNewGameState() {
-        return GameState.initial(players, Dice.init(), BoardTiles.init());
+        players = createTestPlayers();
     }
 
     @Test
@@ -62,7 +50,7 @@ public class TestGameEngine {
 
     @Test
     public void testStartTurn() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         
         GameState newState = engine.startTurn(state);
 
@@ -71,7 +59,7 @@ public class TestGameEngine {
 
     @Test
     public void testStartTurnOnEndedGameThrowsException() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         GameState endedState = state.withGameEnded(true, players[0]);
 
         assertThrows(IllegalStateException.class, () -> {
@@ -81,7 +69,7 @@ public class TestGameEngine {
 
     @Test
     public void testRollWithAvailableDice() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         state = engine.startTurn(state);
 
         GameState rolledState = engine.roll(state);
@@ -96,7 +84,7 @@ public class TestGameEngine {
 
     @Test
     public void testRollWithWrongPhaseThrowsException() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         // Fase WAITING_TURN_START, non ROLL_OR_ACTION
 
         assertThrows(IllegalStateException.class, () -> {
@@ -106,7 +94,7 @@ public class TestGameEngine {
 
     @Test
     public void testRollWithNoDiceCausesBust() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         state = engine.startTurn(state);
         
         // Crea scenario con 0 dadi disponibili
@@ -126,7 +114,7 @@ public class TestGameEngine {
 
     @Test
     public void testChooseDieFace() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         state = engine.startTurn(state);
         
         // Roll dadi freschi - deve sempre avere facce disponibili
@@ -149,7 +137,7 @@ public class TestGameEngine {
 
     @Test
     public void testChooseDieFaceNotPresentThrowsException() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         state = engine.startTurn(state);
         
         // Crea uno scenario deterministico: aggiungi solo ONE, TWO, THREE, FOUR, FIVE
@@ -179,7 +167,7 @@ public class TestGameEngine {
 
     @Test
     public void testChooseDieFaceAlreadyChosenThrowsException() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         state = engine.startTurn(state);
         
         Dice testDice = state.getDice();
@@ -203,7 +191,7 @@ public class TestGameEngine {
 
     @Test
     public void testHasWormChosen() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         
         Dice testDice = state.getDice();
         testDice.resetDice();
@@ -224,7 +212,7 @@ public class TestGameEngine {
 
     @Test
     public void testCanPick() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         
         Dice testDice = state.getDice();
         testDice.resetDice();
@@ -276,7 +264,7 @@ public class TestGameEngine {
 
     @Test
     public void testCanSteal() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         
         // Dai una tessera a un giocatore
         Player player1 = state.getPlayers()[1];
@@ -309,7 +297,7 @@ public class TestGameEngine {
 
     @Test
     public void testCanStealWithNoValidPlayers() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         
         // Nessun giocatore ha tessere
         Dice testDice = state.getDice();
@@ -330,7 +318,7 @@ public class TestGameEngine {
 
     @Test
     public void testPickTileAndEndTurnWithoutWormThrowsException() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         GameState turnStartedState = engine.startTurn(state);
         
         // Senza aver scelto un WORM
@@ -341,7 +329,7 @@ public class TestGameEngine {
 
     @Test
     public void testPickTileAndEndTurnSuccessfully() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         state = engine.startTurn(state);
         
         // Crea scenario deterministico: WORM + 4 FIVE = 25 punti
@@ -374,7 +362,7 @@ public class TestGameEngine {
 
     @Test
     public void testStealTileWithoutWormThrowsException() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         GameState turnStartedState = engine.startTurn(state);
         
         assertThrows(IllegalStateException.class, () -> {
@@ -384,7 +372,7 @@ public class TestGameEngine {
 
     @Test
     public void testStealTileAndEndTurnSuccessfully() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         state = engine.startTurn(state);
         
         // Dai una tessera al giocatore 1 (Bob)
@@ -422,7 +410,7 @@ public class TestGameEngine {
 
     @Test
     public void testStealFromSelfThrowsException() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         state = engine.startTurn(state);
         
         // Crea uno scenario deterministico con WORM
@@ -445,7 +433,7 @@ public class TestGameEngine {
 
     @Test
     public void testStealWithInvalidPlayerIndexThrowsException() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         GameState turnStartedState = engine.startTurn(state);
         
         // Dai una tessera con valore 25 a un giocatore per rendere lo steal possibile
@@ -483,7 +471,7 @@ public class TestGameEngine {
 
     @Test
     public void testIsForcedToPick() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         
         Dice testDice = state.getDice();
         testDice.resetDice();
@@ -583,7 +571,7 @@ public class TestGameEngine {
 
     @Test
     public void testIsGameOver() {
-        GameState state = createNewGameState();
+        GameState state = createFreshGameState(players);
         
         assertFalse(engine.isGameOver(state));
         
