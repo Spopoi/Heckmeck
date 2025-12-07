@@ -7,6 +7,12 @@ plugins {
 group 'org.example'
 version '1.0-SNAPSHOT'
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -34,7 +40,10 @@ application {
 test {
     useJUnitPlatform()
     jvmArgs '--add-opens=java.base/java.lang=ALL-UNNAMED'
+}
 
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 run {
@@ -51,5 +60,5 @@ task runGUI(type: JavaExec) {
     group 'org.example'
     description "Run the HeckmeckGUI class with JavaExecTask"
     classpath = sourceSets.main.runtimeClasspath
-    main = 'GUI.HeckmeckGUI'
+    mainClass = 'GUI.HeckmeckGUI'
 }
