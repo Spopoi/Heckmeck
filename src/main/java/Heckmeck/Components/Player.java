@@ -87,4 +87,14 @@ public class Player {
     public int hashCode() {
         return playerName != null ? playerName.hashCode() : 0;
     }
+    
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id=" + playerID +
+                ", name='" + playerName + '\'' +
+                ", topTile=" + getTopTileInfo() +
+                ", worms=" + getWormScore() +
+                '}';
+    }
 }

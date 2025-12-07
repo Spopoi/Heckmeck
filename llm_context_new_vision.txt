@@ -1,0 +1,862 @@
+Il progetto Heckmeck deve essere ristrutturato intorno a un nucleo di dominio puro, completamente indipendente dall’interfaccia utente, e a una serie di strati che si occupano di come gli utenti interagiscono con il gioco, sia in locale che online. L’idea è che qualsiasi UI (CLI, Swing, React) parli sempre con lo stesso motore di gioco, usando lo stesso modello di stato e lo stesso set di azioni.
+
+Al centro c’è il dominio: GameState, GameEngine, GameAction, GameResult e le regole HeckmeckRules, insieme ai componenti esistenti Player, Dice, BoardTiles, Tile, Die. GameState rappresenta lo stato immutabile della partita in un istante. Contiene l’array di Player, il Dice, il BoardTiles, l’indice del giocatore corrente, la fase di gioco e informazioni di fine partita. Non contiene alcuna logica di I/O o dipendenza dalla UI. Un’implementazione coerente con quanto hai già scritto è questa:
+
+```java
+package Heckmeck;
+
+import Heckmeck.Components.BoardTiles;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Player;
+
+import java.util.Arrays;
+import java.util.Objects;
+
+public final class GameState {
+
+    public enum Phase {
+        NOT_INITIALIZED,
+        WAITING_TURN_START,
+        ROLL_OR_ACTION,
+        CHOOSING_DIE_FACE,
+        GAME_OVER
+    }
+
+    private final Player[] players;
+    private final Dice dice;
+    private final BoardTiles boardTiles;
+    private final int currentPlayerIndex;
+    private final Phase phase;
+    private final boolean gameEnded;
+    private final Player winner;
+
+    private GameState(
+            Player[] players,
+            Dice dice,
+            BoardTiles boardTiles,
+            int currentPlayerIndex,
+            Phase phase,
+            boolean gameEnded,
+            Player winner
+    ) {
+        this.players = players.clone();
+        this.dice = dice;
+        this.boardTiles = boardTiles;
+        this.currentPlayerIndex = currentPlayerIndex;
+        this.phase = phase;
+        this.gameEnded = gameEnded;
+        this.winner = winner;
+    }
+
+    public static GameState initial(Player[] players, Dice dice, BoardTiles boardTiles) {
+        Objects.requireNonNull(players, "players must not be null");
+        Objects.requireNonNull(dice, "dice must not be null");
+        Objects.requireNonNull(boardTiles, "boardTiles must not be null");
+
+        if (players.length == 0) {
+            throw new IllegalArgumentException("There must be at least one player");
+        }
+
+        return new GameState(
+                players,
+                dice,
+                boardTiles,
+                0,
+                Phase.WAITING_TURN_START,
+                false,
+                null
+        );
+    }
+
+    public static GameState notInitialized() {
+        return new GameState(
+                new Player[0],
+                null,
+                null,
+                -1,
+                Phase.NOT_INITIALIZED,
+                false,
+                null
+        );
+    }
+
+    public Player[] getPlayers() {
+        return players.clone();
+    }
+
+    public int getNumberOfPlayers() {
+        return players.length;
+    }
+
+    public Player getCurrentPlayer() {
+        if (currentPlayerIndex < 0 || currentPlayerIndex >= players.length) {
+            return null;
+        }
+        return players[currentPlayerIndex];
+    }
+
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
+    public Dice getDice() {
+        return dice;
+    }
+
+    public BoardTiles getBoardTiles() {
+        return boardTiles;
+    }
+
+    public Phase getPhase() {
+        return phase;
+    }
+
+    public boolean isGameEnded() {
+        return gameEnded;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public boolean hasWinner() {
+        return winner != null;
+    }
+
+    public GameState withPlayers(Player[] newPlayers) {
+        return new GameState(
+                newPlayers,
+                this.dice,
+                this.boardTiles,
+                clampCurrentPlayerIndex(this.currentPlayerIndex, newPlayers),
+                this.phase,
+                this.gameEnded,
+                this.winner
+        );
+    }
+
+    public GameState withDice(Dice newDice) {
+        return new GameState(
+                this.players,
+                newDice,
+                this.boardTiles,
+                this.currentPlayerIndex,
+                this.phase,
+                this.gameEnded,
+                this.winner
+        );
+    }
+
+    public GameState withBoardTiles(BoardTiles newBoardTiles) {
+        return new GameState(
+                this.players,
+                this.dice,
+                newBoardTiles,
+                this.currentPlayerIndex,
+                this.phase,
+                this.gameEnded,
+                this.winner
+        );
+    }
+
+    public GameState withCurrentPlayerIndex(int newIndex) {
+        return new GameState(
+                this.players,
+                this.dice,
+                this.boardTiles,
+                newIndex,
+                this.phase,
+                this.gameEnded,
+                this.winner
+        );
+    }
+
+    public GameState withPhase(Phase newPhase) {
+        return new GameState(
+                this.players,
+                this.dice,
+                this.boardTiles,
+                this.currentPlayerIndex,
+                newPhase,
+                this.gameEnded,
+                this.winner
+        );
+    }
+
+    public GameState withGameEnded(boolean ended, Player winner) {
+        return new GameState(
+                this.players,
+                this.dice,
+                this.boardTiles,
+                this.currentPlayerIndex,
+                ended ? Phase.GAME_OVER : this.phase,
+                ended,
+                winner
+        );
+    }
+
+    public GameState nextPlayer() {
+        if (players.length == 0) {
+            return this;
+        }
+        int nextIndex = (currentPlayerIndex + 1) % players.length;
+        nextIndex = clampCurrentPlayerIndex(nextIndex, players);
+        return new GameState(
+                this.players,
+                this.dice,
+                this.boardTiles,
+                nextIndex,
+                this.phase,
+                this.gameEnded,
+                this.winner
+        );
+    }
+
+    private static int clampCurrentPlayerIndex(int index, Player[] newPlayers) {
+        if (newPlayers == null || newPlayers.length == 0) {
+            return -1;
+        }
+        if (index < 0) {
+            return 0;
+        }
+        if (index >= newPlayers.length) {
+            return newPlayers.length - 1;
+        }
+        return index;
+    }
+
+    @Override
+    public String toString() {
+        return "GameState{" +
+                "players=" + Arrays.toString(players) +
+                ", dice=" + dice +
+                ", boardTiles=" + boardTiles +
+                ", currentPlayerIndex=" + currentPlayerIndex +
+                ", phase=" + phase +
+                ", gameEnded=" + gameEnded +
+                ", winner=" + winner +
+                '}';
+    }
+}
+```
+
+Per modificare lo stato esiste un set di GameAction, che è l’unico canale per cambiare GameState. Le azioni modellano ciò che un giocatore può fare: iniziare il turno, tirare, scegliere una faccia, pickare una tessera, rubare. Una rappresentazione coerente è una sealed interface con record:
+
+```java
+package Heckmeck;
+
+import Heckmeck.Components.Die;
+
+public sealed interface GameAction
+        permits StartTurn, RollDice, ChooseDieFace, PickTileAction, StealTileAction {
+}
+
+public record StartTurn() implements GameAction { }
+
+public record RollDice() implements GameAction { }
+
+public record ChooseDieFace(Die.Face face) implements GameAction { }
+
+public record PickTileAction() implements GameAction { }
+
+public record StealTileAction(int robbedPlayerIndex) implements GameAction { }
+```
+
+L’esecuzione di una GameAction produce un GameResult, che contiene il nuovo stato e, opzionalmente, eventi e errori. In una prima versione può essere minimale:
+
+```java
+package Heckmeck;
+
+import java.util.List;
+
+public final class GameResult {
+
+    private final GameState newState;
+    private final List<String> errors;
+
+    public GameResult(GameState newState) {
+        this(newState, List.of());
+    }
+
+    public GameResult(GameState newState, List<String> errors) {
+        this.newState = newState;
+        this.errors = errors;
+    }
+
+    public GameState newState() {
+        return newState;
+    }
+
+    public List<String> errors() {
+        return errors;
+    }
+
+    public boolean hasErrors() {
+        return !errors.isEmpty();
+    }
+}
+```
+
+GameEngine è il motore che implementa tutte le regole di Heckmeck, usando HeckmeckRules e i componenti Dice, BoardTiles, Player. L’idea è che GameEngine esponga un metodo apply(GameState, GameAction) che inoltra alle funzioni già implementate come startTurn, roll, chooseDieFace, pickTileAndEndTurn, stealTileAndEndTurn. Un’implementazione coerente con la logica che hai già estratto è:
+
+```java
+package Heckmeck;
+
+import Heckmeck.Components.BoardTiles;
+import Heckmeck.Components.Dice;
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Player;
+import Heckmeck.Components.Tile;
+
+import java.util.List;
+import java.util.Objects;
+
+import static Heckmeck.Components.Die.Face.WORM;
+
+public final class GameEngine {
+
+    private final Rules rules;
+
+    public GameEngine(Rules rules) {
+        this.rules = Objects.requireNonNull(rules);
+    }
+
+    public GameState startNewGame(Player[] players) {
+        Objects.requireNonNull(players, "players must not be null");
+        Dice dice = Dice.init();
+        BoardTiles boardTiles = BoardTiles.init();
+        return GameState.initial(players, dice, boardTiles);
+    }
+
+    public GameResult apply(GameState state, GameAction action) {
+        if (state.isGameEnded()) {
+            return new GameResult(state, List.of("Game is already over"));
+        }
+        try {
+            if (action instanceof StartTurn) {
+                return ok(startTurn(state));
+            } else if (action instanceof RollDice) {
+                return ok(roll(state));
+            } else if (action instanceof ChooseDieFace c) {
+                return ok(chooseDieFace(state, c.face()));
+            } else if (action instanceof PickTileAction) {
+                return ok(pickTileAndEndTurn(state));
+            } else if (action instanceof StealTileAction s) {
+                return ok(stealTileAndEndTurn(state, s.robbedPlayerIndex()));
+            } else {
+                return new GameResult(state, List.of("Unknown action: " + action));
+            }
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            return new GameResult(state, List.of(e.getMessage()));
+        }
+    }
+
+    private GameResult ok(GameState newState) {
+        return new GameResult(newState);
+    }
+
+    public GameState startTurn(GameState state) {
+        ensureNotEnded(state);
+        Dice dice = state.getDice();
+        dice.resetDice();
+        return state.withPhase(GameState.Phase.ROLL_OR_ACTION);
+    }
+
+    public GameState roll(GameState state) {
+        ensureNotEnded(state);
+        ensurePhase(state, GameState.Phase.ROLL_OR_ACTION);
+
+        Dice dice = state.getDice();
+
+        if (dice.getNumOfDice() <= 0) {
+            return bust(state);
+        }
+
+        dice.rollDice();
+
+        if (dice.canPickAFace()) {
+            return state.withPhase(GameState.Phase.CHOOSING_DIE_FACE);
+        } else {
+            return bust(state);
+        }
+    }
+
+    public GameState chooseDieFace(GameState state, Die.Face face) {
+        ensureNotEnded(state);
+        ensurePhase(state, GameState.Phase.CHOOSING_DIE_FACE);
+
+        Dice dice = state.getDice();
+
+        if (!dice.isFacePresent(face)) {
+            throw new IllegalStateException("Chosen face is not present on dice: " + face);
+        }
+        if (dice.isFaceChosen(face)) {
+            throw new IllegalStateException("Face already chosen: " + face);
+        }
+
+        dice.chooseDice(face);
+        return state.withPhase(GameState.Phase.ROLL_OR_ACTION);
+    }
+
+    public boolean hasWormChosen(GameState state) {
+        return state.getDice().isFaceChosen(WORM);
+    }
+
+    public boolean isForcedToPick(GameState state) {
+        Dice dice = state.getDice();
+        return dice.getChosenDice().size() >= HeckmeckRules.INITIAL_NUMBER_OF_DICE && canPick(state);
+    }
+
+    public boolean canPick(GameState state) {
+        BoardTiles boardTiles = state.getBoardTiles();
+        if (!boardTiles.hasElement()) {
+            return false;
+        }
+        Tile minValueTile = boardTiles.tiles().first();
+        return state.getDice().getScore() >= minValueTile.number();
+    }
+
+    public boolean canSteal(GameState state) {
+        int playerScore = state.getDice().getScore();
+        if (playerScore < Tile.tileMinNumber) return false;
+
+        for (Player robbedPlayer : state.getPlayers()) {
+            if (robbedPlayer.canStealTile(playerScore)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public GameState pickTileAndEndTurn(GameState state) {
+        ensureNotEnded(state);
+        ensurePhase(state, GameState.Phase.ROLL_OR_ACTION);
+
+        Dice dice = state.getDice();
+        BoardTiles boardTiles = state.getBoardTiles();
+
+        if (!dice.isFaceChosen(WORM)) {
+            throw new IllegalStateException("Cannot pick a tile without having chosen at least one WORM.");
+        }
+        if (!canPick(state)) {
+            throw new IllegalStateException("Cannot pick a tile with current dice score.");
+        }
+
+        int diceScore = dice.getScore();
+        Tile availableTile = boardTiles.nearestTile(diceScore);
+
+        Player[] players = state.getPlayers();
+        int currentIndex = state.getCurrentPlayerIndex();
+        Player current = players[currentIndex];
+
+        boardTiles.remove(availableTile);
+        current.pickTile(availableTile);
+        players[currentIndex] = current;
+
+        GameState updated = state
+                .withBoardTiles(boardTiles)
+                .withPlayers(players);
+
+        return finalizeTurnAndMaybeEndGame(updated);
+    }
+
+    public GameState stealTileAndEndTurn(GameState state, int robbedPlayerIndex) {
+        ensureNotEnded(state);
+        ensurePhase(state, GameState.Phase.ROLL_OR_ACTION);
+
+        Dice dice = state.getDice();
+        int currentIndex = state.getCurrentPlayerIndex();
+
+        if (!dice.isFaceChosen(WORM)) {
+            throw new IllegalStateException("Cannot steal without having chosen at least one WORM.");
+        }
+        if (!canSteal(state)) {
+            throw new IllegalStateException("No steal is possible with current score.");
+        }
+
+        Player[] players = state.getPlayers();
+
+        if (robbedPlayerIndex < 0 || robbedPlayerIndex >= players.length) {
+            throw new IllegalArgumentException("Invalid robbed player index: " + robbedPlayerIndex);
+        }
+        if (robbedPlayerIndex == currentIndex) {
+            throw new IllegalStateException("Cannot steal from yourself.");
+        }
+
+        int playerScore = dice.getScore();
+        Player current = players[currentIndex];
+        Player robbed = players[robbedPlayerIndex];
+
+        if (!robbed.canStealTile(playerScore)) {
+            throw new IllegalStateException("Target player has no stealable tile for score " + playerScore);
+        }
+
+        current.stealTileFromPlayer(robbed);
+
+        players[currentIndex] = current;
+        players[robbedPlayerIndex] = robbed;
+
+        GameState updated = state.withPlayers(players);
+
+        return finalizeTurnAndMaybeEndGame(updated);
+    }
+
+    private GameState bust(GameState state) {
+        Player[] players = state.getPlayers();
+        int currentIndex = state.getCurrentPlayerIndex();
+        Player current = players[currentIndex];
+        BoardTiles boardTiles = state.getBoardTiles();
+
+        if (current.hasTile()) {
+            boardTiles.add(current.getLastPickedTile());
+            current.removeLastPickedTile();
+        }
+        boardTiles.removeLastTile();
+
+        players[currentIndex] = current;
+
+        GameState updated = state
+                .withPlayers(players)
+                .withBoardTiles(boardTiles);
+
+        return finalizeTurnAndMaybeEndGame(updated);
+    }
+
+    private GameState finalizeTurnAndMaybeEndGame(GameState state) {
+        Dice dice = state.getDice();
+        dice.resetDice();
+
+        BoardTiles boardTiles = state.getBoardTiles();
+
+        if (!boardTiles.hasElement()) {
+            Player winner = rules.whoIsTheWinner(state.getPlayers());
+            return state.withGameEnded(true, winner);
+        } else {
+            GameState afterNext = state.nextPlayer();
+            return afterNext.withPhase(GameState.Phase.WAITING_TURN_START);
+        }
+    }
+
+    private void ensureNotEnded(GameState state) {
+        if (state.isGameEnded()) {
+            throw new IllegalStateException("Game is already over.");
+        }
+    }
+
+    private void ensurePhase(GameState state, GameState.Phase expected) {
+        if (state.getPhase() != expected) {
+            throw new IllegalStateException(
+                    "Invalid phase. Expected " + expected + " but was " + state.getPhase()
+            );
+        }
+    }
+}
+```
+
+Per collegare il dominio con le UI e con la parte remota si usa un GameGateway. GameGateway è un’interfaccia che espone un modo uniforme per inviare GameAction e ottenere GameState, indipendentemente dal fatto che il gioco giri in locale o su un server remoto:
+
+```java
+package Heckmeck;
+
+public interface GameGateway {
+
+    GameState getCurrentState();
+
+    GameResult sendAction(GameAction action);
+
+    GameState startNewLocalGame(Heckmeck.Components.Player[] players);
+}
+```
+
+LocalGameGateway è l’implementazione per partite locali, che usa direttamente GameEngine e tiene GameState in memoria:
+
+```java
+package Heckmeck;
+
+import Heckmeck.Components.Player;
+
+public final class LocalGameGateway implements GameGateway {
+
+    private final GameEngine engine;
+    private GameState state;
+
+    public LocalGameGateway(Rules rules) {
+        this.engine = new GameEngine(rules);
+        this.state = GameState.notInitialized();
+    }
+
+    @Override
+    public GameState getCurrentState() {
+        return state;
+    }
+
+    @Override
+    public GameResult sendAction(GameAction action) {
+        GameResult result = engine.apply(state, action);
+        state = result.newState();
+        return result;
+    }
+
+    @Override
+    public GameState startNewLocalGame(Player[] players) {
+        state = engine.startNewGame(players);
+        return state;
+    }
+}
+```
+
+RemoteGameGateway sarà l’implementazione lato client che usa HTTP o WebSocket per parlare con un server che gestisce GameSession e GameService. Qui il codice è uno stub, perché la parte HTTP dipende dal framework, ma l’idea è chiara:
+
+```java
+package Heckmeck;
+
+public final class RemoteGameGateway implements GameGateway {
+
+    private final String baseUrl;
+    private final String gameId;
+    private GameState cachedState;
+
+    public RemoteGameGateway(String baseUrl, String gameId) {
+        this.baseUrl = baseUrl;
+        this.gameId = gameId;
+    }
+
+    @Override
+    public GameState getCurrentState() {
+        // GET baseUrl + "/games/" + gameId + "/state"
+        // deserializza in GameState
+        return cachedState;
+    }
+
+    @Override
+    public GameResult sendAction(GameAction action) {
+        // POST baseUrl + "/games/" + gameId + "/actions" con JSON dell'action
+        // deserializza GameResult (con newState)
+        // aggiorna cachedState
+        return null; // da implementare
+    }
+
+    @Override
+    public GameState startNewLocalGame(Heckmeck.Components.Player[] players) {
+        throw new UnsupportedOperationException("Remote gateway cannot start local game");
+    }
+}
+```
+
+HeckmeckController si trova sopra il gateway e sopra la view, e usa GameGateway per inviare azioni e HeckmeckView per mostrare lo stato e chiedere input. HeckmeckView rappresenta ciò che la UI deve saper fare (renderizzare stato, mostrare messaggi, chiedere scelte); le implementazioni saranno CliView, SwingView, e concettualmente il frontend React:
+
+```java
+package Heckmeck;
+
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Player;
+
+public interface HeckmeckView {
+
+    void renderState(GameState state);
+
+    void showMessage(String msg);
+
+    void showError(String msg);
+
+    void showGameOver(GameState state);
+
+    Die.Face askDieFace(GameState state, Player currentPlayer);
+
+    boolean askWantToPick(GameState state, Player currentPlayer, int diceScore, int tileNumber);
+
+    boolean askWantToSteal(GameState state, Player currentPlayer, Player robbed);
+}
+```
+
+Il controller usa questa interfaccia e il gateway, senza sapere se si tratta di CLI, Swing o altro:
+
+```java
+package Heckmeck;
+
+import Heckmeck.Components.Die;
+import Heckmeck.Components.Player;
+import Heckmeck.Components.Tile;
+
+public final class HeckmeckController {
+
+    private final GameGateway gateway;
+    private final HeckmeckView view;
+    private final GameEngine engine; // opzionale per accesso a funzioni di comodo come canSteal/canPick
+
+    public HeckmeckController(GameGateway gateway, HeckmeckView view, Rules rules) {
+        this.gateway = gateway;
+        this.view = view;
+        this.engine = new GameEngine(rules);
+    }
+
+    public void runGameLoop() {
+        GameState state = gateway.getCurrentState();
+        while (!state.isGameEnded()) {
+            view.renderState(state);
+            switch (state.getPhase()) {
+                case WAITING_TURN_START -> gateway.sendAction(new StartTurn());
+                case ROLL_OR_ACTION -> handleRollOrAction(state);
+                case CHOOSING_DIE_FACE -> handleChooseDieFace(state);
+                case NOT_INITIALIZED, GAME_OVER -> {}
+            }
+            state = gateway.getCurrentState();
+        }
+        view.showGameOver(state);
+    }
+
+    private void handleRollOrAction(GameState state) {
+        Player current = state.getCurrentPlayer();
+        if (engine.hasWormChosen(state)) {
+            if (engine.canSteal(state)) {
+                int score = state.getDice().getScore();
+                Player[] players = state.getPlayers();
+                int currentIndex = state.getCurrentPlayerIndex();
+                for (int i = 0; i < players.length; i++) {
+                    if (i == currentIndex) continue;
+                    Player robbed = players[i];
+                    if (robbed.canStealTile(score)) {
+                        boolean want = view.askWantToSteal(state, current, robbed);
+                        if (want) {
+                            gateway.sendAction(new StealTileAction(i));
+                            return;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+            if (engine.canPick(state)) {
+                int diceScore = state.getDice().getScore();
+                Tile availableTile = state.getBoardTiles().nearestTile(diceScore);
+                if (engine.isForcedToPick(state) ||
+                        view.askWantToPick(state, current, diceScore, availableTile.number())) {
+                    gateway.sendAction(new PickTileAction());
+                    return;
+                }
+            }
+            gateway.sendAction(new RollDice());
+        } else {
+            gateway.sendAction(new RollDice());
+        }
+    }
+
+    private void handleChooseDieFace(GameState state) {
+        Player current = state.getCurrentPlayer();
+        Die.Face face = view.askDieFace(state, current);
+        GameResult result = gateway.sendAction(new ChooseDieFace(face));
+        if (result.hasErrors()) {
+            view.showError(String.join("\n", result.errors()));
+        }
+    }
+}
+```
+
+Per il gioco online multi-partita entra in gioco il lato server con GameSession e GameService. GameSession incapsula una singola partita sul server, mantenendo GameEngine e GameState e applicando le azioni in modo thread-safe:
+
+```java
+package Heckmeck;
+
+import Heckmeck.Components.Player;
+
+import java.util.Objects;
+import java.util.UUID;
+
+public final class GameSession {
+
+    private final String gameId;
+    private final GameEngine engine;
+    private GameState state;
+    private final String name;
+    private final long createdAt;
+
+    public GameSession(String gameId, Rules rules, Player[] players, String name) {
+        this.gameId = Objects.requireNonNull(gameId);
+        this.engine = new GameEngine(Objects.requireNonNull(rules));
+        this.state = engine.startNewGame(players);
+        this.name = name != null ? name : "Heckmeck " + gameId;
+        this.createdAt = System.currentTimeMillis();
+    }
+
+    public static GameSession createNew(Rules rules, Player[] players, String name) {
+        String id = UUID.randomUUID().toString();
+        return new GameSession(id, rules, players, name);
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public synchronized GameState getState() {
+        return state;
+    }
+
+    public synchronized GameResult apply(GameAction action) {
+        GameResult result = engine.apply(state, action);
+        this.state = result.newState();
+        return result;
+    }
+}
+```
+
+GameService gestisce un insieme di GameSession attive, permettendo di creare nuove partite, applicare azioni e leggere lo stato:
+
+```java
+package Heckmeck;
+
+import Heckmeck.Components.Player;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+public final class GameService {
+
+    private final Rules rules;
+    private final Map<String, GameSession> sessions = new ConcurrentHashMap<>();
+
+    public GameService(Rules rules) {
+        this.rules = Objects.requireNonNull(rules);
+    }
+
+    public String createGame(Player[] players, String name) {
+        GameSession session = GameSession.createNew(rules, players, name);
+        sessions.put(session.getGameId(), session);
+        return session.getGameId();
+    }
+
+    public GameState getState(String gameId) {
+        return getRequiredSession(gameId).getState();
+    }
+
+    public GameResult applyAction(String gameId, GameAction action) {
+        return getRequiredSession(gameId).apply(action);
+    }
+
+    public List<String> listGameIds() {
+        return new ArrayList<>(sessions.keySet());
+    }
+
+    public void removeGame(String gameId) {
+        sessions.remove(gameId);
+    }
+
+    private GameSession getRequiredSession(String gameId) {
+        GameSession session = sessions.get(gameId);
+        if (session == null) {
+            throw new IllegalArgumentException("Game not found: " + gameId);
+        }
+        return session;
+    }
+}
+```
+
+Sopra GameService verrà costruito un controller REST/WebSocket che riceve JSON dal frontend React o da client remoti (CLI/Swing remoti), mappa il JSON su GameAction e richiama GameService.applyAction, poi restituisce GameState o GameResult serializzati. Localmente, invece, la CLI o Swing useranno LocalGameGateway e HeckmeckController, senza passare dalla rete. In questo modo la stessa logica di gioco (GameEngine, GameState, GameAction) è condivisa tra tutte le interfacce, e il codice di interazione (HeckmeckController) è anch’esso condiviso tra CLI, Swing e client remoti, limitando al minimo la duplicazione e mantenendo il progetto estendibile sia lato UI che lato server.
+
