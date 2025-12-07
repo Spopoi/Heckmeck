@@ -75,22 +75,6 @@ public final class GameState {
         );
     }
 
-    /**
-     * Factory to create a "not initialized" state, useful if you want to further separate
-     * the configuration phase (e.g. choosing number of players) from the game phase.
-     */
-    public static GameState notInitialized() {
-        return new GameState(
-                new Player[0],
-                null,
-                null,
-                -1,
-                Phase.NOT_INITIALIZED,
-                false,
-                null
-        );
-    }
-
     // --------- STATE GETTERS ---------
 
     public Player[] getPlayers() {
@@ -125,7 +109,7 @@ public final class GameState {
     }
 
     public boolean isGameEnded() {
-        return gameEnded;
+        return gameEnded || !boardTiles.hasElement();
     }
 
     /**

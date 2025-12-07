@@ -33,17 +33,6 @@ public class TestGameState {
     }
 
     @Test
-    public void testNotInitializedState() {
-        GameState state = GameState.notInitialized();
-
-        assertEquals(0, state.getNumberOfPlayers());
-        assertEquals(-1, state.getCurrentPlayerIndex());
-        assertNull(state.getCurrentPlayer());
-        assertEquals(GameState.Phase.NOT_INITIALIZED, state.getPhase());
-        assertFalse(state.isGameEnded());
-    }
-
-    @Test
     public void testInitialStateWithNullPlayersThrowsException() {
         assertThrows(NullPointerException.class, () -> {
             GameState.initial(null, Dice.init(), BoardTiles.init());
@@ -123,11 +112,13 @@ public class TestGameState {
 
     @Test
     public void testNextPlayerWithEmptyPlayers() {
-        GameState state = GameState.notInitialized();
+        // Test with state that has empty board (game ended)
+        Player[] singlePlayer = {Player.generatePlayer(0)};
+        GameState state = GameState.initial(singlePlayer, Dice.init(), new BoardTiles(new java.util.TreeSet<>()));
         GameState newState = state.nextPlayer();
 
-        // Non deve crashare, ritorna lo stesso stato
-        assertEquals(state, newState);
+        // Should cycle back to player 0
+        assertEquals(0, newState.getCurrentPlayerIndex());
     }
 
     @Test
