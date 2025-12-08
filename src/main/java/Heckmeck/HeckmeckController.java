@@ -72,6 +72,9 @@ public class HeckmeckController {
             state = gateway.getState();
             
             if (state.getPhase() == GameState.Phase.ROLL_OR_ACTION) {
+                // Show current state before handling phase
+                ioHandler.showPlayerData(state.getCurrentPlayer(), state.getDice(), state.getPlayers());
+                ioHandler.showBoardTiles(state.getBoardTiles());
                 turnEnded = handleRollOrActionPhase(state);
             } else if (state.getPhase() == GameState.Phase.CHOOSING_DIE_FACE) {
                 turnEnded = handleChoosingDiePhase(state);
@@ -88,36 +91,103 @@ public class HeckmeckController {
      * @return true if turn ended, false if continuing
      */
     private boolean handleRollOrActionPhase(GameState state) {
-        Player currentPlayer = state.getCurrentPlayer();
-        
-        // Check if forced to pick
-        if (engine.isForcedToPick(state)) {
-            ioHandler.printMessage("You must pick a tile!");
-            return executePick(state);
+        // If has WORM, try player action (pick/steal), otherwise roll
+        if (engine.hasWormChosen(state)) {
+            if (tryPlayerAction(state)) {
+                return true; // Action taken, turn ended
+            }
         }
         
-        // Show current state
-        ioHandler.showPlayerData(currentPlayer, state.getDice(), state.getPlayers());
-        ioHandler.showBoardTiles(state.getBoardTiles());
+        // No action taken - roll dice
+        executeRoll();
         
-        // Check available actions
-        boolean hasWorm = engine.hasWormChosen(state);
+        // Check if bust occurred after roll
+        GameState newState = gateway.getState();
+        if (newState.getPhase() == GameState.Phase.WAITING_TURN_START) {
+            ioHandler.showBustMessage();
+            return true; // Turn ended due to bust
+        }
+        
+        return false; // Continue to choosing die phase
+    }
+    
+    /**
+     * Tries to execute a player action (pick or steal).
+     * Returns true if an action was taken, false if player wants to continue rolling.
+     */
+    private boolean tryPlayerAction(GameState state) {
         boolean canPick = engine.canPick(state);
         boolean canSteal = engine.canSteal(state);
-        
-        // If player has WORM and can pick/steal, ask what they want to do
-        if (hasWorm && (canPick || canSteal)) {
-            // Ask player what to do
-            if (canPick && askPlayerToPick(state)) {
-                return executePick(state);
-            } else if (canSteal && askPlayerToSteal(state)) {
-                return executeSteal(state);
-            }
-            // Player declined both - continue rolling
+
+        // No actions available - bust will be handled on next roll
+        if (!canPick && !canSteal) {
+            return false;
         }
         
-        // Roll dice (either no WORM, or player declined pick/steal)
-        return executeRoll();
+        boolean noMoreDice = engine.hasNoMoreDice(state);
+
+        // Steal has priority over pick
+        if (canSteal) {
+            if (noMoreDice) {
+                showNoMoreDiceMessage(state, canPick, canSteal);
+                return executeSteal(state); // Forced - don't ask
+            }
+            return trySteal(state); // Optional - ask player
+        }
+
+        if (canPick) {
+            if (noMoreDice) {
+                showNoMoreDiceMessage(state, canPick, canSteal);
+                return executePick(state); // Forced - don't ask
+            }
+            return tryPick(state); // Optional - ask player
+        }
+
+        return false;
+    }
+
+    
+    /**
+     * Shows message when player has no more dice to roll.
+     */
+    private void showNoMoreDiceMessage(GameState state, boolean canPick, boolean canSteal) {
+        StringBuilder msg = new StringBuilder("No more dice! ");
+        
+        if (canPick) {
+            int tileNumber = engine.getPickableTileNumber(state);
+            msg.append("You must pick tile ").append(tileNumber);
+            
+            if (canSteal) {
+                Player stealablePlayer = engine.getStealablePlayer(state);
+                msg.append(" or steal tile ").append(stealablePlayer.getLastPickedTile().number())
+                   .append(" from ").append(stealablePlayer.getName());
+            }
+        } else if (canSteal) {
+            Player stealablePlayer = engine.getStealablePlayer(state);
+            msg.append("You must steal tile ").append(stealablePlayer.getLastPickedTile().number())
+               .append(" from ").append(stealablePlayer.getName());
+        } 
+        ioHandler.printMessage(msg.toString());
+    }
+    
+    /**
+     * Tries to pick a tile. Returns true if pick was executed.
+     */
+    private boolean tryPick(GameState state) {
+        if (askPlayerToPick(state)) {
+            return executePick(state);
+        }
+        return false;
+    }
+    
+    /**
+     * Tries to steal from another player. Returns true if steal was executed.
+     */
+    private boolean trySteal(GameState state) {
+        if (askPlayerToSteal(state)) {
+            return executeSteal(state);
+        }
+        return false;
     }
     
     /**
@@ -128,46 +198,40 @@ public class HeckmeckController {
     private boolean handleChoosingDiePhase(GameState state) {
         Player currentPlayer = state.getCurrentPlayer();
         
-        // Show rolled dice
-        ioHandler.showRolledDice(state.getDice());
-        
-        // Ask player to choose a die face
-        Die.Face chosenFace = ioHandler.chooseDie(currentPlayer);
-        
-        GameResult result = gateway.applyAction(new GameAction.ChooseDieFace(chosenFace));
-        
-        if (!result.isSuccess()) {
-            handleError(result);
-            return false; // Try again
+        // Loop until valid choice
+        while (true) {
+            // Ask player to choose a die face
+            Die.Face chosenFace = ioHandler.chooseDie(currentPlayer);
+            
+            GameResult result = gateway.applyAction(new GameAction.ChooseDieFace(chosenFace));
+            
+            if (!result.isSuccess()) {
+                handleError(result);
+                // Continue loop to ask again without re-showing dice
+                continue;
+            }
+            
+            // Check if turn ended due to no more dice or no pickable faces (bust handled by engine)
+            return result.newState().getPhase() == GameState.Phase.WAITING_TURN_START;
         }
-        
-        // Check if turn ended due to no more dice or no pickable faces (bust handled by engine)
-        return result.newState().getPhase() == GameState.Phase.WAITING_TURN_START;
     }
     
     private boolean askPlayerToPick(GameState state) {
         int score = state.getDice().getScore();
-        int availableTileNumber = state.getBoardTiles().nearestTile(score).number();
+        int availableTileNumber = engine.getPickableTileNumber(state);
         return ioHandler.wantToPick(state.getCurrentPlayer(), score, availableTileNumber);
     }
     
     private boolean askPlayerToSteal(GameState state) {
-        // Find a player to steal from
-        int currentScore = state.getDice().getScore();
-        Player[] players = state.getPlayers();
-        
-        for (int i = 0; i < players.length; i++) {
-            if (i != state.getCurrentPlayerIndex() && players[i].canStealTile(currentScore)) {
-                if (ioHandler.wantToSteal(state.getCurrentPlayer(), players[i])) {
-                    // Found target, will execute steal
-                    return true;
-                }
-            }
+        Player stealablePlayer = engine.getStealablePlayer(state);
+        if (stealablePlayer == null) {
+            return false; // No stealable player found
         }
-        return false;
+        return ioHandler.wantToSteal(state.getCurrentPlayer(), stealablePlayer);
     }
     
     private boolean executePick(GameState state) {
+        int tileNumber = engine.getPickableTileNumber(state);
         GameResult result = gateway.applyAction(new GameAction.PickTileAction());
         
         if (!result.isSuccess()) {
@@ -175,28 +239,27 @@ public class HeckmeckController {
             return false;
         }
         
+        ioHandler.printMessage("You got tile number " + tileNumber + "!");
         return true; // Turn ended
     }
     
     private boolean executeSteal(GameState state) {
-        // Find the player to steal from based on current score
-        int currentScore = state.getDice().getScore();
-        Player[] players = state.getPlayers();
-        int targetIndex = -1;
-        
-        for (int i = 0; i < players.length; i++) {
-            if (i != state.getCurrentPlayerIndex() && players[i].canStealTile(currentScore)) {
-                if (ioHandler.wantToSteal(state.getCurrentPlayer(), players[i])) {
-                    targetIndex = i;
-                    break;
-                }
-            }
-        }
-        
-        if (targetIndex == -1) {
+        Player stealablePlayer = engine.getStealablePlayer(state);
+        if (stealablePlayer == null) {
             return false; // No target found, continue turn
         }
         
+        // Find the index of the stealable player
+        Player[] players = state.getPlayers();
+        int targetIndex = -1;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] == stealablePlayer) {
+                targetIndex = i;
+                break;
+            }
+        }
+        
+        int stolenTileNumber = stealablePlayer.getLastPickedTile().number();
         GameResult result = gateway.applyAction(new GameAction.StealTileAction(targetIndex));
         
         if (!result.isSuccess()) {
@@ -204,24 +267,20 @@ public class HeckmeckController {
             return false;
         }
         
+        ioHandler.printMessage("You stole tile number " + stolenTileNumber + " from " + stealablePlayer.getName() + "!");
         return true; // Turn ended
     }
     
-    private boolean executeRoll() {
+    private void executeRoll() {
         GameResult result = gateway.applyAction(new GameAction.RollDice());
         
         if (!result.isSuccess()) {
             handleError(result);
-            return true; // Likely a bust, turn ended
+            return;
         }
         
-        // Check if bust occurred (turn moved to next player)
-        if (result.newState().getPhase() == GameState.Phase.WAITING_TURN_START) {
-            ioHandler.showBustMessage();
-            return true;
-        }
-        
-        return false; // Continue to choosing die phase
+        // Show rolled dice (now preserved even after bust thanks to GameEngine change)
+        ioHandler.showRolledDice(result.newState().getDice());
     }
     
     private void handleError(GameResult result) {

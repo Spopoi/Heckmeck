@@ -162,6 +162,43 @@ public final class GameEngine {
     }
 
     /**
+     * Gets the tile number that would be picked from the board.
+     * Returns -1 if cannot pick.
+     */
+    public int getPickableTileNumber(GameState state) {
+        if (!canPick(state)) {
+            return -1;
+        }
+        return state.getBoardTiles().nearestTile(state.getDice().getScore()).number();
+    }
+
+    /**
+     * Gets the first player that can be stolen from with current score.
+     * Returns null if cannot steal from anyone.
+     */
+    public Player getStealablePlayer(GameState state) {
+        int playerScore = state.getDice().getScore();
+        if (playerScore < Tile.tileMinNumber) return null;
+
+        int currentPlayerIndex = state.getCurrentPlayerIndex();
+        Player[] players = state.getPlayers();
+        
+        for (int i = 0; i < players.length; i++) {
+            if (i != currentPlayerIndex && players[i].canStealTile(playerScore)) {
+                return players[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks if player has no more dice to roll (all chosen).
+     */
+    public boolean hasNoMoreDice(GameState state) {
+        return state.getDice().getChosenDice().size() >= HeckmeckRules.INITIAL_NUMBER_OF_DICE;
+    }
+
+    /**
      * PICK action:
      * - requires WORM chosen and canPick == true
      * - removes the nearest tile (<= score) from the board
@@ -270,9 +307,9 @@ public final class GameEngine {
     }
 
     private GameState finalizeTurnAndMaybeEndGame(GameState state) {
-        Dice dice = state.getDice();
-        dice.resetDice();
-
+        // Don't reset dice here - they will be reset at the start of next turn
+        // This allows the controller to show the bust dice before the next turn
+        
         BoardTiles boardTiles = state.getBoardTiles();
 
         if (!boardTiles.hasElement()) {

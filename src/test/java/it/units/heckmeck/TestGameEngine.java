@@ -587,4 +587,40 @@ public class TestGameEngine {
         state = GameState.initial(players, Dice.init(), emptyBoard);
         assertTrue(engine.isGameOver(state));
     }
+
+    @Test
+    public void testDicePreservedAfterBustUntilNextTurn() {
+        GameState state = createFreshGameState(players);
+        state = engine.startTurn(state);
+        
+        // Scegliamo alcuni dadi per simulare un turno in corso
+        Dice testDice = state.getDice();
+        testDice.resetDice();
+        testDice.getDiceList().clear();
+        // Aggiungi dadi specifici
+        for (int i = 0; i < 3; i++) {
+            testDice.addSpecificDie(Die.Face.ONE);
+        }
+        testDice.chooseDice(Die.Face.ONE); // Sceglie TUTTI i dadi con faccia ONE (3 dadi)
+        
+        state = state.withDice(testDice);
+        assertEquals(3, testDice.getChosenDice().size(), "Should have chosen 3 dice");
+        
+        // Roll con 0 dadi disponibili causa bust
+        testDice.getDiceList().clear(); // Rimuoviamo tutti i dadi non scelti
+        state = state.withDice(testDice);
+        GameState bustedState = engine.roll(state);
+        
+        // DOPO BUST: i dadi scelti devono essere ancora presenti (non resettati)
+        assertEquals(GameState.Phase.WAITING_TURN_START, bustedState.getPhase());
+        assertEquals(1, bustedState.getCurrentPlayerIndex(), "Should move to next player");
+        assertEquals(3, bustedState.getDice().getChosenDice().size(), 
+            "Dice should NOT be reset after bust - preserved for display");
+        
+        // All'INIZIO DEL TURNO SUCCESSIVO: i dadi devono essere resettati
+        GameState nextTurnState = engine.startTurn(bustedState);
+        assertEquals(GameState.Phase.ROLL_OR_ACTION, nextTurnState.getPhase());
+        assertEquals(8, nextTurnState.getDice().getNumOfDice(), "Dice should be reset at start of new turn");
+        assertEquals(0, nextTurnState.getDice().getChosenDice().size(), "No dice should be chosen at turn start");
+    }
 }

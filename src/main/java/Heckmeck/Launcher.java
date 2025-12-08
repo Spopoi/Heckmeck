@@ -38,15 +38,9 @@ public abstract class Launcher {
         Rules rules = new HeckmeckRules();
         GameEngine engine = new GameEngine(rules);
         
-        // Get number of players and names
+        // Setup players
         int numPlayers = io.chooseNumberOfPlayers();
-        Player[] players = new Player[numPlayers];
-        
-        for (int i = 0; i < numPlayers; i++) {
-            players[i] = Player.generatePlayer(i);
-            String playerName = io.choosePlayerName(players[i]);
-            players[i].setPlayerName(playerName);
-        }
+        Player[] players = setupPlayers(numPlayers, io, rules);
         
         // Create gateway and controller
         GameGateway gateway = new LocalGameGateway(engine, players);
@@ -57,6 +51,28 @@ public abstract class Launcher {
         
         // Clean up
         gateway.close();
+    }
+
+    /**
+     * Creates and configures all players with unique names.
+     */
+    private static Player[] setupPlayers(int numPlayers, IOHandler io, Rules rules) {
+        Player[] players = new Player[numPlayers];
+        
+        for (int i = 0; i < numPlayers; i++) {
+            players[i] = Player.generatePlayer(i);
+            String playerName = io.choosePlayerName(players[i]);
+            
+            // Check for duplicate names
+            while (rules.isNameAlreadyPicked(playerName, players)) {
+                io.printError("Name '" + playerName + "' is already taken. Please choose a different name.");
+                playerName = io.choosePlayerName(players[i]);
+            }
+            
+            players[i].setPlayerName(playerName);
+        }
+        
+        return players;
     }
 
     public static void exit(){
