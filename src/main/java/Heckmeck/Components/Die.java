@@ -1,6 +1,7 @@
 package Heckmeck.Components;
 import Utils.FileReader;
 
+import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -8,7 +9,7 @@ import  java.util.*;
 
 import static java.util.Map.entry;
 
-public class Die {
+public class Die implements Serializable {
 
     private Face dieFace;
     private static final Random PRNG = new Random();

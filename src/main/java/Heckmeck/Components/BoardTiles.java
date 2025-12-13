@@ -1,10 +1,10 @@
 package Heckmeck.Components;
 
-
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public record BoardTiles(TreeSet<Tile> tiles) implements TilesCollection {
+public record BoardTiles(TreeSet<Tile> tiles) implements Serializable, TilesCollection {
     public static BoardTiles init() {
         List<Tile> tiles = IntStream.range(Tile.tileMinNumber, Tile.tileMaxNumber + 1).mapToObj(Tile::generateTile).toList();
         return new BoardTiles(new TreeSet<>(tiles));

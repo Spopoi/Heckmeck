@@ -1,11 +1,12 @@
 package Heckmeck.Components;
 import Heckmeck.HeckmeckRules;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class Dice {
+public class Dice implements Serializable {
     private final List<Die> diceList;
     private final List<Die> chosenDiceList;
     private int score;

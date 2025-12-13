@@ -1,6 +1,7 @@
 package Heckmeck.Components;
 
 import Utils.FileReader;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -8,7 +9,7 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
-public record Tile(int number) implements Comparable<Tile> {
+public record Tile(int number) implements Serializable, Comparable<Tile> {
     private final static String RESOURCE_FILE = "CLI/TILES";
     public final static int tileMinNumber = 21;
     public final static int tileMaxNumber = 36;

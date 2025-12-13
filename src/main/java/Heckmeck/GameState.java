@@ -4,6 +4,7 @@ import Heckmeck.Components.BoardTiles;
 import Heckmeck.Components.Dice;
 import Heckmeck.Components.Player;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
  * - be serialized (for REST/WebSocket backend)
  * - be used by CLI, Swing and web frontend without changing the domain logic
  */
-public final class GameState {
+public final class GameState implements Serializable {
 
     public enum Phase {
         NOT_INITIALIZED,     // before initialization

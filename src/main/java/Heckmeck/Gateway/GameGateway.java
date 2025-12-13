@@ -38,6 +38,15 @@ public interface GameGateway {
     boolean isActive();
     
     /**
+     * Gets the player index for the local player.
+     * For local games, returns -1 (all players are local).
+     * For remote games, returns the index assigned by the server.
+     * 
+     * @return The local player index, or -1 for local games
+     */
+    int getMyPlayerIndex();
+    
+    /**
      * Closes the gateway and releases any resources.
      * After calling this method, the gateway should not be used anymore.
      */

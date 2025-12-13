@@ -80,6 +80,12 @@ public class LocalGameGateway implements GameGateway {
     }
     
     @Override
+    public int getMyPlayerIndex() {
+        // For local games, all players are local, so return -1
+        return -1;
+    }
+    
+    @Override
     public void close() {
         active = false;
         // No resources to release for local gateway

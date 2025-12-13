@@ -1,7 +1,8 @@
 package Heckmeck.Components;
 
+import java.io.Serializable;
 
-public class Player {
+public class Player implements Serializable {
     private String playerName;
     private final StackOfTiles playerTiles;
     private final int playerID;

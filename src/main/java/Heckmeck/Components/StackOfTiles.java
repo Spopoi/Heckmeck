@@ -1,11 +1,11 @@
 package Heckmeck.Components;
 
-
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.LinkedList;
 
 
-public class StackOfTiles implements TilesCollection {
+public class StackOfTiles implements Serializable, TilesCollection {
 
     private final LinkedList<Tile> stackOfTiles;
 

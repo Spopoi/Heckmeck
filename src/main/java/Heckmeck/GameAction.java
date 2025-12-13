@@ -2,13 +2,15 @@ package Heckmeck;
 
 import Heckmeck.Components.Die;
 
+import java.io.Serializable;
+
 /**
  * Sealed interface representing all possible actions a player can perform in Heckmeck.
  * Using sealed interfaces ensures type safety and exhaustive pattern matching.
  * 
  * All action types are defined as nested records within this interface.
  */
-public sealed interface GameAction {
+public sealed interface GameAction extends Serializable {
     
     /**
      * Action to start a player's turn.

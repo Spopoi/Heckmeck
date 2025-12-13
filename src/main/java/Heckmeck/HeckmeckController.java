@@ -41,7 +41,16 @@ public class HeckmeckController {
      */
     public void play() {
         while (gateway.isActive() && !gateway.getState().isGameEnded()) {
-            playTurn();
+            GameState state = gateway.getState();
+            int myPlayerIndex = gateway.getMyPlayerIndex();
+            boolean isMyTurn = myPlayerIndex == -1 || myPlayerIndex == state.getCurrentPlayerIndex();
+            
+            if (isMyTurn) {
+                playTurn();
+            } else {
+                // Not my turn, just wait and observe
+                waitForMyTurn();
+            }
         }
         
         if (gateway.getState().isGameEnded()) {
@@ -50,7 +59,7 @@ public class HeckmeckController {
     }
     
     /**
-     * Plays a single turn for the current player.
+     * Plays a single turn for the current player (only called when it's the local player's turn).
      */
     private void playTurn() {
         GameState state = gateway.getState();
@@ -286,6 +295,18 @@ public class HeckmeckController {
     private void handleError(GameResult result) {
         for (String error : result.errors()) {
             ioHandler.printError(error);
+        }
+    }
+    
+    /**
+     * Waits for state updates during other players' turns.
+     * The receiver thread in RemoteGameGateway will update the state asynchronously.
+     */
+    private void waitForMyTurn() {
+        try {
+            Thread.sleep(500); // Check state every 500ms
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
     
